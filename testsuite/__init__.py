@@ -12,8 +12,8 @@ import logging
 import unittest
 import sys
 
-from ..log import DebugLogFormatter
-from ..util import find_modules
+from cihai.log import DebugLogFormatter
+from cihai.util import find_modules
 
 log = logging.getLogger()
 

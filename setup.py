@@ -20,7 +20,7 @@ if sys.version_info < (2, 7):
     tests_reqs += ['unittest2']
 
 import re
-VERSIONFILE = "cihaidata/__init__.py"
+VERSIONFILE = "__init__.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VSRE, verstrline, re.M)
