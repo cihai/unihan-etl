@@ -19,14 +19,14 @@ permissive, high quality CJK datasets and clients.
 
 - `cihai-handbook`_ provides documentational overviews of the history of
   CJK, the dataset standards and available client libraries.
-- Official client libraries. `cihaidata-unihan`_ will be a python client for
+- Official client libraries. `cihai-python`_ will be a python client for
   cihai+datapackages datasets (cjklib style).
 - Public datasets maintained by `cihai team`_. Unihan will be a first
   example. See `cihaidata-unihan`_.
 
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
 .. _cihai team: https://github.com/cihai?tab=members
-.. _cihaidata-unihan: https://github.com/cihai/cihaidata-unihan
+.. _cihai-python: https://github.com/cihai/cihai-python
 .. _cihaidata-unihan: https://github.com/cihai/cihaidata-unihan
 
 Being built against unit tests. See the `Travis Builds`_ and
@@ -110,15 +110,15 @@ Related links:
 ==============  ==========================================================
 Python support  Python 2.7, >= 3.3
 Source          https://github.com/cihai/cihaidata-unihan
-Docs            http://cihai.rtfd.org
-Changelog       http://cihai.readthedocs.org/en/latest/history.html
-API             http://cihai.readthedocs.org/en/latest/api.html
+Docs            http://cihaidata-unihan.rtfd.org
+Changelog       http://cihaidata-unihan.readthedocs.org/en/latest/history.html
+API             http://cihaidata-unihan.readthedocs.org/en/latest/api.html
 Issues          https://github.com/cihai/cihaidata-unihan/issues
 Travis          http://travis-ci.org/cihai/cihaidata-unihan
 Test coverage   https://coveralls.io/r/cihai/cihaidata-unihan
-pypi            https://pypi.python.org/pypi/cihai
-Ohloh           https://www.ohloh.net/p/cihai
-License         `BSD`_.
+pypi            https://pypi.python.org/pypi/cihaidata-unihan
+Ohloh           https://www.ohloh.net/p/cihaidata-unihan
+License         `MIT`_.
 git repo        .. code-block:: bash
 
                     $ git clone https://github.com/cihai/cihaidata-unihan.git
@@ -135,6 +135,7 @@ tests           .. code-block:: bash
 ==============  ==========================================================
 
 .. _BSD: http://opensource.org/licenses/BSD-3-Clause
+.. _MIT: http://opensource.org/licenses/MIT
 .. _Documentation: http://cihai.readthedocs.org/en/latest/
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
 .. _Unihan: http://www.unicode.org/charts/unihan.html
