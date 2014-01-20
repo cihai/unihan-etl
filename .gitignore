@@ -38,7 +38,7 @@ nosetests.xml
 .env
 .env3
 
-cihai/data/*
+cihaidata/data/*
 
 doc/_build
 
