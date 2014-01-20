@@ -42,7 +42,7 @@ setup(
     include_package_data=True,
     install_requires=install_reqs,
     tests_require=tests_reqs,
-    test_suite='cihaidata_unihan.testsuite',
+    test_suite='testsuite',
     zip_safe=False,
     packages=find_packages(exclude=["doc"]),
     package_data={
