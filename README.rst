@@ -1,13 +1,14 @@
-.. image:: https://travis-ci.org/cihai/cihai-python.png?branch=master
-    :target: https://travis-ci.org/cihai/cihai-python
+.. image:: https://travis-ci.org/cihai/cihaidata-unihan.png?branch=master
+    :target: https://travis-ci.org/cihai/cihaidata-unihan
 
 .. image:: https://badge.fury.io/py/cihai.png
     :target: http://badge.fury.io/py/cihai
 
-.. image:: https://coveralls.io/repos/cihai/cihai-python/badge.png?branch=master
-    :target: https://coveralls.io/r/cihai/cihai-python?branch=master
+.. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
+    :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
 
-``cihai-python`` - China fit into a python package.
+``cihaidata-unihan`` - build simple data format CSV's for `unihan`_.
+Provides optional integration with `cihai`_ python API.
 
 **This project has been split into the https://github.com/cihai group.**
 
@@ -18,24 +19,15 @@ permissive, high quality CJK datasets and clients.
 
 - `cihai-handbook`_ provides documentational overviews of the history of
   CJK, the dataset standards and available client libraries.
-- Official client libraries. `cihai-python`_ will be a python client for
+- Official client libraries. `cihaidata-unihan`_ will be a python client for
   cihai+datapackages datasets (cjklib style).
 - Public datasets maintained by `cihai team`_. Unihan will be a first
   example. See `cihaidata-unihan`_.
 
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
 .. _cihai team: https://github.com/cihai?tab=members
-.. _cihai-python: https://github.com/cihai/cihai-python
 .. _cihaidata-unihan: https://github.com/cihai/cihaidata-unihan
-
-Attempt at building successor of the Han Character library `cjklib`_.
-
-- compatible with python 2.7+ and 3.3+.
-- built using TDD and python best practices.
-- supports `Unihan`_, see `current datasets`_.
-- upcoming supports for character decomposition, dictionaries (CEDict).
-- extensible to new datasets, see more about `Extending`_ cihai's 
-  knowledge.
+.. _cihaidata-unihan: https://github.com/cihai/cihaidata-unihan
 
 Being built against unit tests. See the `Travis Builds`_ and
 `Revision History`_.
@@ -54,8 +46,8 @@ Future results
   - Breaking strings of characters into words
   - More datasets
 
-.. _Travis Builds: https://travis-ci.org/cihai/cihai-python/builds
-.. _Revision History: https://github.com/cihai/cihai-python/commits/master
+.. _Travis Builds: https://travis-ci.org/cihai/cihaidata-unihan/builds
+.. _Revision History: https://github.com/cihai/cihaidata-unihan/commits/master
 .. _cjklib: http://cjklib.org/0.3/
 .. _current datasets: http://cihai.readthedocs.org/en/latest/api.html#datasets
 .. _Extending: http://cihai.readthedocs.org/en/latest/extending.html
@@ -64,22 +56,22 @@ Future results
 
 ==============  ==========================================================
 Python support  Python 2.7, >= 3.3
-Source          https://github.com/cihai/cihai-python
+Source          https://github.com/cihai/cihaidata-unihan
 Docs            http://cihai.rtfd.org
 Changelog       http://cihai.readthedocs.org/en/latest/history.html
 API             http://cihai.readthedocs.org/en/latest/api.html
-Issues          https://github.com/cihai/cihai-python/issues
-Travis          http://travis-ci.org/cihai/cihai-python
-Test coverage   https://coveralls.io/r/cihai/cihai-python
+Issues          https://github.com/cihai/cihaidata-unihan/issues
+Travis          http://travis-ci.org/cihai/cihaidata-unihan
+Test coverage   https://coveralls.io/r/cihai/cihaidata-unihan
 pypi            https://pypi.python.org/pypi/cihai
 Ohloh           https://www.ohloh.net/p/cihai
 License         `BSD`_.
 git repo        .. code-block:: bash
 
-                    $ git clone https://github.com/cihai/cihai-python.git
+                    $ git clone https://github.com/cihai/cihaidata-unihan.git
 install dev     .. code-block:: bash
 
-                    $ git clone https://github.com/cihai/cihai-python.git cihai
+                    $ git clone https://github.com/cihai/cihaidata-unihan.git cihai
                     $ cd ./cihai
                     $ virtualenv .env
                     $ source .env/bin/activate
