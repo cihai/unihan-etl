@@ -59,6 +59,11 @@ log = logging.getLogger(__name__)
 
 class UnihanHelper(CihaiHelper):
 
+    config = os.path.abspath(os.path.join(
+        os.path.dirname(__file__),
+        'test_config.yml'
+    ))
+
     @classmethod
     def setUpClass(cls):
         cls.tempdir = tempfile.mkdtemp()
