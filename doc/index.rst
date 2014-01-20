@@ -1,10 +1,8 @@
-.. _cihai-python:
+.. _cihaidata-unihan:
 
-===================
-cihai python client
-===================
-
-China in a python package.
+=====================
+cihai dataset: unihan
+=====================
 
 .. include:: ../README.rst
     :start-line: 10
@@ -13,7 +11,5 @@ China in a python package.
     :maxdepth: 2
 
     api
-    extending
-    internals
     history
     roadmap
