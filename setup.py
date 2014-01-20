@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""cihaidata-unihan lives at <https://github.com/tony/cihaidata-unihan>.
+"""cihaidata-unihan lives at <https://github.com/cihai/cihaidata-unihan>.
 
 cihaidata-unihan
 ~~~~~~~~~~~~~~~~
