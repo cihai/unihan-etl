@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from cihai.testsuite import main
+from cihaidata.testsuite import main
 main()

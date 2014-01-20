@@ -1,8 +1,7 @@
 .. image:: https://travis-ci.org/cihai/cihaidata-unihan.png?branch=master
     :target: https://travis-ci.org/cihai/cihaidata-unihan
 
-.. image:: https://badge.fury.io/py/cihai.png
-    :target: http://badge.fury.io/py/cihai
+.. image:: https://badge.fury.io/py/cihai.png :target: http://badge.fury.io/py/cihai
 
 .. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
     :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
@@ -45,6 +44,59 @@ Future results
   - Sorting results by usage, stroke
   - Breaking strings of characters into words
   - More datasets
+
+Structure
+---------
+
+.. code-block:: bash
+
+    # dataset metadata, schema information.
+    datapackage.json
+
+    # (future) when this package is stable, unihan.csv will be provided
+    data/unihan.csv
+
+    # script to download dataset and convert to clean CSV.
+    scripts/process.py
+
+    # cihai's python related modules, public-facing python API.
+    __init__.py
+
+    # unihan module code
+    unihan.py
+
+
+Cihai is *not* required for:
+
+- ``data/unihan.csv`` - `simple data format`_ compatible csv file.
+- ``scripts/process.py`` - create a ``data/unihan.csv``.
+
+When this module is stable, ``data/unihan.csv`` will have prepared
+releases, without requires using ``scripts/process.py``. ``process.py``
+will not require external libraries.
+
+Intended usage
+--------------
+
+(Not ready)
+
+.. code-block:: bash
+
+    $ ./scripts/process.py
+
+Creates ``data/unihan.csv``.
+
+Examples
+--------
+
+- https://github.com/datasets/gdp
+- https://github.com/datasets/country-codes
+
+Related links:
+
+- CSV *Simple Data Format* (SDF): http://data.okfn.org/standards/simple-data-format
+- Tools: http://data.okfn.org/tools
+
 
 .. _Travis Builds: https://travis-ci.org/cihai/cihaidata-unihan/builds
 .. _Revision History: https://github.com/cihai/cihaidata-unihan/commits/master
