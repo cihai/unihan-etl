@@ -1,7 +1,8 @@
 .. image:: https://travis-ci.org/cihai/cihaidata-unihan.png?branch=master
     :target: https://travis-ci.org/cihai/cihaidata-unihan
 
-.. image:: https://badge.fury.io/py/cihai.png :target: http://badge.fury.io/py/cihai
+.. image:: https://badge.fury.io/py/cihaidata-unihan.png
+    :target: http://badge.fury.io/py/cihaidata-unihan
 
 .. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
     :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
