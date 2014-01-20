@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for unihan.
 
-cihai.testsuite.unihan
-~~~~~~~~~~~~~~~~~~~~~~
+cihaidata_unihan.testsuite.unihan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unihan
 

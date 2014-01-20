@@ -2,8 +2,8 @@
 # -*- coding: utf8 - *-
 """Cihai dataset for `Unihan`_, Han Unification from Unicode, Inc.
 
-cihai.datasets.unihan
-~~~~~~~~~~~~~~~~~~~~~
+cihaidata_unihan
+~~~~~~~~~~~~~~~~
 
 todo: install manifest for installing files remotely via pip-type of URL.
         git+, hg+, svn+, http://

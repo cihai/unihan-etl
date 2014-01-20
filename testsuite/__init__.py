@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for cihai.
 
-cihai.testsuite
-~~~~~~~~~~~~~~~
+cihaidata_unihan.testsuite
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
 from __future__ import absolute_import, division, print_function, \
