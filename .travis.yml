@@ -10,6 +10,7 @@ before_install:
   - sudo apt-get update -qq
   - export PIP_USE_MIRRORS=true
   - pip install coveralls
+  - pip install -e git+https://github.com/cihai/cihai-python.git#egg=cihai-python
 install:
   - "pip install -e ."
 script: coverage run --source=cihaidata-unihan setup.py test
