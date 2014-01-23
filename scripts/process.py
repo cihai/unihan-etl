@@ -28,6 +28,124 @@ not_junk = lambda line: line[0] != '#' and line != '\n'
 in_columns = lambda c, columns: c in columns + default_columns
 default_columns = ['ucn', 'char']
 
+
+UNIHAN_DATASETS = {
+    'Unihan_DictionaryIndices.txt': [
+        'kCheungBauerIndex',
+        'kCowles',
+        'kDaeJaweon',
+        'kFennIndex',
+        'kGSR',
+        'kHanYu',
+        'kIRGDaeJaweon',
+        'kIRGDaiKanwaZiten',
+        'kIRGHanyuDaZidian',
+        'kIRGKangXi',
+        'kKangXi',
+        'kKarlgren',
+        'kLau',
+        'kMatthews',
+        'kMeyerWempe',
+        'kMorohashi',
+        'kNelson',
+        'kSBGY',
+    ],
+    'Unihan_DictionaryLikeData.txt': [
+        'kCangjie',
+        'kCheungBauer',
+        'kCihaiT',
+        'kFenn',
+        'kFourCornerCode',
+        'kFrequency',
+        'kGradeLevel',
+        'kHDZRadBreak',
+        'kHKGlyph',
+        'kPhonetic',
+        'kTotalStrokes',
+    ],
+    'Unihan_IRGSources.txt': [
+        'kIICore',
+        'kIRG_GSource',
+        'kIRG_HSource',
+        'kIRG_JSource',
+        'kIRG_KPSource',
+        'kIRG_KSource',
+        'kIRG_MSource',
+        'kIRG_TSource',
+        'kIRG_USource',
+        'kIRG_VSource',
+    ],
+    'Unihan_NumericValues.txt': [
+        'kAccountingNumeric',
+        'kOtherNumeric',
+        'kPrimaryNumeric',
+    ],
+    'Unihan_OtherMappings.txt': [
+        'kBigFive',
+        'kCCCII',
+        'kCNS1986',
+        'kCNS1992',
+        'kEACC',
+        'kGB0',
+        'kGB1',
+        'kGB3',
+        'kGB5',
+        'kGB7',
+        'kGB8',
+        'kHKSCS',
+        'kIBMJapan',
+        'kJis0',
+        'kJis1',
+        'kJIS0213',
+        'kKPS0',
+        'kKPS1',
+        'kKSC0',
+        'kKSC1',
+        'kMainlandTelegraph',
+        'kPseudoGB1',
+        'kTaiwanTelegraph',
+        'kXerox',
+    ],
+    'Unihan_RadicalStrokeCounts.txt': [
+        'kRSAdobe_Japan1_6',
+        'kRSJapanese',
+        'kRSKangXi',
+        'kRSKanWa',
+        'kRSKorean',
+        'kRSUnicode',
+    ],
+    'Unihan_Readings.txt': [
+        'kCantonese',
+        'kDefinition',
+        'kHangul',
+        'kHanyuPinlu',
+        'kHanyuPinyin',
+        'kJapaneseKun',
+        'kJapaneseOn',
+        'kKorean',
+        'kMandarin',
+        'kTang',
+        'kVietnamese',
+        'kXHC1983',
+    ],
+    'Unihan_Variants.txt': [
+        'kCompatibilityVariant',
+        'kSemanticVariant',
+        'kSimplifiedVariant',
+        'kSpecializedSemanticVariant',
+        'kTraditionalVariant',
+        'kZVariant',
+    ]
+
+}
+
+UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
+
+table_name = 'Unihan'
+flatten_datasets = lambda d: sorted({c for cs in d.values() for c in cs})
+default_columns = ['ucn', 'char']
+
+
 def ucn_to_unicode(ucn):
     """Convert a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to Python unicode (u'\\u4e00')"""
     if isinstance(ucn, string_types):

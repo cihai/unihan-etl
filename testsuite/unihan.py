@@ -35,6 +35,7 @@ from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
 
 import os
+import sys
 import tempfile
 import logging
 import unittest
@@ -53,6 +54,8 @@ from cihai.util import get_datafile
 from cihai.datasets import unihan
 from cihai._compat import StringIO, text_type
 from cihai import Cihai, CihaiDataset
+
+from scripts import process
 
 log = logging.getLogger(__name__)
 
@@ -88,22 +91,19 @@ class UnihanHelper(CihaiHelper):
 class UnihanScriptsTestCase(UnihanHelper):
 
     def test_in_columns(self):
-        u = self.cihai.use(unihan.Unihan)
-
         columns = ['hey', 'kDefinition', 'kWhat']
-        result = unihan.scripts.process.in_columns('kDefinition', columns)
+        result = process.in_columns('kDefinition', columns)
 
         self.assertTrue(result)
 
     def test_save(self):
 
-        u = self.cihai.use(unihan.Unihan)
         src_filepath = self.tempzip_filepath
 
         tempdir = tempfile.mkdtemp()
 
         dest_filepath = os.path.join(tempdir, self.zip_filename)
-        unihan.scripts.save(src_filepath, dest_filepath, shutil.copy)
+        process.save(src_filepath, dest_filepath, shutil.copy)
 
         result = os.path.exists(dest_filepath)
 
@@ -120,7 +120,7 @@ class UnihanScriptsTestCase(UnihanHelper):
         tempdir = self.tempdir
         dest_filepath = os.path.join(tempdir, 'data', self.zip_filename)
 
-        unihan.scripts.download(src_filepath, dest_filepath, shutil.copy)
+        process.download(src_filepath, dest_filepath, shutil.copy)
 
         result = os.path.dirname(os.path.join(dest_filepath, 'data'))
         self.assertTrue(
@@ -130,18 +130,16 @@ class UnihanScriptsTestCase(UnihanHelper):
 
     def test_extract(self):
 
-        zf = unihan.scripts.extract(self.tempzip_filepath)
+        zf = process.extract(self.tempzip_filepath)
 
         self.assertEqual(len(zf.infolist()), 1)
         self.assertEqual(zf.infolist()[0].file_size, 10)
         self.assertEqual(zf.infolist()[0].filename, "d.txt")
 
     def test_convert(self):
-        u = self.cihai.use(unihan.Unihan)
-
         csv_files = [
-            u.get_datapath('Unihan_DictionaryLikeData.txt'),
-            u.get_datapath('Unihan_Readings.txt'),
+            get_datapath('Unihan_DictionaryLikeData.txt'),
+            get_datapath('Unihan_Readings.txt'),
         ]
 
         columns = [
@@ -149,9 +147,9 @@ class UnihanScriptsTestCase(UnihanHelper):
             'kPhonetic',
             'kCantonese',
             'kDefinition',
-        ] + unihan.scripts.process.default_columns
+        ] + process.default_columns
 
-        items = unihan.scripts.convert(csv_files, columns)
+        items = process.convert(csv_files, columns)
 
         notInColumns = []
 
@@ -169,56 +167,6 @@ class UnihanScriptsTestCase(UnihanHelper):
 class UnihanTestCase(UnihanHelper):
     """Utilities to retrieve cihai information in a relational-friendly format.
     """
-
-    def test_create_table(self):
-        columns = [
-            'kCantonese',
-            'kDefinition',
-            'kHangul',
-        ] + unihan.scripts.process.default_columns
-
-        table = unihan.create_table(columns, self.cihai.metadata)
-
-        results = [text_type(c.name) for c in table.columns]
-        self.assertSetEqual(set(results), set(columns))
-
-        if table.exists():
-            table.drop()
-
-    def test_check_install(self):
-        columns = [
-            'kCantonese',
-            'kDefinition',
-            'kHangul',
-        ] + unihan.scripts.process.default_columns
-
-        install_dict = {
-            'Unihan_Readings.txt': [
-                'kCantonese',
-                'kDefinition',
-                'kHangul',
-            ]
-        }
-
-        results = unihan.check_install(
-            metadata=self.cihai.metadata,
-            install_dict=install_dict
-        )
-
-        self.assertFalse(results)
-
-        u = self.cihai.use(unihan.Unihan)
-        table = u.install(install_dict)
-
-        results = unihan.check_install(
-            metadata=self.cihai.metadata,
-            install_dict=install_dict
-        )
-
-        self.assertTrue(results)
-
-        if table.exists():
-            table.drop()
 
     def test_flatten_datasets(self):
 
@@ -264,7 +212,42 @@ class UnihanTestCase(UnihanHelper):
         self.assertSetEqual(set(expected), set(results))
 
 
+def add_to_path(path):
+    """Adds an entry to sys.path if it's not already there.  This does
+    not append it but moves it to the front so that we can be sure it
+    is loaded.
+    """
+    if not os.path.isdir(path):
+        raise RuntimeError('Tried to add nonexisting path')
+
+    def _samefile(x, y):
+        if x == y:
+            return True
+        try:
+            return os.path.samefile(x, y)
+        except (IOError, OSError, AttributeError):
+            # Windows has no samefile
+            return False
+    sys.path[:] = [x for x in sys.path if not _samefile(path, x)]
+    sys.path.insert(0, path)
+
+
+def get_datapath(filename):
+
+    return os.path.join(
+        os.path.dirname(__file__), 'fixtures', filename
+    )
+
+
+def setup_path():
+    script_path = os.path.join(
+        os.path.dirname(__file__), os.pardir, 'scripts'
+    )
+    add_to_path(script_path)
+
+
 def suite():
+    setup_path()
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(UnihanTestCase))
     suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
