@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""Cihai dataset for `Unihan`_, Han Unification from Unicode, Inc."""
+"""Build Unihan into datapackage-compatible format."""
+
+from __future__ import absolute_import, division, print_function, \
+    with_statement, unicode_literals
 
 import os
 import sys
@@ -9,6 +12,15 @@ import glob
 import hashlib
 import fileinput
 import argparse
+
+
+__title__ = 'requests'
+__description__ = 'Build Unihan into datapackage-compatible CSV.'
+__version__ = '0.0.1'
+__author__ = 'Tony Narlock'
+__license__ = 'MIT'
+__copyright__ = 'Copyright 2014 Tony Narlock'
+
 
 PY2 = sys.version_info[0] == 2
 
@@ -268,12 +280,15 @@ def convert(csv_files, columns):
     return items
 
 
-def build(argv):
-    parser = argparse.ArgumentParser(prog="unihan")
-    parser.add_argument("-d", "--dest", action="append", dest="_destination")
+def cli(argv):
+    parser = argparse.ArgumentParser(
+        prog=__title__,
+        description=__description__
+    )
+    parser.add_argument("-s", "--source", action="append", dest="_source")
+    parser.add_argument("-d", "--destination", action="append", dest="_destination")
     parser.add_argument("-H", "--headings", action="append", dest="_headings")
     parser.add_argument("-f", "--files", action="append", dest="_files")
-    parser.add_argument("-s", "--source", action="append", dest="_source")
 
     args = parser.parse_args(argv)
 
@@ -286,7 +301,7 @@ def build(argv):
 
 
 def main():
-    return build(sys.argv[1:])
+    return cli(sys.argv[1:])
 
 if __name__ == "__main__":
         sys.exit(main())
