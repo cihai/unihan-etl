@@ -142,7 +142,7 @@ UNIHAN_DATASETS = {
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 
 table_name = 'Unihan'
-flatten_datasets = lambda d: sorted({c for cs in d.values() for c in cs})
+get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
 default_columns = ['ucn', 'char']
 
 

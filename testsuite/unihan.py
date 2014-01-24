@@ -4,16 +4,7 @@
 cihaidata_unihan.testsuite.unihan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Unihan
-
-id char ucn colName colNmae colName
-
-load csv's mapped by colNmae and individual names into a dict.
-
-'中' {
-    'ucn': '',
-    'kDefinition': ''
-}
+Use datapackage.json format.
 
 1. insert dict/struct of { 'unihanFileName': ['colName', 'colName'] }
 return cols, records
@@ -27,7 +18,6 @@ What a data set should provide.
 2. Extract it (if necessary).
 3. Extract the code
 
-Get Cihai test object working with the local package directory files.
 
 """
 
@@ -163,9 +153,9 @@ class UnihanTestCase(UnihanHelper):
     """Utilities to retrieve cihai information in a relational-friendly format.
     """
 
-    def test_flatten_datasets(self):
+    def test_flatten_headings(self):
 
-        flatten_datasets = process.flatten_datasets
+        get_headings = process.get_headings
 
         single_dataset = {
             'Unihan_Readings.txt': [
@@ -176,7 +166,7 @@ class UnihanTestCase(UnihanHelper):
         }
 
         expected = ['kCantonese', 'kDefinition', 'kHangul']
-        results = flatten_datasets(single_dataset)
+        results = get_headings(single_dataset)
 
         self.assertEqual(expected, results)
 
@@ -202,7 +192,7 @@ class UnihanTestCase(UnihanHelper):
             'kCNS1986',
         ]
 
-        results = flatten_datasets(datasets)
+        results = get_headings(datasets)
 
         self.assertSetEqual(set(expected), set(results))
 
