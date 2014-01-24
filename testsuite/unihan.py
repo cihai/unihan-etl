@@ -150,12 +150,9 @@ class UnihanScriptsTestCase(UnihanHelper):
 
 
 class UnihanTestCase(UnihanHelper):
-    """Utilities to retrieve cihai information in a relational-friendly format.
-    """
+    """Utilities to retrieve unihan data in datapackage format."""
 
     def test_flatten_headings(self):
-
-        get_headings = process.get_headings
 
         single_dataset = {
             'Unihan_Readings.txt': [
@@ -166,7 +163,7 @@ class UnihanTestCase(UnihanHelper):
         }
 
         expected = ['kCantonese', 'kDefinition', 'kHangul']
-        results = get_headings(single_dataset)
+        results = process.get_headings(single_dataset)
 
         self.assertEqual(expected, results)
 
@@ -192,7 +189,7 @@ class UnihanTestCase(UnihanHelper):
             'kCNS1986',
         ]
 
-        results = get_headings(datasets)
+        results = process.get_headings(datasets)
 
         self.assertSetEqual(set(expected), set(results))
 
