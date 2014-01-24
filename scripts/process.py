@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""Build Unihan into datapackage-compatible format."""
+"""Build Unihan into datapackage-compatible format.
+
+TODO: Parse datapackage.json's field and schema paramters.
+"""
 
 from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
@@ -40,9 +43,26 @@ else:
 not_junk = lambda line: line[0] != '#' and line != '\n'
 in_columns = lambda c, columns: c in columns + default_columns
 default_columns = ['ucn', 'char']
+UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 
 
-UNIHAN_DATASETS = {
+def get_datapath(filename):
+
+    return os.path.abspath(os.path.join(
+        os.path.dirname(__file__), os.pardir, 'data', filename
+    ))
+
+WORK_DIR = get_datapath('')
+UNIHAN_DEST = get_datapath('data-built.csv')
+
+#: Return list of headings from dict of {filename: ['heading', 'heading1']}.
+get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
+default_columns = ['ucn', 'char']
+
+#: Return filtered :dict:`~.UNIHAN_MANIFEST` by list of file names.
+filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
+
+UNIHAN_MANIFEST = {
     'Unihan_DictionaryIndices.txt': [
         'kCheungBauerIndex',
         'kCowles',
@@ -151,12 +171,6 @@ UNIHAN_DATASETS = {
     ]
 
 }
-
-UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
-
-table_name = 'Unihan'
-get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
-default_columns = ['ucn', 'char']
 
 
 def ucn_to_unicode(ucn):
@@ -280,22 +294,38 @@ def convert(csv_files, columns):
     return items
 
 
+def build(
+    source, destination, work_dir, headings, files
+):
+
+    print(source, destination, work_dir, headings, files)
+
+
 def cli(argv):
     parser = argparse.ArgumentParser(
         prog=__title__,
         description=__description__
     )
-    parser.add_argument("-s", "--source", action="append", dest="_source")
-    parser.add_argument("-d", "--destination", action="append", dest="_destination")
-    parser.add_argument("-H", "--headings", action="append", dest="_headings")
-    parser.add_argument("-f", "--files", action="append", dest="_files")
+    parser.add_argument("-s", "--source", action="append", dest="source",
+                        help="Default: %s" % UNIHAN_URL)
+    parser.add_argument("-d", "--destination", action="append", dest="destination",
+                        help="Default: %s" % UNIHAN_DEST)
+    parser.add_argument("-w", "--work-dir", action="append", dest="work_dir",
+                        help="Default: %s" % WORK_DIR)
+    parser.add_argument("-H", "--headings", action="append", dest="headings",
+                        help="Default: %s" % UNIHAN_HEADINGS)
+    parser.add_argument("-f", "--files", action="append", dest="files", nargs='*',
+                        help="Default: %s" % UNIHAN_FILES)
 
     args = parser.parse_args(argv)
 
-    dest = args._destination if args._destination is not None else []
-    headings = args._headings if args._headings is not None else []
-    files = args._files if args._files is not None else []
-    source = args._source if args._source is not None else []
+    source = args.source if args.source is not None else UNIHAN_URL
+    destination = args.destination if args.destination is not None else UNIHAN_DEST
+    work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
+    headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
+    files = args.files if args.files is not None else UNIHAN_FILES
+
+    build(source, destination, work_dir, headings, files)
 
     parser.print_help()
 
