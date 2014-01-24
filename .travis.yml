@@ -13,6 +13,6 @@ before_install:
   - pip install -e git+https://github.com/cihai/cihai-python.git#egg=cihai-python
 install:
   - "pip install -e ."
-script: coverage run --source=cihaidata_unihan setup.py test
+script: coverage run --source=scripts setup.py test
 after_success:
   - coveralls
