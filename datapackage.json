@@ -1,0 +1,37 @@
+{
+  "name": "unihan",
+  "title": "Unicode Han Database (Unihan)",
+  "licenses": [
+    {
+      "url": "http://www.unicode.org/copyright.html#Exhibit1", 
+      "name": "UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWARE"
+    }
+  ], 
+  "sources": [{
+    "web": "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
+  }],
+  "resources": [
+    {
+      "path": "data/unihan.csv",
+      "schema": {
+        "fields": [
+          {
+            "type": "string", 
+            "primarykey": true,
+            "id": "UCN"
+          }, 
+          {
+            "type": "string", 
+            "id": "kdefinition"
+          },
+          {
+            "type": "integer", 
+            "id": "kTotalStrokes"
+          }
+
+        ]
+      }
+    }
+  ]
+}
+
