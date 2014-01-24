@@ -40,8 +40,11 @@ else:
 
     from urllib.request import urlretrieve
 
+#: Return False on newlines and C-style comments.
 not_junk = lambda line: line[0] != '#' and line != '\n'
-in_columns = lambda c, columns: c in columns + default_columns
+
+#: Return True if string is in the default headings.
+in_headings = lambda c, columns: c in columns + default_columns
 default_columns = ['ucn', 'char']
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 
@@ -284,7 +287,7 @@ def convert(csv_files, columns):
     for l in data:
         if not_junk(l):
             l = l.strip().split('\t')
-            if in_columns(l[1], columns):
+            if in_headings(l[1], columns):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
                 if not char in items:

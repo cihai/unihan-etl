@@ -109,9 +109,9 @@ class UnihanHelper(TestCase):
 
 class UnihanScriptsTestCase(UnihanHelper):
 
-    def test_in_columns(self):
+    def test_in_headings(self):
         columns = ['hey', 'kDefinition', 'kWhat']
-        result = process.in_columns('kDefinition', columns)
+        result = process.in_headings('kDefinition', columns)
 
         self.assertTrue(result)
 
