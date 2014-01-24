@@ -8,6 +8,7 @@ import zipfile
 import glob
 import hashlib
 import fileinput
+import argparse
 
 PY2 = sys.version_info[0] == 2
 
@@ -267,4 +268,17 @@ def convert(csv_files, columns):
     return items
 
 
+def build(argv):
+    parser = argparse.ArgumentParser(prog="warehouse")
+    parser.add_argument("-c", "--config", action="append", dest="_configs")
 
+    args = parser.parse_args(argv)
+
+    configs = args._configs if args._configs is not None else []
+
+
+def main():
+    return build(sys.argv[1:])
+
+if __name__ == "__main__":
+        sys.exit(main())

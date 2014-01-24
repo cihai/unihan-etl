@@ -69,9 +69,7 @@ class UnihanHelper(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-
         shutil.rmtree(cls.tempdir)
-
         super(UnihanHelper, cls).tearDownClass()
 
 
@@ -192,6 +190,31 @@ class UnihanTestCase(UnihanHelper):
         results = process.get_headings(datasets)
 
         self.assertSetEqual(set(expected), set(results))
+
+
+class UnihanScript(object):
+
+    """Instance of unihan script with confurible environment
+    settings."""
+
+    download_url = ''
+
+
+class CliArgTests(TestCase):
+    """Allows for creating a custom output of unihan data
+    in datapackage.json format."""
+
+    def test_output_to_file(self):
+        """-o outputs to destinations."""
+        pass
+
+    def test_headings(self):
+        """-H for headings."""
+        pass
+
+    def test_files(self):
+        """-f for files."""
+        pass
 
 
 def add_to_path(path):
