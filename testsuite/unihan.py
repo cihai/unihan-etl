@@ -42,25 +42,22 @@ import unittest
 import zipfile
 import shutil
 
-import sqlalchemy
+try:
+    import unittest2 as unittest
+except ImportError:  # Python 2.7
+    import unittest
 
-from sqlalchemy import Table, MetaData
-
-import cihai
-
-from cihai.testsuite.cihai import CihaiHelper
-from cihai.testsuite.helpers import TestCase
-from cihai.util import get_datafile
-from cihai.datasets import unihan
-from cihai._compat import StringIO, text_type
-from cihai import Cihai, CihaiDataset
 
 from scripts import process
 
 log = logging.getLogger(__name__)
 
 
-class UnihanHelper(CihaiHelper):
+class TestCase(unittest.TestCase):
+    pass
+
+
+class UnihanHelper(TestCase):
 
     config = os.path.abspath(os.path.join(
         os.path.dirname(__file__),
@@ -112,8 +109,6 @@ class UnihanScriptsTestCase(UnihanHelper):
         self.assertTrue(result)
 
     def test_download(self):
-
-        u = self.cihai.use(unihan.Unihan)
 
         src_filepath = self.tempzip_filepath
 
@@ -170,7 +165,7 @@ class UnihanTestCase(UnihanHelper):
 
     def test_flatten_datasets(self):
 
-        flatten_datasets = unihan.flatten_datasets
+        flatten_datasets = process.flatten_datasets
 
         single_dataset = {
             'Unihan_Readings.txt': [
