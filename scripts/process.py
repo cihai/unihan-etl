@@ -269,12 +269,20 @@ def convert(csv_files, columns):
 
 
 def build(argv):
-    parser = argparse.ArgumentParser(prog="warehouse")
-    parser.add_argument("-c", "--config", action="append", dest="_configs")
+    parser = argparse.ArgumentParser(prog="unihan")
+    parser.add_argument("-d", "--dest", action="append", dest="_destination")
+    parser.add_argument("-H", "--headings", action="append", dest="_headings")
+    parser.add_argument("-f", "--files", action="append", dest="_files")
+    parser.add_argument("-s", "--source", action="append", dest="_source")
 
     args = parser.parse_args(argv)
 
-    configs = args._configs if args._configs is not None else []
+    dest = args._destination if args._destination is not None else []
+    headings = args._headings if args._headings is not None else []
+    files = args._files if args._files is not None else []
+    source = args._source if args._source is not None else []
+
+    parser.print_help()
 
 
 def main():
