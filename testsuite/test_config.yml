@@ -1,5 +1,0 @@
-debug: True
-
-data_path: ./testsuite/fixtures/
-database:
-  url: 'sqlite:///:memory:'
