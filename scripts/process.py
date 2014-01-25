@@ -16,6 +16,8 @@ import hashlib
 import fileinput
 import argparse
 
+from scripts.util import convert_to_attr_dict
+
 
 __title__ = 'requests'
 __description__ = 'Build Unihan into datapackage-compatible CSV.'
@@ -313,30 +315,42 @@ def convert(csv_files, columns):
     return items
 
 
-
-
 class Builder(object):
 
-    def __init__(
-        self, source, destination, work_dir, headings, files
-    ):
-        print(source, destination, work_dir, headings, files)
+    def __init__(self, config):
+
+        print(config)
+
+        #: configuration dictionary. Available as attributes. ``.config.debug``
+        self.config = convert_to_attr_dict(config)
+
+        print(
+            self.config        )
+
 
     @classmethod
     def from_cli(cls, argv):
+        """Create Builder instance from CLI :mod:`argparse` arguments.
+
+        :param argv: Arguments passed in via CLI.
+        :type argv: list
+        :returns: builder
+        :rtype: :class:`~.Builder`
+
+        """
         parser = argparse.ArgumentParser(
             prog=__title__,
             description=__description__
         )
-        parser.add_argument("-s", "--source", action="append", dest="source",
+        parser.add_argument("-s", "--source", dest="source",
                             help="Default: %s" % UNIHAN_URL)
-        parser.add_argument("-d", "--destination", action="append", dest="destination",
+        parser.add_argument("-d", "--destination", dest="destination",
                             help="Default: %s" % UNIHAN_DEST)
-        parser.add_argument("-w", "--work-dir", action="append", dest="work_dir",
+        parser.add_argument("-w", "--work-dir", dest="work_dir",
                             help="Default: %s" % WORK_DIR)
         parser.add_argument("-H", "--headings", action="append", dest="headings",
                             help="Default: %s" % UNIHAN_HEADINGS)
-        parser.add_argument("-f", "--files", action="append", dest="files", nargs='*',
+        parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
 
         args = parser.parse_args(argv)
@@ -348,7 +362,9 @@ class Builder(object):
         files = args.files if args.files is not None else UNIHAN_FILES
 
         parser.print_help()
-        return cls(source, destination, work_dir, headings, files)
+
+
+        return cls({k:v for k,v in vars(args).items() if v})
 
 
 if __name__ == "__main__":
