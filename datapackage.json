@@ -27,8 +27,367 @@
           {
             "type": "integer", 
             "id": "kTotalStrokes"
+          },
+          {
+            "type": "string", 
+            "id": "kCheungBauerIndex"
+          },
+          {
+            "type": "string", 
+            "id": "kCowles"
+          },
+          {
+            "type": "string", 
+            "id": "kDaeJaweon"
+          },
+          {
+            "type": "string", 
+            "id": "kFennIndex"
+          },
+          {
+            "type": "string", 
+            "id": "kGSR"
+          },
+          {
+            "type": "string", 
+            "id": "kHanYu"
+          },
+          {
+            "type": "string", 
+            "id": "kIRGDaeJaweon"
+          },
+          {
+            "type": "string", 
+            "id": "kIRGDaiKanwaZiten"
+          },
+          {
+            "type": "string", 
+            "id": "kIRGHanyuDaZidian"
+          },
+          {
+            "type": "string", 
+            "id": "kIRGKangXi"
+          },
+          {
+            "type": "string", 
+            "id": "kKangXi"
+          },
+          {
+            "type": "string", 
+            "id": "kKarlgren"
+          },
+          {
+            "type": "string", 
+            "id": "kLau"
+          },
+          {
+            "type": "string", 
+            "id": "kMatthews"
+          },
+          {
+            "type": "string", 
+            "id": "kMeyerWempe"
+          },
+          {
+            "type": "string", 
+            "id": "kMorohashi"
+          },
+          {
+            "type": "string", 
+            "id": "kNelson"
+          },
+          {
+            "type": "string", 
+            "id": "kSBGY"
+          },
+          {
+            "type": "string", 
+            "id": "kCangjie"
+          },
+          {
+            "type": "string", 
+            "id": "kCheungBauer"
+          },
+          {
+            "type": "string", 
+            "id": "kCihaiT"
+          },
+          {
+            "type": "string", 
+            "id": "kFenn"
+          },
+          {
+            "type": "string", 
+            "id": "kFourCornerCode"
+          },
+          {
+            "type": "string", 
+            "id": "kFrequency"
+          },
+          {
+            "type": "string", 
+            "id": "kGradeLevel"
+          },
+          {
+            "type": "string", 
+            "id": "kHDZRadBreak"
+          },
+          {
+            "type": "string", 
+            "id": "kHKGlyph"
+          },
+          {
+            "type": "string", 
+            "id": "kPhonetic"
+          },
+          {
+            "type": "string", 
+            "id": "kTotalStrokes"
+          },
+          {
+            "type": "string", 
+            "id": "kIICore"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_GSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_HSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_JSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_KPSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_KSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_MSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_TSource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_USource"
+          },
+          {
+            "type": "string", 
+            "id": "kIRG_VSource"
+          },
+          {
+            "type": "string", 
+            "id": "kAccountingNumeric"
+          },
+          {
+            "type": "string", 
+            "id": "kOtherNumeric"
+          },
+          {
+            "type": "string", 
+            "id": "kPrimaryNumeric"
+          },
+          {
+            "type": "string", 
+            "id": "kBigFive"
+          },
+          {
+            "type": "string", 
+            "id": "kCCCII"
+          },
+          {
+            "type": "string", 
+            "id": "kCNS1986"
+          },
+          {
+            "type": "string", 
+            "id": "kCNS1992"
+          },
+          {
+            "type": "string", 
+            "id": "kEACC"
+          },
+          {
+            "type": "string", 
+            "id": "kGB0"
+          },
+          {
+            "type": "string", 
+            "id": "kGB1"
+          },
+          {
+            "type": "string", 
+            "id": "kGB3"
+          },
+          {
+            "type": "string", 
+            "id": "kGB5"
+          },
+          {
+            "type": "string", 
+            "id": "kGB7"
+          },
+          {
+            "type": "string", 
+            "id": "kGB8"
+          },
+          {
+            "type": "string", 
+            "id": "kHKSCS"
+          },
+          {
+            "type": "string", 
+            "id": "kIBMJapan"
+          },
+          {
+            "type": "string", 
+            "id": "kJis0"
+          },
+          {
+            "type": "string", 
+            "id": "kJis1"
+          },
+          {
+            "type": "string", 
+            "id": "kJIS0213"
+          },
+          {
+            "type": "string", 
+            "id": "kKPS0"
+          },
+          {
+            "type": "string", 
+            "id": "kKPS1"
+          },
+          {
+            "type": "string", 
+            "id": "kKSC0"
+          },
+          {
+            "type": "string", 
+            "id": "kKSC1"
+          },
+          {
+            "type": "string", 
+            "id": "kMainlandTelegraph"
+          },
+          {
+            "type": "string", 
+            "id": "kPseudoGB1"
+          },
+          {
+            "type": "string", 
+            "id": "kTaiwanTelegraph"
+          },
+          {
+            "type": "string", 
+            "id": "kXerox"
+          },
+          {
+            "type": "string", 
+            "id": "kRSAdobe_Japan1_6"
+          },
+          {
+            "type": "string", 
+            "id": "kRSJapanese"
+          },
+          {
+            "type": "string", 
+            "id": "kRSKangXi"
+          },
+          {
+            "type": "string", 
+            "id": "kRSKanWa"
+          },
+          {
+            "type": "string",
+            "id": "kRSKorean"
+          },
+          {
+            "type": "string", 
+            "id": "kRSUnicode"
+          },
+          {
+            "type": "string", 
+            "id": "kCantonese"
+          },
+          {
+            "type": "string", 
+            "id": "kDefinition"
+          },
+          {
+            "type": "string", 
+            "id": "kHangul"
+          },
+          {
+            "type": "string", 
+            "id": "kHanyuPinlu"
+          },
+          {
+            "type": "string", 
+            "id": "kHanyuPinyin"
+          },
+          {
+            "type": "string", 
+            "id": "kJapaneseKun"
+          },
+          {
+            "type": "string", 
+            "id": "kJapaneseOn"
+          },
+          {
+            "type": "string", 
+            "id": "kKorean"
+          },
+          {
+            "type": "string", 
+            "id": "kMandarin"
+          },
+          {
+            "type": "string", 
+            "id": "kTang"
+          },
+          {
+            "type": "string", 
+            "id": "kVietnamese"
+          },
+          {
+            "type": "string", 
+            "id": "kXHC1983"
+          },
+          {
+            "type": "string", 
+            "id": "kCompatibilityVariant"
+          },
+          {
+            "type": "string", 
+            "id": "kSemanticVariant"
+          },
+          {
+            "type": "string", 
+            "id": "kSimplifiedVariant"
+          },
+          {
+            "type": "string", 
+            "id": "kSpecializedSemanticVariant"
+          },
+          {
+            "type": "string", 
+            "id": "kTraditionalVariant"
+          },
+          {
+            "type": "string", 
+            "id": "kZVariant"
           }
-
         ]
       }
     }
