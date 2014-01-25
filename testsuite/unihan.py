@@ -238,6 +238,10 @@ class CliArgTests(TestCase):
     """Allows for creating a custom output of unihan data
     in datapackage.json format."""
 
+    def test_no_arg(self):
+        """Works without arguments."""
+        pass
+
     def test_output_to_file(self):
         """-o outputs to destinations."""
         pass

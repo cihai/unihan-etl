@@ -12,6 +12,7 @@
   }],
   "resources": [
     {
+      "name": "unihan",
       "path": "data/unihan.csv",
       "schema": {
         "primaryKey": ["char", "ucn"],

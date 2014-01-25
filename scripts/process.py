@@ -40,31 +40,6 @@ else:
 
     from urllib.request import urlretrieve
 
-#: Return False on newlines and C-style comments.
-not_junk = lambda line: line[0] != '#' and line != '\n'
-
-#: Return True if string is in the default headings.
-in_headings = lambda c, columns: c in columns + default_columns
-default_columns = ['ucn', 'char']
-UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
-
-
-def get_datapath(filename):
-
-    return os.path.abspath(os.path.join(
-        os.path.dirname(__file__), os.pardir, 'data', filename
-    ))
-
-WORK_DIR = get_datapath('')
-UNIHAN_DEST = get_datapath('data-built.csv')
-
-#: Return list of headings from dict of {filename: ['heading', 'heading1']}.
-get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
-default_columns = ['ucn', 'char']
-
-#: Return filtered :dict:`~.UNIHAN_MANIFEST` by list of file names.
-filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
-
 UNIHAN_MANIFEST = {
     'Unihan_DictionaryIndices.txt': [
         'kCheungBauerIndex',
@@ -174,6 +149,47 @@ UNIHAN_MANIFEST = {
     ]
 
 }
+
+#: Return False on newlines and C-style comments.
+not_junk = lambda line: line[0] != '#' and line != '\n'
+
+#: Return True if string is in the default headings.
+in_headings = lambda c, columns: c in columns + default_columns
+default_columns = ['ucn', 'char']
+UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
+
+#: Default Unihan Files
+UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+
+def get_datapath(filename):
+
+    return os.path.abspath(os.path.join(
+        os.path.dirname(__file__), os.pardir, 'data', filename
+    ))
+
+WORK_DIR = get_datapath('')
+UNIHAN_DEST = get_datapath('data-built.csv')
+
+#: Return list of headings from dict of {filename: ['heading', 'heading1']}.
+get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
+
+#: Default Unihan Headings
+UNIHAN_HEADINGS = get_headings(UNIHAN_MANIFEST)
+
+default_columns = ['ucn', 'char']
+
+#: Return filtered :dict:`~.UNIHAN_MANIFEST` by list of file names.
+filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
+
+default_config = {
+    'source': UNIHAN_URL,
+    'destination': UNIHAN_DEST,
+    'work_dir': WORK_DIR,
+    'headings': UNIHAN_HEADINGS,
+    'files': UNIHAN_FILES
+}
+
+
 
 
 def ucn_to_unicode(ucn):
@@ -297,44 +313,43 @@ def convert(csv_files, columns):
     return items
 
 
-def build(
-    source, destination, work_dir, headings, files
-):
-
-    print(source, destination, work_dir, headings, files)
 
 
-def cli(argv):
-    parser = argparse.ArgumentParser(
-        prog=__title__,
-        description=__description__
-    )
-    parser.add_argument("-s", "--source", action="append", dest="source",
-                        help="Default: %s" % UNIHAN_URL)
-    parser.add_argument("-d", "--destination", action="append", dest="destination",
-                        help="Default: %s" % UNIHAN_DEST)
-    parser.add_argument("-w", "--work-dir", action="append", dest="work_dir",
-                        help="Default: %s" % WORK_DIR)
-    parser.add_argument("-H", "--headings", action="append", dest="headings",
-                        help="Default: %s" % UNIHAN_HEADINGS)
-    parser.add_argument("-f", "--files", action="append", dest="files", nargs='*',
-                        help="Default: %s" % UNIHAN_FILES)
+class Builder(object):
 
-    args = parser.parse_args(argv)
+    def __init__(
+        self, source, destination, work_dir, headings, files
+    ):
+        print(source, destination, work_dir, headings, files)
 
-    source = args.source if args.source is not None else UNIHAN_URL
-    destination = args.destination if args.destination is not None else UNIHAN_DEST
-    work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
-    headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
-    files = args.files if args.files is not None else UNIHAN_FILES
+    @classmethod
+    def from_cli(cls, argv):
+        parser = argparse.ArgumentParser(
+            prog=__title__,
+            description=__description__
+        )
+        parser.add_argument("-s", "--source", action="append", dest="source",
+                            help="Default: %s" % UNIHAN_URL)
+        parser.add_argument("-d", "--destination", action="append", dest="destination",
+                            help="Default: %s" % UNIHAN_DEST)
+        parser.add_argument("-w", "--work-dir", action="append", dest="work_dir",
+                            help="Default: %s" % WORK_DIR)
+        parser.add_argument("-H", "--headings", action="append", dest="headings",
+                            help="Default: %s" % UNIHAN_HEADINGS)
+        parser.add_argument("-f", "--files", action="append", dest="files", nargs='*',
+                            help="Default: %s" % UNIHAN_FILES)
 
-    build(source, destination, work_dir, headings, files)
+        args = parser.parse_args(argv)
 
-    parser.print_help()
+        source = args.source if args.source is not None else UNIHAN_URL
+        destination = args.destination if args.destination is not None else UNIHAN_DEST
+        work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
+        headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
+        files = args.files if args.files is not None else UNIHAN_FILES
 
+        parser.print_help()
+        return cls(source, destination, work_dir, headings, files)
 
-def main():
-    return cli(sys.argv[1:])
 
 if __name__ == "__main__":
-        sys.exit(main())
+        sys.exit(Builder.from_cli(sys.argv[1:]))
