@@ -3,7 +3,8 @@ omit =
     */testsuite/*
     */_vendor/*
     */_*
-    */log.py
+    */util.py
+    */_compat.py
 
 [report]
 exclude_lines =
