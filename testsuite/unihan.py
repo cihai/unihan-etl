@@ -236,6 +236,7 @@ class UnihanScript(object):
 
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
     UNIHAN_FILES, default_config, Builder
+from scripts.util import merge_dict
 
 
 class CliArgTestCase(TestCase):
@@ -253,7 +254,12 @@ class CliArgTestCase(TestCase):
 
     def test_output_to_file(self):
         """-o outputs to destinations."""
-        pass
+
+        expectedIn = {'destination': 'data/output.csv'}
+
+        result = Builder.from_cli(['-d', 'data/output.csv']).config
+
+        self.assertDictContainsSubset(expectedIn, result)
 
     def test_headings(self):
         """-H for headings."""
