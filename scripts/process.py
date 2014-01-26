@@ -320,16 +320,9 @@ class Builder(object):
     def __init__(self, config):
 
         config = merge_dict(default_config, config)
-        print(config)
-
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
-
-        print(
-            self.config
-        )
-
 
     @classmethod
     def from_cli(cls, argv):

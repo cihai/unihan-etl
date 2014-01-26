@@ -40,6 +40,11 @@ except ImportError:  # Python 2.7
 
 from scripts import process
 
+from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
+    UNIHAN_FILES, default_config, Builder
+from scripts.util import merge_dict
+
+
 log = logging.getLogger(__name__)
 
 
@@ -234,11 +239,6 @@ class UnihanScript(object):
     download_url = ''
 
 
-from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
-    UNIHAN_FILES, default_config, Builder
-from scripts.util import merge_dict
-
-
 class CliArgTestCase(TestCase):
     """Allows for creating a custom output of unihan data
     in datapackage.json format."""
@@ -252,27 +252,28 @@ class CliArgTestCase(TestCase):
 
         self.assertEqual(expected, result)
 
-    def test_output_to_file(self):
-        """-o outputs to destinations."""
+    def test_cli_plus_defaults(self):
+        """Test CLI args + defaults."""
 
         expectedIn = {'destination': 'data/output.csv'}
-
         result = Builder.from_cli(['-d', 'data/output.csv']).config
-
         self.assertDictContainsSubset(expectedIn, result)
 
-    def test_headings(self):
-        """-H for headings."""
-        pass
+        expectedIn = {'headings': ['kDefinition']}
+        result = Builder.from_cli(['-H', 'kDefinition']).config
+        self.assertDictContainsSubset(expectedIn, result)
 
-    def test_files(self):
-        """-f for files."""
-        pass
+        expectedIn = {'headings': ['kDefinition']}
+        result = Builder.from_cli(['-H', 'kDefinition']).config
+        self.assertDictContainsSubset(expectedIn, result)
 
-    def test_source(self):
-        """-s --source for file location."""
-        pass
+        expectedIn = {'headings': ['kDefinition', 'kXerox']}
+        result = Builder.from_cli(['-H', 'kDefinition', 'kXerox']).config
+        self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple headings.")
 
+        expectedIn = {'headings': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'}
+        result = Builder.from_cli(['-H', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
+        self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple arguments.")
 
 def suite():
     setup_path()
