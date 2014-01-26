@@ -241,7 +241,7 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     :type destination: str
     :param reporthook: Function to write progress bar to stdout buffer.
     :type reporthook: function
-    :returns: destination where file downloaded to
+    :returns: destination where file downloaded to.
     :rtype: str
 
     """
@@ -351,7 +351,7 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_DEST)
         parser.add_argument("-w", "--work-dir", dest="work_dir",
                             help="Default: %s" % WORK_DIR)
-        parser.add_argument("-H", "--headings", action="append", dest="headings",
+        parser.add_argument("-H", "--headings", dest="headings", nargs="*",
                             help="Default: %s" % UNIHAN_HEADINGS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
