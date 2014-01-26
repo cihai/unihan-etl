@@ -16,7 +16,7 @@ import hashlib
 import fileinput
 import argparse
 
-from scripts.util import convert_to_attr_dict
+from scripts.util import convert_to_attr_dict, merge_dict
 
 
 __title__ = 'requests'
@@ -319,13 +319,16 @@ class Builder(object):
 
     def __init__(self, config):
 
+        config = merge_dict(default_config, config)
         print(config)
+
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
 
         print(
-            self.config        )
+            self.config
+        )
 
 
     @classmethod
@@ -355,14 +358,11 @@ class Builder(object):
 
         args = parser.parse_args(argv)
 
-        source = args.source if args.source is not None else UNIHAN_URL
-        destination = args.destination if args.destination is not None else UNIHAN_DEST
-        work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
-        headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
-        files = args.files if args.files is not None else UNIHAN_FILES
-
-        parser.print_help()
-
+        # source = args.source if args.source is not None else UNIHAN_URL
+        # destination = args.destination if args.destination is not None else UNIHAN_DEST
+        # work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
+        # headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
+        # files = args.files if args.files is not None else UNIHAN_FILES
 
         return cls({k:v for k,v in vars(args).items() if v})
 

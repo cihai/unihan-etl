@@ -234,13 +234,22 @@ class UnihanScript(object):
     download_url = ''
 
 
-class CliArgTests(TestCase):
+from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
+    UNIHAN_FILES, default_config, Builder
+
+
+class CliArgTestCase(TestCase):
     """Allows for creating a custom output of unihan data
     in datapackage.json format."""
 
-    def test_no_arg(self):
+    def test_no_args(self):
         """Works without arguments."""
-        pass
+
+        expected = default_config
+
+        result = Builder.from_cli([]).config
+
+        self.assertEqual(expected, result)
 
     def test_output_to_file(self):
         """-o outputs to destinations."""
@@ -264,4 +273,5 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(UnihanTestCase))
     suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
+    suite.addTest(unittest.makeSuite(CliArgTestCase))
     return suite
