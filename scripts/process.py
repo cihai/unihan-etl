@@ -9,6 +9,7 @@ from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
 
 import os
+import re
 import sys
 import zipfile
 import glob
@@ -221,6 +222,28 @@ def ucn_to_unicode(ucn):
     assert isinstance(char, text_type)
 
     return char
+
+
+def ucnstring_to_python(ucn_string):
+    """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
+    (u'\\u4e00').
+    """
+    res = re.findall("U\+[0-9a-fA-F]*", ucn_string)
+    for r in res:
+        ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
+
+    ucn_string = ucn_string.encode('utf-8')
+
+    assert isinstance(ucn_string, bytes)
+    return ucn_string
+
+
+def ucnstring_to_unicode(ucn_string):
+    """Return ucnstring as Unicode."""
+    ucn_string = ucnstring_to_python(ucn_string).decode('utf-8')
+
+    assert isinstance(ucn_string, text_type)
+    return ucn_string
 
 
 def save(url, filename, urlretrieve=urlretrieve, reporthook=None):

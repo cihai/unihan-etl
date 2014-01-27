@@ -41,7 +41,7 @@ except ImportError:  # Python 2.7
 from scripts import process
 
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
-    UNIHAN_FILES, default_config, Builder
+    UNIHAN_FILES, default_config, Builder, text_type
 from scripts.util import merge_dict
 
 
@@ -307,8 +307,32 @@ class UnihanTestCase(UnihanHelper):
 
 class ProcessTestCase(TestCase):
 
-    def test_conversion_ucn_to_utf8(self):
-        pass
+    def test_conversion_ucn_to_unicode(self):
+        before = 'U+4E00'
+        expected = '\u4e00'
+
+        result = process.ucn_to_unicode(before)
+
+        self.assertEqual(result, expected)
+
+        self.assertIsInstance(result, text_type)
+
+        # wide character
+        before = 'U+20001'
+        expected = '\U00020001'
+
+        result = process.ucn_to_unicode(before)
+
+        self.assertEqual(result, expected)
+        self.assertIsInstance(result, text_type)
+
+        before = '(same as U+7A69 穩) firm; stable; secure'
+        expected = '(same as 穩 穩) firm; stable; secure'
+
+        result = process.ucnstring_to_unicode(before)
+
+        self.assertEqual(result, expected)
+        self.assertIsInstance(result, text_type)
 
 
 class CliArgTestCase(TestCase):
@@ -345,6 +369,10 @@ class CliArgTestCase(TestCase):
         expectedIn = {'headings': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'}
         result = Builder.from_cli(['-H', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
         self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple arguments.")
+
+    def test_cli_exit_emessage_to_stderr(self):
+        """Sends exception .message to stderr on exit."""
+        pass
 
 def suite():
     setup_path()
