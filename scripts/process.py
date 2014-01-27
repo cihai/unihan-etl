@@ -192,8 +192,6 @@ default_config = {
 }
 
 
-
-
 def ucn_to_unicode(ucn):
     """Convert a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to Python unicode (u'\\u4e00')"""
     if isinstance(ucn, string_types):
@@ -326,10 +324,14 @@ class Builder(object):
 
         """
 
+        if 'files' in config and 'headings' not in config:
+            config['headings'] = get_headings(filter_manifest(config['files']))
+
         config = merge_dict(default_config, config)
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
+
 
     @classmethod
     def from_cli(cls, argv):

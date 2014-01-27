@@ -244,12 +244,12 @@ class UnihanTestCase(UnihanHelper):
         result = b.config.files
         expected = files
 
-        self.assertEqual(b.config.files, files, msg='Returns only the files picked.')
+        self.assertEqual(result, expected, msg='Returns only the files picked.')
 
-        expected = process.filter_manifest(files)
+        expected = process.get_headings(process.filter_manifest(files))
         result = b.config.headings
 
-        #self.assertEqual(msg='Returns only the headings for files picked.')
+        self.assertEqual(result, expected, msg='Returns only the headings for files picked.')
 
     def test_raise_error_unknown_heading(self):
         """Throw error if picking unknown heading."""
