@@ -318,6 +318,13 @@ def convert(csv_files, columns):
 class Builder(object):
 
     def __init__(self, config):
+        """Download and generate a datapackage.json compatible release of
+        `unihan <http://www.unicode.org/reports/tr38/>`_.
+
+        :param config: config values to override defaults.
+        :type config: dict
+
+        """
 
         config = merge_dict(default_config, config)
 
@@ -350,12 +357,6 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_FILES)
 
         args = parser.parse_args(argv)
-
-        # source = args.source if args.source is not None else UNIHAN_URL
-        # destination = args.destination if args.destination is not None else UNIHAN_DEST
-        # work_dir = args.work_dir if args.work_dir is not None else WORK_DIR
-        # headings = args.headings if args.headings is not None else UNIHAN_HEADINGS
-        # files = args.files if args.files is not None else UNIHAN_FILES
 
         return cls({k:v for k,v in vars(args).items() if v})
 

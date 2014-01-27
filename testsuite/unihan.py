@@ -230,13 +230,52 @@ class UnihanTestCase(UnihanHelper):
 
         self.assertSetEqual(set(expected), set(results))
 
+    def test_pick_files(self):
+        """Pick a white list of files to build from."""
 
-class UnihanScript(object):
+        files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    """Instance of unihan script with confurible environment
-    settings."""
+        config = {
+            'files': files
+        }
 
-    download_url = ''
+        b = process.Builder(config)
+
+        result = b.config.files
+        expected = files
+
+        self.assertEqual(b.config.files, files, msg='Returns only the files picked.')
+
+        expected = process.filter_manifest(files)
+        result = b.config.headings
+
+        #self.assertEqual(msg='Returns only the headings for files picked.')
+
+    def test_raise_error_unknown_heading(self):
+        """Throw error if picking unknown heading."""
+        pass
+
+    def test_raise_error_unknown_file(self):
+        """Throw error if picking unknown file."""
+        pass
+
+    def test_raise_error_unknown_heading_filtered_files(self):
+        """Throw error if picking heading not in file list, when files specified."""
+        pass
+
+    def test_set_reduce_files_automatically_when_only_heading_specified(self):
+        """Picks file automatically if none specified and headings are."""
+        pass
+
+    def test_set_reduce_headings_automatically_when_only_files_specified(self):
+        """Picks only necessary files when headings specified."""
+        pass
+
+
+class ProcessTestCase(TestCase):
+
+    def test_conversion_ucn_to_utf8(self):
+        pass
 
 
 class CliArgTestCase(TestCase):
@@ -247,7 +286,6 @@ class CliArgTestCase(TestCase):
         """Works without arguments."""
 
         expected = default_config
-
         result = Builder.from_cli([]).config
 
         self.assertEqual(expected, result)
@@ -280,5 +318,6 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(UnihanTestCase))
     suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
+    suite.addTest(unittest.makeSuite(ProcessTestCase))
     suite.addTest(unittest.makeSuite(CliArgTestCase))
     return suite
