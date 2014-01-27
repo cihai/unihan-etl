@@ -246,10 +246,7 @@ class UnihanTestCase(UnihanHelper):
 
         self.assertEqual(result, expected, msg='Returns only the files picked.')
 
-        expected = process.get_headings(process.filter_manifest(files))
-        result = b.config.headings
 
-        self.assertEqual(result, expected, msg='Returns only the headings for files picked.')
 
     def test_raise_error_unknown_heading(self):
         """Throw error if picking unknown heading."""
@@ -265,11 +262,35 @@ class UnihanTestCase(UnihanHelper):
 
     def test_set_reduce_files_automatically_when_only_heading_specified(self):
         """Picks file automatically if none specified and headings are."""
-        pass
+
+        headings = process.UNIHAN_MANIFEST['Unihan_Readings.txt'] + process.UNIHAN_MANIFEST['Unihan_Variants.txt']
+
+        config = {
+            'headings': headings
+        }
+
+        b = process.Builder(config)
+
+        expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
+        result = b.config.files
+
+        self.assertEqual(result, expected)
 
     def test_set_reduce_headings_automatically_when_only_files_specified(self):
         """Picks only necessary files when headings specified."""
-        pass
+
+        files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
+
+        config = {
+            'files': files
+        }
+
+        b = process.Builder(config)
+
+        expected = process.get_headings(process.filter_manifest(files))
+        result = b.config.headings
+
+        self.assertEqual(result, expected, msg='Returns only the headings for files picked.')
 
 
 class ProcessTestCase(TestCase):

@@ -180,8 +180,17 @@ UNIHAN_HEADINGS = get_headings(UNIHAN_MANIFEST)
 
 default_columns = ['ucn', 'char']
 
-#: Return filtered :dict:`~.UNIHAN_MANIFEST` by list of file names.
+#: Return filtered :dict:`~.UNIHAN_MANIFEST` from list of file names.
 filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
+
+#: Return list of files from list of headings.
+def get_files(headings):
+    files = set()
+    for file_, file_headings in UNIHAN_MANIFEST.items():
+        if any(file_ for h in headings if h in file_headings):
+            files.add(file_)
+
+    return list(files)
 
 default_config = {
     'source': UNIHAN_URL,
@@ -324,8 +333,13 @@ class Builder(object):
 
         """
 
+        # Filter headings when only files specified.
         if 'files' in config and 'headings' not in config:
             config['headings'] = get_headings(filter_manifest(config['files']))
+
+        # Filter files when only heading specified.
+        if 'headings' in config and 'files' not in config:
+            config['files'] = get_files(config['headings'])
 
         config = merge_dict(default_config, config)
 
