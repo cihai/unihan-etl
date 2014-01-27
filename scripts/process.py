@@ -186,9 +186,14 @@ filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
 #: Return list of files from list of headings.
 def get_files(headings):
     files = set()
-    for file_, file_headings in UNIHAN_MANIFEST.items():
-        if any(file_ for h in headings if h in file_headings):
-            files.add(file_)
+
+    for heading in headings:
+        if heading in UNIHAN_HEADINGS:
+            for file_, file_headings in UNIHAN_MANIFEST.items():
+                if any(file_ for h in headings if h in file_headings):
+                    files.add(file_)
+        else:
+            raise KeyError('Heading {0} not found in file list.'.format(heading))
 
     return list(files)
 
@@ -335,7 +340,10 @@ class Builder(object):
 
         # Filter headings when only files specified.
         if 'files' in config and 'headings' not in config:
-            config['headings'] = get_headings(filter_manifest(config['files']))
+            try:
+                config['headings'] = get_headings(filter_manifest(config['files']))
+            except KeyError as e:
+                raise KeyError('File {0} not found in file list.'.format(e.message))
 
         # Filter files when only heading specified.
         if 'headings' in config and 'files' not in config:

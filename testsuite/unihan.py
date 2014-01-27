@@ -250,11 +250,23 @@ class UnihanTestCase(UnihanHelper):
 
     def test_raise_error_unknown_heading(self):
         """Throw error if picking unknown heading."""
-        pass
+
+        config = {
+            'headings': ['kHello']
+        }
+
+        with self.assertRaisesRegexp(KeyError, 'Heading ([a-zA-Z].*) not found in file list.'):
+            b = process.Builder(config)
 
     def test_raise_error_unknown_file(self):
         """Throw error if picking unknown file."""
-        pass
+
+        config = {
+            'files': ['Sparta.lol']
+        }
+
+        with self.assertRaisesRegexp(KeyError, 'File ([a-zA-Z].*) not found in file list.'):
+            b = process.Builder(config)
 
     def test_raise_error_unknown_heading_filtered_files(self):
         """Throw error if picking heading not in file list, when files specified."""
