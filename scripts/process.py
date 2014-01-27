@@ -164,6 +164,7 @@ UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 
+
 def get_datapath(filename):
 
     return os.path.abspath(os.path.join(
@@ -182,7 +183,8 @@ UNIHAN_HEADINGS = get_headings(UNIHAN_MANIFEST)
 default_columns = ['ucn', 'char']
 
 #: Return filtered :dict:`~.UNIHAN_MANIFEST` from list of file names.
-filter_manifest = lambda files: { f: UNIHAN_MANIFEST[f] for f in files }
+filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
+
 
 #: Return list of files from list of headings.
 def get_files(headings):
@@ -366,7 +368,7 @@ class Builder(object):
             try:
                 config['headings'] = get_headings(filter_manifest(config['files']))
             except KeyError as e:
-                raise KeyError('File {0} not found in file list.'.format(e.message))
+                raise KeyError('File {0} not found in file list.'.format(e))
 
         # Filter files when only heading specified.
         if 'headings' in config and 'files' not in config:
@@ -376,7 +378,6 @@ class Builder(object):
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
-
 
     @classmethod
     def from_cli(cls, argv):
@@ -405,7 +406,7 @@ class Builder(object):
 
         args = parser.parse_args(argv)
 
-        return cls({k:v for k,v in vars(args).items() if v})
+        return cls({k: v for k, v in vars(args).items() if v})
 
 
 if __name__ == "__main__":
