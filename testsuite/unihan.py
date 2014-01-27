@@ -265,7 +265,7 @@ class UnihanTestCase(UnihanHelper):
             'files': ['Sparta.lol']
         }
 
-        with self.assertRaisesRegexp(KeyError, 'File ([a-zA-Z].*) not found in file list.'):
+        with self.assertRaisesRegexp(KeyError, 'File ([a-zA-Z_\.].*) not found in file list.'):
             b = process.Builder(config)
 
     def test_raise_error_unknown_heading_filtered_files(self):
