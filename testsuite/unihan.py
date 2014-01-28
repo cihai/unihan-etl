@@ -246,8 +246,6 @@ class UnihanTestCase(UnihanHelper):
 
         self.assertEqual(result, expected, msg='Returns only the files picked.')
 
-
-
     def test_raise_error_unknown_heading(self):
         """Throw error if picking unknown heading."""
 
@@ -284,9 +282,9 @@ class UnihanTestCase(UnihanHelper):
         b = process.Builder(config)
 
         expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-        result = b.config.files
+        results = b.config.files
 
-        self.assertEqual(result, expected)
+        self.assertSetEqual(set(expected), set(results))
 
     def test_set_reduce_headings_automatically_when_only_files_specified(self):
         """Picks only necessary files when headings specified."""
@@ -300,9 +298,9 @@ class UnihanTestCase(UnihanHelper):
         b = process.Builder(config)
 
         expected = process.get_headings(process.filter_manifest(files))
-        result = b.config.headings
+        results = b.config.headings
 
-        self.assertEqual(result, expected, msg='Returns only the headings for files picked.')
+        self.assertSetEqual(set(expected), set(results), msg='Returns only the headings for files picked.')
 
 
 class ProcessTestCase(TestCase):
@@ -373,6 +371,7 @@ class CliArgTestCase(TestCase):
     def test_cli_exit_emessage_to_stderr(self):
         """Sends exception .message to stderr on exit."""
         pass
+
 
 def suite():
     setup_path()
