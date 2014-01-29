@@ -189,21 +189,19 @@ U+3401	kHanyuPinyin	10019.020:tiàn
             items = process.convert(csv_files, columns)
 
             notInColumns = []
-            inColumns = set(['kDefinition', 'kCantonese'] + process.default_columns)
+            inColumns =['kDefinition', 'kCantonese'] + process.default_columns
 
             # columns not selected in convert must not be in result.
-            for key, values in items.items():
-                if any(v for v in values if v not in columns):
-                    for v in values:
-                        if v not in columns:
-                            notInColumns.append(v)
-                        else:
-                            inColumns.append(v)
+            for v in items[0]:
+                if v not in columns:
+                    notInColumns.append(v)
+                else:
+                    inColumns.append(v)
         finally:
             os.remove(filename)
 
         self.assertEqual([], notInColumns, msg="Convert filters columns not specified.")
-        self.assertTrue(inColumns.issubset(set(columns)), "Convert returns correct columns specified + ucn and char.")
+        self.assertTrue(set(inColumns).issubset(set(columns)), "Convert returns correct columns specified + ucn and char.")
 
     def test_convert_simple_data_format(self):
         """convert turns data into simple data format (SDF)."""
@@ -221,8 +219,13 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 
         items = process.convert(csv_files, columns)
 
+        header = items[0]
 
-class UnihanTestCase(UnihanHelper):
+        self.assertSetEqual(set(columns), set(header))
+        rows = items[:1]
+
+
+class UnihanHelperFunctions(UnihanHelper):
     """Utilities to retrieve unihan data in datapackage format."""
 
     def test_flatten_headings(self):
@@ -427,7 +430,7 @@ class CliArgTestCase(TestCase):
 def suite():
     setup_path()
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(UnihanTestCase))
+    suite.addTest(unittest.makeSuite(UnihanHelperFunctions))
     suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
     suite.addTest(unittest.makeSuite(ProcessTestCase))
     suite.addTest(unittest.makeSuite(CliArgTestCase))
