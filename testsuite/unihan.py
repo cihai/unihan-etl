@@ -370,7 +370,22 @@ class CliArgTestCase(TestCase):
 
     def test_cli_exit_emessage_to_stderr(self):
         """Sends exception .message to stderr on exit."""
-        pass
+
+        import sys
+        from cStringIO import StringIO
+        from contextlib import contextmanager
+
+        @contextmanager
+        def captureStdErr(command, *args, **kwargs):
+            out, sys.stderr = sys.stderr, StringIO()
+            command(*args, **kwargs)
+            sys.stderr.seek(0)
+            yield sys.stderr.read()
+            sys.stderr = out
+
+        with self.assertRaisesRegexp(SystemExit, 'Heading sdfa not found in file list.'):
+            with captureStdErr(Builder.from_cli, ['-d', 'data/output.csv', '-H', 'sdfa']) as output:
+                pass
 
 
 def suite():

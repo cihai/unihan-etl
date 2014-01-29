@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf8 - *-
+# -*- coding: utf8 -*-
 """Build Unihan into datapackage-compatible format.
 
 TODO: Parse datapackage.json's field and schema paramters.
@@ -406,7 +406,10 @@ class Builder(object):
 
         args = parser.parse_args(argv)
 
-        return cls({k: v for k, v in vars(args).items() if v})
+        try:
+            return cls({k: v for k, v in vars(args).items() if v})
+        except Exception as e:
+            sys.exit(e)
 
 
 if __name__ == "__main__":
