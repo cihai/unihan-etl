@@ -370,16 +370,25 @@ class Builder(object):
 
         """
 
-        # Filter headings when only files specified.
         if 'files' in config and 'headings' not in config:
+            # Filter headings when only files specified.
             try:
                 config['headings'] = get_headings(filter_manifest(config['files']))
             except KeyError as e:
                 raise KeyError('File {0} not found in file list.'.format(e))
-
-        # Filter files when only heading specified.
-        if 'headings' in config and 'files' not in config:
+        elif 'headings' in config and 'files' not in config:
+            # Filter files when only heading specified.
             config['files'] = get_files(config['headings'])
+        elif 'headings' in config and 'files' in config:
+            #config['files'] = get_files(config['headings'])
+
+            # Filter headings when only files specified.
+            headings_in_files = get_headings(filter_manifest(config['files']))
+
+            not_in_heading = [h for h in config['headings'] if h not in headings_in_files]
+            #not_in_heading = [h for h in headings_in_files if h not in config['headings']]
+            if not_in_heading:
+                raise KeyError('Heading {0} not found in file list.'.format(', '.join(not_in_heading)))
 
         config = merge_dict(default_config, config)
 

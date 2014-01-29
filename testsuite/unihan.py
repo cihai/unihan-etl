@@ -190,7 +190,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
             items = process.convert(csv_files, columns)
 
             notInColumns = []
-            inColumns =['kDefinition', 'kCantonese'] + process.default_columns
+            inColumns = ['kDefinition', 'kCantonese'] + process.default_columns
 
             # columns not selected in convert must not be in result.
             for v in items[0]:
@@ -308,7 +308,16 @@ class UnihanHelperFunctions(UnihanHelper):
 
     def test_raise_error_unknown_heading_filtered_files(self):
         """Throw error if picking heading not in file list, when files specified."""
-        pass
+
+        files = ['Unihan_Variants.txt']
+
+        config = {
+            'files': files,
+            'headings': ['kDefinition']
+        }
+
+        with self.assertRaisesRegexp(KeyError, 'Heading ([a-zA-Z].*) not found in file list.'):
+            b = process.Builder(config)
 
     def test_set_reduce_files_automatically_when_only_heading_specified(self):
         """Picks file automatically if none specified and headings are."""
