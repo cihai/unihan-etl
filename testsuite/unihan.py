@@ -121,6 +121,31 @@ class UnihanScriptsTestCase(UnihanHelper):
 
         self.assertTrue(result)
 
+    def test_filter_manifest(self):
+        expected =  {
+            'Unihan_Variants.txt': [
+                'kCompatibilityVariant',
+                'kSemanticVariant',
+                'kSimplifiedVariant',
+                'kSpecializedSemanticVariant',
+                'kTraditionalVariant',
+                'kZVariant',
+            ]
+        }
+
+        result = process.filter_manifest(['Unihan_Variants.txt'])
+
+        self.assertEqual(set(result), set(expected))
+
+    def test_get_files(self):
+        fields = ['kKorean', 'kRSUnicode']
+
+        expected = ['Unihan_Readings.txt', 'Unihan_RadicalStrokeCounts.txt']
+
+        result = process.get_files(fields)
+
+        self.assertEqual(set(result), set(expected))
+
     def test_save(self):
 
         src_filepath = self.tempzip_filepath
