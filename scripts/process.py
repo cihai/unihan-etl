@@ -354,7 +354,7 @@ def convert(csv_files, columns):
                     items[char] = dict.fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
                 items[char][item['field']] = item['value']
-    return [v for k,v in items.items()]
+    return [v for v in items.values()]
 
 
 class Builder(object):
