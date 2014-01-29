@@ -41,7 +41,7 @@ from contextlib import contextmanager
 
 from scripts import process
 
-from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
+from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
     UNIHAN_FILES, default_config, Builder, text_type, StringIO
 from scripts.util import merge_dict
 
@@ -115,9 +115,9 @@ class UnihanHelper(TestCase):
 
 class UnihanScriptsTestCase(UnihanHelper):
 
-    def test_in_headings(self):
+    def test_in_fields(self):
         columns = ['hey', 'kDefinition', 'kWhat']
-        result = process.in_headings('kDefinition', columns)
+        result = process.in_fields('kDefinition', columns)
 
         self.assertTrue(result)
 
@@ -229,7 +229,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 class UnihanHelperFunctions(UnihanHelper):
     """Utilities to retrieve unihan data in datapackage format."""
 
-    def test_flatten_headings(self):
+    def test_flatten_fields(self):
 
         single_dataset = {
             'Unihan_Readings.txt': [
@@ -240,7 +240,7 @@ class UnihanHelperFunctions(UnihanHelper):
         }
 
         expected = ['kCantonese', 'kDefinition', 'kHangul']
-        results = process.get_headings(single_dataset)
+        results = process.get_fields(single_dataset)
 
         self.assertEqual(expected, results)
 
@@ -266,7 +266,7 @@ class UnihanHelperFunctions(UnihanHelper):
             'kCNS1986',
         ]
 
-        results = process.get_headings(datasets)
+        results = process.get_fields(datasets)
 
         self.assertSetEqual(set(expected), set(results))
 
@@ -286,14 +286,14 @@ class UnihanHelperFunctions(UnihanHelper):
 
         self.assertEqual(result, expected, msg='Returns only the files picked.')
 
-    def test_raise_error_unknown_heading(self):
-        """Throw error if picking unknown heading."""
+    def test_raise_error_unknown_field(self):
+        """Throw error if picking unknown field."""
 
         config = {
-            'headings': ['kHello']
+            'fields': ['kHello']
         }
 
-        with self.assertRaisesRegexp(KeyError, 'Heading ([a-zA-Z].*) not found in file list.'):
+        with self.assertRaisesRegexp(KeyError, 'Field ([a-zA-Z].*) not found in file list.'):
             b = process.Builder(config)
 
     def test_raise_error_unknown_file(self):
@@ -306,26 +306,26 @@ class UnihanHelperFunctions(UnihanHelper):
         with self.assertRaisesRegexp(KeyError, 'File ([a-zA-Z_\.\'].*) not found in file list.'):
             b = process.Builder(config)
 
-    def test_raise_error_unknown_heading_filtered_files(self):
-        """Throw error if picking heading not in file list, when files specified."""
+    def test_raise_error_unknown_field_filtered_files(self):
+        """Throw error if picking field not in file list, when files specified."""
 
         files = ['Unihan_Variants.txt']
 
         config = {
             'files': files,
-            'headings': ['kDefinition']
+            'fields': ['kDefinition']
         }
 
-        with self.assertRaisesRegexp(KeyError, 'Heading ([a-zA-Z].*) not found in file list.'):
+        with self.assertRaisesRegexp(KeyError, 'Field ([a-zA-Z].*) not found in file list.'):
             b = process.Builder(config)
 
-    def test_set_reduce_files_automatically_when_only_heading_specified(self):
-        """Picks file automatically if none specified and headings are."""
+    def test_set_reduce_files_automatically_when_only_field_specified(self):
+        """Picks file automatically if none specified and fields are."""
 
-        headings = process.UNIHAN_MANIFEST['Unihan_Readings.txt'] + process.UNIHAN_MANIFEST['Unihan_Variants.txt']
+        fields = process.UNIHAN_MANIFEST['Unihan_Readings.txt'] + process.UNIHAN_MANIFEST['Unihan_Variants.txt']
 
         config = {
-            'headings': headings
+            'fields': fields
         }
 
         b = process.Builder(config)
@@ -335,8 +335,8 @@ class UnihanHelperFunctions(UnihanHelper):
 
         self.assertSetEqual(set(expected), set(results))
 
-    def test_set_reduce_headings_automatically_when_only_files_specified(self):
-        """Picks only necessary files when headings specified."""
+    def test_set_reduce_fields_automatically_when_only_files_specified(self):
+        """Picks only necessary files when fields specified."""
 
         files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
@@ -346,10 +346,10 @@ class UnihanHelperFunctions(UnihanHelper):
 
         b = process.Builder(config)
 
-        expected = process.get_headings(process.filter_manifest(files))
-        results = b.config.headings
+        expected = process.get_fields(process.filter_manifest(files))
+        results = b.config.fields
 
-        self.assertSetEqual(set(expected), set(results), msg='Returns only the headings for files picked.')
+        self.assertSetEqual(set(expected), set(results), msg='Returns only the fields for files picked.')
 
 
 class ProcessTestCase(TestCase):
@@ -401,20 +401,20 @@ class CliArgTestCase(TestCase):
         result = Builder.from_cli(['-d', 'data/output.csv']).config
         self.assertDictContainsSubset(expectedIn, result)
 
-        expectedIn = {'headings': ['kDefinition']}
-        result = Builder.from_cli(['-H', 'kDefinition']).config
+        expectedIn = {'fields': ['kDefinition']}
+        result = Builder.from_cli(['-F', 'kDefinition']).config
         self.assertDictContainsSubset(expectedIn, result)
 
-        expectedIn = {'headings': ['kDefinition']}
-        result = Builder.from_cli(['-H', 'kDefinition']).config
+        expectedIn = {'fields': ['kDefinition']}
+        result = Builder.from_cli(['-F', 'kDefinition']).config
         self.assertDictContainsSubset(expectedIn, result)
 
-        expectedIn = {'headings': ['kDefinition', 'kXerox']}
-        result = Builder.from_cli(['-H', 'kDefinition', 'kXerox']).config
-        self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple headings.")
+        expectedIn = {'fields': ['kDefinition', 'kXerox']}
+        result = Builder.from_cli(['-F', 'kDefinition', 'kXerox']).config
+        self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple fields.")
 
-        expectedIn = {'headings': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'}
-        result = Builder.from_cli(['-H', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
+        expectedIn = {'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'}
+        result = Builder.from_cli(['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
         self.assertDictContainsSubset(expectedIn, result, msg="Accepts multiple arguments.")
 
     def test_cli_exit_emessage_to_stderr(self):
@@ -428,8 +428,8 @@ class CliArgTestCase(TestCase):
             yield sys.stderr.read()
             sys.stderr = out
 
-        with self.assertRaisesRegexp(SystemExit, 'Heading sdfa not found in file list.'):
-            with captureStdErr(Builder.from_cli, ['-d', 'data/output.csv', '-H', 'sdfa']) as output:
+        with self.assertRaisesRegexp(SystemExit, 'Field sdfa not found in file list.'):
+            with captureStdErr(Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']) as output:
                 pass
 
 

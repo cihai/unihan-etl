@@ -161,8 +161,8 @@ UNIHAN_MANIFEST = {
 #: Return False on newlines and C-style comments.
 not_junk = lambda line: line[0] != '#' and line != '\n'
 
-#: Return True if string is in the default headings.
-in_headings = lambda c, columns: c in columns + default_columns
+#: Return True if string is in the default fields.
+in_fields = lambda c, columns: c in columns + default_columns
 default_columns = ['ucn', 'char']
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 
@@ -179,11 +179,11 @@ def get_datapath(filename):
 WORK_DIR = get_datapath('')
 UNIHAN_DEST = get_datapath('data-built.csv')
 
-#: Return list of headings from dict of {filename: ['heading', 'heading1']}.
-get_headings = lambda d: sorted({c for cs in d.values() for c in cs})
+#: Return list of fields from dict of {filename: ['field', 'field1']}.
+get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
 
-#: Default Unihan Headings
-UNIHAN_HEADINGS = get_headings(UNIHAN_MANIFEST)
+#: Default Unihan fields
+UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
 default_columns = ['ucn', 'char']
 
@@ -191,17 +191,17 @@ default_columns = ['ucn', 'char']
 filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-#: Return list of files from list of headings.
-def get_files(headings):
+#: Return list of files from list of fields.
+def get_files(fields):
     files = set()
 
-    for heading in headings:
-        if heading in UNIHAN_HEADINGS:
-            for file_, file_headings in UNIHAN_MANIFEST.items():
-                if any(file_ for h in headings if h in file_headings):
+    for field in fields:
+        if field in UNIHAN_FIELDS:
+            for file_, file_fields in UNIHAN_MANIFEST.items():
+                if any(file_ for h in fields if h in file_fields):
                     files.add(file_)
         else:
-            raise KeyError('Heading {0} not found in file list.'.format(heading))
+            raise KeyError('Field {0} not found in file list.'.format(field))
 
     return list(files)
 
@@ -209,7 +209,7 @@ default_config = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
     'work_dir': WORK_DIR,
-    'headings': UNIHAN_HEADINGS,
+    'fields': UNIHAN_FIELDS,
     'files': UNIHAN_FILES
 }
 
@@ -347,7 +347,7 @@ def convert(csv_files, columns):
     for l in data:
         if not_junk(l):
             l = l.strip().split('\t')
-            if in_headings(l[1], columns):
+            if in_fields(l[1], columns):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
                 if not char in items:
@@ -370,25 +370,25 @@ class Builder(object):
 
         """
 
-        if 'files' in config and 'headings' not in config:
-            # Filter headings when only files specified.
+        if 'files' in config and 'fields' not in config:
+            # Filter fields when only files specified.
             try:
-                config['headings'] = get_headings(filter_manifest(config['files']))
+                config['fields'] = get_fields(filter_manifest(config['files']))
             except KeyError as e:
                 raise KeyError('File {0} not found in file list.'.format(e))
-        elif 'headings' in config and 'files' not in config:
-            # Filter files when only heading specified.
-            config['files'] = get_files(config['headings'])
-        elif 'headings' in config and 'files' in config:
-            #config['files'] = get_files(config['headings'])
+        elif 'fields' in config and 'files' not in config:
+            # Filter files when only field specified.
+            config['files'] = get_files(config['fields'])
+        elif 'fields' in config and 'files' in config:
+            #config['files'] = get_files(config['Fields'])
 
-            # Filter headings when only files specified.
-            headings_in_files = get_headings(filter_manifest(config['files']))
+            # Filter fields when only files specified.
+            fields_in_files = get_fields(filter_manifest(config['files']))
 
-            not_in_heading = [h for h in config['headings'] if h not in headings_in_files]
-            #not_in_heading = [h for h in headings_in_files if h not in config['headings']]
-            if not_in_heading:
-                raise KeyError('Heading {0} not found in file list.'.format(', '.join(not_in_heading)))
+            not_in_field = [h for h in config['fields'] if h not in fields_in_files]
+            #not_in_field = [h for h in fields_in_files if h not in config['fields']]
+            if not_in_field:
+                raise KeyError('Field {0} not found in file list.'.format(', '.join(not_in_field)))
 
         config = merge_dict(default_config, config)
 
@@ -415,8 +415,8 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_DEST)
         parser.add_argument("-w", "--work-dir", dest="work_dir",
                             help="Default: %s" % WORK_DIR)
-        parser.add_argument("-H", "--headings", dest="headings", nargs="*",
-                            help="Default: %s" % UNIHAN_HEADINGS)
+        parser.add_argument("-F", "--fields", dest="fields", nargs="*",
+                            help="Default: %s" % UNIHAN_FIELDS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
 
