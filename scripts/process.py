@@ -354,7 +354,9 @@ def convert(csv_files, columns):
                     items[char] = dict.fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
                 items[char][item['field']] = item['value']
-    return [v for v in items.values()]
+
+    datarows = [columns[:]] + [r.values() for r in [v for v in items.values()]]
+    return datarows
 
 
 class Builder(object):
@@ -418,4 +420,4 @@ class Builder(object):
 
 
 if __name__ == "__main__":
-        sys.exit(Builder.from_cli(sys.argv[1:]))
+    sys.exit(Builder.from_cli(sys.argv[1:]))

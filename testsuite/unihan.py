@@ -220,9 +220,9 @@ U+3401	kHanyuPinyin	10019.020:tiàn
         items = process.convert(csv_files, columns)
 
         header = items[0]
+        self.assertEqual(header, columns)
 
-        self.assertSetEqual(set(columns), set(header))
-        rows = items[:1]
+        rows = items[1:]
 
 
 class UnihanHelperFunctions(UnihanHelper):
