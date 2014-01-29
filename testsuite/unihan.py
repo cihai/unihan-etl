@@ -158,7 +158,55 @@ class UnihanScriptsTestCase(UnihanHelper):
         self.assertEqual(zf.infolist()[0].file_size, 10)
         self.assertEqual(zf.infolist()[0].filename, "d.txt")
 
-    def test_convert(self):
+    def test_convert_unihan_file_format(self):
+        pass
+
+    def test_convert_only_output_requested_columns(self):
+        import tempfile
+        fd, filename = tempfile.mkstemp()
+
+        try:
+            os.write(fd, """\
+U+3400	kCantonese	jau1
+U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
+U+3400	kMandarin	qiū
+U+3401	kCantonese	tim2
+U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
+U+3401	kHanyuPinyin	10019.020:tiàn
+""".encode('utf-8'))
+
+            csv_files = [
+                filename
+            ]
+
+            columns = [
+                'kTotalStrokes',
+                'kPhonetic',
+                'kCantonese',
+                'kDefinition',
+            ] + process.default_columns
+
+            items = process.convert(csv_files, columns)
+
+            notInColumns = []
+            inColumns = set(['kDefinition', 'kCantonese'] + process.default_columns)
+
+            # columns not selected in convert must not be in result.
+            for key, values in items.items():
+                if any(v for v in values if v not in columns):
+                    for v in values:
+                        if v not in columns:
+                            notInColumns.append(v)
+                        else:
+                            inColumns.append(v)
+        finally:
+            os.remove(filename)
+
+        self.assertEqual([], notInColumns, msg="Convert filters columns not specified.")
+        self.assertTrue(inColumns.issubset(set(columns)), "Convert returns correct columns specified + ucn and char.")
+
+    def test_convert_simple_data_format(self):
+        """convert turns data into simple data format (SDF)."""
         csv_files = [
             get_datapath('Unihan_DictionaryLikeData.txt'),
             get_datapath('Unihan_Readings.txt'),
@@ -172,18 +220,6 @@ class UnihanScriptsTestCase(UnihanHelper):
         ] + process.default_columns
 
         items = process.convert(csv_files, columns)
-
-        notInColumns = []
-
-        for key, values in items.items():
-            if any(v for v in values if v not in columns):
-                for v in values:
-                    if v not in columns:
-                        notInColumns.append(v)
-
-        self.assertEqual(
-            [], notInColumns,
-        )
 
 
 class UnihanTestCase(UnihanHelper):
