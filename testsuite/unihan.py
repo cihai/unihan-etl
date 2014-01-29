@@ -37,11 +37,12 @@ try:
 except ImportError:  # Python 2.7
     import unittest
 
+from contextlib import contextmanager
 
 from scripts import process
 
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_HEADINGS, \
-    UNIHAN_FILES, default_config, Builder, text_type
+    UNIHAN_FILES, default_config, Builder, text_type, StringIO
 from scripts.util import merge_dict
 
 
@@ -409,10 +410,6 @@ class CliArgTestCase(TestCase):
 
     def test_cli_exit_emessage_to_stderr(self):
         """Sends exception .message to stderr on exit."""
-
-        import sys
-        from cStringIO import StringIO
-        from contextlib import contextmanager
 
         @contextmanager
         def captureStdErr(command, *args, **kwargs):
