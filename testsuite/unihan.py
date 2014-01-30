@@ -115,9 +115,9 @@ class UnihanHelper(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tempdir = tempfile.mkdtemp()
-        cls.zip_filename = 'zipfile.zip'
-        cls.tempzip_filepath = os.path.join(cls.tempdir, cls.zip_filename)
-        zf = zipfile.ZipFile(cls.tempzip_filepath, 'a')
+        cls.mock_zip_filename = 'zipfile.zip'
+        cls.mock_zip_filepath = os.path.join(cls.tempdir, cls.mock_zip_filename)
+        zf = zipfile.ZipFile(cls.mock_zip_filepath, 'a')
         zf.writestr("d.txt", "DDDDDDDDDD")
         zf.close()
 
@@ -136,7 +136,7 @@ class UnihanScriptsTestCase(UnihanHelper):
     def test_has_unihan_zip(self):
         self.assertFalse(process.has_unihan_zip())
 
-        self.assertTrue(process.has_unihan_zip(self.tempzip_filepath))
+        self.assertTrue(process.has_unihan_zip(self.mock_zip_filepath))
 
     def test_in_fields(self):
         columns = ['hey', 'kDefinition', 'kWhat']
@@ -171,11 +171,11 @@ class UnihanScriptsTestCase(UnihanHelper):
 
     def test_save(self):
 
-        src_filepath = self.tempzip_filepath
+        src_filepath = self.mock_zip_filepath
 
         tempdir = tempfile.mkdtemp()
 
-        dest_filepath = os.path.join(tempdir, self.zip_filename)
+        dest_filepath = os.path.join(tempdir, self.mock_zip_filename)
         process.save(src_filepath, dest_filepath, shutil.copy)
 
         result = os.path.exists(dest_filepath)
@@ -186,10 +186,10 @@ class UnihanScriptsTestCase(UnihanHelper):
 
     def test_download(self):
 
-        src_filepath = self.tempzip_filepath
+        src_filepath = self.mock_zip_filepath
 
         tempdir = self.tempdir
-        dest_filepath = os.path.join(tempdir, 'data', self.zip_filename)
+        dest_filepath = os.path.join(tempdir, 'data', self.mock_zip_filename)
 
         process.download(src_filepath, dest_filepath, shutil.copy)
 
@@ -201,7 +201,7 @@ class UnihanScriptsTestCase(UnihanHelper):
 
     def test_extract(self):
 
-        zf = process.extract(self.tempzip_filepath)
+        zf = process.extract(self.mock_zip_filepath)
 
         self.assertEqual(len(zf.infolist()), 1)
         self.assertEqual(zf.infolist()[0].file_size, 10)
@@ -211,7 +211,6 @@ class UnihanScriptsTestCase(UnihanHelper):
         pass
 
     def test_convert_only_output_requested_columns(self):
-        import tempfile
         fd, filename = tempfile.mkstemp()
 
         try:
@@ -326,7 +325,7 @@ class UnihanHelperFunctions(UnihanHelper):
 
         config = {
             'files': files,
-            'source': self.tempzip_filepath
+            'source': self.mock_zip_filepath
         }
 
         b = process.Builder(config)
@@ -448,8 +447,8 @@ class CliArgTestCase(UnihanHelper):
     def test_cli_plus_defaults(self):
         """Test CLI args + defaults."""
 
-        expectedIn = {'source': self.tempzip_filepath}
-        result = Builder.from_cli(['-s', self.tempzip_filepath]).config
+        expectedIn = {'source': self.mock_zip_filepath}
+        result = Builder.from_cli(['-s', self.mock_zip_filepath]).config
         self.assertDictContainsSubset(expectedIn, result)
 
         expectedIn = {'fields': ['kDefinition']}
