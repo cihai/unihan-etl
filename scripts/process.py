@@ -424,8 +424,6 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_FIELDS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
-        parser.add_argument("-D", "--download", dest="download", action='store_true',
-                            help="Default: %s" % True)
 
         args = parser.parse_args(argv)
 

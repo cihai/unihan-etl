@@ -49,6 +49,10 @@ from scripts.util import merge_dict
 log = logging.getLogger(__name__)
 
 
+class Builder(Builder):
+    """Mock of Builder."""
+    pass
+
 def add_to_path(path):
     """Adds an entry to sys.path if it's not already there.  This does
     not append it but moves it to the front so that we can be sure it
@@ -81,6 +85,24 @@ def get_datapath(filename):
     return os.path.join(
         os.path.dirname(__file__), 'fixtures', filename
     )
+
+
+@contextmanager
+def captureStdErr(command, *args, **kwargs):
+    out, sys.stderr = sys.stderr, StringIO()
+    command(*args, **kwargs)
+    sys.stderr.seek(0)
+    yield sys.stderr.read()
+    sys.stderr = out
+
+
+@contextmanager
+def captureStdOut(command, *args, **kwargs):
+    out, sys.stdout = sys.stderr, StringIO()
+    command(*args, **kwargs)
+    sys.stdout.seek(0)
+    yield sys.stdout.read()
+    sys.stdout = out
 
 
 class TestCase(unittest.TestCase):
@@ -257,6 +279,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 
 
 class UnihanHelperFunctions(UnihanHelper):
+
     """Utilities to retrieve unihan data in datapackage format."""
 
     def test_flatten_fields(self):
@@ -343,7 +366,7 @@ class UnihanHelperFunctions(UnihanHelper):
 
         config = {
             'files': files,
-            'fields': ['kDefinition']
+            'fields': ['kDefinition'],
         }
 
         with self.assertRaisesRegexp(KeyError, 'Field ([a-zA-Z].*) not found in file list.'):
@@ -355,7 +378,7 @@ class UnihanHelperFunctions(UnihanHelper):
         fields = process.UNIHAN_MANIFEST['Unihan_Readings.txt'] + process.UNIHAN_MANIFEST['Unihan_Variants.txt']
 
         config = {
-            'fields': fields
+            'fields': fields,
         }
 
         b = process.Builder(config)
@@ -413,6 +436,7 @@ class ProcessTestCase(TestCase):
 
 
 class CliArgTestCase(TestCase):
+
     """Allows for creating a custom output of unihan data
     in datapackage.json format."""
 
@@ -449,14 +473,6 @@ class CliArgTestCase(TestCase):
 
     def test_cli_exit_emessage_to_stderr(self):
         """Sends exception .message to stderr on exit."""
-
-        @contextmanager
-        def captureStdErr(command, *args, **kwargs):
-            out, sys.stderr = sys.stderr, StringIO()
-            command(*args, **kwargs)
-            sys.stderr.seek(0)
-            yield sys.stderr.read()
-            sys.stderr = out
 
         with self.assertRaisesRegexp(SystemExit, 'Field sdfa not found in file list.'):
             with captureStdErr(Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']) as output:
