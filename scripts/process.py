@@ -163,10 +163,9 @@ not_junk = lambda line: line[0] != '#' and line != '\n'
 #: Return True if string is in the default fields.
 in_fields = lambda c, columns: c in columns + default_columns
 default_columns = ['ucn', 'char']
-UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 
-#: Default Unihan Files
-UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+#: Return list of fields from dict of {filename: ['field', 'field1']}.
+get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
 
 
 def get_datapath(filename):
@@ -174,18 +173,6 @@ def get_datapath(filename):
     return os.path.abspath(os.path.join(
         os.path.dirname(__file__), os.pardir, 'data', filename
     ))
-
-WORK_DIR = get_datapath('')
-UNIHAN_DEST = get_datapath('data-built.csv')
-UNIHAN_ZIP = get_datapath('Unihan.zip')
-
-#: Return list of fields from dict of {filename: ['field', 'field1']}.
-get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
-
-#: Default Unihan fields
-UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
-
-default_columns = ['ucn', 'char']
 
 #: Return filtered :dict:`~.UNIHAN_MANIFEST` from list of file names.
 filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
@@ -204,6 +191,17 @@ def get_files(fields):
             raise KeyError('Field {0} not found in file list.'.format(field))
 
     return list(files)
+
+default_columns = ['ucn', 'char']
+
+WORK_DIR = get_datapath('')
+#: Default Unihan Files
+UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
+UNIHAN_DEST = get_datapath('data-built.csv')
+UNIHAN_ZIP = get_datapath('Unihan.zip')
+#: Default Unihan fields
+UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
 default_config = {
     'source': UNIHAN_URL,
@@ -428,7 +426,6 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_FILES)
         parser.add_argument("-D", "--download", dest="download", action='store_true',
                             help="Default: %s" % True)
-
 
         args = parser.parse_args(argv)
 
