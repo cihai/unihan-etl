@@ -155,7 +155,6 @@ UNIHAN_MANIFEST = {
         'kTraditionalVariant',
         'kZVariant',
     ]
-
 }
 
 #: Return False on newlines and C-style comments.
@@ -178,6 +177,7 @@ def get_datapath(filename):
 
 WORK_DIR = get_datapath('')
 UNIHAN_DEST = get_datapath('data-built.csv')
+UNIHAN_ZIP = get_datapath('Unihan.zip')
 
 #: Return list of fields from dict of {filename: ['field', 'field1']}.
 get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
@@ -210,7 +210,8 @@ default_config = {
     'destination': UNIHAN_DEST,
     'work_dir': WORK_DIR,
     'fields': UNIHAN_FIELDS,
-    'files': UNIHAN_FILES
+    'files': UNIHAN_FILES,
+    'download': False
 }
 
 
@@ -303,6 +304,7 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     if no_unihan_files_exist():
         if not_downloaded():
             print('Downloading Unihan.zip...')
+            print('%s to %s' % (url, dest))
             if reporthook:
                 save(url, dest, urlretrieve, reporthook)
             else:
@@ -380,13 +382,10 @@ class Builder(object):
             # Filter files when only field specified.
             config['files'] = get_files(config['fields'])
         elif 'fields' in config and 'files' in config:
-            #config['files'] = get_files(config['Fields'])
-
             # Filter fields when only files specified.
             fields_in_files = get_fields(filter_manifest(config['files']))
 
             not_in_field = [h for h in config['fields'] if h not in fields_in_files]
-            #not_in_field = [h for h in fields_in_files if h not in config['fields']]
             if not_in_field:
                 raise KeyError('Field {0} not found in file list.'.format(', '.join(not_in_field)))
 
@@ -394,6 +393,14 @@ class Builder(object):
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
+
+        if config['download']:
+            if not has_unihan_zip():
+                print('no Unihan.zip at %s' % UNIHAN_ZIP)
+                print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP))
+                download(UNIHAN_URL, UNIHAN_DEST)
+            else:
+                print('has Unihan.zip')
 
     @classmethod
     def from_cli(cls, argv):
@@ -419,6 +426,9 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_FIELDS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
+        parser.add_argument("-D", "--download", dest="download", action='store_true',
+                            help="Default: %s" % True)
+
 
         args = parser.parse_args(argv)
 
@@ -431,7 +441,7 @@ class Builder(object):
 def has_unihan_zip(zip_path=None):
     """Return True if file has Unihan.zip and is a valid zip."""
     if not zip_path:
-        zip_path = get_datapath('Unihan.zip')
+        zip_path = UNIHAN_ZIP
 
     if os.path.isfile(zip_path):
         if zipfile.is_zipfile(zip_path):
