@@ -42,7 +42,7 @@ from contextlib import contextmanager
 from scripts import process
 
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
-    UNIHAN_FILES, default_config, Builder, text_type, StringIO
+    UNIHAN_FILES, default_config, Builder, text_type, StringIO, UNIHAN_ZIP_FILEPATH
 from scripts.util import merge_dict
 
 
@@ -134,7 +134,10 @@ class UnihanHelper(TestCase):
 class UnihanScriptsTestCase(UnihanHelper):
 
     def test_has_unihan_zip(self):
-        self.assertFalse(process.has_unihan_zip())
+        if os.path.isfile(UNIHAN_ZIP_FILEPATH):
+            self.assertTrue(process.has_unihan_zip())
+        else:
+            self.assertFalse(process.has_unihan_zip())
 
         self.assertTrue(process.has_unihan_zip(self.mock_zip_filepath))
 
@@ -325,7 +328,7 @@ class UnihanHelperFunctions(UnihanHelper):
 
         config = {
             'files': files,
-            'source': self.mock_zip_filepath
+            'zip_filepath': self.mock_zip_filepath
         }
 
         b = process.Builder(config)
@@ -447,8 +450,8 @@ class CliArgTestCase(UnihanHelper):
     def test_cli_plus_defaults(self):
         """Test CLI args + defaults."""
 
-        expectedIn = {'source': self.mock_zip_filepath}
-        result = Builder.from_cli(['-s', self.mock_zip_filepath]).config
+        expectedIn = {'zip_filepath': self.mock_zip_filepath}
+        result = Builder.from_cli(['-z', self.mock_zip_filepath]).config
         self.assertDictContainsSubset(expectedIn, result)
 
         expectedIn = {'fields': ['kDefinition']}

@@ -17,7 +17,7 @@ import hashlib
 import fileinput
 import argparse
 
-from scripts.util import convert_to_attr_dict, merge_dict
+from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress
 
 
 __title__ = 'requests'
@@ -199,13 +199,14 @@ WORK_DIR = get_datapath('')
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 UNIHAN_DEST = get_datapath('data-built.csv')
-UNIHAN_ZIP = get_datapath('Unihan.zip')
+UNIHAN_ZIP_FILEPATH = get_datapath('Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
 default_config = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
+    'zip_filepath': UNIHAN_ZIP_FILEPATH,
     'work_dir': WORK_DIR,
     'fields': UNIHAN_FIELDS,
     'files': UNIHAN_FILES,
@@ -392,10 +393,10 @@ class Builder(object):
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
 
-        if not has_unihan_zip(self.config.source):
-            print('no Unihan.zip at %s' % UNIHAN_ZIP)
-            print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP))
-            download(UNIHAN_URL, UNIHAN_DEST)
+        if not has_unihan_zip(self.config.zip_filepath):
+            print('no Unihan.zip at %s' % UNIHAN_ZIP_FILEPATH)
+            print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP_FILEPATH))
+            download(UNIHAN_URL, UNIHAN_ZIP_FILEPATH, reporthook=_dl_progress)
         else:
             print('has Unihan.zip')
 
@@ -415,6 +416,8 @@ class Builder(object):
         )
         parser.add_argument("-s", "--source", dest="source",
                             help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
+        parser.add_argument("-z", "--zip_filepath", dest="zip_filepath",
+                            help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_FILEPATH)
         parser.add_argument("-d", "--destination", dest="destination",
                             help="Output of .csv. Default: %s" % UNIHAN_DEST)
         parser.add_argument("-w", "--work-dir", dest="work_dir",
@@ -423,9 +426,6 @@ class Builder(object):
                             help="Default: %s" % UNIHAN_FIELDS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
-        parser.add_argument("-N", "--no-download", dest="download", default=False,
-                            help="Don't run download script.")
-
 
         args = parser.parse_args(argv)
 
@@ -438,7 +438,7 @@ class Builder(object):
 def has_unihan_zip(zip_filepath=None):
     """Return True if file has Unihan.zip and is a valid zip."""
     if not zip_filepath:
-        zip_filepath = UNIHAN_ZIP
+        zip_filepath = UNIHAN_ZIP_FILEPATH
 
     if os.path.isfile(zip_filepath):
         if zipfile.is_zipfile(zip_filepath):
