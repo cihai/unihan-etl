@@ -392,13 +392,12 @@ class Builder(object):
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
 
-        if config['download']:
-            if not has_unihan_zip():
-                print('no Unihan.zip at %s' % UNIHAN_ZIP)
-                print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP))
-                download(UNIHAN_URL, UNIHAN_DEST)
-            else:
-                print('has Unihan.zip')
+        if not has_unihan_zip(self.config.source):
+            print('no Unihan.zip at %s' % UNIHAN_ZIP)
+            print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP))
+            download(UNIHAN_URL, UNIHAN_DEST)
+        else:
+            print('has Unihan.zip')
 
     @classmethod
     def from_cli(cls, argv):
@@ -415,15 +414,18 @@ class Builder(object):
             description=__description__
         )
         parser.add_argument("-s", "--source", dest="source",
-                            help="Default: %s" % UNIHAN_URL)
+                            help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
         parser.add_argument("-d", "--destination", dest="destination",
-                            help="Default: %s" % UNIHAN_DEST)
+                            help="Output of .csv. Default: %s" % UNIHAN_DEST)
         parser.add_argument("-w", "--work-dir", dest="work_dir",
                             help="Default: %s" % WORK_DIR)
         parser.add_argument("-F", "--fields", dest="fields", nargs="*",
                             help="Default: %s" % UNIHAN_FIELDS)
         parser.add_argument("-f", "--files", dest="files", nargs='*',
                             help="Default: %s" % UNIHAN_FILES)
+        parser.add_argument("-N", "--no-download", dest="download", default=False,
+                            help="Don't run download script.")
+
 
         args = parser.parse_args(argv)
 
@@ -433,20 +435,20 @@ class Builder(object):
             sys.exit(e)
 
 
-def has_unihan_zip(zip_path=None):
+def has_unihan_zip(zip_filepath=None):
     """Return True if file has Unihan.zip and is a valid zip."""
-    if not zip_path:
-        zip_path = UNIHAN_ZIP
+    if not zip_filepath:
+        zip_filepath = UNIHAN_ZIP
 
-    if os.path.isfile(zip_path):
-        if zipfile.is_zipfile(zip_path):
-            print("Exists, is valid zip. %s" % zip_path)
+    if os.path.isfile(zip_filepath):
+        if zipfile.is_zipfile(zip_filepath):
+            print("Exists, is valid zip. %s" % zip_filepath)
             return True
         else:
-            print("Not a valid zip. %s" % zip_path)
+            print("Not a valid zip. %s" % zip_filepath)
             return False
     else:
-        print("File doesn't exist. %s" % zip_path)
+        print("File doesn't exist. %s" % zip_filepath)
         return False
 
 if __name__ == "__main__":

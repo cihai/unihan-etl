@@ -49,10 +49,6 @@ from scripts.util import merge_dict
 log = logging.getLogger(__name__)
 
 
-class Builder(Builder):
-    """Mock of Builder."""
-    pass
-
 def add_to_path(path):
     """Adds an entry to sys.path if it's not already there.  This does
     not append it but moves it to the front so that we can be sure it
@@ -329,7 +325,8 @@ class UnihanHelperFunctions(UnihanHelper):
         files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
         config = {
-            'files': files
+            'files': files,
+            'source': self.tempzip_filepath
         }
 
         b = process.Builder(config)
@@ -435,7 +432,7 @@ class ProcessTestCase(TestCase):
         self.assertIsInstance(result, text_type)
 
 
-class CliArgTestCase(TestCase):
+class CliArgTestCase(UnihanHelper):
 
     """Allows for creating a custom output of unihan data
     in datapackage.json format."""
@@ -451,8 +448,8 @@ class CliArgTestCase(TestCase):
     def test_cli_plus_defaults(self):
         """Test CLI args + defaults."""
 
-        expectedIn = {'destination': 'data/output.csv'}
-        result = Builder.from_cli(['-d', 'data/output.csv']).config
+        expectedIn = {'source': self.tempzip_filepath}
+        result = Builder.from_cli(['-s', self.tempzip_filepath]).config
         self.assertDictContainsSubset(expectedIn, result)
 
         expectedIn = {'fields': ['kDefinition']}
