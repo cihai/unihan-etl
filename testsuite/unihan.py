@@ -115,6 +115,11 @@ class UnihanHelper(TestCase):
 
 class UnihanScriptsTestCase(UnihanHelper):
 
+    def test_has_unihan_zip(self):
+        self.assertFalse(process.has_unihan_zip())
+
+        self.assertTrue(process.has_unihan_zip(self.tempzip_filepath))
+
     def test_in_fields(self):
         columns = ['hey', 'kDefinition', 'kWhat']
         result = process.in_fields('kDefinition', columns)
@@ -122,7 +127,7 @@ class UnihanScriptsTestCase(UnihanHelper):
         self.assertTrue(result)
 
     def test_filter_manifest(self):
-        expected =  {
+        expected = {
             'Unihan_Variants.txt': [
                 'kCompatibilityVariant',
                 'kSemanticVariant',

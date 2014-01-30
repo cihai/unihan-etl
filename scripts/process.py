@@ -428,5 +428,21 @@ class Builder(object):
             sys.exit(e)
 
 
+def has_unihan_zip(zip_path=None):
+    """Return True if file has Unihan.zip and is a valid zip."""
+    if not zip_path:
+        zip_path = get_datapath('Unihan.zip')
+
+    if os.path.isfile(zip_path):
+        if zipfile.is_zipfile(zip_path):
+            print("Exists, is valid zip. %s" % zip_path)
+            return True
+        else:
+            print("Not a valid zip. %s" % zip_path)
+            return False
+    else:
+        print("File doesn't exist. %s" % zip_path)
+        return False
+
 if __name__ == "__main__":
     sys.exit(Builder.from_cli(sys.argv[1:]))
