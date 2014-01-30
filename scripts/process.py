@@ -394,11 +394,9 @@ class Builder(object):
         self.config = convert_to_attr_dict(config)
 
         if not has_unihan_zip(self.config.zip_filepath):
-            print('no Unihan.zip at %s' % UNIHAN_ZIP_FILEPATH)
-            print('Downloading %s to %s' % (UNIHAN_URL, UNIHAN_ZIP_FILEPATH))
             download(UNIHAN_URL, UNIHAN_ZIP_FILEPATH, reporthook=_dl_progress)
         else:
-            print('has Unihan.zip')
+            pass
 
     @classmethod
     def from_cli(cls, argv):
@@ -452,4 +450,4 @@ def has_unihan_zip(zip_filepath=None):
         return False
 
 if __name__ == "__main__":
-    sys.exit(Builder.from_cli(sys.argv[1:]))
+    Builder.from_cli(sys.argv[1:])
