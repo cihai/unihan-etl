@@ -26,7 +26,7 @@ from scripts import process
 
 from scripts._compat import text_type
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
-    UNIHAN_FILES, default_config, Builder, UNIHAN_ZIP_FILEPATH
+    UNIHAN_FILES, default_config, Builder, UNIHAN_ZIP_FILEPATH, zip_has_files
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_python, \
     ucnstring_to_unicode
 
@@ -67,7 +67,7 @@ class UnihanHelper(TestCase):
         zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
         zf.close()
 
-        cls.zf = zf
+        cls.mock_zip = zf
 
         super(UnihanHelper, cls).setUpClass()
 
@@ -78,6 +78,15 @@ class UnihanHelper(TestCase):
 
 
 class UnihanScriptsTestCase(UnihanHelper):
+
+    def test_zip_has_files(self):
+        self.assertTrue(
+            zip_has_files(['Unihan_Readings.txt'], self.mock_zip)
+        )
+
+        self.assertFalse(
+            zip_has_files(['Unihan_Cats.txt'], self.mock_zip)
+        )
 
     def test_has_unihan_zip(self):
         if os.path.isfile(UNIHAN_ZIP_FILEPATH):

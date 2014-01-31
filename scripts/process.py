@@ -364,10 +364,15 @@ class Builder(object):
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
 
-        if not has_unihan_zip(self.config.zip_filepath):
+        while not has_unihan_zip(self.config.zip_filepath):
             download(UNIHAN_URL, UNIHAN_ZIP_FILEPATH, reporthook=_dl_progress)
+
+        zip_file = extract(UNIHAN_ZIP_FILEPATH)
+
+        if zip_has_files(self.config.files, zip_file):
+            print('all files in zip.')
         else:
-            pass
+            print('missing files.')
 
     @classmethod
     def from_cli(cls, argv):
@@ -404,6 +409,24 @@ def has_unihan_zip(zip_filepath=None):
     else:
         print("File doesn't exist. %s" % zip_filepath)
         return False
+
+
+def zip_has_files(files, zip_file):
+    """Return True if zip has the files inside.
+
+    :param files: list of files inside zip
+    :type files: list
+    :param zip_file: zip file to look inside.
+    :type zip_file: :py:class:`zipfile.ZipFile`
+    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
+    :rtype: bool
+
+    """
+    if set(files).issubset(set(zip_file.namelist())):
+        return True
+    else:
+        return False
+
 
 if __name__ == "__main__":
     Builder.from_cli(sys.argv[1:])
