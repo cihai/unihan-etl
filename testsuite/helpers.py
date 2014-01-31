@@ -14,7 +14,7 @@ import sys
 
 from contextlib import contextmanager
 
-from scripts.process import StringIO
+from scripts._compat import StringIO
 
 
 def add_to_path(path):

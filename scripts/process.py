@@ -9,7 +9,6 @@ from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
 
 import os
-import re
 import sys
 import zipfile
 import glob
@@ -17,7 +16,10 @@ import hashlib
 import fileinput
 import argparse
 
-from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress
+from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
+    ucn_to_unicode, ucnstring_to_python, ucnstring_to_unicode
+
+from scripts._compat import urlretrieve
 
 
 __title__ = 'requests'
@@ -27,26 +29,6 @@ __author__ = 'Tony Narlock'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2014 Tony Narlock'
 
-
-PY2 = sys.version_info[0] == 2
-
-if PY2:
-    unichr = unichr
-    text_type = unicode
-    string_types = (str, unicode)
-
-    from cStringIO import StringIO as BytesIO
-    from StringIO import StringIO
-
-    from urllib import urlretrieve
-else:
-    unichr = chr
-    text_type = str
-    string_types = (str,)
-
-    from io import StringIO, BytesIO
-
-    from urllib.request import urlretrieve
 
 UNIHAN_MANIFEST = {
     'Unihan_DictionaryIndices.txt': [
@@ -174,7 +156,7 @@ def get_datapath(filename):
         os.path.dirname(__file__), os.pardir, 'data', filename
     ))
 
-#: Return filtered :dict:`~.UNIHAN_MANIFEST` from list of file names.
+#: Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names.
 filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
 
 
@@ -212,45 +194,6 @@ default_config = {
     'files': UNIHAN_FILES,
     'download': False
 }
-
-
-def ucn_to_unicode(ucn):
-    """Convert a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to Python unicode (u'\\u4e00')"""
-    if isinstance(ucn, string_types):
-        ucn = ucn.strip("U+")
-        if len(ucn) > int(4):
-            char = b'\U' + format(int(ucn, 16), '08x').encode('latin1')
-            char = char.decode('unicode_escape')
-        else:
-            char = unichr(int(ucn, 16))
-    else:
-        char = unichr(ucn)
-
-    assert isinstance(char, text_type)
-
-    return char
-
-
-def ucnstring_to_python(ucn_string):
-    """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
-    (u'\\u4e00').
-    """
-    res = re.findall("U\+[0-9a-fA-F]*", ucn_string)
-    for r in res:
-        ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
-
-    ucn_string = ucn_string.encode('utf-8')
-
-    assert isinstance(ucn_string, bytes)
-    return ucn_string
-
-
-def ucnstring_to_unicode(ucn_string):
-    """Return ucnstring as Unicode."""
-    ucn_string = ucnstring_to_python(ucn_string).decode('utf-8')
-
-    assert isinstance(ucn_string, text_type)
-    return ucn_string
 
 
 def save(url, filename, urlretrieve=urlretrieve, reporthook=None):

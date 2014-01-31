@@ -39,9 +39,13 @@ except ImportError:  # Python 2.7
 
 from scripts import process
 
+from scripts._compat import text_type
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
-    UNIHAN_FILES, default_config, Builder, text_type, UNIHAN_ZIP_FILEPATH
-from scripts.util import merge_dict
+    UNIHAN_FILES, default_config, Builder, UNIHAN_ZIP_FILEPATH
+from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_python, \
+    ucnstring_to_unicode
+
+
 from .helpers import add_to_path, setup_path, get_datapath, captureStdErr
 
 
@@ -357,7 +361,7 @@ class ProcessTestCase(TestCase):
         before = 'U+4E00'
         expected = '\u4e00'
 
-        result = process.ucn_to_unicode(before)
+        result = ucn_to_unicode(before)
 
         self.assertEqual(result, expected)
 
@@ -367,7 +371,7 @@ class ProcessTestCase(TestCase):
         before = 'U+20001'
         expected = '\U00020001'
 
-        result = process.ucn_to_unicode(before)
+        result = ucn_to_unicode(before)
 
         self.assertEqual(result, expected)
         self.assertIsInstance(result, text_type)
@@ -375,7 +379,7 @@ class ProcessTestCase(TestCase):
         before = '(same as U+7A69 穩) firm; stable; secure'
         expected = '(same as 穩 穩) firm; stable; secure'
 
-        result = process.ucnstring_to_unicode(before)
+        result = ucnstring_to_unicode(before)
 
         self.assertEqual(result, expected)
         self.assertIsInstance(result, text_type)
