@@ -177,7 +177,7 @@ WORK_DIR = get_datapath('')
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
-UNIHAN_DEST = get_datapath('data-built.csv')
+UNIHAN_DEST = get_datapath('unihan.csv')
 UNIHAN_ZIP_FILEPATH = get_datapath('Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
