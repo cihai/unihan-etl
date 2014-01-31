@@ -12,11 +12,13 @@ import glob
 import hashlib
 import fileinput
 import argparse
+import csv
+import codecs
 
 from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
     ucn_to_unicode, ucnstring_to_python, ucnstring_to_unicode
 
-from scripts._compat import urlretrieve
+from scripts._compat import urlretrieve, StringIO
 
 
 __title__ = 'cihaidata-unihan'
@@ -370,9 +372,16 @@ class Builder(object):
         zip_file = extract(UNIHAN_ZIP_FILEPATH)
 
         if zip_has_files(self.config.files, zip_file):
-            print('all files in zip.')
+            print('All files in zip.')
+            abs_paths = [os.path.join(self.config.work_dir, f) for f in self.config.files]
+            data = convert(abs_paths, self.config.fields)
+
+            with open(self.config.destination, 'w+') as f:
+                #csvwriter = csv.writer(f)
+                csvwriter = UnicodeWriter(f)
+                csvwriter.writerows(data)
         else:
-            print('missing files.')
+            print('Missing files.')
 
     @classmethod
     def from_cli(cls, argv):
@@ -392,6 +401,36 @@ class Builder(object):
             return cls({k: v for k, v in vars(args).items() if v})
         except Exception as e:
             sys.exit(e)
+
+
+class UnicodeWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = StringIO()
+        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([s.encode("utf-8") or None for s in row if s])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
 
 
 def has_unihan_zip(zip_filepath=None):
