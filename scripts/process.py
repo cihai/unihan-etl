@@ -19,7 +19,7 @@ from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
 from scripts._compat import urlretrieve
 
 
-__title__ = 'requests'
+__title__ = 'cihaidata-unihan'
 __description__ = 'Build Unihan into datapackage-compatible CSV.'
 __version__ = '0.0.1'
 __author__ = 'Tony Narlock'
@@ -305,6 +305,32 @@ def convert(csv_files, columns):
     return datarows
 
 
+def get_parser():
+    """Return :py:class:`argparse.ArgumentParser` instance for CLI.
+
+    :returns: argument parser for CLI use.
+    :rtype: :py:class:`argparse.ArgumentParser`
+
+    """
+    parser = argparse.ArgumentParser(
+        prog=__title__,
+        description=__description__
+    )
+    parser.add_argument("-s", "--source", dest="source",
+                        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
+    parser.add_argument("-z", "--zip_filepath", dest="zip_filepath",
+                        help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_FILEPATH)
+    parser.add_argument("-d", "--destination", dest="destination",
+                        help="Output of .csv. Default: %s" % UNIHAN_DEST)
+    parser.add_argument("-w", "--work-dir", dest="work_dir",
+                        help="Default: %s" % WORK_DIR)
+    parser.add_argument("-F", "--fields", dest="fields", nargs="*",
+                        help="Default: %s" % UNIHAN_FIELDS)
+    parser.add_argument("-f", "--files", dest="files", nargs='*',
+                        help="Default: %s" % UNIHAN_FILES)
+    return parser
+
+
 class Builder(object):
 
     def __init__(self, config):
@@ -353,22 +379,7 @@ class Builder(object):
         :rtype: :class:`~.Builder`
 
         """
-        parser = argparse.ArgumentParser(
-            prog=__title__,
-            description=__description__
-        )
-        parser.add_argument("-s", "--source", dest="source",
-                            help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
-        parser.add_argument("-z", "--zip_filepath", dest="zip_filepath",
-                            help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_FILEPATH)
-        parser.add_argument("-d", "--destination", dest="destination",
-                            help="Output of .csv. Default: %s" % UNIHAN_DEST)
-        parser.add_argument("-w", "--work-dir", dest="work_dir",
-                            help="Default: %s" % WORK_DIR)
-        parser.add_argument("-F", "--fields", dest="fields", nargs="*",
-                            help="Default: %s" % UNIHAN_FIELDS)
-        parser.add_argument("-f", "--files", dest="files", nargs='*',
-                            help="Default: %s" % UNIHAN_FILES)
+        parser = get_parser()
 
         args = parser.parse_args(argv)
 

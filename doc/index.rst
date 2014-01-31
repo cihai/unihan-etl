@@ -11,5 +11,6 @@ cihai dataset: unihan
     :maxdepth: 2
 
     api
+    cli
     history
     roadmap
