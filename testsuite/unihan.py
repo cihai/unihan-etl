@@ -4,21 +4,6 @@
 cihaidata_unihan.testsuite.unihan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use datapackage.json format.
-
-1. insert dict/struct of { 'unihanFileName': ['colName', 'colName'] }
-return cols, records
-
-    Idea: Create a special iter class for it.
-    Idea 2: Function, return cols, struct above
-
-What a data set should provide.
-
-1. Download the code.
-2. Extract it (if necessary).
-3. Extract the code
-
-
 """
 
 from __future__ import absolute_import, division, print_function, \

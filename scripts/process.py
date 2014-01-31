@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-"""Build Unihan into datapackage-compatible format.
-
-TODO: Parse datapackage.json's field and schema paramters.
-"""
+"""Build Unihan into datapackage-compatible format."""
 
 from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
@@ -289,7 +286,9 @@ def convert(csv_files, columns):
 
     """
 
-    data = fileinput.FileInput(files=csv_files, openhook=fileinput.hook_encoded('utf-8'))
+    data = fileinput.FileInput(
+        files=csv_files, openhook=fileinput.hook_encoded('utf-8')
+    )
     items = {}
     for l in data:
         if not_junk(l):
