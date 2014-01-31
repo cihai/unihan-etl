@@ -76,13 +76,15 @@ will not require external libraries.
 Intended usage
 --------------
 
-(Not ready)
+See `extended CLI arguments`_
 
 .. code-block:: bash
 
     $ ./scripts/process.py
 
 Creates ``data/unihan.csv``.
+
+.. _extended CLI arguments: http://cihaidata-unihan.readthedocs.org/cli.html
 
 Examples
 --------
