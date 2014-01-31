@@ -277,8 +277,6 @@ def save(url, filename, urlretrieve=urlretrieve, reporthook=None):
 def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     """Download a file to a destination.
 
-    TODO: Fix inconsistency with this and ``WORK_DIR``.
-
     :param url: URL to download from.
     :type url: str
     :param destination: file path where download is to be saved.
@@ -314,17 +312,20 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     return dest
 
 
-def extract(zip_filepath):
+def extract(zip_filepath, work_dir=None):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
-    :param zip_filepath: file to extract.
+    :param zip_filepath: filepath to extract.
     :type zip_filepath: string
+    :param work_dir: (optional) directory to extract to. Defaults to
+        :py:meth:`os.path.dirname` of ``zip_filepath``.
+    :type work_dir: string
     :returns: The extracted zip.
     :rtype: :class:`zipfile.ZipFile`
 
     """
 
-    datadir = os.path.dirname(zip_filepath)
+    datadir = work_dir or os.path.dirname(zip_filepath)
     try:
         z = zipfile.ZipFile(zip_filepath)
     except zipfile.BadZipfile as e:
