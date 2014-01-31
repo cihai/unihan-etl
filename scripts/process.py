@@ -369,7 +369,7 @@ class Builder(object):
         while not has_unihan_zip(self.config.zip_filepath):
             download(UNIHAN_URL, UNIHAN_ZIP_FILEPATH, reporthook=_dl_progress)
 
-        zip_file = extract(UNIHAN_ZIP_FILEPATH)
+        zip_file = extract(self.config.zip_filepath)
 
         if zip_has_files(self.config.files, zip_file):
             print('All files in zip.')
