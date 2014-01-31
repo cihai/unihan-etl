@@ -37,7 +37,6 @@ except ImportError:  # Python 2.7
     import unittest
 
 
-
 from scripts import process
 
 from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
@@ -48,6 +47,15 @@ from .helpers import add_to_path, setup_path, get_datapath, captureStdErr
 
 log = logging.getLogger(__name__)
 
+
+SAMPLE_DATA = """\
+U+3400	kCantonese	jau1
+U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
+U+3400	kMandarin	qiū
+U+3401	kCantonese	tim2
+U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
+U+3401	kHanyuPinyin	10019.020:tiàn
+"""
 
 
 class TestCase(unittest.TestCase):
@@ -67,7 +75,7 @@ class UnihanHelper(TestCase):
         cls.mock_zip_filename = 'zipfile.zip'
         cls.mock_zip_filepath = os.path.join(cls.tempdir, cls.mock_zip_filename)
         zf = zipfile.ZipFile(cls.mock_zip_filepath, 'a')
-        zf.writestr("d.txt", "DDDDDDDDDD")
+        zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
         zf.close()
 
         cls.zf = zf
@@ -156,8 +164,8 @@ class UnihanScriptsTestCase(UnihanHelper):
         zf = process.extract(self.mock_zip_filepath)
 
         self.assertEqual(len(zf.infolist()), 1)
-        self.assertEqual(zf.infolist()[0].file_size, 10)
-        self.assertEqual(zf.infolist()[0].filename, "d.txt")
+        self.assertEqual(zf.infolist()[0].file_size, 218)
+        self.assertEqual(zf.infolist()[0].filename, "Unihan_Readings.txt")
 
     def test_convert_unihan_file_format(self):
         pass
@@ -166,14 +174,7 @@ class UnihanScriptsTestCase(UnihanHelper):
         fd, filename = tempfile.mkstemp()
 
         try:
-            os.write(fd, """\
-U+3400	kCantonese	jau1
-U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
-U+3400	kMandarin	qiū
-U+3401	kCantonese	tim2
-U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
-U+3401	kHanyuPinyin	10019.020:tiàn
-""".encode('utf-8'))
+            os.write(fd, SAMPLE_DATA.encode('utf-8'))
 
             csv_files = [
                 filename
