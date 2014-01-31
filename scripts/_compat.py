@@ -13,6 +13,8 @@ if PY2:
     from StringIO import StringIO
 
     from urllib import urlretrieve
+
+    exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
 else:
     unichr = chr
     text_type = str
@@ -21,3 +23,9 @@ else:
     from io import StringIO, BytesIO
 
     from urllib.request import urlretrieve
+
+    def reraise(tp, value, tb=None):
+        if value.__traceback__ is not tb:
+            raise(value.with_traceback(tb))
+        raise value
+
