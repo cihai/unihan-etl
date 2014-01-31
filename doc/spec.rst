@@ -1,3 +1,5 @@
+:orphan:
+
 Current Updates
 ===============
 
@@ -8,7 +10,7 @@ Configuration
 
 It can accept a custom configuration file via command line with ``-c``:
 
-.. code-block :: bash
+.. code-block:: bash
 
     $ python -m cihai -c myconfig.yml
 
