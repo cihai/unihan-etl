@@ -4,7 +4,7 @@ Current Updates
 Scribblings on cihai dev.
 
 Configuration
-~~~~~~~~~~~~~
+-------------
 
 It can accept a custom configuration file via command line with ``-c``:
 
