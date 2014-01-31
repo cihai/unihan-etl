@@ -7,12 +7,9 @@
 .. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
     :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
 
-``cihaidata-unihan`` - build simple data format CSV's for `unihan`_.
-Provides optional integration with `cihai`_ python API.
+``cihaidata-unihan`` - `simple data format` dataset for `unihan`_.
 
-**This project has been split into the https://github.com/cihai group.**
-
-**This project is being split:**
+**This project has been split:**
 
 ``Cihai`` is a team, effort, united effort for incubating open,
 permissive, high quality CJK datasets and clients.
@@ -32,8 +29,6 @@ permissive, high quality CJK datasets and clients.
 
 Being built against unit tests. See the `Travis Builds`_ and
 `Revision History`_.
-
-See `Internals`_ for design philosophy.
 
 Future results
 --------------
@@ -61,11 +56,12 @@ Structure
     # script to download dataset and convert to clean CSV.
     scripts/process.py
 
-    # cihai's python related modules, public-facing python API.
+    # python module, public-facing python API.
     __init__.py
+    scripts/__init__.py
 
-    # unihan module code
-    unihan.py
+    # utility / helper functions
+    scripts/util.py
 
 
 Cihai is *not* required for:
@@ -106,7 +102,6 @@ Related links:
 .. _current datasets: http://cihai.readthedocs.org/en/latest/api.html#datasets
 .. _Extending: http://cihai.readthedocs.org/en/latest/extending.html
 .. _permissively licensing your dataset: http://cihai.readthedocs.org/en/latest/information_liberation.html
-.. _Internals: http://cihai.readthedocs.org/en/latest/internals.html
 
 ==============  ==========================================================
 Python support  Python 2.7, >= 3.3
