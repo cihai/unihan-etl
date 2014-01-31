@@ -277,6 +277,8 @@ def save(url, filename, urlretrieve=urlretrieve, reporthook=None):
 def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     """Download a file to a destination.
 
+    TODO: Fix inconsistency with this and ``WORK_DIR``.
+
     :param url: URL to download from.
     :type url: str
     :param destination: file path where download is to be saved.

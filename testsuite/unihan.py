@@ -167,9 +167,6 @@ class UnihanScriptsTestCase(UnihanHelper):
         self.assertEqual(zf.infolist()[0].file_size, 218)
         self.assertEqual(zf.infolist()[0].filename, "Unihan_Readings.txt")
 
-    def test_convert_unihan_file_format(self):
-        pass
-
     def test_convert_only_output_requested_columns(self):
         fd, filename = tempfile.mkstemp()
 
