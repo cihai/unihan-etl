@@ -367,7 +367,7 @@ class Builder(object):
         self.config = convert_to_attr_dict(config)
 
         while not has_unihan_zip(self.config.zip_filepath):
-            download(UNIHAN_URL, UNIHAN_ZIP_FILEPATH, reporthook=_dl_progress)
+            download(self.config.source, self.config.zip_filepath, reporthook=_dl_progress)
 
         zip_file = extract(self.config.zip_filepath)
 
