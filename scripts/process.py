@@ -20,6 +20,8 @@ from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
 
 from scripts._compat import urlretrieve, StringIO, PY2
 
+from scripts.unicodecsv import UnicodeWriter
+
 
 __title__ = 'cihaidata-unihan'
 __description__ = 'Build Unihan into datapackage-compatible CSV.'
@@ -402,40 +404,6 @@ class Builder(object):
             return cls({k: v for k, v in vars(args).items() if v})
         except Exception as e:
             sys.exit(e)
-
-
-class UnicodeWriter:
-    """
-    A CSV writer which will write rows to CSV file "f",
-    which is encoded in the given encoding.
-    """
-
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        # Redirect output to a queue
-        self.queue = StringIO()
-        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
-        self.stream = f
-        self.encoder = codecs.getincrementalencoder(encoding)()
-
-    def writerow(self, row):
-        if PY2:
-            self.writer.writerow([s.encode("utf-8") or None for s in row if s])
-        else:
-            self.writer.writerow([s or None for s in row if s])
-        # Fetch UTF-8 output from the queue ...
-        data = self.queue.getvalue()
-        if PY2:
-            data = data.decode("utf-8")
-        # ... and reencode it into the target encoding
-        data = self.encoder.encode(data)
-        # write to the target stream
-        self.stream.write(data)
-        # empty queue
-        self.queue.truncate(0)
-
-    def writerows(self, rows):
-        for row in rows:
-            self.writerow(row)
 
 
 def has_unihan_zip(zip_filepath=None):
