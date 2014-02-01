@@ -18,7 +18,7 @@ import codecs
 from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
     ucn_to_unicode, ucnstring_to_python, ucnstring_to_unicode
 
-from scripts._compat import urlretrieve, StringIO
+from scripts._compat import urlretrieve, StringIO, PY2
 
 
 __title__ = 'cihaidata-unihan'
@@ -418,10 +418,14 @@ class UnicodeWriter:
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def writerow(self, row):
-        self.writer.writerow([s.encode("utf-8") or None for s in row if s])
+        if PY2:
+            self.writer.writerow([s.encode("utf-8") or None for s in row if s])
+        else:
+            self.writer.writerow([s or None for s in row if s])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
-        data = data.decode("utf-8")
+        if PY2:
+            data = data.decode("utf-8")
         # ... and reencode it into the target encoding
         data = self.encoder.encode(data)
         # write to the target stream
