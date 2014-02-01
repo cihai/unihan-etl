@@ -11,6 +11,8 @@ try:
 except ImportError:
     izip = zip
 
+from ._compat import string_types as unicode
+
 #http://semver.org/
 VERSION = (0, 10, 1)
 __version__ = ".".join(map(str,VERSION))
