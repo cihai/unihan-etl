@@ -335,6 +335,8 @@ def get_parser():
 
 class Builder(object):
 
+    default_config = default_config
+
     def __init__(self, config):
         """Download and generate a datapackage.json compatible release of
         `unihan <http://www.unicode.org/reports/tr38/>`_.
@@ -361,7 +363,7 @@ class Builder(object):
             if not_in_field:
                 raise KeyError('Field {0} not found in file list.'.format(', '.join(not_in_field)))
 
-        config = merge_dict(default_config, config)
+        config = merge_dict(self.default_config, config)
 
         #: configuration dictionary. Available as attributes. ``.config.debug``
         self.config = convert_to_attr_dict(config)
@@ -377,7 +379,6 @@ class Builder(object):
             data = convert(abs_paths, self.config.fields)
 
             with open(self.config.destination, 'w+') as f:
-                #csvwriter = csv.writer(f)
                 csvwriter = UnicodeWriter(f)
                 csvwriter.writerows(data)
         else:

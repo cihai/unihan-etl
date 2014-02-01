@@ -46,6 +46,23 @@ U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
 U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
+test_config = merge_dict(default_config.copy(), {
+    'source': UNIHAN_URL,
+    'destination': UNIHAN_DEST,
+    'zip_filepath': UNIHAN_ZIP_FILEPATH,
+    'work_dir': WORK_DIR,
+    'fields': UNIHAN_FIELDS,
+    'files': 'Unihan_Readings.txt',
+    'download': False
+})
+
+
+class MockBuilder(Builder):
+
+    default_config = test_config
+
+Builder = MockBuilder
+
 
 class TestCase(unittest.TestCase):
     pass
@@ -61,11 +78,15 @@ class UnihanHelper(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tempdir = tempfile.mkdtemp()
-        cls.mock_zip_filename = 'zipfile.zip'
+        cls.mock_zip_filename = 'Unihan.zip'
         cls.mock_zip_filepath = os.path.join(cls.tempdir, cls.mock_zip_filename)
         zf = zipfile.ZipFile(cls.mock_zip_filepath, 'a')
         zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
         zf.close()
+
+        Builder.default_config['work_dir'] = cls.tempdir
+        Builder.default_config['zip_filepath'] = cls.mock_zip_filepath
+        Builder.default_config['destination'] = os.path.join(cls.tempdir, 'unihan.csv')
 
         cls.mock_zip = zf
 
@@ -75,6 +96,19 @@ class UnihanHelper(TestCase):
     def tearDownClass(cls):
         shutil.rmtree(cls.tempdir)
         super(UnihanHelper, cls).tearDownClass()
+
+
+class UnihanMock(UnihanHelper):
+
+    def test_builder_mock(self):
+
+        self.assertEqual(test_config, Builder.default_config)
+        self.assertNotEqual(test_config, default_config)
+
+        b = Builder({})
+
+        self.assertEqual(test_config, b.config)
+        self.assertNotEqual(default_config, b.config)
 
 
 class UnihanScriptsTestCase(UnihanHelper):
@@ -387,7 +421,7 @@ class CliArgTestCase(UnihanHelper):
     def test_no_args(self):
         """Works without arguments."""
 
-        expected = default_config
+        expected = test_config
         result = Builder.from_cli([]).config
 
         self.assertEqual(expected, result)
@@ -426,6 +460,7 @@ class CliArgTestCase(UnihanHelper):
 def suite():
     setup_path()
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(UnihanMock))
     suite.addTest(unittest.makeSuite(UnihanHelperFunctions))
     suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
     suite.addTest(unittest.makeSuite(ProcessTestCase))
