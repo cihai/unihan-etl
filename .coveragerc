@@ -5,6 +5,7 @@ omit =
     */_*
     */util.py
     */_compat.py
+    */unicodecsv.py
 
 [report]
 exclude_lines =
