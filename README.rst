@@ -7,19 +7,20 @@
 .. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
     :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
 
-``cihaidata-unihan`` - `simple data format` dataset for `unihan`_.
+``cihaidata-unihan`` - tool to build `unihan`_ into `simple data format`
+CSV format.
 
 **This project has been split:**
 
 ``Cihai`` is a team, effort, united effort for incubating open,
 permissive, high quality CJK datasets and clients.
 
-- `cihai-handbook`_ provides documentational overviews of the history of
-  CJK, the dataset standards and available client libraries.
-- Official client libraries. `cihai-python`_ will be a python client for
+- `cihai-handbook`_ - how to convert your cjk dataset to
+  `datapackages`_-friendly format.
+- Official client libraries. `cihai-python`_ a python client for
   cihai+datapackages datasets (cjklib style).
-- Public datasets maintained by `cihai team`_. Unihan will be a first
-  example. See `cihaidata-unihan on github`_.
+- Public datasets maintained by `cihai team`_. See `cihaidata-unihan on
+  github`_.
 
 .. _cihai: https://github.com/cihai/
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
@@ -29,18 +30,6 @@ permissive, high quality CJK datasets and clients.
 
 Being built against unit tests. See the `Travis Builds`_ and
 `Revision History`_.
-
-Future results
---------------
-
-- Future versions will allow deeper introspection into results:
-
-  - Multiple characters words
-  - Phrases
-  - Mispellings / similar shapes
-  - Sorting results by usage, stroke
-  - Breaking strings of characters into words
-  - More datasets
 
 Structure
 ---------
