@@ -1,4 +1,4 @@
-.. _cihaidata-unihan:
+.. _index:
 
 =====================
 cihai dataset: unihan
