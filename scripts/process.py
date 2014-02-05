@@ -15,6 +15,8 @@ import argparse
 import csv
 import codecs
 
+sys.path.insert(0, os.getcwd())  # we want to grab this:
+
 from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
     ucn_to_unicode, ucnstring_to_python, ucnstring_to_unicode
 
@@ -177,12 +179,18 @@ def get_files(fields):
 
 default_columns = ['ucn', 'char']
 
-WORK_DIR = get_datapath('')
+#: Directory to use for downloading files.
+DATA_DIR = get_datapath('')
+#: Directory to use for processing intermittent files.
+WORK_DIR = get_datapath('downloads')
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+#: URI of Unihan.zip data.
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
+#: Filepath to output built CSV file to.
 UNIHAN_DEST = get_datapath('unihan.csv')
-UNIHAN_ZIP_FILEPATH = get_datapath('Unihan.zip')
+#: Filepath to download Zip file.
+UNIHAN_ZIP_FILEPATH = get_datapath('downloads/Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
@@ -309,6 +317,40 @@ def convert(csv_files, columns):
     return datarows
 
 
+def has_unihan_zip(zip_filepath=None):
+    """Return True if file has Unihan.zip and is a valid zip."""
+    if not zip_filepath:
+        zip_filepath = UNIHAN_ZIP_FILEPATH
+
+    if os.path.isfile(zip_filepath):
+        if zipfile.is_zipfile(zip_filepath):
+            print("Exists, is valid zip. %s" % zip_filepath)
+            return True
+        else:
+            print("Not a valid zip. %s" % zip_filepath)
+            return False
+    else:
+        print("File doesn't exist. %s" % zip_filepath)
+        return False
+
+
+def zip_has_files(files, zip_file):
+    """Return True if zip has the files inside.
+
+    :param files: list of files inside zip
+    :type files: list
+    :param zip_file: zip file to look inside.
+    :type zip_file: :py:class:`zipfile.ZipFile`
+    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
+    :rtype: bool
+
+    """
+    if set(files).issubset(set(zip_file.namelist())):
+        return True
+    else:
+        return False
+
+
 def get_parser():
     """Return :py:class:`argparse.ArgumentParser` instance for CLI.
 
@@ -404,40 +446,6 @@ class Builder(object):
             return cls({k: v for k, v in vars(args).items() if v})
         except Exception as e:
             sys.exit(e)
-
-
-def has_unihan_zip(zip_filepath=None):
-    """Return True if file has Unihan.zip and is a valid zip."""
-    if not zip_filepath:
-        zip_filepath = UNIHAN_ZIP_FILEPATH
-
-    if os.path.isfile(zip_filepath):
-        if zipfile.is_zipfile(zip_filepath):
-            print("Exists, is valid zip. %s" % zip_filepath)
-            return True
-        else:
-            print("Not a valid zip. %s" % zip_filepath)
-            return False
-    else:
-        print("File doesn't exist. %s" % zip_filepath)
-        return False
-
-
-def zip_has_files(files, zip_file):
-    """Return True if zip has the files inside.
-
-    :param files: list of files inside zip
-    :type files: list
-    :param zip_file: zip file to look inside.
-    :type zip_file: :py:class:`zipfile.ZipFile`
-    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
-    :rtype: bool
-
-    """
-    if set(files).issubset(set(zip_file.namelist())):
-        return True
-    else:
-        return False
 
 
 if __name__ == "__main__":
