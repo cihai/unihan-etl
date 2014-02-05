@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Here you can find the recent changes to cihai.
+Here you can find the recent changes to cihaidata-unihan.
 
 .. changelog::
     :version: dev
@@ -11,12 +11,6 @@ Here you can find the recent changes to cihai.
     .. change::
         :tags:  docs
 
-      add changelog, history, docs.
-
-    .. change::
-        :tags: tests
-
-      Add tests for libunihan data import
-
+        Initial release.
 
 .. todo:: vim: set filetype=rst:
