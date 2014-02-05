@@ -44,3 +44,5 @@ doc/_build
 
 .ropeproject
 .idea
+
+data/downloads
