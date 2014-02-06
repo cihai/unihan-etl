@@ -10,9 +10,7 @@
 ``cihaidata-unihan`` - tool to build `unihan`_ into `simple data format`
 CSV format. Part of the `cihai`_ project.
 
-Unihan's data is disperved across multiple files in the format of:
-
-.. code-block:: csv
+Unihan's data is disperved across multiple files in the format of::
 
     U+3400	kCantonese	jau1
     U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
@@ -23,9 +21,7 @@ Unihan's data is disperved across multiple files in the format of:
     U+3401	kMandarin	tiàn
 
 ``script/process.py`` will download Unihan.zip and build all files into a
-single tabular CSV:
-
-.. code-block:: csv
+single tabular CSV::
 
     char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
     丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
