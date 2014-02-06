@@ -25,7 +25,7 @@ single tabular CSV::
 
     char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
     丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
-    㐁,U+3401,tim2,to lock; to taste, a mat, bamboo bark,10019.020:tiàn,tiàn
+    㐁,U+3401,tim2,"to lock; to taste, a mat, bamboo bark",10019.020:"tiàn,tiàn"
 
 ``process.py`` supports command line arguments. See `script/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
