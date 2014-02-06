@@ -300,12 +300,17 @@ def convert(csv_files, columns):
 
     """
 
+    import collections
+    items = collections.OrderedDict()
+
+    print('Processing files: %s.' % ', '.join(csv_files))
     data = fileinput.FileInput(
         files=csv_files, openhook=fileinput.hook_encoded('utf-8')
     )
-    import collections
-    items = collections.OrderedDict()
-    for l in data:
+    print('Done.')
+
+    print('Collecting field data...')
+    for idx, l in enumerate(data):
         if not_junk(l):
             l = l.strip().split('\t')
             if in_fields(l[1], columns):
@@ -316,8 +321,15 @@ def convert(csv_files, columns):
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
                 items[char][item['field']] = item['value']
+        sys.stdout.write('\rProcessing line %i.' % (idx))
+        sys.stdout.flush()
+    sys.stdout.write('\n')
+    sys.stdout.flush()
 
+    print('Done.')
+    print('Converting to Simple Data Format.')
     datarows = [columns[:]] + [r.values() for r in [v for v in items.values()]]
+    print('Done.')
     return datarows
 
 
@@ -429,6 +441,7 @@ class Builder(object):
             with open(self.config.destination, 'w+') as f:
                 csvwriter = UnicodeWriter(f)
                 csvwriter.writerows(data)
+                print('Saved output to: %s.' % self.config.destination)
         else:
             print('Missing files.')
 
