@@ -303,7 +303,8 @@ def convert(csv_files, columns):
     data = fileinput.FileInput(
         files=csv_files, openhook=fileinput.hook_encoded('utf-8')
     )
-    items = {}
+    import collections
+    items = collections.OrderedDict()
     for l in data:
         if not_junk(l):
             l = l.strip().split('\t')
@@ -311,7 +312,7 @@ def convert(csv_files, columns):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
                 if not char in items:
-                    items[char] = dict.fromkeys(columns)
+                    items[char] = collections.OrderedDict().fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
                 items[char][item['field']] = item['value']
 
