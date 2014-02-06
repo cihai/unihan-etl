@@ -147,7 +147,7 @@ not_junk = lambda line: line[0] != '#' and line != '\n'
 
 #: Return True if string is in the default fields.
 in_fields = lambda c, columns: c in columns + index_fields
-index_fields = ['ucn', 'char']
+index_fields = ['char', 'ucn']
 
 #: Return list of fields from dict of {filename: ['field', 'field1']}.
 get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
