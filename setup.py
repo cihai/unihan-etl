@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""cihaidata-unihan lives at <https://github.com/cihai/cihaidata-unihan>.
-
-cihaidata-unihan
-~~~~~~~~~~~~~~~~
-
-"""
+"""cihaidata-unihan lives at <https://github.com/cihai/cihaidata-unihan>."""
 import os
 import sys
 from setuptools import setup, find_packages
