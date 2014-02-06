@@ -10,8 +10,7 @@ windows:
   focus: true
   panes:
   - shell_command:
-    - vim
-    - :Ex
+    - blank
     focus: true
   - pane
   - shell_command:
