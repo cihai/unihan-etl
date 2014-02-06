@@ -146,21 +146,24 @@ UNIHAN_MANIFEST = {
 not_junk = lambda line: line[0] != '#' and line != '\n'
 
 #: Return True if string is in the default fields.
-in_fields = lambda c, columns: c in columns + default_columns
-default_columns = ['ucn', 'char']
+in_fields = lambda c, columns: c in columns + index_fields
+index_fields = ['ucn', 'char']
 
 #: Return list of fields from dict of {filename: ['field', 'field1']}.
 get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
 
+#: Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names.
+filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
 
+#: Default index fields for unihan csv's. You probably want these.
+index_fields = ['ucn', 'char']
+
+
+#: Return path of a file inside data directory.
 def get_datapath(filename):
-
     return os.path.abspath(os.path.join(
         os.path.dirname(__file__), os.pardir, 'data', filename
     ))
-
-#: Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names.
-filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
 
 
 #: Return list of files from list of fields.
@@ -177,7 +180,6 @@ def get_files(fields):
 
     return list(files)
 
-default_columns = ['ucn', 'char']
 
 #: Directory to use for downloading files.
 DATA_DIR = get_datapath('')
@@ -199,7 +201,7 @@ default_config = {
     'destination': UNIHAN_DEST,
     'zip_filepath': UNIHAN_ZIP_FILEPATH,
     'work_dir': WORK_DIR,
-    'fields': UNIHAN_FIELDS,
+    'fields': index_fields + UNIHAN_FIELDS,
     'files': UNIHAN_FILES,
     'download': False
 }
