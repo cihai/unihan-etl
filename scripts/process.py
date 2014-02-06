@@ -314,6 +314,7 @@ def convert(csv_files, columns):
                 if not char in items:
                     items[char] = collections.OrderedDict().fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
+                    items[char]['char'] = char
                 items[char][item['field']] = item['value']
 
     datarows = [columns[:]] + [r.values() for r in [v for v in items.values()]]
