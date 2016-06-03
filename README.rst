@@ -1,3 +1,7 @@
+This project is inactive
+========================
+
+
 .. image:: https://travis-ci.org/cihai/cihaidata-unihan.png?branch=master
     :target: https://travis-ci.org/cihai/cihaidata-unihan
 
