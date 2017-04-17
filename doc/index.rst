@@ -5,7 +5,6 @@ cihai dataset: unihan
 =====================
 
 .. include:: ../README.rst
-    :start-line: 10
 
 .. toctree::
     :maxdepth: 2
