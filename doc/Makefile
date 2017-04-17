@@ -167,4 +167,4 @@ serve:
 	@echo 'docs server running at http://0.0.0.0:8039/_build/html'
 	@echo
 	@echo '================================================='
-	python -m SimpleHTTPServer 8039
+	python -m http.server 8039
