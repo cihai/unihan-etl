@@ -77,17 +77,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/cihai.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/cihaidata-unihan.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/cihai.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/cihaidata-unihan.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/cihai"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/cihai"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/cihaidata-unihan"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/cihaidata-unihan"
 	@echo "# devhelp"
 
 epub:
@@ -151,3 +151,20 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+checkbuild:
+	rm -rf $(BUILDDIR)
+	$(SPHINXBUILD) -n -q ./ $(BUILDDIR)
+
+WATCH_FILES= find .. -type f -not -path '*/\.*' | grep -i '.*[.]rst\|CHANGES\|TODO\|.*conf\.py' 2> /dev/null
+
+watch:
+	if command -v entr > /dev/null; then ${WATCH_FILES} | entr -c $(MAKE) html; else $(MAKE) html; fi
+
+serve:
+	@echo '================================================='
+	@echo
+	@echo 'docs server running at http://0.0.0.0:8039/_build/html'
+	@echo
+	@echo '================================================='
+	python -m SimpleHTTPServer 8039
