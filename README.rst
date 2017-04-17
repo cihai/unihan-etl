@@ -1,18 +1,7 @@
-This project is inactive
-========================
-
-
-.. image:: https://travis-ci.org/cihai/cihaidata-unihan.png?branch=master
-    :target: https://travis-ci.org/cihai/cihaidata-unihan
-
-.. image:: https://badge.fury.io/py/cihaidata-unihan.png
-    :target: http://badge.fury.io/py/cihaidata-unihan
-
-.. image:: https://coveralls.io/repos/cihai/cihaidata-unihan/badge.png?branch=master
-    :target: https://coveralls.io/r/cihai/cihaidata-unihan?branch=master
-
-``cihaidata-unihan`` - tool to build `unihan`_ into `simple data format`
+*cihaidata-unihan* - tool to build `unihan`_ into `simple data format`
 CSV format. Part of the `cihai`_ project.
+
+|pypi| |docs| |build-status| |coverage| |license|
 
 Unihan's data is disperved across multiple files in the format of::
 
@@ -117,20 +106,19 @@ Related links:
 .. _Revision History: https://github.com/cihai/cihaidata-unihan/commits/master
 .. _cjklib: http://cjklib.org/0.3/
 .. _current datasets: http://cihai.readthedocs.org/en/latest/api.html#datasets
-.. _Extending: http://cihai.readthedocs.org/en/latest/extending.html
 .. _permissively licensing your dataset: http://cihai.readthedocs.org/en/latest/information_liberation.html
 
 ==============  ==========================================================
 Python support  Python 2.7, >= 3.3
-Source          https://github.com/cihai/cihaidata-unihan
-Docs            http://cihaidata-unihan.rtfd.org
-Changelog       http://cihaidata-unihan.readthedocs.org/en/latest/history.html
-API             http://cihaidata-unihan.readthedocs.org/en/latest/api.html
-Issues          https://github.com/cihai/cihaidata-unihan/issues
-Travis          http://travis-ci.org/cihai/cihaidata-unihan
-Test coverage   https://coveralls.io/r/cihai/cihaidata-unihan
+Source          https://github.com/cihaidata-unihan/cihaidata-unihan
+Docs            https://cihaidata-unihan.git-pull.com
+Changelog       https://cihaidata-unihan.git-pull.com/en/latest/history.html
+API             https://cihaidata-unihan.git-pull.com/en/latest/api.html
+Issues          https://github.com/cihaidata-unihan/cihaidata-unihan/issues
+Travis          https://travis-ci.org/cihaidata-unihan/cihaidata-unihan
+Test coverage   https://coveralls.io/r/cihaidata-unihan/cihaidata-unihan
 pypi            https://pypi.python.org/pypi/cihaidata-unihan
-Ohloh           https://www.ohloh.net/p/cihaidata-unihan
+OpenHub         https://www.openhub.net/p/cihaidata-unihan
 License         `MIT`_.
 git repo        .. code-block:: bash
 
@@ -158,3 +146,23 @@ tests           .. code-block:: bash
 .. _simple data format: http://data.okfn.org/standards/simple-data-format
 .. _cihai dataset API: http://cihai.readthedocs.org/en/latest/extending.html
 .. _PEP 301\: python package format: http://www.python.org/dev/peps/pep-0301/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/cihaidata-unihan.svg
+    :alt: Python Package
+    :target: http://badge.fury.io/py/cihaidata-unihan
+
+.. |build-status| image:: https://img.shields.io/travis/cihaidata-unihan/cihaidata-unihan.svg
+   :alt: Build Status
+   :target: https://travis-ci.org/cihaidata-unihan/cihaidata-unihan
+
+.. |coverage| image:: https://codecov.io/gh/cihaidata-unihan/cihaidata-unihan/branch/master/graph/badge.svg
+    :alt: Code Coverage
+    :target: https://codecov.io/gh/cihaidata-unihan/cihaidata-unihan
+
+.. |license| image:: https://img.shields.io/github/license/cihaidata-unihan/cihaidata-unihan.svg
+    :alt: License 
+
+.. |docs| image:: https://readthedocs.org/projects/cihaidata-unihan/badge/?version=latest
+    :alt: Documentation Status
+    :scale: 100%
+    :target: https://readthedocs.org/projects/cihaidata-unihan/
