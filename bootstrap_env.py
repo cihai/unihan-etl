@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import, division, print_function, \
-    with_statement, unicode_literals
-
+from __future__ import absolute_import, print_function, unicode_literals
 
 import os
-import sys
 import subprocess
+import sys
 
 
 def warning(*objs):
@@ -15,13 +13,6 @@ def warning(*objs):
 
 def fail(message):
     sys.exit("Error: {message}".format(message=message))
-
-
-PY2 = sys.version_info[0] == 2
-if PY2:
-    from urllib import urlretrieve
-else:
-    from urllib.request import urlretrieve
 
 
 def has_module(module_name):
@@ -74,16 +65,21 @@ def which(exe=None, throw=True):
 
 
 project_dir = os.path.dirname(os.path.realpath(__file__))
-env_dir = os.path.join(project_dir, '.env')
+env_dir = os.path.join(project_dir, '.venv')
 pip_bin = os.path.join(env_dir, 'bin', 'pip')
 python_bin = os.path.join(env_dir, 'bin', 'python')
 virtualenv_bin = which('virtualenv', throw=False)
 virtualenv_exists = os.path.exists(env_dir) and os.path.isfile(python_bin)
-sphinx_requirements_filepath = os.path.join(project_dir, 'doc', 'requirements.pip')
+sphinx_requirements_filepath = os.path.join(
+    project_dir, 'requirements', 'doc.txt')
+dev_requirements_filepath = os.path.join(
+    project_dir, 'requirements', 'dev.txt')
+test_requirements_filepath = os.path.join(
+    project_dir, 'requirements', 'test.txt')
 
 
 try:
-    import virtualenv
+    import virtualenv  # NOQA
 except ImportError:
     message = (
         'Virtualenv is required for this bootstrap to run.\n'
@@ -94,31 +90,43 @@ except ImportError:
 
 
 try:
-    import pip
+    import pip  # NOQA
 except ImportError:
     message = (
         'pip is required for this bootstrap to run.\n'
         'Find instructions on how to install at: %s' %
-        'http://pip.readthedocs.org/en/latest/installing.html'
+        'http://pip.readthedocs.io/en/latest/installing.html'
     )
     fail(message)
 
 
 def main():
+    if not which('entr', throw=False):
+        message = (
+            '\nentr(1) is used in this app as a cross platform file watcher.'
+            'You can install it via your package manager on most POSIX '
+            'systems. See the site at http://entrproject.org/\n'
+        )
+        print(message)
+
     if not virtualenv_exists:
         virtualenv_bin = which('virtualenv', throw=False)
 
         subprocess.check_call(
-            [virtualenv_bin, env_dir]
+            [virtualenv_bin, '-ppython3.6', env_dir]
         )
-
         subprocess.check_call(
             [pip_bin, 'install', '-e', project_dir]
         )
 
-    if not os.path.isfile(os.path.join(env_dir, 'bin', 'watching_testrunner')):
+    if not has_module('pytest'):
         subprocess.check_call(
-            [pip_bin, 'install', 'watching-testrunner']
+            [pip_bin, 'install', '-r', test_requirements_filepath]
+        )
+
+    if not has_module('flake8'):
+        subprocess.check_call(
+            [pip_bin, 'install', '-r', dev_requirements_filepath]
         )
 
     if not os.path.isfile(os.path.join(env_dir, 'bin', 'sphinx-quickstart')):
@@ -128,6 +136,7 @@ def main():
 
     if os.path.exists(os.path.join(env_dir, 'build')):
         os.removedirs(os.path.join(env_dir, 'build'))
+
 
 if __name__ == '__main__':
     main()
