@@ -24,7 +24,7 @@ from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_FILES,
 from scripts.util import (merge_dict, ucn_to_unicode, ucnstring_to_python,
                           ucnstring_to_unicode)
 
-from .helpers import add_to_path, captureStdErr, get_datapath, setup_path
+from scripts.test import add_to_path, captureStdErr, get_datapath, setup_path
 
 try:
     import unittest2 as unittest
