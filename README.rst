@@ -151,15 +151,15 @@ tests           .. code-block:: bash
     :alt: Python Package
     :target: http://badge.fury.io/py/cihaidata-unihan
 
-.. |build-status| image:: https://img.shields.io/travis/cihaidata-unihan/cihaidata-unihan.svg
+.. |build-status| image:: https://img.shields.io/travis/cihai/cihaidata-unihan.svg
    :alt: Build Status
-   :target: https://travis-ci.org/cihaidata-unihan/cihaidata-unihan
+   :target: https://travis-ci.org/cihai/cihaidata-unihan
 
-.. |coverage| image:: https://codecov.io/gh/cihaidata-unihan/cihaidata-unihan/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/cihai/cihaidata-unihan/branch/master/graph/badge.svg
     :alt: Code Coverage
-    :target: https://codecov.io/gh/cihaidata-unihan/cihaidata-unihan
+    :target: https://codecov.io/gh/cihai/cihaidata-unihan
 
-.. |license| image:: https://img.shields.io/github/license/cihaidata-unihan/cihaidata-unihan.svg
+.. |license| image:: https://img.shields.io/github/license/cihai/cihaidata-unihan.svg
     :alt: License 
 
 .. |docs| image:: https://readthedocs.org/projects/cihaidata-unihan/badge/?version=latest
