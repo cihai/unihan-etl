@@ -109,7 +109,7 @@ Related links:
 .. _permissively licensing your dataset: http://cihai.readthedocs.org/en/latest/information_liberation.html
 
 ==============  ==========================================================
-Python support  Python 2.7, >= 3.3
+Python support  Python 2.7, >= 3.3, pypy/pypy3
 Source          https://github.com/cihaidata-unihan/cihaidata-unihan
 Docs            https://cihaidata-unihan.git-pull.com
 Changelog       https://cihaidata-unihan.git-pull.com/en/latest/history.html
