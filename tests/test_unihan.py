@@ -6,15 +6,25 @@ cihaidata_unihan.testsuite.unihan
 
 """
 
-from __future__ import absolute_import, division, print_function, \
-    with_statement, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals, with_statement)
 
-import os
-import tempfile
 import logging
+import os
+import shutil
+import tempfile
 import unittest
 import zipfile
-import shutil
+
+from scripts import process
+from scripts._compat import text_type
+from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_FILES,
+                             UNIHAN_URL, UNIHAN_ZIP_FILEPATH, WORK_DIR,
+                             Builder, default_config, zip_has_files)
+from scripts.util import (merge_dict, ucn_to_unicode, ucnstring_to_python,
+                          ucnstring_to_unicode)
+
+from .helpers import add_to_path, captureStdErr, get_datapath, setup_path
 
 try:
     import unittest2 as unittest
@@ -22,16 +32,9 @@ except ImportError:  # Python 2.7
     import unittest
 
 
-from scripts import process
-
-from scripts._compat import text_type
-from scripts.process import UNIHAN_URL, UNIHAN_DEST, WORK_DIR, UNIHAN_FIELDS, \
-    UNIHAN_FILES, default_config, Builder, UNIHAN_ZIP_FILEPATH, zip_has_files
-from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_python, \
-    ucnstring_to_unicode
 
 
-from .helpers import add_to_path, setup_path, get_datapath, captureStdErr
+
 
 
 log = logging.getLogger(__name__)
