@@ -47,7 +47,7 @@ def setup_path():
 def get_datapath(filename):
 
     return os.path.join(
-        os.path.dirname(__file__), 'fixtures', filename
+        os.path.dirname(__file__), '..', 'tests', 'fixtures', filename
     )
 
 
@@ -67,5 +67,3 @@ def captureStdOut(command, *args, **kwargs):
     sys.stdout.seek(0)
     yield sys.stdout.read()
     sys.stdout = out
-
-
