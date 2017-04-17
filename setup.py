@@ -1,41 +1,60 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
 """cihaidata-unihan lives at <https://github.com/cihai/cihaidata-unihan>."""
-import os
-import sys
-from setuptools import setup, find_packages
 
-sys.path.insert(0, os.getcwd())  # we want to grab this:
-from package_metadata import p
+import sys
+
+from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
+
+about = {}
+with open("__about__.py") as fp:
+    exec(fp.read(), about)
 
 with open('requirements/base.txt') as f:
     install_reqs = [line for line in f.read().split('\n') if line]
-    tests_reqs = []
 
-if sys.version_info < (2, 7):
-    install_reqs += ['argparse']
-    tests_reqs += ['unittest2']
+with open('requirements/test.txt') as f:
+    tests_reqs = [line for line in f.read().split('\n') if line]
 
-readme = open('README.rst').read()
+if sys.version_info[0] > 2:
+    readme = open('README.rst', encoding='utf-8').read()
+else:
+    readme = open('README.rst').read()
+
 history = open('CHANGES').read().replace('.. :changelog:', '')
 
+
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
+
+
 setup(
-    name=p.title,
-    version=p.version,
-    url='https://github.com/cihai/cihaidata-unihan',
+    name=about['__title__'],
+    version=about['__version__'],
+    url='https://cihaidata-unihan.git-pull.com',
     download_url='https://pypi.python.org/pypi/cihaidata-unihan',
-    license=p.license,
-    author=p.author,
-    author_email=p.email,
-    description=p.description,
+    license=about['__license__'],
+    author=about['__author__'],
+    author_email=about['__email__'],
+    description=about['__description__'],
     long_description=readme,
     include_package_data=True,
     install_requires=install_reqs,
     tests_require=tests_reqs,
-    test_suite='testsuite',
+    cmdclass={'test': PyTest},
     zip_safe=False,
-    keywords=p.title,
-    packages=find_packages(exclude=["doc"]),
+    keywords=about['__title__'],
+    package=find_packages(exclude=["doc"]),
     package_data={
         'cihaidata-unihan': ['data/*']
     },
