@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 sys.path.insert(0, os.getcwd())  # we want to grab this:
 from package_metadata import p
 
-with open('requirements.pip') as f:
+with open('requirements/base.txt') as f:
     install_reqs = [line for line in f.read().split('\n') if line]
     tests_reqs = []
 
