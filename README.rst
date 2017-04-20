@@ -27,7 +27,7 @@ download URL's and output destinations.
 Being built against unit tests. See the `Travis Builds`_ and
 `Revision History`_.
 
-.. _cihai: https://github.com/cihai/
+.. _cihai: https://cihai.git-pull.com
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
 .. _cihai team: https://github.com/cihai?tab=members
 .. _cihai-python: https://github.com/cihai/cihai-python
