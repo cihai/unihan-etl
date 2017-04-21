@@ -7,8 +7,6 @@ from __future__ import (absolute_import, division, print_function,
 import logging
 import os
 import shutil
-import tempfile
-import unittest
 import zipfile
 
 import pytest
@@ -20,11 +18,6 @@ from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
                              default_config, zip_has_files)
 from scripts.test import capture_stderr, get_datapath, assertDictContainsSubset
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
-
-try:
-    import unittest2 as unittest  # NOQA
-except ImportError:  # Python 2.7
-    import unittest
 
 log = logging.getLogger(__name__)
 
@@ -57,10 +50,6 @@ class MockBuilder(Builder):
 Builder = MockBuilder
 
 
-class TestCase(unittest.TestCase):
-    pass
-
-
 mock_zip_filename = 'Unihan.zip'
 
 
@@ -86,46 +75,12 @@ def mock_zip(mock_zip_file):
 @pytest.fixture(scope="session")
 def TestBuilder(mock_test_dir, mock_zip_file):
     # monkey-patching builder
-    Builder.default_config['work_dir'] = str(mock_test_dir)
-    Builder.default_config['zip_filepath'] = str(mock_zip_file)
-    Builder.default_config['destination'] = str(
+    MockBuilder.default_config['work_dir'] = str(mock_test_dir)
+    MockBuilder.default_config['zip_filepath'] = str(mock_zip_file)
+    MockBuilder.default_config['destination'] = str(
         mock_test_dir.join('unihan.csv')
     )
-    return Builder
-
-
-class UnihanHelper(TestCase):
-
-    config = os.path.abspath(os.path.join(
-        os.path.dirname(__file__),
-        'test_config.yml'
-    ))
-
-    @classmethod
-    def setUpClass(cls):
-        cls.tempdir = tempfile.mkdtemp()
-        cls.mock_zip_filename = 'Unihan.zip'
-        cls.mock_zip_filepath = os.path.join(
-            cls.tempdir, cls.mock_zip_filename
-        )
-        zf = zipfile.ZipFile(cls.mock_zip_filepath, 'a')
-        zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
-        zf.close()
-
-        Builder.default_config['work_dir'] = cls.tempdir
-        Builder.default_config['zip_filepath'] = cls.mock_zip_filepath
-        Builder.default_config['destination'] = os.path.join(
-            cls.tempdir, 'unihan.csv'
-        )
-
-        cls.mock_zip = zf
-
-        super(UnihanHelper, cls).setUpClass()
-
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(cls.tempdir)
-        super(UnihanHelper, cls).tearDownClass()
+    return MockBuilder
 
 
 @pytest.mark.skip(reason="slow and may remove this")
@@ -315,11 +270,6 @@ def test_flatten_fields():
     assert set(expected) == set(results)
 
 
-class UnihanHelperFunctions(UnihanHelper):
-
-    """Utilities to retrieve unihan data in datapackage format."""
-
-
 def test_pick_files(mock_zip_file):
     """Pick a white list of files to build from."""
 
@@ -442,10 +392,6 @@ def test_conversion_ucn_to_unicode():
 
     assert result == expected
     assert isinstance(result, text_type)
-
-
-"""Allows for creating a custom output of unihan data
-in datapackage.json format."""
 
 
 def test_no_args():
