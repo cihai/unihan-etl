@@ -16,7 +16,7 @@ from scripts._compat import text_type
 from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
                              UNIHAN_ZIP_FILEPATH, WORK_DIR, Builder,
                              default_config, zip_has_files)
-from scripts.test import capture_stderr, get_datapath, assertDictContainsSubset
+from scripts.test import assertDictContainsSubset, capture_stderr, get_datapath
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
 log = logging.getLogger(__name__)
