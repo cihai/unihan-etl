@@ -46,7 +46,7 @@ def get_datapath(filename):
 
 
 @contextmanager
-def captureStdErr(command, *args, **kwargs):
+def capture_stderr(command, *args, **kwargs):
     out, sys.stderr = sys.stderr, StringIO()
     command(*args, **kwargs)
     sys.stderr.seek(0)
@@ -55,7 +55,7 @@ def captureStdErr(command, *args, **kwargs):
 
 
 @contextmanager
-def captureStdOut(command, *args, **kwargs):
+def capture_stdout(command, *args, **kwargs):
     out, sys.stdout = sys.stderr, StringIO()
     command(*args, **kwargs)
     sys.stdout.seek(0)
