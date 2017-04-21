@@ -20,7 +20,8 @@ from scripts.util import (_dl_progress, convert_to_attr_dict, merge_dict,
                           ucn_to_unicode)
 
 about = {}
-with open("__about__.py") as fp:
+about_file = os.path.join(os.path.dirname(__file__), '..', '__about__.py')
+with open(about_file) as fp:
     exec(fp.read(), about)
 
 UNIHAN_MANIFEST = {
