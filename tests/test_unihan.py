@@ -18,7 +18,7 @@ from scripts._compat import text_type
 from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
                              UNIHAN_ZIP_FILEPATH, WORK_DIR, Builder,
                              default_config, zip_has_files)
-from scripts.test import capture_stderr, get_datapath
+from scripts.test import capture_stderr, get_datapath, assertDictContainsSubset
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
 try:
@@ -273,221 +273,227 @@ def test_convert_keys_values_match():
     pass
 
 
-class UnihanHelperFunctions(UnihanHelper):
+def test_flatten_fields():
 
-    """Utilities to retrieve unihan data in datapackage format."""
+    single_dataset = {
+        'Unihan_Readings.txt': [
+            'kCantonese',
+            'kDefinition',
+            'kHangul',
+        ]
+    }
 
-    def test_flatten_fields(self):
+    expected = ['kCantonese', 'kDefinition', 'kHangul']
+    results = process.get_fields(single_dataset)
 
-        single_dataset = {
-            'Unihan_Readings.txt': [
-                'kCantonese',
-                'kDefinition',
-                'kHangul',
-            ]
-        }
+    assert expected == results
 
-        expected = ['kCantonese', 'kDefinition', 'kHangul']
-        results = process.get_fields(single_dataset)
-
-        assert expected == results
-
-        datasets = {
-            'Unihan_NumericValues.txt': [
-                'kAccountingNumeric',
-                'kOtherNumeric',
-                'kPrimaryNumeric',
-            ],
-            'Unihan_OtherMappings.txt': [
-                'kBigFive',
-                'kCCCII',
-                'kCNS1986',
-            ]
-        }
-
-        expected = [
+    datasets = {
+        'Unihan_NumericValues.txt': [
             'kAccountingNumeric',
             'kOtherNumeric',
             'kPrimaryNumeric',
+        ],
+        'Unihan_OtherMappings.txt': [
             'kBigFive',
             'kCCCII',
             'kCNS1986',
         ]
+    }
 
-        results = process.get_fields(datasets)
+    expected = [
+        'kAccountingNumeric',
+        'kOtherNumeric',
+        'kPrimaryNumeric',
+        'kBigFive',
+        'kCCCII',
+        'kCNS1986',
+    ]
 
-        assert set(expected) == set(results)
+    results = process.get_fields(datasets)
 
-    def test_pick_files(self):
-        """Pick a white list of files to build from."""
-
-        files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-
-        config = {
-            'files': files,
-            'zip_filepath': self.mock_zip_filepath
-        }
-
-        b = process.Builder(config)
-
-        result = b.config.files
-        expected = files
-
-        assert result == expected, 'Returns only the files picked.'
-
-    def test_raise_error_unknown_field(self):
-        """Throw error if picking unknown field."""
-
-        config = {
-            'fields': ['kHello']
-        }
-
-        with pytest.raises(KeyError) as excinfo:
-            process.Builder(config)
-        excinfo.match('Field ([a-zA-Z].*) not found in file list.')
-
-    def test_raise_error_unknown_file(self):
-        """Throw error if picking unknown file."""
-
-        config = {
-            'files': ['Sparta.lol']
-        }
-
-        with pytest.raises(KeyError) as excinfo:
-            process.Builder(config)
-        excinfo.match('File ([a-zA-Z_\.\'].*) not found in file list.')
-
-    def test_raise_error_unknown_field_filtered_files(self):
-        """Throw error field not in file list, when files specified."""
-
-        files = ['Unihan_Variants.txt']
-
-        config = {
-            'files': files,
-            'fields': ['kDefinition'],
-        }
-
-        with pytest.raises(KeyError) as excinfo:
-            process.Builder(config)
-        excinfo.match('Field ([a-zA-Z].*) not found in file list.')
-
-    def test_set_reduce_files_automatically_when_only_field_specified(self):
-        """Picks file automatically if none specified and fields are."""
-
-        fields = (
-            process.UNIHAN_MANIFEST['Unihan_Readings.txt'] +
-            process.UNIHAN_MANIFEST['Unihan_Variants.txt']
-        )
-
-        config = {
-            'fields': fields,
-        }
-
-        b = process.Builder(config)
-
-        expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-        results = b.config.files
-
-        assert set(expected) == set(results)
-
-    def test_set_reduce_fields_automatically_when_only_files_specified(self):
-        """Picks only necessary files when fields specified."""
-
-        files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-
-        config = {
-            'files': files
-        }
-
-        b = process.Builder(config)
-
-        expected = process.get_fields(process.filter_manifest(files))
-        results = b.config.fields
-
-        assert set(expected) == set(results), (
-            'Returns only the fields for files picked.'
-        )
+    assert set(expected) == set(results)
 
 
-class ProcessTestCase(TestCase):
+class UnihanHelperFunctions(UnihanHelper):
 
-    def test_conversion_ucn_to_unicode(self):
-        before = 'U+4E00'
-        expected = '\u4e00'
-
-        result = ucn_to_unicode(before)
-
-        assert result == expected
-
-        assert isinstance(result, text_type)
-
-        # wide character
-        before = 'U+20001'
-        expected = '\U00020001'
-
-        result = ucn_to_unicode(before)
-
-        assert result == expected
-        assert isinstance(result, text_type)
-
-        before = '(same as U+7A69 穩) firm; stable; secure'
-        expected = '(same as 穩 穩) firm; stable; secure'
-
-        result = ucnstring_to_unicode(before)
-
-        assert result == expected
-        assert isinstance(result, text_type)
+    """Utilities to retrieve unihan data in datapackage format."""
 
 
-class CliArgTestCase(UnihanHelper):
+def test_pick_files(mock_zip_file):
+    """Pick a white list of files to build from."""
 
-    """Allows for creating a custom output of unihan data
-    in datapackage.json format."""
+    files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    def test_no_args(self):
-        """Works without arguments."""
+    config = {
+        'files': files,
+        'zip_filepath': str(mock_zip_file)
+    }
 
-        expected = test_config
-        result = Builder.from_cli([]).config
+    b = process.Builder(config)
 
-        assert expected == result
+    result = b.config.files
+    expected = files
 
-    def test_cli_plus_defaults(self):
-        """Test CLI args + defaults."""
+    assert result == expected, 'Returns only the files picked.'
 
-        expectedIn = {'zip_filepath': self.mock_zip_filepath}
-        result = Builder.from_cli(['-z', self.mock_zip_filepath]).config
-        self.assertDictContainsSubset(expectedIn, result)
 
-        expectedIn = {'fields': ['kDefinition']}
-        result = Builder.from_cli(['-F', 'kDefinition']).config
-        self.assertDictContainsSubset(expectedIn, result)
+def test_raise_error_unknown_field():
+    """Throw error if picking unknown field."""
 
-        expectedIn = {'fields': ['kDefinition']}
-        result = Builder.from_cli(['-F', 'kDefinition']).config
-        self.assertDictContainsSubset(expectedIn, result)
+    config = {
+        'fields': ['kHello']
+    }
 
-        expectedIn = {'fields': ['kDefinition', 'kXerox']}
-        result = Builder.from_cli(['-F', 'kDefinition', 'kXerox']).config
-        self.assertDictContainsSubset(
-            expectedIn, result, msg="Accepts multiple fields."
-        )
+    with pytest.raises(KeyError) as excinfo:
+        process.Builder(config)
+    excinfo.match('Field ([a-zA-Z].*) not found in file list.')
 
-        expectedIn = {
-            'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
-        }
-        result = Builder.from_cli(
-            ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
-        self.assertDictContainsSubset(
-            expectedIn, result, msg="Accepts multiple arguments."
-        )
 
-    def test_cli_exit_emessage_to_stderr(self):
-        """Sends exception .message to stderr on exit."""
+def test_raise_error_unknown_file():
+    """Throw error if picking unknown file."""
 
-        with pytest.raises(SystemExit) as excinfo:
-            with capture_stderr(
-                Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']
-            ):
-                pass
-        excinfo.match('Field sdfa not found in file list.')
+    config = {
+        'files': ['Sparta.lol']
+    }
+
+    with pytest.raises(KeyError) as excinfo:
+        process.Builder(config)
+    excinfo.match('File ([a-zA-Z_\.\'].*) not found in file list.')
+
+
+def test_raise_error_unknown_field_filtered_files():
+    """Throw error field not in file list, when files specified."""
+
+    files = ['Unihan_Variants.txt']
+
+    config = {
+        'files': files,
+        'fields': ['kDefinition'],
+    }
+
+    with pytest.raises(KeyError) as excinfo:
+        process.Builder(config)
+    excinfo.match('Field ([a-zA-Z].*) not found in file list.')
+
+
+def test_set_reduce_files_automatically_when_only_field_specified():
+    """Picks file automatically if none specified and fields are."""
+
+    fields = (
+        process.UNIHAN_MANIFEST['Unihan_Readings.txt'] +
+        process.UNIHAN_MANIFEST['Unihan_Variants.txt']
+    )
+
+    config = {
+        'fields': fields,
+    }
+
+    b = process.Builder(config)
+
+    expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
+    results = b.config.files
+
+    assert set(expected) == set(results)
+
+
+def test_set_reduce_fields_automatically_when_only_files_specified():
+    """Picks only necessary files when fields specified."""
+
+    files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
+
+    config = {
+        'files': files
+    }
+
+    b = process.Builder(config)
+
+    expected = process.get_fields(process.filter_manifest(files))
+    results = b.config.fields
+
+    assert set(expected) == set(results), (
+        'Returns only the fields for files picked.'
+    )
+
+
+def test_conversion_ucn_to_unicode():
+    before = 'U+4E00'
+    expected = '\u4e00'
+
+    result = ucn_to_unicode(before)
+
+    assert result == expected
+
+    assert isinstance(result, text_type)
+
+    # wide character
+    before = 'U+20001'
+    expected = '\U00020001'
+
+    result = ucn_to_unicode(before)
+
+    assert result == expected
+    assert isinstance(result, text_type)
+
+    before = '(same as U+7A69 穩) firm; stable; secure'
+    expected = '(same as 穩 穩) firm; stable; secure'
+
+    result = ucnstring_to_unicode(before)
+
+    assert result == expected
+    assert isinstance(result, text_type)
+
+
+"""Allows for creating a custom output of unihan data
+in datapackage.json format."""
+
+
+def test_no_args():
+    """Works without arguments."""
+
+    expected = test_config
+    result = Builder.from_cli([]).config
+
+    assert expected == result
+
+
+def test_cli_plus_defaults(mock_zip_file, TestBuilder):
+    """Test CLI args + defaults."""
+
+    expected_in = {'zip_filepath': str(mock_zip_file)}
+    result = TestBuilder.from_cli(['-z', str(mock_zip_file)]).config
+    assertDictContainsSubset(expected_in, result)
+
+    expected_in = {'fields': ['kDefinition']}
+    result = TestBuilder.from_cli(['-F', 'kDefinition']).config
+    assertDictContainsSubset(expected_in, result)
+
+    expected_in = {'fields': ['kDefinition']}
+    result = TestBuilder.from_cli(['-F', 'kDefinition']).config
+    assertDictContainsSubset(expected_in, result)
+
+    expected_in = {'fields': ['kDefinition', 'kXerox']}
+    result = TestBuilder.from_cli(['-F', 'kDefinition', 'kXerox']).config
+    assertDictContainsSubset(
+        expected_in, result, msg="Accepts multiple fields."
+    )
+
+    expected_in = {
+        'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
+    }
+    result = TestBuilder.from_cli(
+        ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
+    assertDictContainsSubset(
+        expected_in, result, msg="Accepts multiple arguments."
+    )
+
+
+def test_cli_exit_emessage_to_stderr():
+    """Sends exception .message to stderr on exit."""
+
+    with pytest.raises(SystemExit) as excinfo:
+        with capture_stderr(
+            Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']
+        ):
+            pass
+    excinfo.match('Field sdfa not found in file list.')

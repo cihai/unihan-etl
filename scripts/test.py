@@ -61,3 +61,9 @@ def capture_stdout(command, *args, **kwargs):
     sys.stdout.seek(0)
     yield sys.stdout.read()
     sys.stdout = out
+
+
+def assertDictContainsSubset(subset, dictionary, msg=None):
+    for key, value in subset.items():
+        assert key in dictionary, msg
+        assert dictionary[key] == value, msg
