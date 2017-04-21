@@ -7,12 +7,8 @@ LICENSE: BSD 2-Clause
 LICENSE URL:  https://github.com/jdunck/python-unicodecsv/blob/master/LICENSE
 """
 import csv
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
 
-from ._compat import string_types as unicode
+from ._compat import string_types as unicode, izip
 
 #http://semver.org/
 VERSION = (0, 10, 1)

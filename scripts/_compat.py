@@ -14,6 +14,7 @@ if PY2:
     from StringIO import StringIO
 
     from urllib import urlretrieve
+    from itertools import izip
 
     exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
 else:
@@ -24,6 +25,7 @@ else:
     from io import StringIO, BytesIO
 
     from urllib.request import urlretrieve
+    izip = zip
 
     def reraise(tp, value, tb=None):
         if value.__traceback__ is not tb:
