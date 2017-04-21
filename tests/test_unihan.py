@@ -147,7 +147,7 @@ def test_save(tmpdir, mock_zip_file):
     dest_filepath = tmpdir.join(mock_zip_filename)
     process.save(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
-    assert os.path.exists(dest_filepath)
+    assert os.path.exists(str(dest_filepath))
 
 
 def test_download(tmpdir, mock_zip_file):
