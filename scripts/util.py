@@ -17,7 +17,10 @@ from ._compat import string_types, text_type, unichr
 
 
 def ucn_to_unicode(ucn):
-    """Convert a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to Python unicode (u'\\u4e00')"""
+    """Return a python unicode value from a UCN.
+
+    Converts a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to
+    Python unicode (u'\\u4e00')"""
     if isinstance(ucn, string_types):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
@@ -39,7 +42,9 @@ def ucnstring_to_python(ucn_string):
     """
     res = re.findall("U\+[0-9a-fA-F]*", ucn_string)
     for r in res:
-        ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
+        ucn_string = ucn_string.replace(
+            text_type(r), text_type(ucn_to_unicode(r))
+        )
 
     ucn_string = ucn_string.encode('utf-8')
 
@@ -111,7 +116,7 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
 class AttributeDict(dict):
 
     def __getattr__(self, name):
-        if not name in self:
+        if name not in self:
             raise AttributeError("'{}' object has no attribute '{}'".format(
                 self.__class__,
                 name,

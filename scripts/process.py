@@ -9,18 +9,15 @@ import os
 import sys
 import zipfile
 import glob
-import hashlib
 import fileinput
 import argparse
-import csv
-import codecs
 
-sys.path.insert(0, os.getcwd())  # we want to grab this:
+sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
 
 from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
-    ucn_to_unicode, ucnstring_to_python, ucnstring_to_unicode
+    ucn_to_unicode
 
-from scripts._compat import urlretrieve, StringIO, PY2
+from scripts._compat import urlretrieve
 
 from scripts.unicodecsv import UnicodeWriter
 
@@ -145,17 +142,25 @@ UNIHAN_MANIFEST = {
 #: Default index fields for unihan csv's. You probably want these.
 INDEX_FIELDS = ['ucn', 'char']
 
-#: Return False on newlines and C-style comments.
-not_junk = lambda line: line[0] != '#' and line != '\n'
 
-#: Return True if string is in the default fields.
-in_fields = lambda c, columns: c in columns + INDEX_FIELDS
+def not_junk(line):
+    """Return False on newlines and C-style comments."""
+    return line[0] != '#' and line != '\n'
 
-#: Return list of fields from dict of {filename: ['field', 'field1']}.
-get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
 
-#: Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names.
-filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
+def in_fields(c, columns):
+    """Return True if string is in the default fields."""
+    return c in columns + INDEX_FIELDS
+
+
+def get_fields(d):
+    """Return list of fields from dict of {filename: ['field', 'field1']}."""
+    return sorted({c for cs in d.values() for c in cs})
+
+
+def filter_manifest(files):
+    """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
+    return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
 #: Return path of a file inside data directory.
@@ -245,13 +250,15 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     if not os.path.exists(datadir):
         os.makedirs(datadir)
 
-    no_unihan_files_exist = lambda: not glob.glob(
-        os.path.join(datadir, 'Unihan*.txt')
-    )
+    def no_unihan_files_exist():
+        return not glob.glob(
+            os.path.join(datadir, 'Unihan*.txt')
+        )
 
-    not_downloaded = lambda: not os.path.exists(
-        os.path.join(datadir, 'Unihan.zip')
-    )
+    def not_downloaded():
+        return not os.path.exists(
+            os.path.join(datadir, 'Unihan.zip')
+        )
 
     if no_unihan_files_exist():
         if not_downloaded():
@@ -315,7 +322,7 @@ def convert(csv_files, columns):
             if in_fields(l[1], columns):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
-                if not char in items:
+                if char not in items:
                     items[char] = collections.OrderedDict().fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
@@ -377,18 +384,30 @@ def get_parser():
         prog=__title__,
         description=__description__
     )
-    parser.add_argument("-s", "--source", dest="source",
-                        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
-    parser.add_argument("-z", "--zip_filepath", dest="zip_filepath",
-                        help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_FILEPATH)
-    parser.add_argument("-d", "--destination", dest="destination",
-                        help="Output of .csv. Default: %s" % UNIHAN_DEST)
-    parser.add_argument("-w", "--work-dir", dest="work_dir",
-                        help="Default: %s" % WORK_DIR)
-    parser.add_argument("-F", "--fields", dest="fields", nargs="*",
-                        help="Default: %s" % UNIHAN_FIELDS)
-    parser.add_argument("-f", "--files", dest="files", nargs='*',
-                        help="Default: %s" % UNIHAN_FILES)
+    parser.add_argument(
+        "-s", "--source", dest="source",
+        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
+    parser.add_argument(
+        "-z", "--zip_filepath", dest="zip_filepath",
+        help="Path the zipfile is downloaded to. Default: %s" %
+        UNIHAN_ZIP_FILEPATH
+    )
+    parser.add_argument(
+        "-d", "--destination", dest="destination",
+        help="Output of .csv. Default: %s" % UNIHAN_DEST
+    )
+    parser.add_argument(
+        "-w", "--work-dir", dest="work_dir",
+        help="Default: %s" % WORK_DIR
+    )
+    parser.add_argument(
+        "-F", "--fields", dest="fields", nargs="*",
+        help="Default: %s" % UNIHAN_FIELDS
+    )
+    parser.add_argument(
+        "-f", "--files", dest="files", nargs='*',
+        help="Default: %s" % UNIHAN_FILES
+    )
     return parser
 
 
@@ -418,9 +437,15 @@ class Builder(object):
             # Filter fields when only files specified.
             fields_in_files = get_fields(filter_manifest(config['files']))
 
-            not_in_field = [h for h in config['fields'] if h not in fields_in_files]
+            not_in_field = [
+                h for h in config['fields'] if h not in fields_in_files
+            ]
             if not_in_field:
-                raise KeyError('Field {0} not found in file list.'.format(', '.join(not_in_field)))
+                raise KeyError(
+                    'Field {0} not found in file list.'.format(
+                        ', '.join(not_in_field)
+                    )
+                )
 
         config = merge_dict(self.default_config, config)
 
@@ -428,13 +453,17 @@ class Builder(object):
         self.config = convert_to_attr_dict(config)
 
         while not has_unihan_zip(self.config.zip_filepath):
-            download(self.config.source, self.config.zip_filepath, reporthook=_dl_progress)
+            download(self.config.source, self.config.zip_filepath,
+                     reporthook=_dl_progress)
 
         zip_file = extract(self.config.zip_filepath)
 
         if zip_has_files(self.config.files, zip_file):
             print('All files in zip.')
-            abs_paths = [os.path.join(self.config.work_dir, f) for f in self.config.files]
+            abs_paths = [
+                os.path.join(self.config.work_dir, f)
+                for f in self.config.files
+            ]
             data = convert(abs_paths, self.config.fields)
 
             with open(self.config.destination, 'w+') as f:
