@@ -110,13 +110,13 @@ Related links:
 
 ==============  ==========================================================
 Python support  Python 2.7, >= 3.3, pypy/pypy3
-Source          https://github.com/cihaidata-unihan/cihaidata-unihan
+Source          https://github.com/cihai/cihaidata-unihan
 Docs            https://cihaidata-unihan.git-pull.com
 Changelog       https://cihaidata-unihan.git-pull.com/en/latest/history.html
 API             https://cihaidata-unihan.git-pull.com/en/latest/api.html
-Issues          https://github.com/cihaidata-unihan/cihaidata-unihan/issues
-Travis          https://travis-ci.org/cihaidata-unihan/cihaidata-unihan
-Test coverage   https://coveralls.io/r/cihaidata-unihan/cihaidata-unihan
+Issues          https://github.com/cihai/cihaidata-unihan/issues
+Travis          https://travis-ci.org/cihai/cihaidata-unihan
+Test coverage   https://codecov.io/gh/cihai/cihaidata-unihan
 pypi            https://pypi.python.org/pypi/cihaidata-unihan
 OpenHub         https://www.openhub.net/p/cihaidata-unihan
 License         `MIT`_.
