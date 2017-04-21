@@ -61,6 +61,39 @@ class TestCase(unittest.TestCase):
     pass
 
 
+mock_zip_filename = 'Unihan.zip'
+
+
+@pytest.fixture(scope="session")
+def mock_test_dir(tmpdir_factory):
+    fn = tmpdir_factory.mktemp('tmuxp')
+    return fn
+
+
+@pytest.fixture(scope="session")
+def mock_zip_file(mock_test_dir):
+    return mock_test_dir.join(mock_zip_filename)
+
+
+@pytest.fixture(scope="session")
+def mock_zip(mock_zip_file):
+    zf = zipfile.ZipFile(str(mock_zip_file), 'a')
+    zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
+    zf.close()
+    return zf
+
+
+@pytest.fixture(scope="session")
+def TestBuilder(mock_test_dir, mock_zip_file):
+    # monkey-patching builder
+    Builder.default_config['work_dir'] = str(mock_test_dir)
+    Builder.default_config['zip_filepath'] = str(mock_zip_file)
+    Builder.default_config['destination'] = str(
+        mock_test_dir.join('unihan.csv')
+    )
+    return Builder
+
+
 class UnihanHelper(TestCase):
 
     config = os.path.abspath(os.path.join(
@@ -95,160 +128,149 @@ class UnihanHelper(TestCase):
         super(UnihanHelper, cls).tearDownClass()
 
 
-class UnihanMock(UnihanHelper):
+@pytest.mark.skip(reason="slow and may remove this")
+def test_builder_mock(TestBuilder):
 
-    def test_builder_mock(self):
+    assert test_config == TestBuilder.default_config
+    assert test_config != default_config
 
-        assert test_config == Builder.default_config
-        assert test_config != default_config
+    b = TestBuilder({})
 
-        b = Builder({})
-
-        assert test_config == b.config
-        assert default_config != b.config
+    assert test_config == b.config
+    assert default_config != b.config
 
 
-class UnihanScriptsTestCase(UnihanHelper):
+def test_zip_has_files(mock_zip):
+    assert zip_has_files(['Unihan_Readings.txt'], mock_zip)
 
-    def test_zip_has_files(self):
-        assert zip_has_files(['Unihan_Readings.txt'], self.mock_zip)
+    assert not zip_has_files(['Unihan_Cats.txt'], mock_zip)
 
-        assert not zip_has_files(['Unihan_Cats.txt'], self.mock_zip)
 
-    def test_has_unihan_zip(self):
-        if os.path.isfile(UNIHAN_ZIP_FILEPATH):
-            assert process.has_unihan_zip()
-        else:
-            assert not process.has_unihan_zip()
+def test_has_unihan_zip(mock_zip):
+    if os.path.isfile(UNIHAN_ZIP_FILEPATH):
+        assert process.has_unihan_zip()
+    else:
+        assert not process.has_unihan_zip()
 
-        assert process.has_unihan_zip(self.mock_zip_filepath)
+    assert process.has_unihan_zip(mock_zip.filename)
 
-    def test_in_fields(self):
-        columns = ['hey', 'kDefinition', 'kWhat']
-        result = process.in_fields('kDefinition', columns)
 
-        assert result
+def test_in_fields():
+    columns = ['hey', 'kDefinition', 'kWhat']
+    result = process.in_fields('kDefinition', columns)
 
-    def test_filter_manifest(self):
-        expected = {
-            'Unihan_Variants.txt': [
-                'kCompatibilityVariant',
-                'kSemanticVariant',
-                'kSimplifiedVariant',
-                'kSpecializedSemanticVariant',
-                'kTraditionalVariant',
-                'kZVariant',
-            ]
-        }
+    assert result
 
-        result = process.filter_manifest(['Unihan_Variants.txt'])
 
-        assert set(result) == set(expected)
-
-    def test_get_files(self):
-        fields = ['kKorean', 'kRSUnicode']
-
-        expected = ['Unihan_Readings.txt', 'Unihan_RadicalStrokeCounts.txt']
-
-        result = process.get_files(fields)
-
-        assert set(result) == set(expected)
-
-    def test_save(self):
-
-        src_filepath = self.mock_zip_filepath
-
-        tempdir = tempfile.mkdtemp()
-
-        dest_filepath = os.path.join(tempdir, self.mock_zip_filename)
-        process.save(src_filepath, dest_filepath, shutil.copy)
-
-        result = os.path.exists(dest_filepath)
-
-        shutil.rmtree(tempdir)
-
-        assert result
-
-    def test_download(self):
-
-        src_filepath = self.mock_zip_filepath
-
-        tempdir = self.tempdir
-        dest_filepath = os.path.join(tempdir, 'data', self.mock_zip_filename)
-
-        process.download(src_filepath, dest_filepath, shutil.copy)
-
-        result = os.path.dirname(os.path.join(dest_filepath, 'data'))
-        assert result, "Creates data directory if doesn't exist."
-
-    def test_extract(self):
-
-        zf = process.extract(self.mock_zip_filepath)
-
-        assert len(zf.infolist()) == 1
-        assert zf.infolist()[0].file_size == 218
-        assert zf.infolist()[0].filename == "Unihan_Readings.txt"
-
-    def test_convert_only_output_requested_columns(self):
-        fd, filename = tempfile.mkstemp()
-
-        try:
-            os.write(fd, SAMPLE_DATA.encode('utf-8'))
-
-            csv_files = [
-                filename
-            ]
-
-            columns = [
-                'kTotalStrokes',
-                'kPhonetic',
-                'kCantonese',
-                'kDefinition',
-            ] + process.INDEX_FIELDS
-
-            items = process.convert(csv_files, columns)
-
-            notInColumns = []
-            inColumns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
-
-            # columns not selected in convert must not be in result.
-            for v in items[0]:
-                if v not in columns:
-                    notInColumns.append(v)
-                else:
-                    inColumns.append(v)
-        finally:
-            os.remove(filename)
-
-        assert [] == notInColumns, "Convert filters columns not specified."
-        assert set(inColumns).issubset(set(columns)), (
-            "Convert returns correct columns specified + ucn and char."
-        )
-
-    def test_convert_simple_data_format(self):
-        """convert turns data into simple data format (SDF)."""
-        csv_files = [
-            get_datapath('Unihan_DictionaryLikeData.txt'),
-            get_datapath('Unihan_Readings.txt'),
+def test_filter_manifest():
+    expected = {
+        'Unihan_Variants.txt': [
+            'kCompatibilityVariant',
+            'kSemanticVariant',
+            'kSimplifiedVariant',
+            'kSpecializedSemanticVariant',
+            'kTraditionalVariant',
+            'kZVariant',
         ]
+    }
 
-        columns = [
-            'kTotalStrokes',
-            'kPhonetic',
-            'kCantonese',
-            'kDefinition',
-        ] + process.INDEX_FIELDS
+    result = process.filter_manifest(['Unihan_Variants.txt'])
 
-        items = process.convert(csv_files, columns)
+    assert set(result) == set(expected)
 
-        header = items[0]
-        assert header == columns
 
-        rows = items[1:]  # NOQA
+def test_get_files():
+    fields = ['kKorean', 'kRSUnicode']
+    expected = ['Unihan_Readings.txt', 'Unihan_RadicalStrokeCounts.txt']
 
-    def test_convert_keys_values_match(self):
-        """convert returns values in the correct places."""
-        pass
+    result = process.get_files(fields)
+
+    assert set(result) == set(expected)
+
+
+def test_save(tmpdir, mock_zip_file):
+    dest_filepath = tmpdir.join(mock_zip_filename)
+    process.save(str(mock_zip_file), dest_filepath, shutil.copy)
+
+    assert os.path.exists(dest_filepath)
+
+
+def test_download(tmpdir, mock_zip_file):
+    dest_filepath = tmpdir.join('data', mock_zip_filename)
+
+    process.download(str(mock_zip_file), dest_filepath, shutil.copy)
+
+    result = os.path.dirname(dest_filepath.join('data'))
+    assert result, "Creates data directory if doesn't exist."
+
+
+def test_extract(mock_zip_file):
+    zf = process.extract(str(mock_zip_file))
+
+    assert len(zf.infolist()) == 1
+    assert zf.infolist()[0].file_size == 218
+    assert zf.infolist()[0].filename == "Unihan_Readings.txt"
+
+
+def test_convert_only_output_requested_columns(tmpdir):
+    csv_file = tmpdir.join('test.csv')
+
+    csv_file.write(SAMPLE_DATA.encode('utf-8'))
+
+    csv_files = [
+        str(csv_file)
+    ]
+
+    columns = [
+        'kTotalStrokes',
+        'kPhonetic',
+        'kCantonese',
+        'kDefinition',
+    ] + process.INDEX_FIELDS
+
+    items = process.convert(csv_files, columns)
+
+    notInColumns = []
+    inColumns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
+
+    # columns not selected in convert must not be in result.
+    for v in items[0]:
+        if v not in columns:
+            notInColumns.append(v)
+        else:
+            inColumns.append(v)
+
+    assert [] == notInColumns, "Convert filters columns not specified."
+    assert set(inColumns).issubset(set(columns)), (
+        "Convert returns correct columns specified + ucn and char."
+    )
+
+
+def test_convert_simple_data_format():
+    """convert turns data into simple data format (SDF)."""
+    csv_files = [
+        get_datapath('Unihan_DictionaryLikeData.txt'),
+        get_datapath('Unihan_Readings.txt'),
+    ]
+
+    columns = [
+        'kTotalStrokes',
+        'kPhonetic',
+        'kCantonese',
+        'kDefinition',
+    ] + process.INDEX_FIELDS
+
+    items = process.convert(csv_files, columns)
+
+    header = items[0]
+    assert header == columns
+
+    rows = items[1:]  # NOQA
+
+
+def test_convert_keys_values_match():
+    """convert returns values in the correct places."""
+    pass
 
 
 class UnihanHelperFunctions(UnihanHelper):
