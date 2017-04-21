@@ -170,7 +170,7 @@ def test_extract(mock_zip_file):
 def test_convert_only_output_requested_columns(tmpdir):
     csv_file = tmpdir.join('test.csv')
 
-    csv_file.write(SAMPLE_DATA.encode('utf-8'))
+    csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
 
     csv_files = [
         str(csv_file)
