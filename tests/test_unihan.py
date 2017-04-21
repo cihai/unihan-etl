@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests for unihan.
-
-cihaidata_unihan.testsuite.unihan
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-"""
+"""Tests for unihan data download and processing."""
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
@@ -462,14 +457,3 @@ class CliArgTestCase(UnihanHelper):
         with self.assertRaisesRegexp(SystemExit, 'Field sdfa not found in file list.'):
             with captureStdErr(Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']) as output:
                 pass
-
-
-def suite():
-    setup_path()
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(UnihanMock))
-    suite.addTest(unittest.makeSuite(UnihanHelperFunctions))
-    suite.addTest(unittest.makeSuite(UnihanScriptsTestCase))
-    suite.addTest(unittest.makeSuite(ProcessTestCase))
-    suite.addTest(unittest.makeSuite(CliArgTestCase))
-    return suite

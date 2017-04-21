@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests for unihan.
-
-cihaidata_unihan.testsuite.helpers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-"""
+"""Test helpers functions for downloading and processing Unihan data."""
 
 from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals

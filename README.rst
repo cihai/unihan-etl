@@ -67,7 +67,7 @@ Structure
     scripts/process.py
 
     # unit tests to verify behavior / consistency of builder
-    testsuite/*
+    tests/*
 
     # python 2/3 compatibility modules
     script/_compat.py
