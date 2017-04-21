@@ -11,3 +11,6 @@ API
 
 .. automodule:: scripts.util
     :members:
+
+.. automodule:: scripts.test
+    :members:
