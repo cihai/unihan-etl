@@ -145,7 +145,7 @@ def test_get_files():
 
 def test_save(tmpdir, mock_zip_file):
     dest_filepath = tmpdir.join(mock_zip_filename)
-    process.save(str(mock_zip_file), dest_filepath, shutil.copy)
+    process.save(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
     assert os.path.exists(dest_filepath)
 
@@ -153,7 +153,7 @@ def test_save(tmpdir, mock_zip_file):
 def test_download(tmpdir, mock_zip_file):
     dest_filepath = tmpdir.join('data', mock_zip_filename)
 
-    process.download(str(mock_zip_file), dest_filepath, shutil.copy)
+    process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
     result = os.path.dirname(dest_filepath.join('data'))
     assert result, "Creates data directory if doesn't exist."
