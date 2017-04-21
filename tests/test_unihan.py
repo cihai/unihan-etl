@@ -217,12 +217,12 @@ class UnihanScriptsTestCase(UnihanHelper):
                 'kPhonetic',
                 'kCantonese',
                 'kDefinition',
-            ] + process.index_fields
+            ] + process.INDEX_FIELDS
 
             items = process.convert(csv_files, columns)
 
             notInColumns = []
-            inColumns = ['kDefinition', 'kCantonese'] + process.index_fields
+            inColumns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
 
             # columns not selected in convert must not be in result.
             for v in items[0]:
@@ -248,7 +248,7 @@ class UnihanScriptsTestCase(UnihanHelper):
             'kPhonetic',
             'kCantonese',
             'kDefinition',
-        ] + process.index_fields
+        ] + process.INDEX_FIELDS
 
         items = process.convert(csv_files, columns)
 

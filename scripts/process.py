@@ -142,21 +142,20 @@ UNIHAN_MANIFEST = {
     ]
 }
 
+#: Default index fields for unihan csv's. You probably want these.
+INDEX_FIELDS = ['ucn', 'char']
+
 #: Return False on newlines and C-style comments.
 not_junk = lambda line: line[0] != '#' and line != '\n'
 
 #: Return True if string is in the default fields.
-in_fields = lambda c, columns: c in columns + index_fields
-index_fields = ['char', 'ucn']
+in_fields = lambda c, columns: c in columns + INDEX_FIELDS
 
 #: Return list of fields from dict of {filename: ['field', 'field1']}.
 get_fields = lambda d: sorted({c for cs in d.values() for c in cs})
 
 #: Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names.
 filter_manifest = lambda files: {f: UNIHAN_MANIFEST[f] for f in files}
-
-#: Default index fields for unihan csv's. You probably want these.
-index_fields = ['ucn', 'char']
 
 
 #: Return path of a file inside data directory.
@@ -201,7 +200,7 @@ default_config = {
     'destination': UNIHAN_DEST,
     'zip_filepath': UNIHAN_ZIP_FILEPATH,
     'work_dir': WORK_DIR,
-    'fields': index_fields + UNIHAN_FIELDS,
+    'fields': INDEX_FIELDS + UNIHAN_FIELDS,
     'files': UNIHAN_FILES,
     'download': False
 }
