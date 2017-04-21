@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """Test helpers functions for downloading and processing Unihan data."""
 
-from __future__ import absolute_import, division, print_function, \
-    with_statement, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals, with_statement)
 
 import os
 import sys
-
 from contextlib import contextmanager
 
 from scripts._compat import StringIO

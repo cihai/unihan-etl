@@ -10,17 +10,16 @@ import shutil
 import tempfile
 import unittest
 import zipfile
+
 import pytest
 
 from scripts import process
 from scripts._compat import text_type
-from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS,
-                             UNIHAN_URL, UNIHAN_ZIP_FILEPATH, WORK_DIR,
-                             Builder, default_config, zip_has_files)
-from scripts.util import (merge_dict, ucn_to_unicode,
-                          ucnstring_to_unicode)
-
+from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
+                             UNIHAN_ZIP_FILEPATH, WORK_DIR, Builder,
+                             default_config, zip_has_files)
 from scripts.test import captureStdErr, get_datapath
+from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
 try:
     import unittest2 as unittest  # NOQA

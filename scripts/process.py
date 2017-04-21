@@ -2,33 +2,26 @@
 # -*- coding: utf8 -*-
 """Build Unihan into datapackage-compatible format."""
 
-from __future__ import absolute_import, division, print_function, \
-    with_statement, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals, with_statement)
 
+import argparse
+import fileinput
+import glob
 import os
 import sys
 import zipfile
-import glob
-import fileinput
-import argparse
 
 sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
 
-from scripts.util import convert_to_attr_dict, merge_dict, _dl_progress, \
-    ucn_to_unicode
-
 from scripts._compat import urlretrieve
-
 from scripts.unicodecsv import UnicodeWriter
+from scripts.util import (_dl_progress, convert_to_attr_dict, merge_dict,
+                          ucn_to_unicode)
 
-
-__title__ = 'cihaidata-unihan'
-__description__ = 'Build Unihan into datapackage-compatible CSV.'
-__version__ = '0.0.1'
-__author__ = 'Tony Narlock'
-__license__ = 'MIT'
-__copyright__ = 'Copyright 2014 Tony Narlock'
-
+about = {}
+with open("__about__.py") as fp:
+    exec(fp.read(), about)
 
 UNIHAN_MANIFEST = {
     'Unihan_DictionaryIndices.txt': [
@@ -381,8 +374,8 @@ def get_parser():
 
     """
     parser = argparse.ArgumentParser(
-        prog=__title__,
-        description=__description__
+        prog=about['__title__'],
+        description=about['__description__']
     )
     parser.add_argument(
         "-s", "--source", dest="source",
