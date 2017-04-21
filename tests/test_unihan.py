@@ -155,7 +155,7 @@ def test_download(tmpdir, mock_zip_file):
 
     process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
-    result = os.path.dirname(dest_filepath.join('data'))
+    result = os.path.dirname(str(dest_filepath.join('data')))
     assert result, "Creates data directory if doesn't exist."
 
 
@@ -185,18 +185,18 @@ def test_convert_only_output_requested_columns(tmpdir):
 
     items = process.convert(csv_files, columns)
 
-    notInColumns = []
-    inColumns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
+    not_in_columns = []
+    in_columns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
 
     # columns not selected in convert must not be in result.
     for v in items[0]:
         if v not in columns:
-            notInColumns.append(v)
+            not_in_columns.append(v)
         else:
-            inColumns.append(v)
+            in_columns.append(v)
 
-    assert [] == notInColumns, "Convert filters columns not specified."
-    assert set(inColumns).issubset(set(columns)), (
+    assert [] == not_in_columns, "Convert filters columns not specified."
+    assert set(in_columns).issubset(set(columns)), (
         "Convert returns correct columns specified + ucn and char."
     )
 
