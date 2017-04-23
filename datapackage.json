@@ -396,7 +396,8 @@
             "name": "kZVariant"
           }
         ]
-      }
+      },
+      "url": "https://github.com/cihai/cihaidata-unihan/releases/download/0.1.0-pre/unihan.csv"
     }
   ]
 }
