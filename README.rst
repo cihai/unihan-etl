@@ -135,7 +135,6 @@ tests           .. code-block:: bash
                     $ python setup.py test
 ==============  ==========================================================
 
-.. _BSD: http://opensource.org/licenses/BSD-3-Clause
 .. _MIT: http://opensource.org/licenses/MIT
 .. _Documentation: http://cihai.readthedocs.org/en/latest/
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
