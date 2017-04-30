@@ -210,7 +210,7 @@ def save(url, filename, urlretrieve=urlretrieve, reporthook=None):
     :param url: URL to download
     :type url: str
     :param filename: destination to download to.
-    :type filename: string
+    :type filename: str
     :param urlretrieve: function to download file
     :type urlretrieve: function
     :param reporthook: callback for ``urlretrieve`` function progress.
@@ -269,10 +269,10 @@ def extract(zip_filepath, work_dir=None):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
     :param zip_filepath: filepath to extract.
-    :type zip_filepath: string
+    :type zip_filepath: str
     :param work_dir: (optional) directory to extract to. Defaults to
         :py:meth:`os.path.dirname` of ``zip_filepath``.
-    :type work_dir: string
+    :type work_dir: str
     :returns: The extracted zip.
     :rtype: :class:`zipfile.ZipFile`
 
