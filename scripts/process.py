@@ -16,8 +16,7 @@ sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
 
 from scripts._compat import urlretrieve
 from scripts.unicodecsv import UnicodeWriter
-from scripts.util import (_dl_progress, convert_to_attr_dict, merge_dict,
-                          ucn_to_unicode)
+from scripts.util import _dl_progress, merge_dict, ucn_to_unicode
 
 about = {}
 about_file = os.path.join(os.path.dirname(__file__), '..', '__about__.py')
@@ -441,29 +440,26 @@ class Builder(object):
                     )
                 )
 
-        config = merge_dict(self.default_config, config)
+        self.config = merge_dict(self.default_config, config)
 
-        #: configuration dictionary. Available as attributes. ``.config.debug``
-        self.config = convert_to_attr_dict(config)
-
-        while not has_unihan_zip(self.config.zip_filepath):
-            download(self.config.source, self.config.zip_filepath,
+        while not has_unihan_zip(self.config['zip_filepath']):
+            download(self.config['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
-        zip_file = extract(self.config.zip_filepath)
+        zip_file = extract(self.config['zip_filepath'])
 
-        if zip_has_files(self.config.files, zip_file):
+        if zip_has_files(self.config['files'], zip_file):
             print('All files in zip.')
             abs_paths = [
-                os.path.join(self.config.work_dir, f)
-                for f in self.config.files
+                os.path.join(self.config['work_dir'], f)
+                for f in self.config['files']
             ]
-            data = convert(abs_paths, self.config.fields)
+            data = convert(abs_paths, self.config['fields'])
 
-            with open(self.config.destination, 'w+') as f:
+            with open(self.config['destination'], 'w+') as f:
                 csvwriter = UnicodeWriter(f)
                 csvwriter.writerows(data)
-                print('Saved output to: %s.' % self.config.destination)
+                print('Saved output to: %s.' % self.config['destination'])
         else:
             print('Missing files.')
 

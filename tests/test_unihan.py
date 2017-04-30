@@ -282,7 +282,7 @@ def test_pick_files(mock_zip_file):
 
     b = process.Builder(config)
 
-    result = b.config.files
+    result = b.config['files']
     expected = files
 
     assert result == expected, 'Returns only the files picked.'
@@ -342,7 +342,7 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     b = process.Builder(config)
 
     expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-    results = b.config.files
+    results = b.config['files']
 
     assert set(expected) == set(results)
 
@@ -359,7 +359,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
     b = process.Builder(config)
 
     expected = process.get_fields(process.filter_manifest(files))
-    results = b.config.fields
+    results = b.config['fields']
 
     assert set(expected) == set(results), (
         'Returns only the fields for files picked.'
