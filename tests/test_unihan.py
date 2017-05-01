@@ -85,13 +85,18 @@ def test_zip_has_files(mock_zip):
     assert not zip_has_files(['Unihan_Cats.txt'], mock_zip)
 
 
-def test_has_valid_zip(mock_zip):
+def test_has_valid_zip(tmpdir, mock_zip):
     if os.path.isfile(UNIHAN_ZIP_FILEPATH):
         assert process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
     else:
         assert not process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
 
     assert process.has_valid_zip(mock_zip.filename)
+
+    bad_zip = tmpdir.join('corrupt.zip')
+    bad_zip.write('moo')
+
+    assert not process.has_valid_zip(str(bad_zip))
 
 
 def test_in_fields():
