@@ -15,8 +15,7 @@ from scripts import process
 from scripts._compat import text_type
 from scripts.process import (UNIHAN_ZIP_FILEPATH, Packager,
                              default_options, zip_has_files)
-from scripts.test import (assert_dict_contains_subset, capture_stderr,
-                          get_datapath)
+from scripts.test import assert_dict_contains_subset, get_datapath
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
 log = logging.getLogger(__name__)
@@ -440,9 +439,8 @@ def test_cli_plus_defaults(mock_zip_file, TestPackager):
 def test_cli_exit_emessage_to_stderr():
     """Sends exception .message to stderr on exit."""
 
+    # SystemExit print's to stdout by default
     with pytest.raises(SystemExit) as excinfo:
-        with capture_stderr(
-            Packager.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']
-        ):
-            pass
+        Packager.from_cli(['-d', 'data/output.csv', '-F', 'sdfa'])
+
     excinfo.match('Field sdfa not found in file list.')

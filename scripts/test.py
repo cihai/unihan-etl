@@ -6,9 +6,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import os
 import sys
-from contextlib import contextmanager
-
-from scripts._compat import StringIO
 
 
 def add_to_path(path):
@@ -43,24 +40,6 @@ def get_datapath(filename):
     return os.path.join(
         os.path.dirname(__file__), '..', 'tests', 'fixtures', filename
     )
-
-
-@contextmanager
-def capture_stderr(command, *args, **kwargs):
-    out, sys.stderr = sys.stderr, StringIO()
-    command(*args, **kwargs)
-    sys.stderr.seek(0)
-    yield sys.stderr.read()
-    sys.stderr = out
-
-
-@contextmanager
-def capture_stdout(command, *args, **kwargs):
-    out, sys.stdout = sys.stderr, StringIO()
-    command(*args, **kwargs)
-    sys.stdout.seek(0)
-    yield sys.stdout.read()
-    sys.stdout = out
 
 
 def assert_dict_contains_subset(subset, dictionary, msg=None):
