@@ -325,10 +325,14 @@ def convert(csv_files, columns):
     sys.stdout.write('\n')
     sys.stdout.flush()
 
-    print('Done.')
-    print('Converting to Simple Data Format.')
-    datarows = [columns[:]] + [r.values() for r in [v for v in items.values()]]
-    print('Done.')
+    print('Processing complete.')
+    print('Converting data to CSV-friendly format.')
+
+    datarows = [columns[:]]  # Add columns to first row
+    datarows += [r.values() for r in [v for v in items.values()]]  # Data
+
+    print('Conversion to CSV-friendly format complete.')
+
     return datarows
 
 
