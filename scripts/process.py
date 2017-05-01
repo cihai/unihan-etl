@@ -408,6 +408,26 @@ def get_parser():
     return parser
 
 
+def export(zip_filepath, zip_files, work_dir, fields, destination):
+    """Extract zip and process information into CSV's."""
+    zip_file = extract_zip(zip_filepath)
+
+    if zip_has_files(zip_files, zip_file):
+        print('All files in zip.')
+        abs_paths = [
+            os.path.join(work_dir, f)
+            for f in zip_files
+        ]
+        data = convert(abs_paths, fields)
+
+        with open(destination, 'w+') as f:
+            csvwriter = UnicodeWriter(f)
+            csvwriter.writerows(data)
+            print('Saved output to: %s.' % destination)
+    else:
+        print('Missing files.')
+
+
 class Builder(object):
 
     def __init__(self, options):
@@ -452,27 +472,21 @@ class Builder(object):
     def download(self):
         """Download raw UNIHAN data if not exists."""
         while not has_valid_zip(self.options['zip_filepath']):
-            download(self.options['source'], self['zip_filepath'],
-                     reporthook=_dl_progress)
+            download(
+                self.options['source'], self.options['zip_filepath'],
+                reporthook=_dl_progress
+            )
 
-    def process(self):
+    def export(self):
         """Extract zip and process information into CSV's."""
-        zip_file = extract_zip(self.options['zip_filepath'])
 
-        if zip_has_files(self.options['zip_files'], zip_file):
-            print('All files in zip.')
-            abs_paths = [
-                os.path.join(self.options['work_dir'], f)
-                for f in self.options['zip_files']
-            ]
-            data = convert(abs_paths, self.options['fields'])
-
-            with open(self.options['destination'], 'w+') as f:
-                csvwriter = UnicodeWriter(f)
-                csvwriter.writerows(data)
-                print('Saved output to: %s.' % self.options['destination'])
-        else:
-            print('Missing files.')
+        export(
+            zip_file_path=self.options['zip_filepath'],
+            zip_files=self.options['zip_files'],
+            work_dir=self.options['work_dir'],
+            fields=self.options['fields'],
+            destination=self.options['destination']
+        )
 
     @classmethod
     def from_cli(cls, argv):
