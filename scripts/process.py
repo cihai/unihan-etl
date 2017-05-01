@@ -485,7 +485,7 @@ class Packager(object):
         """Extract zip and process information into CSV's."""
 
         export(
-            zip_file_path=self.options['zip_filepath'],
+            zip_filepath=self.options['zip_filepath'],
             zip_files=self.options['zip_files'],
             work_dir=self.options['work_dir'],
             fields=self.options['fields'],
@@ -513,4 +513,6 @@ class Packager(object):
 
 
 if __name__ == "__main__":
-    Packager.from_cli(sys.argv[1:])
+    p = Packager.from_cli(sys.argv[1:])
+    p.download()
+    p.export()
