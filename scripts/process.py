@@ -332,10 +332,8 @@ def convert(csv_files, columns):
     return datarows
 
 
-def has_unihan_zip(zip_filepath=None):
+def has_unihan_zip(zip_filepath):
     """Return True if file has Unihan.zip and is a valid zip."""
-    if not zip_filepath:
-        zip_filepath = UNIHAN_ZIP_FILEPATH
 
     if os.path.isfile(zip_filepath):
         if zipfile.is_zipfile(zip_filepath):

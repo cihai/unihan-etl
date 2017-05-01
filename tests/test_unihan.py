@@ -87,9 +87,9 @@ def test_zip_has_files(mock_zip):
 
 def test_has_unihan_zip(mock_zip):
     if os.path.isfile(UNIHAN_ZIP_FILEPATH):
-        assert process.has_unihan_zip()
+        assert process.has_unihan_zip(UNIHAN_ZIP_FILEPATH)
     else:
-        assert not process.has_unihan_zip()
+        assert not process.has_unihan_zip(UNIHAN_ZIP_FILEPATH)
 
     assert process.has_unihan_zip(mock_zip.filename)
 
