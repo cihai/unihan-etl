@@ -85,13 +85,13 @@ def test_zip_has_files(mock_zip):
     assert not zip_has_files(['Unihan_Cats.txt'], mock_zip)
 
 
-def test_has_unihan_zip(mock_zip):
+def test_has_valid_zip(mock_zip):
     if os.path.isfile(UNIHAN_ZIP_FILEPATH):
-        assert process.has_unihan_zip(UNIHAN_ZIP_FILEPATH)
+        assert process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
     else:
-        assert not process.has_unihan_zip(UNIHAN_ZIP_FILEPATH)
+        assert not process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
 
-    assert process.has_unihan_zip(mock_zip.filename)
+    assert process.has_valid_zip(mock_zip.filename)
 
 
 def test_in_fields():

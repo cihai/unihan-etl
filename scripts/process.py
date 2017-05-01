@@ -332,8 +332,14 @@ def convert(csv_files, columns):
     return datarows
 
 
-def has_unihan_zip(zip_filepath):
-    """Return True if file has Unihan.zip and is a valid zip."""
+def has_valid_zip(zip_filepath):
+    """Return True if valid zip exists.
+
+    :param zip_filepath: absolute path to zip
+    :type zip_filepath: str
+    :returns: True if valid zip exists at path
+    :rtype: bool
+    """
 
     if os.path.isfile(zip_filepath):
         if zipfile.is_zipfile(zip_filepath):
@@ -445,7 +451,7 @@ class Builder(object):
 
     def download(self):
         """Download raw UNIHAN data if not exists."""
-        while not has_unihan_zip(self.options['zip_filepath']):
+        while not has_valid_zip(self.options['zip_filepath']):
             download(self.options['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
