@@ -13,8 +13,7 @@ import pytest
 
 from scripts import process
 from scripts._compat import text_type
-from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
-                             UNIHAN_ZIP_FILEPATH, WORK_DIR, Builder,
+from scripts.process import (UNIHAN_ZIP_FILEPATH, Builder,
                              default_config, zip_has_files)
 from scripts.test import (assert_dict_contains_subset, capture_stderr,
                           get_datapath)
@@ -33,13 +32,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
 test_config = merge_dict(default_config.copy(), {
-    'source': UNIHAN_URL,
-    'destination': UNIHAN_DEST,
-    'zip_filepath': UNIHAN_ZIP_FILEPATH,
-    'work_dir': WORK_DIR,
-    'fields': UNIHAN_FIELDS,
     'files': 'Unihan_Readings.txt',
-    'download': False
 })
 
 
