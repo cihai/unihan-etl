@@ -13,7 +13,7 @@ import pytest
 
 from scripts import process
 from scripts._compat import text_type
-from scripts.process import (UNIHAN_ZIP_FILEPATH, Builder,
+from scripts.process import (UNIHAN_ZIP_FILEPATH, Packager,
                              default_options, zip_has_files)
 from scripts.test import (assert_dict_contains_subset, capture_stderr,
                           get_datapath)
@@ -59,7 +59,7 @@ def mock_zip(mock_zip_file):
 
 
 @pytest.fixture(scope="session")
-def TestBuilder(mock_test_dir, mock_zip_file):
+def TestPackager(mock_test_dir, mock_zip_file):
     # monkey-patching builder
     options = {
         'work_dir': str(mock_test_dir),
@@ -68,12 +68,12 @@ def TestBuilder(mock_test_dir, mock_zip_file):
             mock_test_dir.join('unihan.csv')
         )
     }
-    return Builder(options)
+    return Packager(options)
 
 
 @pytest.mark.skip(reason="slow and may remove this")
-def test_builder_mock(TestBuilder):
-    b = TestBuilder
+def test_builder_mock(TestPackager):
+    b = TestPackager
 
     assert test_options == b.options
     assert default_options != b.options
@@ -264,7 +264,7 @@ def test_pick_files(mock_zip_file):
         'zip_filepath': str(mock_zip_file)
     }
 
-    b = process.Builder(options)
+    b = process.Packager(options)
 
     result = b.options['zip_files']
     expected = files
@@ -280,7 +280,7 @@ def test_raise_error_unknown_field():
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(options)
+        process.Packager(options)
     excinfo.match('Field ([a-zA-Z].*) not found in file list.')
 
 
@@ -292,7 +292,7 @@ def test_raise_error_unknown_file():
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(options)
+        process.Packager(options)
     excinfo.match('File ([a-zA-Z_\.\'].*) not found in file list.')
 
 
@@ -307,7 +307,7 @@ def test_raise_error_unknown_field_filtered_files():
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(options)
+        process.Packager(options)
     excinfo.match('Field ([a-zA-Z].*) not found in file list.')
 
 
@@ -323,7 +323,7 @@ def test_set_reduce_files_automatically_when_only_field_specified():
         'fields': fields,
     }
 
-    b = process.Builder(options)
+    b = process.Packager(options)
 
     expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
     results = b.options['zip_files']
@@ -340,7 +340,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
         'zip_files': files
     }
 
-    b = process.Builder(options)
+    b = process.Packager(options)
 
     expected = process.get_fields(process.filter_manifest(files))
     results = b.options['fields']
@@ -381,26 +381,26 @@ def test_conversion_ucn_to_unicode():
 def test_no_args():
     """Works without arguments."""
 
-    assert default_options == Builder.from_cli([]).options
+    assert default_options == Packager.from_cli([]).options
 
 
-def test_cli_plus_defaults(mock_zip_file, TestBuilder):
+def test_cli_plus_defaults(mock_zip_file, TestPackager):
     """Test CLI args + defaults."""
 
     expected_in = {'zip_filepath': str(mock_zip_file)}
-    result = Builder.from_cli(['-z', str(mock_zip_file)]).options
+    result = Packager.from_cli(['-z', str(mock_zip_file)]).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = Builder.from_cli(['-F', 'kDefinition']).options
+    result = Packager.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = Builder.from_cli(['-F', 'kDefinition']).options
+    result = Packager.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition', 'kXerox']}
-    result = Builder.from_cli(['-F', 'kDefinition', 'kXerox']).options
+    result = Packager.from_cli(['-F', 'kDefinition', 'kXerox']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple fields."
     )
@@ -408,7 +408,7 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
     expected_in = {
         'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
     }
-    result = Builder.from_cli(
+    result = Packager.from_cli(
         ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple arguments."
@@ -420,7 +420,7 @@ def test_cli_exit_emessage_to_stderr():
 
     with pytest.raises(SystemExit) as excinfo:
         with capture_stderr(
-            Builder.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']
+            Packager.from_cli, ['-d', 'data/output.csv', '-F', 'sdfa']
         ):
             pass
     excinfo.match('Field sdfa not found in file list.')

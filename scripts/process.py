@@ -428,7 +428,7 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
         print('Missing files.')
 
 
-class Builder(object):
+class Packager(object):
 
     def __init__(self, options):
         """Download and generate a datapackage.json compatible release of
@@ -490,12 +490,12 @@ class Builder(object):
 
     @classmethod
     def from_cli(cls, argv):
-        """Create Builder instance from CLI :mod:`argparse` arguments.
+        """Create Packager instance from CLI :mod:`argparse` arguments.
 
         :param argv: Arguments passed in via CLI.
         :type argv: list
         :returns: builder
-        :rtype: :class:`~.Builder`
+        :rtype: :class:`~.Packager`
 
         """
         parser = get_parser()
@@ -509,4 +509,4 @@ class Builder(object):
 
 
 if __name__ == "__main__":
-    Builder.from_cli(sys.argv[1:])
+    Packager.from_cli(sys.argv[1:])
