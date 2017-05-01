@@ -159,7 +159,7 @@ def test_extract_zip(mock_zip_file):
 def test_export(mock_zip_file, mock_test_dir):
     process.export(
         zip_filepath=str(mock_zip_file),
-        zip_files="Unihan_Readings.txt",
+        zip_files=['Unihan_Readings.txt', 'Unihan_Variants.txt'],
         work_dir=str(mock_test_dir),
         fields=[
             'kTotalStrokes',
