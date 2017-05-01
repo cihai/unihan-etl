@@ -32,7 +32,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
 test_options = merge_dict(default_options.copy(), {
-    'files': 'Unihan_Readings.txt',
+    'zip_files': 'Unihan_Readings.txt',
 })
 
 
@@ -260,13 +260,13 @@ def test_pick_files(mock_zip_file):
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
     options = {
-        'files': files,
+        'zip_files': files,
         'zip_filepath': str(mock_zip_file)
     }
 
     b = process.Builder(options)
 
-    result = b.options['files']
+    result = b.options['zip_files']
     expected = files
 
     assert result == expected, 'Returns only the files picked.'
@@ -288,7 +288,7 @@ def test_raise_error_unknown_file():
     """Throw error if picking unknown file."""
 
     options = {
-        'files': ['Sparta.lol']
+        'zip_files': ['Sparta.lol']
     }
 
     with pytest.raises(KeyError) as excinfo:
@@ -302,7 +302,7 @@ def test_raise_error_unknown_field_filtered_files():
     files = ['Unihan_Variants.txt']
 
     options = {
-        'files': files,
+        'zip_files': files,
         'fields': ['kDefinition'],
     }
 
@@ -326,7 +326,7 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     b = process.Builder(options)
 
     expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-    results = b.options['files']
+    results = b.options['zip_files']
 
     assert set(expected) == set(results)
 
@@ -337,7 +337,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
     options = {
-        'files': files
+        'zip_files': files
     }
 
     b = process.Builder(options)

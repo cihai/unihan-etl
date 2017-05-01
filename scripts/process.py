@@ -199,7 +199,7 @@ default_options = {
     'zip_filepath': UNIHAN_ZIP_FILEPATH,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
-    'files': UNIHAN_FILES,
+    'zip_files': UNIHAN_FILES,
     'download': False
 }
 
@@ -402,8 +402,8 @@ def get_parser():
         help="Default: %s" % UNIHAN_FIELDS
     )
     parser.add_argument(
-        "-f", "--files", dest="files", nargs='*',
-        help="Default: %s" % UNIHAN_FILES
+        "-f", "--zip-files", dest="zip_files", nargs='*',
+        help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
     )
     return parser
 
@@ -422,20 +422,20 @@ class Builder(object):
 
     def validate_options(self, options):
 
-        if 'files' in options and 'fields' not in options:
+        if 'zip_files' in options and 'fields' not in options:
             # Filter fields when only files specified.
             try:
                 options['fields'] = get_fields(
-                    filter_manifest(options['files'])
+                    filter_manifest(options['zip_files'])
                 )
             except KeyError as e:
                 raise KeyError('File {0} not found in file list.'.format(e))
-        elif 'fields' in options and 'files' not in options:
+        elif 'fields' in options and 'zip_files' not in options:
             # Filter files when only field specified.
-            options['files'] = get_files(options['fields'])
-        elif 'fields' in options and 'files' in options:
+            options['zip_files'] = get_files(options['fields'])
+        elif 'fields' in options and 'zip_files' in options:
             # Filter fields when only files specified.
-            fields_in_files = get_fields(filter_manifest(options['files']))
+            fields_in_files = get_fields(filter_manifest(options['zip_files']))
 
             not_in_field = [
                 h for h in options['fields'] if h not in fields_in_files
@@ -459,11 +459,11 @@ class Builder(object):
         """Extract zip and process information into CSV's."""
         zip_file = extract_zip(self.options['zip_filepath'])
 
-        if zip_has_files(self.options['files'], zip_file):
+        if zip_has_files(self.options['zip_files'], zip_file):
             print('All files in zip.')
             abs_paths = [
                 os.path.join(self.options['work_dir'], f)
-                for f in self.options['files']
+                for f in self.options['zip_files']
             ]
             data = convert(abs_paths, self.options['fields'])
 
