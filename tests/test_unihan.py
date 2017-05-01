@@ -156,6 +156,23 @@ def test_extract_zip(mock_zip_file):
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
+def test_export(mock_zip_file, mock_test_dir):
+    process.export(
+        zip_filepath=str(mock_zip_file),
+        zip_files="Unihan_Readings.txt",
+        work_dir=str(mock_test_dir),
+        fields=[
+            'kTotalStrokes',
+            'kPhonetic',
+            'kCantonese',
+            'kDefinition',
+        ],
+        destination=str(
+            mock_test_dir.join('unihan.csv')
+        )
+    )
+
+
 def test_convert_only_output_requested_columns(tmpdir):
     csv_file = tmpdir.join('test.csv')
 
