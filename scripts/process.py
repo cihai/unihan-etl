@@ -446,11 +446,13 @@ class Builder(object):
         self.options = merge_dict(default_options.copy(), options)
 
     def download(self):
+        """Download raw UNIHAN data if not exists."""
         while not has_unihan_zip(self.options['zip_filepath']):
             download(self.options['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
     def process(self):
+        """Extract zip and process information into CSV's."""
         zip_file = extract_zip(self.options['zip_filepath'])
 
         if zip_has_files(self.options['files'], zip_file):

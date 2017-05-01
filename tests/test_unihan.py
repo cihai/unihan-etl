@@ -381,10 +381,7 @@ def test_conversion_ucn_to_unicode():
 def test_no_args():
     """Works without arguments."""
 
-    expected = test_options
-    result = Builder.from_cli([])
-
-    assert default_options == result.options
+    assert default_options == Builder.from_cli([]).options
 
 
 def test_cli_plus_defaults(mock_zip_file, TestBuilder):
