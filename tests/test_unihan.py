@@ -14,7 +14,7 @@ import pytest
 from scripts import process
 from scripts._compat import text_type
 from scripts.process import (UNIHAN_ZIP_FILEPATH, Builder,
-                             default_config, zip_has_files)
+                             default_options, zip_has_files)
 from scripts.test import (assert_dict_contains_subset, capture_stderr,
                           get_datapath)
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
@@ -31,14 +31,14 @@ U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
 U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
-test_config = merge_dict(default_config.copy(), {
+test_options = merge_dict(default_options.copy(), {
     'files': 'Unihan_Readings.txt',
 })
 
 
 class MockBuilder(Builder):
 
-    default_config = test_config
+    default_options = test_options
 
 
 Builder = MockBuilder
@@ -69,9 +69,9 @@ def mock_zip(mock_zip_file):
 @pytest.fixture(scope="session")
 def TestBuilder(mock_test_dir, mock_zip_file):
     # monkey-patching builder
-    MockBuilder.default_config['work_dir'] = str(mock_test_dir)
-    MockBuilder.default_config['zip_filepath'] = str(mock_zip_file)
-    MockBuilder.default_config['destination'] = str(
+    MockBuilder.default_options['work_dir'] = str(mock_test_dir)
+    MockBuilder.default_options['zip_filepath'] = str(mock_zip_file)
+    MockBuilder.default_options['destination'] = str(
         mock_test_dir.join('unihan.csv')
     )
     return MockBuilder
@@ -80,13 +80,13 @@ def TestBuilder(mock_test_dir, mock_zip_file):
 @pytest.mark.skip(reason="slow and may remove this")
 def test_builder_mock(TestBuilder):
 
-    assert test_config == TestBuilder.default_config
-    assert test_config != default_config
+    assert test_options == TestBuilder.default_options
+    assert test_options != default_options
 
     b = TestBuilder({})
 
-    assert test_config == b.config
-    assert default_config != b.config
+    assert test_options == b.options
+    assert default_options != b.options
 
 
 def test_zip_has_files(mock_zip):
@@ -269,14 +269,14 @@ def test_pick_files(mock_zip_file):
 
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    config = {
+    options = {
         'files': files,
         'zip_filepath': str(mock_zip_file)
     }
 
-    b = process.Builder(config)
+    b = process.Builder(options)
 
-    result = b.config['files']
+    result = b.options['files']
     expected = files
 
     assert result == expected, 'Returns only the files picked.'
@@ -285,24 +285,24 @@ def test_pick_files(mock_zip_file):
 def test_raise_error_unknown_field():
     """Throw error if picking unknown field."""
 
-    config = {
+    options = {
         'fields': ['kHello']
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(config)
+        process.Builder(options)
     excinfo.match('Field ([a-zA-Z].*) not found in file list.')
 
 
 def test_raise_error_unknown_file():
     """Throw error if picking unknown file."""
 
-    config = {
+    options = {
         'files': ['Sparta.lol']
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(config)
+        process.Builder(options)
     excinfo.match('File ([a-zA-Z_\.\'].*) not found in file list.')
 
 
@@ -311,13 +311,13 @@ def test_raise_error_unknown_field_filtered_files():
 
     files = ['Unihan_Variants.txt']
 
-    config = {
+    options = {
         'files': files,
         'fields': ['kDefinition'],
     }
 
     with pytest.raises(KeyError) as excinfo:
-        process.Builder(config)
+        process.Builder(options)
     excinfo.match('Field ([a-zA-Z].*) not found in file list.')
 
 
@@ -329,14 +329,14 @@ def test_set_reduce_files_automatically_when_only_field_specified():
         process.UNIHAN_MANIFEST['Unihan_Variants.txt']
     )
 
-    config = {
+    options = {
         'fields': fields,
     }
 
-    b = process.Builder(config)
+    b = process.Builder(options)
 
     expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-    results = b.config['files']
+    results = b.options['files']
 
     assert set(expected) == set(results)
 
@@ -346,14 +346,14 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
 
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    config = {
+    options = {
         'files': files
     }
 
-    b = process.Builder(config)
+    b = process.Builder(options)
 
     expected = process.get_fields(process.filter_manifest(files))
-    results = b.config['fields']
+    results = b.options['fields']
 
     assert set(expected) == set(results), (
         'Returns only the fields for files picked.'
@@ -391,8 +391,8 @@ def test_conversion_ucn_to_unicode():
 def test_no_args():
     """Works without arguments."""
 
-    expected = test_config
-    result = Builder.from_cli([]).config
+    expected = test_options
+    result = Builder.from_cli([]).options
 
     assert expected == result
 
@@ -401,19 +401,19 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
     """Test CLI args + defaults."""
 
     expected_in = {'zip_filepath': str(mock_zip_file)}
-    result = TestBuilder.from_cli(['-z', str(mock_zip_file)]).config
+    result = TestBuilder.from_cli(['-z', str(mock_zip_file)]).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition']).config
+    result = TestBuilder.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition']).config
+    result = TestBuilder.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition', 'kXerox']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition', 'kXerox']).config
+    result = TestBuilder.from_cli(['-F', 'kDefinition', 'kXerox']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple fields."
     )
@@ -422,7 +422,7 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
         'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
     }
     result = TestBuilder.from_cli(
-        ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
+        ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple arguments."
     )

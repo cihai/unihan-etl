@@ -193,7 +193,7 @@ UNIHAN_ZIP_FILEPATH = get_datapath('downloads/Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
-default_config = {
+default_options = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
     'zip_filepath': UNIHAN_ZIP_FILEPATH,
@@ -406,32 +406,34 @@ def get_parser():
 
 class Builder(object):
 
-    default_config = default_config
+    default_options = default_options
 
-    def __init__(self, config):
+    def __init__(self, options):
         """Download and generate a datapackage.json compatible release of
         `unihan <http://www.unicode.org/reports/tr38/>`_.
 
-        :param config: config values to override defaults.
-        :type config: dict
+        :param options: options values to override defaults.
+        :type options: dict
 
         """
 
-        if 'files' in config and 'fields' not in config:
+        if 'files' in options and 'fields' not in options:
             # Filter fields when only files specified.
             try:
-                config['fields'] = get_fields(filter_manifest(config['files']))
+                options['fields'] = get_fields(
+                    filter_manifest(options['files'])
+                )
             except KeyError as e:
                 raise KeyError('File {0} not found in file list.'.format(e))
-        elif 'fields' in config and 'files' not in config:
+        elif 'fields' in options and 'files' not in options:
             # Filter files when only field specified.
-            config['files'] = get_files(config['fields'])
-        elif 'fields' in config and 'files' in config:
+            options['files'] = get_files(options['fields'])
+        elif 'fields' in options and 'files' in options:
             # Filter fields when only files specified.
-            fields_in_files = get_fields(filter_manifest(config['files']))
+            fields_in_files = get_fields(filter_manifest(options['files']))
 
             not_in_field = [
-                h for h in config['fields'] if h not in fields_in_files
+                h for h in options['fields'] if h not in fields_in_files
             ]
             if not_in_field:
                 raise KeyError(
@@ -440,26 +442,26 @@ class Builder(object):
                     )
                 )
 
-        self.config = merge_dict(self.default_config, config)
+        self.options = merge_dict(self.default_options, options)
 
-        while not has_unihan_zip(self.config['zip_filepath']):
-            download(self.config['source'], self['zip_filepath'],
+        while not has_unihan_zip(self.options['zip_filepath']):
+            download(self.options['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
-        zip_file = extract_zip(self.config['zip_filepath'])
+        zip_file = extract_zip(self.options['zip_filepath'])
 
-        if zip_has_files(self.config['files'], zip_file):
+        if zip_has_files(self.options['files'], zip_file):
             print('All files in zip.')
             abs_paths = [
-                os.path.join(self.config['work_dir'], f)
-                for f in self.config['files']
+                os.path.join(self.options['work_dir'], f)
+                for f in self.options['files']
             ]
-            data = convert(abs_paths, self.config['fields'])
+            data = convert(abs_paths, self.options['fields'])
 
-            with open(self.config['destination'], 'w+') as f:
+            with open(self.options['destination'], 'w+') as f:
                 csvwriter = UnicodeWriter(f)
                 csvwriter.writerows(data)
-                print('Saved output to: %s.' % self.config['destination'])
+                print('Saved output to: %s.' % self.options['destination'])
         else:
             print('Missing files.')
 
