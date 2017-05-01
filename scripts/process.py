@@ -409,6 +409,11 @@ def get_parser():
 
 def export(zip_filepath, zip_files, work_dir, fields, destination):
     """Extract zip and process information into CSV's."""
+
+    for k in INDEX_FIELDS:
+        if k not in fields:
+            fields = [k] + fields
+
     zip_file = extract_zip(zip_filepath)
 
     if zip_has_files(zip_files, zip_file):

@@ -13,8 +13,8 @@ import pytest
 
 from scripts import process
 from scripts._compat import text_type
-from scripts.process import (UNIHAN_ZIP_FILEPATH, Packager,
-                             default_options, zip_has_files)
+from scripts.process import (UNIHAN_ZIP_FILEPATH, Packager, default_options,
+                             zip_has_files)
 from scripts.test import assert_dict_contains_subset, get_datapath
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
@@ -363,8 +363,8 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
 
     b = process.Packager(options)
 
-    expected = process.get_fields(process.filter_manifest(files))
-    results = b.options['fields']
+    results = process.get_fields(process.filter_manifest(files))
+    expected = b.options['fields']
 
     assert set(expected) == set(results), (
         'Returns only the fields for files picked.'
@@ -405,15 +405,11 @@ def test_no_args():
     assert default_options == Packager.from_cli([]).options
 
 
-def test_cli_plus_defaults(mock_zip_file, TestPackager):
+def test_cli_plus_defaults(mock_zip_file):
     """Test CLI args + defaults."""
 
     expected_in = {'zip_filepath': str(mock_zip_file)}
     result = Packager.from_cli(['-z', str(mock_zip_file)]).options
-    assert_dict_contains_subset(expected_in, result)
-
-    expected_in = {'fields': ['kDefinition']}
-    result = Packager.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
