@@ -16,7 +16,8 @@ from scripts._compat import text_type
 from scripts.process import (UNIHAN_DEST, UNIHAN_FIELDS, UNIHAN_URL,
                              UNIHAN_ZIP_FILEPATH, WORK_DIR, Builder,
                              default_config, zip_has_files)
-from scripts.test import assertDictContainsSubset, capture_stderr, get_datapath
+from scripts.test import (assert_dict_contains_subset, capture_stderr,
+                          get_datapath)
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
 
 log = logging.getLogger(__name__)
@@ -408,19 +409,19 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
 
     expected_in = {'zip_filepath': str(mock_zip_file)}
     result = TestBuilder.from_cli(['-z', str(mock_zip_file)]).config
-    assertDictContainsSubset(expected_in, result)
+    assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
     result = TestBuilder.from_cli(['-F', 'kDefinition']).config
-    assertDictContainsSubset(expected_in, result)
+    assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
     result = TestBuilder.from_cli(['-F', 'kDefinition']).config
-    assertDictContainsSubset(expected_in, result)
+    assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition', 'kXerox']}
     result = TestBuilder.from_cli(['-F', 'kDefinition', 'kXerox']).config
-    assertDictContainsSubset(
+    assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple fields."
     )
 
@@ -429,7 +430,7 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
     }
     result = TestBuilder.from_cli(
         ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).config
-    assertDictContainsSubset(
+    assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple arguments."
     )
 
