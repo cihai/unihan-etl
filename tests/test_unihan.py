@@ -153,8 +153,8 @@ def test_download(tmpdir, mock_zip_file):
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_extract(mock_zip_file):
-    zf = process.extract(str(mock_zip_file))
+def test_extract_zip(mock_zip_file):
+    zf = process.extract_zip(str(mock_zip_file))
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218

@@ -265,7 +265,7 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
     return dest
 
 
-def extract(zip_filepath, work_dir=None):
+def extract_zip(zip_filepath, work_dir=None):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
     :param zip_filepath: filepath to extract.
@@ -446,7 +446,7 @@ class Builder(object):
             download(self.config['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
-        zip_file = extract(self.config['zip_filepath'])
+        zip_file = extract_zip(self.config['zip_filepath'])
 
         if zip_has_files(self.config['files'], zip_file):
             print('All files in zip.')
