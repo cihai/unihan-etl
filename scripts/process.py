@@ -295,8 +295,8 @@ def convert(csv_files, columns):
 
     :param csv_files: file names in data dir
     :type csv_files: list
-    :return: List of tuples for data loaded
-
+    :return: List of :class:`collections.OrderedDict`, first row column names.
+    :rtype: list
     """
 
     import collections
@@ -428,6 +428,33 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
         print('Missing files.')
 
 
+def validate_options(options):
+    if 'zip_files' in options and 'fields' not in options:
+        # Filter fields when only files specified.
+        try:
+            options['fields'] = get_fields(
+                filter_manifest(options['zip_files'])
+            )
+        except KeyError as e:
+            raise KeyError('File {0} not found in file list.'.format(e))
+    elif 'fields' in options and 'zip_files' not in options:
+        # Filter files when only field specified.
+        options['zip_files'] = get_files(options['fields'])
+    elif 'fields' in options and 'zip_files' in options:
+        # Filter fields when only files specified.
+        fields_in_files = get_fields(filter_manifest(options['zip_files']))
+
+        not_in_field = [
+            h for h in options['fields'] if h not in fields_in_files
+        ]
+        if not_in_field:
+            raise KeyError(
+                'Field {0} not found in file list.'.format(
+                    ', '.join(not_in_field)
+                )
+            )
+
+
 class Packager(object):
 
     def __init__(self, options):
@@ -438,34 +465,7 @@ class Packager(object):
         :type options: dict
 
         """
-        self.validate_options(options)
-
-    def validate_options(self, options):
-
-        if 'zip_files' in options and 'fields' not in options:
-            # Filter fields when only files specified.
-            try:
-                options['fields'] = get_fields(
-                    filter_manifest(options['zip_files'])
-                )
-            except KeyError as e:
-                raise KeyError('File {0} not found in file list.'.format(e))
-        elif 'fields' in options and 'zip_files' not in options:
-            # Filter files when only field specified.
-            options['zip_files'] = get_files(options['fields'])
-        elif 'fields' in options and 'zip_files' in options:
-            # Filter fields when only files specified.
-            fields_in_files = get_fields(filter_manifest(options['zip_files']))
-
-            not_in_field = [
-                h for h in options['fields'] if h not in fields_in_files
-            ]
-            if not_in_field:
-                raise KeyError(
-                    'Field {0} not found in file list.'.format(
-                        ', '.join(not_in_field)
-                    )
-                )
+        validate_options(options)
 
         self.options = merge_dict(default_options.copy(), options)
 
