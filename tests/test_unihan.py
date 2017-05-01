@@ -36,14 +36,6 @@ test_options = merge_dict(default_options.copy(), {
 })
 
 
-class MockBuilder(Builder):
-
-    default_options = test_options
-
-
-Builder = MockBuilder
-
-
 mock_zip_filename = 'Unihan.zip'
 
 
@@ -69,21 +61,19 @@ def mock_zip(mock_zip_file):
 @pytest.fixture(scope="session")
 def TestBuilder(mock_test_dir, mock_zip_file):
     # monkey-patching builder
-    MockBuilder.default_options['work_dir'] = str(mock_test_dir)
-    MockBuilder.default_options['zip_filepath'] = str(mock_zip_file)
-    MockBuilder.default_options['destination'] = str(
-        mock_test_dir.join('unihan.csv')
-    )
-    return MockBuilder
+    options = {
+        'work_dir': str(mock_test_dir),
+        'zip_filepath': str(mock_zip_file),
+        'destination': str(
+            mock_test_dir.join('unihan.csv')
+        )
+    }
+    return Builder(options)
 
 
 @pytest.mark.skip(reason="slow and may remove this")
 def test_builder_mock(TestBuilder):
-
-    assert test_options == TestBuilder.default_options
-    assert test_options != default_options
-
-    b = TestBuilder({})
+    b = TestBuilder
 
     assert test_options == b.options
     assert default_options != b.options
@@ -392,28 +382,28 @@ def test_no_args():
     """Works without arguments."""
 
     expected = test_options
-    result = Builder.from_cli([]).options
+    result = Builder.from_cli([])
 
-    assert expected == result
+    assert default_options == result.options
 
 
 def test_cli_plus_defaults(mock_zip_file, TestBuilder):
     """Test CLI args + defaults."""
 
     expected_in = {'zip_filepath': str(mock_zip_file)}
-    result = TestBuilder.from_cli(['-z', str(mock_zip_file)]).options
+    result = Builder.from_cli(['-z', str(mock_zip_file)]).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition']).options
+    result = Builder.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition']).options
+    result = Builder.from_cli(['-F', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition', 'kXerox']}
-    result = TestBuilder.from_cli(['-F', 'kDefinition', 'kXerox']).options
+    result = Builder.from_cli(['-F', 'kDefinition', 'kXerox']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple fields."
     )
@@ -421,7 +411,7 @@ def test_cli_plus_defaults(mock_zip_file, TestBuilder):
     expected_in = {
         'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
     }
-    result = TestBuilder.from_cli(
+    result = Builder.from_cli(
         ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple arguments."

@@ -406,8 +406,6 @@ def get_parser():
 
 class Builder(object):
 
-    default_options = default_options
-
     def __init__(self, options):
         """Download and generate a datapackage.json compatible release of
         `unihan <http://www.unicode.org/reports/tr38/>`_.
@@ -442,12 +440,14 @@ class Builder(object):
                     )
                 )
 
-        self.options = merge_dict(self.default_options, options)
+        self.options = merge_dict(default_options.copy(), options)
 
+    def download(self):
         while not has_unihan_zip(self.options['zip_filepath']):
             download(self.options['source'], self['zip_filepath'],
                      reporthook=_dl_progress)
 
+    def process(self):
         zip_file = extract_zip(self.options['zip_filepath'])
 
         if zip_has_files(self.options['files'], zip_file):
