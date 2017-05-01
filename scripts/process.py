@@ -414,6 +414,9 @@ class Builder(object):
         :type options: dict
 
         """
+        self.validate_options(options)
+
+    def validate_options(self, options):
 
         if 'files' in options and 'fields' not in options:
             # Filter fields when only files specified.
