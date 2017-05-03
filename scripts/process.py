@@ -199,15 +199,15 @@ default_options = {
 }
 
 
-def save(url, filename, urlretrieve=urlretrieve, reporthook=None):
+def save(url, filename, urlretrieve_fn=urlretrieve, reporthook=None):
     """Separate download function for testability.
 
     :param url: URL to download
     :type url: str
     :param filename: destination to download to.
     :type filename: str
-    :param urlretrieve: function to download file
-    :type urlretrieve: function
+    :param urlretrieve_fn: function to download file
+    :type urlretrieve_fn: function
     :param reporthook: callback for ``urlretrieve`` function progress.
     :type reporthook: function
     :returns: Result of ``urlretrieve`` function
@@ -215,18 +215,20 @@ def save(url, filename, urlretrieve=urlretrieve, reporthook=None):
     """
 
     if reporthook:
-        return urlretrieve(url, filename, reporthook)
+        return urlretrieve_fn(url, filename, reporthook)
     else:
-        return urlretrieve(url, filename)
+        return urlretrieve_fn(url, filename)
 
 
-def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
+def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     """Download a file to a destination.
 
     :param url: URL to download from.
     :type url: str
-    :param destination: file path where download is to be saved.
-    :type destination: str
+    :param dest: file path where download is to be saved.
+    :type dest: str
+    :param urlretrieve_fn: function to download file
+    :type urlretrieve_fn: function
     :param reporthook: Function to write progress bar to stdout buffer.
     :type reporthook: function
     :returns: destination where file downloaded to.
@@ -253,9 +255,9 @@ def download(url, dest, urlretrieve=urlretrieve, reporthook=None):
             print('Downloading Unihan.zip...')
             print('%s to %s' % (url, dest))
             if reporthook:
-                save(url, dest, urlretrieve, reporthook)
+                save(url, dest, urlretrieve_fn, reporthook)
             else:
-                save(url, dest, urlretrieve)
+                save(url, dest, urlretrieve_fn)
 
     return dest
 
