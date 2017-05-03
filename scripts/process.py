@@ -405,11 +405,11 @@ def get_parser():
         help="Default: %s" % WORK_DIR
     )
     parser.add_argument(
-        "-F", "--fields", dest="fields", nargs="*",
+        "-f", "--fields", dest="fields", nargs="*",
         help="Default: %s" % UNIHAN_FIELDS
     )
     parser.add_argument(
-        "-f", "--zip-files", dest="input_files", nargs='*',
+        "-i", "--input-files", dest="input_files", nargs='*',
         help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
     )
     return parser

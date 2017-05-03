@@ -423,11 +423,11 @@ def test_cli_plus_defaults(mock_zip_file):
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition']}
-    result = Packager.from_cli(['-F', 'kDefinition']).options
+    result = Packager.from_cli(['-f', 'kDefinition']).options
     assert_dict_contains_subset(expected_in, result)
 
     expected_in = {'fields': ['kDefinition', 'kXerox']}
-    result = Packager.from_cli(['-F', 'kDefinition', 'kXerox']).options
+    result = Packager.from_cli(['-f', 'kDefinition', 'kXerox']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple fields."
     )
@@ -436,7 +436,7 @@ def test_cli_plus_defaults(mock_zip_file):
         'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
     }
     result = Packager.from_cli(
-        ['-F', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
+        ['-f', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
     assert_dict_contains_subset(
         expected_in, result, msg="Accepts multiple arguments."
     )
@@ -447,6 +447,6 @@ def test_cli_exit_emessage_to_stderr():
 
     # SystemExit print's to stdout by default
     with pytest.raises(SystemExit) as excinfo:
-        Packager.from_cli(['-d', 'data/output.csv', '-F', 'sdfa'])
+        Packager.from_cli(['-d', 'data/output.csv', '-f', 'sdfa'])
 
     excinfo.match('Field sdfa not found in file list.')
