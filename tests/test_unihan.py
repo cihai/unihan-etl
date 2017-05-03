@@ -161,6 +161,7 @@ def test_download_mock(monkeypatch, tmpdir, mock_zip_file):
     }))
     p.download()
     assert os.path.exists(str(dest_filepath))
+    p.export
 
 
 def test_extract_zip(mock_zip_file):
@@ -188,7 +189,7 @@ def test_export(mock_zip_file, mock_test_dir):
     )
 
 
-def test_convert_only_output_requested_columns(tmpdir):
+def test_normalize_only_output_requested_columns(tmpdir):
     csv_file = tmpdir.join('test.csv')
 
     csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
@@ -202,26 +203,26 @@ def test_convert_only_output_requested_columns(tmpdir):
         'kDefinition',
     ]
 
-    items = process.convert(csv_files, columns)
+    items = process.normalize(csv_files, columns)
 
     not_in_columns = []
     in_columns = ['kDefinition', 'kCantonese']
 
-    # columns not selected in convert must not be in result.
+    # columns not selected in normalize must not be in result.
     for v in items[0]:
         if v not in columns:
             not_in_columns.append(v)
         else:
             in_columns.append(v)
 
-    assert [] == not_in_columns, "Convert filters columns not specified."
+    assert [] == not_in_columns, "normalize filters columns not specified."
     assert set(in_columns).issubset(set(columns)), (
-        "Convert returns correct columns specified + ucn and char."
+        "normalize returns correct columns specified + ucn and char."
     )
 
 
-def test_convert_simple_data_format():
-    """convert turns data into simple data format (SDF)."""
+def test_normalize_simple_data_format():
+    """normalize turns data into simple data format (SDF)."""
     csv_files = [
         get_datapath('Unihan_DictionaryLikeData.txt'),
         get_datapath('Unihan_Readings.txt'),
@@ -234,17 +235,12 @@ def test_convert_simple_data_format():
         'kDefinition',
     ] + process.INDEX_FIELDS
 
-    items = process.convert(csv_files, columns)
+    items = process.normalize(csv_files, columns)
 
     header = items[0]
     assert header == columns
 
     rows = items[1:]  # NOQA
-
-
-def test_convert_keys_values_match():
-    """convert returns values in the correct places."""
-    pass
 
 
 def test_flatten_fields():

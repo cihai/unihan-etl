@@ -282,7 +282,7 @@ def extract_zip(zip_filepath, work_dir=None):
     return z
 
 
-def convert(csv_files, columns):
+def normalize(csv_files, columns):
     """Return dict from Unihan CSV files.
 
     :param csv_files: file names in data dir
@@ -318,7 +318,7 @@ def convert(csv_files, columns):
     sys.stdout.flush()
 
     print('Processing complete.')
-    print('Converting data to CSV-friendly format.')
+    print('normalizeing data to CSV-friendly format.')
 
     datarows = [columns[:]]  # Add columns to first row
     datarows += [r.values() for r in [v for v in items.values()]]  # Data
@@ -419,7 +419,7 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
             os.path.join(work_dir, f)
             for f in zip_files
         ]
-        data = convert(abs_paths, fields)
+        data = normalize(abs_paths, fields)
 
         with open(destination, 'w+') as f:
             csvwriter = UnicodeWriter(f)
