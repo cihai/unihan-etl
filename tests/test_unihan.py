@@ -177,21 +177,19 @@ def test_convert_only_output_requested_columns(tmpdir):
 
     csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
 
-    csv_files = [
-        str(csv_file)
-    ]
+    csv_files = [str(csv_file)]
 
     columns = [
         'kTotalStrokes',
         'kPhonetic',
         'kCantonese',
         'kDefinition',
-    ] + process.INDEX_FIELDS
+    ]
 
     items = process.convert(csv_files, columns)
 
     not_in_columns = []
-    in_columns = ['kDefinition', 'kCantonese'] + process.INDEX_FIELDS
+    in_columns = ['kDefinition', 'kCantonese']
 
     # columns not selected in convert must not be in result.
     for v in items[0]:
