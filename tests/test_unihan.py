@@ -13,7 +13,7 @@ import pytest
 
 from scripts import process
 from scripts._compat import text_type
-from scripts.process import (UNIHAN_ZIP_FILEPATH, Packager, default_options,
+from scripts.process import (UNIHAN_zip_path, Packager, default_options,
                              zip_has_files)
 from scripts.test import assert_dict_contains_subset, get_datapath
 from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
@@ -31,7 +31,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
 test_options = merge_dict(default_options.copy(), {
-    'zip_files': ['Unihan_Readings.txt'],
+    'input_files': ['Unihan_Readings.txt'],
 })
 
 
@@ -62,7 +62,7 @@ def TestPackager(mock_test_dir, mock_zip_file):
     # monkey-patching builder
     options = {
         'work_dir': str(mock_test_dir),
-        'zip_filepath': str(mock_zip_file),
+        'zip_path': str(mock_zip_file),
         'destination': str(
             mock_test_dir.join('unihan.csv')
         )
@@ -85,10 +85,10 @@ def test_zip_has_files(mock_zip):
 
 
 def test_has_valid_zip(tmpdir, mock_zip):
-    if os.path.isfile(UNIHAN_ZIP_FILEPATH):
-        assert process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
+    if os.path.isfile(UNIHAN_zip_path):
+        assert process.has_valid_zip(UNIHAN_zip_path)
     else:
-        assert not process.has_valid_zip(UNIHAN_ZIP_FILEPATH)
+        assert not process.has_valid_zip(UNIHAN_zip_path)
 
     assert process.has_valid_zip(mock_zip.filename)
 
@@ -156,7 +156,7 @@ def test_download_mock(monkeypatch, tmpdir, mock_zip_file):
 
     p = Packager(merge_dict(test_options.copy, {
         'fields': ['kDefinition'],
-        'zip_filepath': str(dest_filepath),
+        'zip_path': str(dest_filepath),
         'work_dir': str(tmpdir)
     }))
     p.download()
@@ -174,8 +174,8 @@ def test_extract_zip(mock_zip_file):
 
 def test_export(mock_zip_file, mock_test_dir):
     process.export(
-        zip_filepath=str(mock_zip_file),
-        zip_files=['Unihan_Readings.txt'],
+        zip_path=str(mock_zip_file),
+        input_files=['Unihan_Readings.txt'],
         work_dir=str(mock_test_dir),
         fields=[
             'kTotalStrokes',
@@ -291,13 +291,13 @@ def test_pick_files(mock_zip_file):
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
     options = {
-        'zip_files': files,
-        'zip_filepath': str(mock_zip_file)
+        'input_files': files,
+        'zip_path': str(mock_zip_file)
     }
 
     b = process.Packager(options)
 
-    result = b.options['zip_files']
+    result = b.options['input_files']
     expected = files
 
     assert result == expected, 'Returns only the files picked.'
@@ -319,7 +319,7 @@ def test_raise_error_unknown_file():
     """Throw error if picking unknown file."""
 
     options = {
-        'zip_files': ['Sparta.lol']
+        'input_files': ['Sparta.lol']
     }
 
     with pytest.raises(KeyError) as excinfo:
@@ -333,7 +333,7 @@ def test_raise_error_unknown_field_filtered_files():
     files = ['Unihan_Variants.txt']
 
     options = {
-        'zip_files': files,
+        'input_files': files,
         'fields': ['kDefinition'],
     }
 
@@ -357,7 +357,7 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     b = process.Packager(options)
 
     expected = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
-    results = b.options['zip_files']
+    results = b.options['input_files']
 
     assert set(expected) == set(results)
 
@@ -368,7 +368,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
     options = {
-        'zip_files': files
+        'input_files': files
     }
 
     b = process.Packager(options)
@@ -418,7 +418,7 @@ def test_no_args():
 def test_cli_plus_defaults(mock_zip_file):
     """Test CLI args + defaults."""
 
-    expected_in = {'zip_filepath': str(mock_zip_file)}
+    expected_in = {'zip_path': str(mock_zip_file)}
     result = Packager.from_cli(['-z', str(mock_zip_file)]).options
     assert_dict_contains_subset(expected_in, result)
 

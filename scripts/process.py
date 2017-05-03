@@ -185,17 +185,17 @@ UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Filepath to output built CSV file to.
 UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan.csv')
 #: Filepath to download Zip file.
-UNIHAN_ZIP_FILEPATH = os.path.join(WORK_DIR, 'Unihan.zip')
+UNIHAN_zip_path = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
 default_options = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
-    'zip_filepath': UNIHAN_ZIP_FILEPATH,
+    'zip_path': UNIHAN_zip_path,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
-    'zip_files': UNIHAN_FILES,
+    'input_files': UNIHAN_FILES,
     'download': False
 }
 
@@ -263,21 +263,21 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     return dest
 
 
-def extract_zip(zip_filepath, work_dir=None):
+def extract_zip(zip_path, work_dir=None):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
-    :param zip_filepath: filepath to extract.
-    :type zip_filepath: str
+    :param zip_path: filepath to extract.
+    :type zip_path: str
     :param work_dir: (optional) directory to extract to. Defaults to
-        :py:meth:`os.path.dirname` of ``zip_filepath``.
+        :py:meth:`os.path.dirname` of ``zip_path``.
     :type work_dir: str
     :returns: The extracted zip.
     :rtype: :class:`zipfile.ZipFile`
 
     """
 
-    datadir = work_dir or os.path.dirname(zip_filepath)
-    z = zipfile.ZipFile(zip_filepath)
+    datadir = work_dir or os.path.dirname(zip_path)
+    z = zipfile.ZipFile(zip_path)
     z.extractall(datadir)
 
     return z
@@ -339,24 +339,24 @@ def normalize_files(csv_files, columns):
     return data
 
 
-def has_valid_zip(zip_filepath):
+def has_valid_zip(zip_path):
     """Return True if valid zip exists.
 
-    :param zip_filepath: absolute path to zip
-    :type zip_filepath: str
+    :param zip_path: absolute path to zip
+    :type zip_path: str
     :returns: True if valid zip exists at path
     :rtype: bool
     """
 
-    if os.path.isfile(zip_filepath):
-        if zipfile.is_zipfile(zip_filepath):
-            print("Exists, is valid zip. %s" % zip_filepath)
+    if os.path.isfile(zip_path):
+        if zipfile.is_zipfile(zip_path):
+            print("Exists, is valid zip. %s" % zip_path)
             return True
         else:
-            print("Not a valid zip. %s" % zip_filepath)
+            print("Not a valid zip. %s" % zip_path)
             return False
     else:
-        print("File doesn't exist. %s" % zip_filepath)
+        print("File doesn't exist. %s" % zip_path)
         return False
 
 
@@ -392,9 +392,9 @@ def get_parser():
         "-s", "--source", dest="source",
         help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
     parser.add_argument(
-        "-z", "--zip_filepath", dest="zip_filepath",
+        "-z", "--zip_path", dest="zip_path",
         help="Path the zipfile is downloaded to. Default: %s" %
-        UNIHAN_ZIP_FILEPATH
+        UNIHAN_zip_path
     )
     parser.add_argument(
         "-d", "--destination", dest="destination",
@@ -409,13 +409,13 @@ def get_parser():
         help="Default: %s" % UNIHAN_FIELDS
     )
     parser.add_argument(
-        "-f", "--zip-files", dest="zip_files", nargs='*',
+        "-f", "--zip-files", dest="input_files", nargs='*',
         help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
     )
     return parser
 
 
-def export(zip_filepath, zip_files, work_dir, fields, destination):
+def export(zip_path, input_files, work_dir, fields, destination):
     """Extract zip and process information into CSV's."""
 
     for k in INDEX_FIELDS:
@@ -424,7 +424,7 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
 
     files = [
         os.path.join(work_dir, f)
-        for f in zip_files
+        for f in input_files
     ]
     data = normalize_files(files, fields)
 
@@ -435,20 +435,20 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
 
 
 def validate_options(options):
-    if 'zip_files' in options and 'fields' not in options:
+    if 'input_files' in options and 'fields' not in options:
         # Filter fields when only files specified.
         try:
             options['fields'] = get_fields(
-                filter_manifest(options['zip_files'])
+                filter_manifest(options['input_files'])
             )
         except KeyError as e:
             raise KeyError('File {0} not found in file list.'.format(e))
-    elif 'fields' in options and 'zip_files' not in options:
+    elif 'fields' in options and 'input_files' not in options:
         # Filter files when only field specified.
-        options['zip_files'] = get_files(options['fields'])
-    elif 'fields' in options and 'zip_files' in options:
+        options['input_files'] = get_files(options['fields'])
+    elif 'fields' in options and 'input_files' in options:
         # Filter fields when only files specified.
-        fields_in_files = get_fields(filter_manifest(options['zip_files']))
+        fields_in_files = get_fields(filter_manifest(options['input_files']))
 
         not_in_field = [
             h for h in options['fields'] if h not in fields_in_files
@@ -477,22 +477,22 @@ class Packager(object):
 
     def download(self):
         """Download raw UNIHAN data if not exists."""
-        while not has_valid_zip(self.options['zip_filepath']):
+        while not has_valid_zip(self.options['zip_path']):
             download(
-                self.options['source'], self.options['zip_filepath'],
+                self.options['source'], self.options['zip_path'],
                 reporthook=_dl_progress
             )
-            zip_file = extract_zip(self.options['zip_filepath'])
+            zip_file = extract_zip(self.options['zip_path'])
 
-            if zip_has_files(self.options['zip_files'], zip_file):
+            if zip_has_files(self.options['input_files'], zip_file):
                 print('All files in zip.')
 
     def export(self):
         """Extract zip and process information into CSV's."""
 
         export(
-            zip_filepath=self.options['zip_filepath'],
-            zip_files=self.options['zip_files'],
+            zip_path=self.options['zip_path'],
+            input_files=self.options['input_files'],
             work_dir=self.options['work_dir'],
             fields=self.options['fields'],
             destination=self.options['destination']
