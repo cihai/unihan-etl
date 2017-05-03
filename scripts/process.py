@@ -156,13 +156,6 @@ def filter_manifest(files):
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-#: Return path of a file inside data directory.
-def get_datapath(filename):
-    return os.path.abspath(os.path.join(
-        os.path.dirname(__file__), os.pardir, 'data', filename
-    ))
-
-
 #: Return list of files from list of fields.
 def get_files(fields):
     files = set()
@@ -179,17 +172,19 @@ def get_files(fields):
 
 
 #: Directory to use for downloading files.
-DATA_DIR = get_datapath('')
+DATA_DIR = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), os.pardir, 'data'
+))
 #: Directory to use for processing intermittent files.
-WORK_DIR = get_datapath('downloads')
+WORK_DIR = os.path.join(DATA_DIR, 'downloads')
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 #: URI of Unihan.zip data.
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Filepath to output built CSV file to.
-UNIHAN_DEST = get_datapath('unihan.csv')
+UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan.csv')
 #: Filepath to download Zip file.
-UNIHAN_ZIP_FILEPATH = get_datapath('downloads/Unihan.zip')
+UNIHAN_ZIP_FILEPATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
