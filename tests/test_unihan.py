@@ -34,7 +34,7 @@ test_options = merge_dict(default_options.copy(), {
 })
 
 
-mock_zip_filename = 'Unihan.zip'
+MOCK_ZIP_FILENAME = 'Unihan.zip'
 
 
 @pytest.fixture(scope="session")
@@ -45,7 +45,7 @@ def mock_test_dir(tmpdir_factory):
 
 @pytest.fixture(scope="session")
 def mock_zip_file(mock_test_dir):
-    return mock_test_dir.join(mock_zip_filename)
+    return mock_test_dir.join(MOCK_ZIP_FILENAME)
 
 
 @pytest.fixture(scope="session")
@@ -131,14 +131,14 @@ def test_get_files():
 
 
 def test_save(tmpdir, mock_zip_file):
-    dest_filepath = tmpdir.join(mock_zip_filename)
+    dest_filepath = tmpdir.join(MOCK_ZIP_FILENAME)
     process.save(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
     assert os.path.exists(str(dest_filepath))
 
 
 def test_download(tmpdir, mock_zip_file):
-    dest_filepath = tmpdir.join('data', mock_zip_filename)
+    dest_filepath = tmpdir.join('data', MOCK_ZIP_FILENAME)
 
     process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
