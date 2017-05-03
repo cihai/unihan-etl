@@ -283,25 +283,9 @@ def extract_zip(zip_filepath, work_dir=None):
     return z
 
 
-def normalize(csv_files, columns):
-    """Return normalized data from a UNIHAN data files.
-
-    :param csv_files: file names in data dir
-    :type csv_files: list
-    :return: List of :class:`collections.OrderedDict`, first row column names.
-    :rtype: list
-    """
-
+def normalize_data(raw_data, columns):
     items = collections.OrderedDict()
-
-    print('Processing files: %s.' % ', '.join(csv_files))
-    data = fileinput.FileInput(
-        files=csv_files, openhook=fileinput.hook_encoded('utf-8')
-    )
-    print('Done.')
-
-    print('Collecting field data...')
-    for idx, l in enumerate(data):
+    for idx, l in enumerate(raw_data):
         if not_junk(l):
             l = l.strip().split('\t')
             if in_fields(l[1], columns):
@@ -314,18 +298,38 @@ def normalize(csv_files, columns):
                 items[char][item['field']] = item['value']
         sys.stdout.write('\rProcessing line %i.' % (idx))
         sys.stdout.flush()
+    return items
+
+
+def normalize(csv_files, columns):
+    """Return normalized data from a UNIHAN data files.
+
+    :param csv_files: list of files
+    :type csv_files: list
+    :return: List of :class:`collections.OrderedDict`, first row column names.
+    :rtype: list
+    """
+
+    print('Processing files: %s.' % ', '.join(csv_files))
+    raw_data = fileinput.FileInput(
+        files=csv_files, openhook=fileinput.hook_encoded('utf-8')
+    )
+    print('Done.')
+
+    print('Collecting field data...')
+    sorted_data = normalize_data(raw_data, columns)
     sys.stdout.write('\n')
     sys.stdout.flush()
 
     print('Processing complete.')
     print('normalizeing data to CSV-friendly format.')
 
-    datarows = [columns[:]]  # Add columns to first row
-    datarows += [r.values() for r in [v for v in items.values()]]  # Data
+    data = [columns[:]]  # Add columns to first row
+    data += [r.values() for r in [v for v in sorted_data.values()]]  # Data
 
     print('Conversion to CSV-friendly format complete.')
 
-    return datarows
+    return data
 
 
 def has_valid_zip(zip_filepath):
