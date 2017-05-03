@@ -422,22 +422,16 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
         if k not in fields:
             fields = [k] + fields
 
-    zip_file = extract_zip(zip_filepath)
+    files = [
+        os.path.join(work_dir, f)
+        for f in zip_files
+    ]
+    data = normalize_files(files, fields)
 
-    if zip_has_files(zip_files, zip_file):
-        print('All files in zip.')
-        abs_paths = [
-            os.path.join(work_dir, f)
-            for f in zip_files
-        ]
-        data = normalize_files(abs_paths, fields)
-
-        with open(destination, 'w+') as f:
-            csvwriter = UnicodeWriter(f)
-            csvwriter.writerows(data)
-            print('Saved output to: %s.' % destination)
-    else:
-        print('Missing files.')
+    with open(destination, 'w+') as f:
+        csvwriter = UnicodeWriter(f)
+        csvwriter.writerows(data)
+        print('Saved output to: %s.' % destination)
 
 
 def validate_options(options):
@@ -488,6 +482,10 @@ class Packager(object):
                 self.options['source'], self.options['zip_filepath'],
                 reporthook=_dl_progress
             )
+            zip_file = extract_zip(self.options['zip_filepath'])
+
+            if zip_has_files(self.options['zip_files'], zip_file):
+                print('All files in zip.')
 
     def export(self):
         """Extract zip and process information into CSV's."""
