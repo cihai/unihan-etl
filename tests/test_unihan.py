@@ -31,7 +31,7 @@ U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
 test_options = merge_dict(default_options.copy(), {
-    'zip_files': 'Unihan_Readings.txt',
+    'zip_files': ['Unihan_Readings.txt'],
 })
 
 
@@ -40,7 +40,7 @@ mock_zip_filename = 'Unihan.zip'
 
 @pytest.fixture(scope="session")
 def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp('tmuxp')
+    fn = tmpdir_factory.mktemp('cihaidata_unihan')
     return fn
 
 
@@ -145,6 +145,22 @@ def test_download(tmpdir, mock_zip_file):
 
     result = os.path.dirname(str(dest_filepath.join('data')))
     assert result, "Creates data directory if doesn't exist."
+
+
+def test_download_mock(monkeypatch, tmpdir, mock_zip_file):
+    dest_filepath = tmpdir.join('data', 'hey.zip')
+
+    def save(url, filename, url_retrieve, reporthook=None):
+        mock_zip_file.copy(dest_filepath)
+    monkeypatch.setattr(process, 'save', save)
+
+    p = Packager(merge_dict(test_options.copy, {
+        'fields': ['kDefinition'],
+        'zip_filepath': str(dest_filepath),
+        'work_dir': str(tmpdir)
+    }))
+    p.download()
+    assert os.path.exists(str(dest_filepath))
 
 
 def test_extract_zip(mock_zip_file):
