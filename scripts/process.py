@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
 import argparse
+import collections
 import fileinput
 import glob
 import os
@@ -283,7 +284,7 @@ def extract_zip(zip_filepath, work_dir=None):
 
 
 def normalize(csv_files, columns):
-    """Return dict from Unihan CSV files.
+    """Return normalized data from a UNIHAN data files.
 
     :param csv_files: file names in data dir
     :type csv_files: list
@@ -291,7 +292,6 @@ def normalize(csv_files, columns):
     :rtype: list
     """
 
-    import collections
     items = collections.OrderedDict()
 
     print('Processing files: %s.' % ', '.join(csv_files))
