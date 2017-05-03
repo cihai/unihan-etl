@@ -12,11 +12,10 @@ import zipfile
 import pytest
 
 from scripts import process
-from scripts._compat import text_type
 from scripts.process import (UNIHAN_zip_path, Packager, default_options,
                              zip_has_files)
 from scripts.test import assert_dict_contains_subset, get_datapath
-from scripts.util import merge_dict, ucn_to_unicode, ucnstring_to_unicode
+from scripts.util import merge_dict
 
 log = logging.getLogger(__name__)
 
@@ -379,34 +378,6 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
     assert set(expected) == set(results), (
         'Returns only the fields for files picked.'
     )
-
-
-def test_conversion_ucn_to_unicode():
-    before = 'U+4E00'
-    expected = '\u4e00'
-
-    result = ucn_to_unicode(before)
-
-    assert result == expected
-
-    assert isinstance(result, text_type)
-
-    # wide character
-    before = 'U+20001'
-    expected = '\U00020001'
-
-    result = ucn_to_unicode(before)
-
-    assert result == expected
-    assert isinstance(result, text_type)
-
-    before = '(same as U+7A69 穩) firm; stable; secure'
-    expected = '(same as 穩 穩) firm; stable; secure'
-
-    result = ucnstring_to_unicode(before)
-
-    assert result == expected
-    assert isinstance(result, text_type)
 
 
 def test_no_args():
