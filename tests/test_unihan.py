@@ -203,7 +203,7 @@ def test_normalize_only_output_requested_columns(tmpdir):
         'kDefinition',
     ]
 
-    items = process.normalize(csv_files, columns)
+    items = process.normalize_files(csv_files, columns)
 
     not_in_columns = []
     in_columns = ['kDefinition', 'kCantonese']
@@ -235,7 +235,7 @@ def test_normalize_simple_data_format():
         'kDefinition',
     ] + process.INDEX_FIELDS
 
-    items = process.normalize(csv_files, columns)
+    items = process.normalize_files(csv_files, columns)
 
     header = items[0]
     assert header == columns

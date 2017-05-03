@@ -283,7 +283,14 @@ def extract_zip(zip_filepath, work_dir=None):
     return z
 
 
-def normalize_data(raw_data, columns):
+def organize_data(raw_data, columns):
+    """Return data from its raw form a dict.
+
+    :param raw_data: combined data from UNIHAN text files
+    :type raw_data: str
+    :param columns: list of column names to extract
+    :type columns: list
+    """
     items = collections.OrderedDict()
     for idx, l in enumerate(raw_data):
         if not_junk(l):
@@ -301,7 +308,7 @@ def normalize_data(raw_data, columns):
     return items
 
 
-def normalize(csv_files, columns):
+def normalize_files(csv_files, columns):
     """Return normalized data from a UNIHAN data files.
 
     :param csv_files: list of files
@@ -317,7 +324,7 @@ def normalize(csv_files, columns):
     print('Done.')
 
     print('Collecting field data...')
-    sorted_data = normalize_data(raw_data, columns)
+    sorted_data = organize_data(raw_data, columns)
     sys.stdout.write('\n')
     sys.stdout.flush()
 
@@ -423,7 +430,7 @@ def export(zip_filepath, zip_files, work_dir, fields, destination):
             os.path.join(work_dir, f)
             for f in zip_files
         ]
-        data = normalize(abs_paths, fields)
+        data = normalize_files(abs_paths, fields)
 
         with open(destination, 'w+') as f:
             csvwriter = UnicodeWriter(f)
