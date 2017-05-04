@@ -130,13 +130,6 @@ def test_get_files():
     assert set(result) == set(expected)
 
 
-def test_save(tmpdir, mock_zip_file):
-    dest_filepath = tmpdir.join(MOCK_ZIP_FILENAME)
-    process.save(str(mock_zip_file), str(dest_filepath), shutil.copy)
-
-    assert os.path.exists(str(dest_filepath))
-
-
 def test_download(tmpdir, mock_zip_file):
     dest_filepath = tmpdir.join('data', MOCK_ZIP_FILENAME)
 
@@ -146,19 +139,18 @@ def test_download(tmpdir, mock_zip_file):
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_download_mock(monkeypatch, tmpdir, mock_zip_file):
+def test_download_mock(tmpdir, mock_zip_file):
     dest_filepath = tmpdir.join('data', 'hey.zip')
 
-    def save(url, filename, url_retrieve, reporthook=None):
+    def urlretrieve(url, filename, url_retrieve, reporthook=None):
         mock_zip_file.copy(dest_filepath)
-    monkeypatch.setattr(process, 'save', save)
 
     p = Packager(merge_dict(test_options.copy, {
         'fields': ['kDefinition'],
         'zip_path': str(dest_filepath),
         'work_dir': str(tmpdir)
     }))
-    p.download()
+    p.download(urlretrieve_fn=urlretrieve)
     assert os.path.exists(str(dest_filepath))
     p.export
 

@@ -200,27 +200,6 @@ default_options = {
 }
 
 
-def save(url, filename, urlretrieve_fn=urlretrieve, reporthook=None):
-    """Separate download function for testability.
-
-    :param url: URL to download
-    :type url: str
-    :param filename: destination to download to.
-    :type filename: str
-    :param urlretrieve_fn: function to download file
-    :type urlretrieve_fn: function
-    :param reporthook: callback for ``urlretrieve`` function progress.
-    :type reporthook: function
-    :returns: Result of ``urlretrieve`` function
-
-    """
-
-    if reporthook:
-        return urlretrieve_fn(url, filename, reporthook)
-    else:
-        return urlretrieve_fn(url, filename)
-
-
 def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     """Download a file to a destination.
 
@@ -256,9 +235,9 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
             print('Downloading Unihan.zip...')
             print('%s to %s' % (url, dest))
             if reporthook:
-                save(url, dest, urlretrieve_fn, reporthook)
+                urlretrieve_fn(url, dest, reporthook)
             else:
-                save(url, dest, urlretrieve_fn)
+                urlretrieve_fn(url, dest)
 
     return dest
 
@@ -475,12 +454,16 @@ class Packager(object):
 
         self.options = merge_dict(default_options.copy(), options)
 
-    def download(self):
-        """Download raw UNIHAN data if not exists."""
+    def download(self, urlretrieve_fn=urlretrieve):
+        """Download raw UNIHAN data if not exists.
+
+        :param urlretrieve_fn: function to download file
+        :type urlretrieve_fn: function
+        """
         while not has_valid_zip(self.options['zip_path']):
             download(
                 self.options['source'], self.options['zip_path'],
-                reporthook=_dl_progress
+                urlretrieve_fn=urlretrieve_fn, reporthook=_dl_progress
             )
             zip_file = extract_zip(self.options['zip_path'])
 
