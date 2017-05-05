@@ -185,14 +185,14 @@ UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Filepath to output built CSV file to.
 UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan.csv')
 #: Filepath to download Zip file.
-UNIHAN_zip_path = os.path.join(WORK_DIR, 'Unihan.zip')
+UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
 
 default_options = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
-    'zip_path': UNIHAN_zip_path,
+    'zip_path': UNIHAN_ZIP_PATH,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
     'input_files': UNIHAN_FILES,
@@ -242,22 +242,21 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     return dest
 
 
-def extract_zip(zip_path, work_dir=None):
+def extract_zip(zip_path, dest_dir):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
     :param zip_path: filepath to extract.
     :type zip_path: str
-    :param work_dir: (optional) directory to extract to. Defaults to
-        :py:meth:`os.path.dirname` of ``zip_path``.
+    :param dest_dir: (optional) directory to extract to.
     :type work_dir: str
     :returns: The extracted zip.
     :rtype: :class:`zipfile.ZipFile`
 
     """
 
-    datadir = work_dir or os.path.dirname(zip_path)
     z = zipfile.ZipFile(zip_path)
-    z.extractall(datadir)
+    print('extract_zip dest dir: %s' % dest_dir)
+    z.extractall(dest_dir)
 
     return z
 
@@ -373,7 +372,7 @@ def get_parser():
     parser.add_argument(
         "-z", "--zip_path", dest="zip_path",
         help="Path the zipfile is downloaded to. Default: %s" %
-        UNIHAN_zip_path
+        UNIHAN_ZIP_PATH
     )
     parser.add_argument(
         "-d", "--destination", dest="destination",
@@ -405,6 +404,7 @@ def export(zip_path, input_files, work_dir, fields, destination):
         os.path.join(work_dir, f)
         for f in input_files
     ]
+    print('export: work_dir: %s' % work_dir)
     data = normalize_files(files, fields)
 
     with open(destination, 'w+') as f:
@@ -465,7 +465,9 @@ class Packager(object):
                 self.options['source'], self.options['zip_path'],
                 urlretrieve_fn=urlretrieve_fn, reporthook=_dl_progress
             )
-            zip_file = extract_zip(self.options['zip_path'])
+            zip_file = extract_zip(
+                self.options['zip_path'], self.options['work_dir']
+            )
 
             if zip_has_files(self.options['input_files'], zip_file):
                 print('All files in zip.')

@@ -12,7 +12,7 @@ import zipfile
 import pytest
 
 from scripts import process
-from scripts.process import (UNIHAN_zip_path, Packager, default_options,
+from scripts.process import (UNIHAN_ZIP_PATH, Packager, default_options,
                              zip_has_files)
 from scripts.test import assert_dict_contains_subset, get_datapath
 from scripts.util import merge_dict
@@ -84,10 +84,10 @@ def test_zip_has_files(mock_zip):
 
 
 def test_has_valid_zip(tmpdir, mock_zip):
-    if os.path.isfile(UNIHAN_zip_path):
-        assert process.has_valid_zip(UNIHAN_zip_path)
+    if os.path.isfile(UNIHAN_ZIP_PATH):
+        assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
-        assert not process.has_valid_zip(UNIHAN_zip_path)
+        assert not process.has_valid_zip(UNIHAN_ZIP_PATH)
 
     assert process.has_valid_zip(mock_zip.filename)
 
@@ -139,7 +139,7 @@ def test_download(tmpdir, mock_zip_file):
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_download_mock(tmpdir, mock_zip_file):
+def test_download_mock(tmpdir, mock_zip_file, mock_test_dir):
     dest_filepath = tmpdir.join('data', 'hey.zip')
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
@@ -148,15 +148,15 @@ def test_download_mock(tmpdir, mock_zip_file):
     p = Packager(merge_dict(test_options.copy, {
         'fields': ['kDefinition'],
         'zip_path': str(dest_filepath),
-        'work_dir': str(tmpdir)
+        'work_dir': str(mock_test_dir.join('downloads')),
     }))
     p.download(urlretrieve_fn=urlretrieve)
     assert os.path.exists(str(dest_filepath))
-    p.export
+    p.export()
 
 
-def test_extract_zip(mock_zip_file):
-    zf = process.extract_zip(str(mock_zip_file))
+def test_extract_zip(mock_zip_file, tmpdir):
+    zf = process.extract_zip(str(mock_zip_file), str(tmpdir))
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218
@@ -167,16 +167,14 @@ def test_export(mock_zip_file, mock_test_dir):
     process.export(
         zip_path=str(mock_zip_file),
         input_files=['Unihan_Readings.txt'],
-        work_dir=str(mock_test_dir),
+        work_dir=str(mock_test_dir.join('downloads')),
         fields=[
             'kTotalStrokes',
             'kPhonetic',
             'kCantonese',
             'kDefinition',
         ],
-        destination=str(
-            mock_test_dir.join('unihan.csv')
-        )
+        destination=str(mock_test_dir.join('unihan.csv'))
     )
 
 
