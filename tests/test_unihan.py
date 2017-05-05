@@ -140,18 +140,20 @@ def test_download(tmpdir, mock_zip_file):
 
 
 def test_download_mock(tmpdir, mock_zip_file, mock_test_dir):
-    dest_filepath = tmpdir.join('data', 'hey.zip')
+    data_path = tmpdir.join('data')
+    dest_path = data_path.join('data', 'hey.zip')
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
-        mock_zip_file.copy(dest_filepath)
+        mock_zip_file.copy(dest_path)
 
     p = Packager(merge_dict(test_options.copy, {
         'fields': ['kDefinition'],
-        'zip_path': str(dest_filepath),
+        'zip_path': str(dest_path),
         'work_dir': str(mock_test_dir.join('downloads')),
+        'destination': str(data_path.join('unihan.csv'))
     }))
     p.download(urlretrieve_fn=urlretrieve)
-    assert os.path.exists(str(dest_filepath))
+    assert os.path.exists(str(dest_path))
     p.export()
 
 
