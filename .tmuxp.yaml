@@ -1,8 +1,8 @@
-session_name: cihaidata-unihan
+session_name: unihan-tabular
 start_directory: ./ # load session relative to config location (project root).
 before_script: ./bootstrap_env.py # ./ to load relative to project root.
 windows:
-- window_name: cihai-unihan
+- window_name: unihan-tabular
   focus: True
   layout: main-horizontal
   options:
