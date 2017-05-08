@@ -56,7 +56,7 @@ setup(
     keywords=about['__title__'],
     package=find_packages(exclude=["doc"]),
     entry_points=dict(
-        console_scripts=['unihan_tabular=unihan_tabular.__main__:run']
+        console_scripts=['unihan-tabular=unihan_tabular.__main__:run']
     ),
     classifiers=[
         'Development Status :: 3 - Alpha',
