@@ -30,8 +30,8 @@ extensions = [
 
 releases_unstable_prehistory = True
 releases_document_name = "history"
-releases_issue_uri = "https://github.com/cihai/cihai/issues/%s"
-releases_release_uri = "https://github.com/cihai/cihai/tree/v%s"
+releases_issue_uri = "https://github.com/cihai/unihan-tabular/issues/%s"
+releases_release_uri = "https://github.com/cihai/unihan-tabular/tree/v%s"
 
 templates_path = ['_templates']
 
