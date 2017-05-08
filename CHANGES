@@ -4,6 +4,11 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :release:`0.5.0 <2017-05-08>`
+- :support:`-` Rename from cihaidata_unihan unihan_tabular
+- :support:`-` Drop datapackages in favor of a universal JSON, YAML and CSV
+  export.
+
 - :release:`0.4.2 <2017-05-07>`
 - :support:`-` Rename *scripts/* to *cihaidata_unihan/*
 
