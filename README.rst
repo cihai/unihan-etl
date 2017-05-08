@@ -46,8 +46,7 @@ Creates ``data/unihan.csv``.
 
 See `script/process.py CLI arguments`_ for advanced usage examples.
 
-.. _script/process.py CLI arguments: http://cihaidata-unihan.readthedocs.org/cli.html
-
+.. _script/process.py CLI arguments: http://cihaidata-unihan.readthedocs.org/en/latest/cli.html
 
 Structure
 ---------
