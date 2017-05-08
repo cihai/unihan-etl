@@ -15,9 +15,13 @@ import zipfile
 
 sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
 
-from unihan_tabular._compat import urlretrieve
-from unihan_tabular.unicodecsv import UnicodeWriter
+from unihan_tabular._compat import urlretrieve, text_type, PY2
 from unihan_tabular.util import _dl_progress, merge_dict, ucn_to_unicode
+
+if PY2:
+    from unihan_tabular.unicodecsv import UnicodeWriter
+else:
+    import csv
 
 about = {}
 about_file = os.path.join(os.path.dirname(__file__), '..', '__about__.py')
@@ -280,7 +284,7 @@ def organize_data(raw_data, columns):
                     items[char] = collections.OrderedDict().fromkeys(columns)
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
-                items[char][item['field']] = item['value']
+                items[char][item['field']] = text_type(item['value'])
         sys.stdout.write('\rProcessing line %i.' % (idx))
         sys.stdout.flush()
     return items
@@ -408,7 +412,10 @@ def export(zip_path, input_files, work_dir, fields, destination):
     data = normalize_files(files, fields)
 
     with open(destination, 'w+') as f:
-        csvwriter = UnicodeWriter(f)
+        if PY2:
+            csvwriter = UnicodeWriter(f)
+        else:
+            csvwriter = csv.writer(f)
         csvwriter.writerows(data)
         print('Saved output to: %s.' % destination)
 
