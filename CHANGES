@@ -8,6 +8,8 @@ Here you can find the recent changes to cihai.
 - :support:`-` Rename from cihaidata_unihan unihan_tabular
 - :support:`-` Drop datapackages in favor of a universal JSON, YAML and CSV
   export.
+- :support:`-` Only use UnicodeWriter in Python 2, fixes issue with python
+  would encode `b` in front of values
 
 - :release:`0.4.2 <2017-05-07>`
 - :support:`-` Rename *scripts/* to *cihaidata_unihan/*
