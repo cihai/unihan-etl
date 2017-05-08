@@ -75,13 +75,8 @@ Structure
     unihan_tabular/_compat.py
     unihan_tabular/unicodecsv.py
 
-    # python module, public-facing python API.
-    __init__.py
-    unihan_tabular/__init__.py
-
     # utility / helper functions
     unihan_tabular/util.py
-
 
 - ``data/unihan.csv`` - CSV export file.
 - ``unihan_tabular/process.py`` - create a ``data/unihan.csv``.
