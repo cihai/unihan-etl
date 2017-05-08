@@ -4,9 +4,14 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :release:`0.4.0 <2017-05-07>`
+- :support:`-` Major internal refactor and simplification
 - :support:`-` Convert to pytest ``assert`` statements
 - :support:`-` Convert full test suite to pytest functions and fixtures
+- :support:`-` Get CLI documentation up again
+- :support:`-` Improve test coverage
 - :support:`-` Lint code, remove unused imports
+- :support:`-` Switch license BSD -> MIT
 
 - :release:`0.3.0 <2017-04-17>`
 - :support:`-` Rebooted
