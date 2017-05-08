@@ -1,7 +1,7 @@
 __title__ = 'cihaidata-python'
 __package_name__ = 'cihaidata_python'
 __description__ = 'Tool to build UNIHAN dataset into datapackage / simple data format.'
-__version__ = '0.0.1'
+__version__ = '0.4.0'
 __author__ = 'Tony Narlock'
 __email__ = 'cihai@git-pull.com'
 __license__ = 'MIT'
