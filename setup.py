@@ -58,6 +58,9 @@ setup(
     package_data={
         'cihaidata-unihan': ['data/*']
     },
+    entry_points=dict(
+        console_scripts=['cihaidata_unihan=scripts.__main__:run']
+    ),
     classifiers=[
         'Development Status :: 3 - Alpha',
         "License :: OSI Approved :: MIT License",

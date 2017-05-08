@@ -404,7 +404,7 @@ def export(zip_path, input_files, work_dir, fields, destination):
         os.path.join(work_dir, f)
         for f in input_files
     ]
-    print('export: work_dir: %s' % work_dir)
+    print('export work_dir: %s' % work_dir)
     data = normalize_files(files, fields)
 
     with open(destination, 'w+') as f:
