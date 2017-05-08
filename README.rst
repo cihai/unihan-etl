@@ -46,7 +46,7 @@ To download and build your own ``unihan.csv``:
 
 .. code-block:: bash
 
-    $ unihan_tabular
+    $ unihan-tabular
 
 Creates ``data/unihan.csv``.
 
