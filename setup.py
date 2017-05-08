@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""cihaidata-unihan lives at <https://github.com/cihai/cihaidata-unihan>."""
+"""unihan-tabular lives at <https://github.com/cihai/unihan-tabular>."""
 
 import sys
 
@@ -41,8 +41,8 @@ class PyTest(TestCommand):
 setup(
     name=about['__title__'],
     version=about['__version__'],
-    url='https://cihaidata-unihan.git-pull.com',
-    download_url='https://pypi.python.org/pypi/cihaidata-unihan',
+    url='https://unihan-tabular.git-pull.com',
+    download_url='https://pypi.python.org/pypi/unihan-tabular',
     license=about['__license__'],
     author=about['__author__'],
     author_email=about['__email__'],
@@ -55,11 +55,8 @@ setup(
     zip_safe=False,
     keywords=about['__title__'],
     package=find_packages(exclude=["doc"]),
-    package_data={
-        'cihaidata-unihan': ['data/*']
-    },
     entry_points=dict(
-        console_scripts=['cihaidata_unihan=cihaidata_unihan.__main__:run']
+        console_scripts=['unihan_tabular=unihan_tabular.__main__:run']
     ),
     classifiers=[
         'Development Status :: 3 - Alpha',

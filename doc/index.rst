@@ -1,8 +1,8 @@
 .. _index:
 
-=====================
-cihai dataset: unihan
-=====================
+==============
+unihan-tabular
+==============
 
 .. include:: ../README.rst
 

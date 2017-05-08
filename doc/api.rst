@@ -1,16 +1,16 @@
 .. _api:
 
-.. module:: cihaidata_unihan
+.. module:: unihan_tabular
 
 ===
 API
 ===
 
-.. automodule:: cihaidata_unihan.process
+.. automodule:: unihan_tabular.process
     :members:
 
-.. automodule:: cihaidata_unihan.util
+.. automodule:: unihan_tabular.util
     :members:
 
-.. automodule:: cihaidata_unihan.test
+.. automodule:: unihan_tabular.test
     :members:

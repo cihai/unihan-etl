@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-"""Build Unihan into datapackage-compatible format."""
+"""Build Unihan into tabular friendly format and export it."""
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
@@ -443,7 +443,7 @@ def validate_options(options):
 class Packager(object):
 
     def __init__(self, options):
-        """Download and generate a datapackage.json compatible release of
+        """Download and generate a tabular release of
         `unihan <http://www.unicode.org/reports/tr38/>`_.
 
         :param options: options values to override defaults.

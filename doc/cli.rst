@@ -5,6 +5,6 @@ Command Line Interface
 ======================
 
 .. argparse::
-    :module: cihaidata_unihan.process
+    :module: unihan_tabular.process
     :func: get_parser
-    :prog: cihaidata_unihan
+    :prog: unihan_tabular
