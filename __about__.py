@@ -1,5 +1,5 @@
-__title__ = 'cihaidata-python'
-__package_name__ = 'cihaidata_python'
+__title__ = 'cihaidata-unihan'
+__package_name__ = 'cihaidata_unihan'
 __description__ = 'Tool to build UNIHAN dataset into datapackage / simple data format.'
 __version__ = '0.4.0'
 __author__ = 'Tony Narlock'
