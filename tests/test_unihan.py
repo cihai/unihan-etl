@@ -11,11 +11,11 @@ import zipfile
 
 import pytest
 
-from cihaidata_unihan import process
-from cihaidata_unihan.process import (UNIHAN_ZIP_PATH, Packager, default_options,
+from unihan_tabular import process
+from unihan_tabular.process import (UNIHAN_ZIP_PATH, Packager, default_options,
                              zip_has_files)
-from cihaidata_unihan.test import assert_dict_contains_subset, get_datapath
-from cihaidata_unihan.util import merge_dict
+from unihan_tabular.test import assert_dict_contains_subset, get_datapath
+from unihan_tabular.util import merge_dict
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ MOCK_ZIP_FILENAME = 'Unihan.zip'
 
 @pytest.fixture(scope="session")
 def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp('cihaidata_unihan')
+    fn = tmpdir_factory.mktemp('unihan_tabular')
     return fn
 
 
