@@ -6,4 +6,4 @@ from __future__ import absolute_import, division, print_function, \
     with_statement, unicode_literals
 
 from .unihan import Unihan, check_install, create_table, flatten_datasets
-from .scripts import save, download, extract, convert
+from .cihaidata_unihan import save, download, extract, convert

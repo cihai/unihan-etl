@@ -2,8 +2,8 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
-from scripts._compat import text_type
-from scripts.util import ucn_to_unicode, ucnstring_to_unicode
+from cihaidata_unihan._compat import text_type
+from cihaidata_unihan.util import ucn_to_unicode, ucnstring_to_unicode
 
 
 def test_conversion_ucn_to_unicode():

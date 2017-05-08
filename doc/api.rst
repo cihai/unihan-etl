@@ -6,11 +6,11 @@
 API
 ===
 
-.. automodule:: scripts.process
+.. automodule:: cihaidata_unihan.process
     :members:
 
-.. automodule:: scripts.util
+.. automodule:: cihaidata_unihan.util
     :members:
 
-.. automodule:: scripts.test
+.. automodule:: cihaidata_unihan.test
     :members:

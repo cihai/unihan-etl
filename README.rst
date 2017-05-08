@@ -13,14 +13,14 @@ Unihan's data is disperved across multiple files in the format of::
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-``script/process.py`` will download Unihan.zip and build all files into a
+``cihaidata_unihan/process.py`` will download Unihan.zip and build all files into a
 single tabular CSV (default output: ``./data/unihan.csv``)::
 
     char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
     丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
     㐁,U+3401,tim2,"to lock; to taste, a mat, bamboo bark",10019.020:"tiàn,tiàn"
 
-``process.py`` supports command line arguments. See `script/process.py CLI
+``process.py`` supports command line arguments. See `cihaidata_unihan/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
 download URL's and output destinations.
 
@@ -40,13 +40,13 @@ To download and build your own ``unihan.csv``:
 
 .. code-block:: bash
 
-    $ ./scripts/process.py
+    $ ./cihaidata_unihan/process.py
 
 Creates ``data/unihan.csv``.
 
-See `script/process.py CLI arguments`_ for advanced usage examples.
+See `cihaidata_unihan/process.py CLI arguments`_ for advanced usage examples.
 
-.. _script/process.py CLI arguments: http://cihaidata-unihan.readthedocs.org/en/latest/cli.html
+.. _cihaidata_unihan/process.py CLI arguments: http://cihaidata-unihan.readthedocs.org/en/latest/cli.html
 
 Structure
 ---------
@@ -63,30 +63,30 @@ Structure
     data/build_files/
 
     # script to download + build a SDF csv of unihan.
-    scripts/process.py
+    cihaidata_unihan/process.py
 
     # unit tests to verify behavior / consistency of builder
     tests/*
 
     # python 2/3 compatibility modules
-    script/_compat.py
-    script/unicodecsv.py
+    cihaidata_unihan/_compat.py
+    cihaidata_unihan/unicodecsv.py
 
     # python module, public-facing python API.
     __init__.py
-    scripts/__init__.py
+    cihaidata_unihan/__init__.py
 
     # utility / helper functions
-    scripts/util.py
+    cihaidata_unihan/util.py
 
 
 Cihai is *not* required for:
 
 - ``data/unihan.csv`` - `simple data format`_ compatible csv file.
-- ``scripts/process.py`` - create a ``data/unihan.csv``.
+- ``cihaidata_unihan/process.py`` - create a ``data/unihan.csv``.
 
 When this module is stable, ``data/unihan.csv`` will have prepared
-releases, without requires using ``scripts/process.py``. ``process.py``
+releases, without requires using ``cihaidata_unihan/process.py``. ``process.py``
 will not require external libraries.
 
 Examples

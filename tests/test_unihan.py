@@ -11,11 +11,11 @@ import zipfile
 
 import pytest
 
-from scripts import process
-from scripts.process import (UNIHAN_ZIP_PATH, Packager, default_options,
+from cihaidata_unihan import process
+from cihaidata_unihan.process import (UNIHAN_ZIP_PATH, Packager, default_options,
                              zip_has_files)
-from scripts.test import assert_dict_contains_subset, get_datapath
-from scripts.util import merge_dict
+from cihaidata_unihan.test import assert_dict_contains_subset, get_datapath
+from cihaidata_unihan.util import merge_dict
 
 log = logging.getLogger(__name__)
 

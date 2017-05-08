@@ -15,9 +15,9 @@ import zipfile
 
 sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
 
-from scripts._compat import urlretrieve
-from scripts.unicodecsv import UnicodeWriter
-from scripts.util import _dl_progress, merge_dict, ucn_to_unicode
+from cihaidata_unihan._compat import urlretrieve
+from cihaidata_unihan.unicodecsv import UnicodeWriter
+from cihaidata_unihan.util import _dl_progress, merge_dict, ucn_to_unicode
 
 about = {}
 about_file = os.path.join(os.path.dirname(__file__), '..', '__about__.py')
