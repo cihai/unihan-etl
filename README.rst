@@ -59,11 +59,8 @@ Structure
 
 .. code-block:: bash
 
-    # (future) when this package is stable, unihan.csv will be provided
+    # output
     data/unihan.csv
-
-    # stores downloaded Unihan.zip and it's txt file contents (.gitignore'd)
-    data/build_files/
 
     # script to download + build a SDF csv of unihan.
     unihan_tabular/process.py
