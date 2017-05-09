@@ -3,7 +3,7 @@ like python, JSON, CSV and YAML. Part of the `cihai`_ project.
 
 |pypi| |docs| |build-status| |coverage| |license|
 
-Unihan's data is disperved across multiple files in the format of::
+Unihan's data is dispersed across multiple files in the format of::
 
     U+3400	kCantonese	jau1
     U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
