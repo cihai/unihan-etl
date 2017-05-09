@@ -44,6 +44,22 @@ CSV (default output: *./data/unihan.csv*):
     丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
     㐁,U+3401,tim2,"to lock; to taste, a mat, bamboo bark",10019.020:"tiàn,tiàn"
 
+YAML (default output: *./data/unihan.yaml*):
+
+.. code-block:: yaml
+
+    㐀:
+      char: 㐀
+      kDefinition: (same as U+4E18 丘) hillock or mound
+      ucn: U+3400
+    㐁:
+      char: 㐁
+      kDefinition: to lick; to taste, a mat, bamboo bark
+      ucn: U+3401
+    㐂:
+      char: 㐂
+      kDefinition: (J) non-standard form of U+559C 喜, to like, love, enjoy; a joyful thing
+      ucn: U+3402
 
 ``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
