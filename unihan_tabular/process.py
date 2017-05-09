@@ -6,8 +6,10 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
 import argparse
+import codecs
 import fileinput
 import glob
+import json
 import os
 import sys
 import zipfile
@@ -422,7 +424,7 @@ def export_csv(data, destination, fields):
     data = listify(data, fields)
     _file = '%s.csv' % destination
 
-    with open(_file, 'w+') as f:
+    with codecs.open(_file, 'w', encoding='utf-8') as f:
         if PY2:
             csvwriter = UnicodeWriter(f)
         else:
@@ -433,15 +435,14 @@ def export_csv(data, destination, fields):
 
 def export_json(data, destination):
     _file = '%s.json' % destination
-    with open(_file, 'w+') as f:
-        import json
+    with codecs.open(_file, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         print('Saved output to: %s' % _file)
 
 
 def export_yaml(data, destination):
     _file = '%s.yaml' % destination
-    with open(_file, 'w+') as f:
+    with codecs.open(_file, 'w', encoding='utf-8') as f:
         yaml.safe_dump(data, stream=f,
                        allow_unicode=True,
                        default_flow_style=False)
