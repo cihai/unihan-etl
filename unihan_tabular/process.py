@@ -192,6 +192,13 @@ UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan')
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
 UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
+#: Allowed export types
+ALLOWED_EXPORT_TYPES = ['json', 'csv']
+try:
+    import yaml
+    ALLOWED_EXPORT_TYPES += ['yaml']
+except ImportError:
+    pass
 
 default_options = {
     'source': UNIHAN_URL,
@@ -234,7 +241,7 @@ def get_parser():
     )
     parser.add_argument(
         "-F", "--format", dest="format",
-        choices=['json', 'csv'],
+        choices=ALLOWED_EXPORT_TYPES,
         help="Default: %s" % default_options['format']
     )
     parser.add_argument(
@@ -414,21 +421,30 @@ def listify(data, fields):
 
 def export_csv(data, destination, fields):
     data = listify(data, fields)
+    _file = '%s.csv' % destination
 
-    with open('%s.csv' % destination, 'w+') as f:
+    with open(_file, 'w+') as f:
         if PY2:
             csvwriter = UnicodeWriter(f)
         else:
             csvwriter = csv.writer(f)
         csvwriter.writerows(data)
-        print('Saved output to: %s.csv' % destination)
+        print('Saved output to: %s' % _file)
 
 
 def export_json(data, destination):
-    with open('%s.json' % destination, 'w+') as f:
+    _file = '%s.json' % destination
+    with open(_file, 'w+') as f:
         import json
         json.dump(data, f, indent=4)
-        print('Saved output to: %s.json' % destination)
+        print('Saved output to: %s' % _file)
+
+
+def export_yaml(data, destination):
+    _file = '%s.yaml' % destination
+    with open(_file, 'w+') as f:
+        yaml.dump(data, stream=f)
+        print('Saved output to: %s' % _file)
 
 
 def validate_options(options):
@@ -510,6 +526,8 @@ class Packager(object):
             export_json(data, self.options['destination'])
         elif self.options['format'] == 'csv':
             export_csv(data, self.options['destination'], fields)
+        elif self.options['format'] == 'yaml':
+            export_yaml(data, self.options['destination'])
         else:
             print('Format %s does not exist' % self.options['format'])
 
