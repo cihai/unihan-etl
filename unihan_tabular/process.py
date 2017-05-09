@@ -382,17 +382,6 @@ def normalize(raw_data, fields):
     return items
 
 
-def load_data(files, fields):
-    """Extract zip and process information into CSV's."""
-
-    print('Loading data: %s.' % ', '.join(files))
-    raw_data = fileinput.FileInput(
-        files=files, openhook=fileinput.hook_encoded('utf-8')
-    )
-    print('Done loading data.')
-    return raw_data
-
-
 def listify(data, fields):
     """Convert tabularized data to a CSV-friendly list.
 
@@ -404,6 +393,17 @@ def listify(data, fields):
     list_data = [fields[:]]  # Add fields to first row
     list_data += [r.values() for r in [v for v in data.values()]]  # Data
     return list_data
+
+
+def load_data(files, fields):
+    """Extract zip and process information into CSV's."""
+
+    print('Loading data: %s.' % ', '.join(files))
+    raw_data = fileinput.FileInput(
+        files=files, openhook=fileinput.hook_encoded('utf-8')
+    )
+    print('Done loading data.')
+    return raw_data
 
 
 def export_csv(data, destination, fields):
