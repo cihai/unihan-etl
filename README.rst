@@ -50,16 +50,18 @@ YAML (default output: *./data/unihan.yaml*):
 
     㐀:
       char: 㐀
+      kCantonese: jau1
       kDefinition: (same as U+4E18 丘) hillock or mound
+      kHanyuPinyin: null
+      kMandarin: qiū
       ucn: U+3400
     㐁:
       char: 㐁
+      kCantonese: tim2
       kDefinition: to lick; to taste, a mat, bamboo bark
+      kHanyuPinyin: 10019.020:tiàn
+      kMandarin: tiàn
       ucn: U+3401
-    㐂:
-      char: 㐂
-      kDefinition: (J) non-standard form of U+559C 喜, to like, love, enjoy; a joyful thing
-      ucn: U+3402
 
 ``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
