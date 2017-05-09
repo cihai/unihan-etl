@@ -328,6 +328,23 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     return dest
 
 
+def load_data(files):
+    """Extract zip and process information into CSV's.
+
+    :param files:
+    :type files: list
+    :rtype: str
+    :returns: string of combined data from files
+    """
+
+    print('Loading data: %s.' % ', '.join(files))
+    raw_data = fileinput.FileInput(
+        files=files, openhook=fileinput.hook_encoded('utf-8')
+    )
+    print('Done loading data.')
+    return raw_data
+
+
 def extract_zip(zip_path, dest_dir):
     """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
@@ -393,23 +410,6 @@ def listify(data, fields):
     list_data = [fields[:]]  # Add fields to first row
     list_data += [r.values() for r in [v for v in data.values()]]  # Data
     return list_data
-
-
-def load_data(files):
-    """Extract zip and process information into CSV's.
-
-    :param files:
-    :type files: list
-    :rtype: str
-    :returns: string of combined data from files
-    """
-
-    print('Loading data: %s.' % ', '.join(files))
-    raw_data = fileinput.FileInput(
-        files=files, openhook=fileinput.hook_encoded('utf-8')
-    )
-    print('Done loading data.')
-    return raw_data
 
 
 def export_csv(data, destination, fields):
