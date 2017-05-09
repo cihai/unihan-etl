@@ -435,7 +435,7 @@ def export_json(data, destination):
     _file = '%s.json' % destination
     with open(_file, 'w+') as f:
         import json
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2, ensure_ascii=False)
         print('Saved output to: %s' % _file)
 
 
