@@ -220,7 +220,7 @@ def get_parser():
         "-s", "--source", dest="source",
         help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
     parser.add_argument(
-        "-z", "--zip_path", dest="zip_path",
+        "-z", "--zip-path", dest="zip_path",
         help="Path the zipfile is downloaded to. Default: %s" %
         UNIHAN_ZIP_PATH
     )
