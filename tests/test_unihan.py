@@ -382,27 +382,33 @@ def test_no_args():
 def test_cli_plus_defaults(mock_zip_file):
     """Test CLI args + defaults."""
 
-    expected_in = {'zip_path': str(mock_zip_file)}
+    option_subset = {'zip_path': str(mock_zip_file)}
     result = Packager.from_cli(['-z', str(mock_zip_file)]).options
-    assert_dict_contains_subset(expected_in, result)
+    assert_dict_contains_subset(option_subset, result)
 
-    expected_in = {'fields': ['kDefinition']}
+    option_subset = {'fields': ['kDefinition']}
     result = Packager.from_cli(['-f', 'kDefinition']).options
-    assert_dict_contains_subset(expected_in, result)
+    assert_dict_contains_subset(option_subset, result)
 
-    expected_in = {'fields': ['kDefinition', 'kXerox']}
+    option_subset = {'fields': ['kDefinition', 'kXerox']}
     result = Packager.from_cli(['-f', 'kDefinition', 'kXerox']).options
     assert_dict_contains_subset(
-        expected_in, result, msg="Accepts multiple fields."
+        option_subset, result, msg="fields -f allows multiple fields."
     )
 
-    expected_in = {
+    option_subset = {
         'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
     }
     result = Packager.from_cli(
         ['-f', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
     assert_dict_contains_subset(
-        expected_in, result, msg="Accepts multiple arguments."
+        option_subset, result, msg="fields -f allows additional arguments."
+    )
+
+    result = Packager.from_cli(['--format', 'json']).options
+    option_subset = {'format': 'json'}
+    assert_dict_contains_subset(
+        option_subset, result, msg="format argument works"
     )
 
 
