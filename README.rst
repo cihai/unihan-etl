@@ -77,6 +77,11 @@ To output CSV::
 
     $ unihan-tabular -F csv
 
+To output YAML::
+
+    $ pip install pyyaml
+    $ unihan-tabular -F yaml
+
 To only output the kDefinition field in a csv::
 
     $ unihan-tabular -F csv -f kDefinition
