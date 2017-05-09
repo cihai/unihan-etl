@@ -412,7 +412,7 @@ def tabularize(zip_path, input_files, work_dir, fields, destination):
     return normalize_files(files, fields)
 
 
-def export(data, destination):
+def export_csv(data, destination):
     with open(destination, 'w+') as f:
         if PY2:
             csvwriter = UnicodeWriter(f)
@@ -491,7 +491,7 @@ class Packager(object):
             fields=self.options['fields'],
             destination=self.options['destination']
         )
-        export(data, self.options['destination'])
+        export_csv(data, self.options['destination'])
 
     @classmethod
     def from_cli(cls, argv):

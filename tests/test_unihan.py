@@ -178,7 +178,7 @@ def test_tabularize(mock_zip_file, mock_test_dir):
         ],
         destination=str(mock_test_dir.join('unihan.csv'))
     )
-    process.export(data, str(mock_test_dir.join('unihan.csv')))
+    process.export_csv(data, str(mock_test_dir.join('unihan.csv')))
 
 
 def test_normalize_only_output_requested_columns(tmpdir):
