@@ -16,11 +16,34 @@ Unihan's data is dispersed across multiple files in the format of::
 ``unihan_tabular/process.py`` will download Unihan.zip and build all files into a
 single tabular friendly format.
 
-CSV (default output: ``./data/unihan.csv``)::
+JSON (default output: *./data/unihan.json*):
+
+.. code-block:: json
+
+   {
+     "丘": {
+      "char": "丘",
+      "kDefinition": "same as U+4E18 丘) hillock or moundd",
+      "kHanyuPinyin": null,
+      "kMandarin": "qiū"
+     },
+     "㐁": {
+       "char": "㐁",
+       "kCantonese": "tim2",
+       "kDefinition": "to lock; to taste, a mat, bamboo bark",
+       "kHanyuPinyin": "10019.020:\"tiàn",
+       "kMandarin": "tiàn"
+     }
+   }
+
+CSV (default output: *./data/unihan.csv*):
+
+.. code-block:: csv
 
     char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
     丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
     㐁,U+3401,tim2,"to lock; to taste, a mat, bamboo bark",10019.020:"tiàn,tiàn"
+
 
 ``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
@@ -48,7 +71,15 @@ To download and build your own ``unihan.csv``:
 
     $ unihan-tabular
 
-Creates ``data/unihan.csv``.
+Creates ``data/unihan.json``.
+
+To output CSV::
+
+    $ unihan-tabular -F csv
+
+To only output the kDefinition field in a csv::
+
+    $ unihan-tabular -F csv -f kDefinition
 
 See `unihan_tabular/process.py CLI arguments`_ for advanced usage examples.
 
@@ -59,7 +90,10 @@ Structure
 
 .. code-block:: bash
 
-    # output
+    # output (JSON)
+    data/unihan.json
+
+    # output (CSV)
     data/unihan.csv
 
     # script to download + build a SDF csv of unihan.
@@ -77,10 +111,6 @@ Structure
 
 - ``data/unihan.csv`` - CSV export file.
 - ``unihan_tabular/process.py`` - create a ``data/unihan.csv``.
-
-When this module is stable, ``data/unihan.csv`` will have prepared
-releases, without requires using ``unihan_tabular/process.py``. ``process.py``
-will not require external libraries.
 
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
