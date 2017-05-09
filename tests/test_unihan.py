@@ -165,22 +165,6 @@ def test_extract_zip(mock_zip_file, tmpdir):
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
-def test_tabularize(mock_zip_file, mock_test_dir):
-    data = process.tabularize(
-        zip_path=str(mock_zip_file),
-        input_files=['Unihan_Readings.txt'],
-        work_dir=str(mock_test_dir.join('downloads')),
-        fields=[
-            'kTotalStrokes',
-            'kPhonetic',
-            'kCantonese',
-            'kDefinition',
-        ],
-        destination=str(mock_test_dir.join('unihan.csv'))
-    )
-    process.export_csv(data, str(mock_test_dir.join('unihan.csv')))
-
-
 def test_normalize_only_output_requested_columns(tmpdir):
     csv_file = tmpdir.join('test.csv')
 
@@ -193,9 +177,15 @@ def test_normalize_only_output_requested_columns(tmpdir):
         'kPhonetic',
         'kCantonese',
         'kDefinition',
-    ]
+    ] + process.INDEX_FIELDS
 
-    items = process.normalize_files(csv_files, columns)
+    data = process.load_data(
+        files=csv_files,
+        fields=columns,
+    )
+
+    items = process.normalize(data, columns)
+    items = process.listify(items, columns)
 
     not_in_columns = []
     in_columns = ['kDefinition', 'kCantonese']
@@ -227,7 +217,13 @@ def test_normalize_simple_data_format():
         'kDefinition',
     ] + process.INDEX_FIELDS
 
-    items = process.normalize_files(csv_files, columns)
+    data = process.load_data(
+        files=csv_files,
+        fields=columns
+    )
+
+    items = process.normalize(data, columns)
+    items = process.listify(items, columns)
 
     header = items[0]
     assert header == columns

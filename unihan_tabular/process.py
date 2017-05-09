@@ -146,9 +146,9 @@ def not_junk(line):
     return line[0] != '#' and line != '\n'
 
 
-def in_fields(c, columns):
+def in_fields(c, fields):
     """Return True if string is in the default fields."""
-    return c in columns + INDEX_FIELDS
+    return c in fields + INDEX_FIELDS
 
 
 def get_fields(d):
@@ -187,7 +187,7 @@ UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 #: URI of Unihan.zip data.
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Filepath to output built CSV file to.
-UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan.csv')
+UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan')
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
@@ -265,60 +265,50 @@ def extract_zip(zip_path, dest_dir):
     return z
 
 
-def organize_data(raw_data, columns):
-    """Return data from its raw form a dict.
+def normalize(raw_data, fields):
+    """Return normalized data from a UNIHAN data files.
 
-    :param raw_data: combined data from UNIHAN text files
+    :param raw_data: combined text files from UNIHAN
     :type raw_data: str
-    :param columns: list of column names to extract
-    :type columns: list
+    :param fields: list of columns to pull
+    :type fields: list
+    :return: List of :class:`collections.OrderedDict`, first row column names.
+    :rtype: list
     """
+
+    print('Collecting field data...')
     items = collections.OrderedDict()
     for idx, l in enumerate(raw_data):
         if not_junk(l):
             l = l.strip().split('\t')
-            if in_fields(l[1], columns):
+            if in_fields(l[1], fields):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
                 if char not in items:
-                    items[char] = collections.OrderedDict().fromkeys(columns)
+                    items[char] = collections.OrderedDict().fromkeys(fields)
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
                 items[char][item['field']] = text_type(item['value'])
         sys.stdout.write('\rProcessing line %i.' % (idx))
         sys.stdout.flush()
-    return items
 
-
-def normalize_files(csv_files, columns):
-    """Return normalized data from a UNIHAN data files.
-
-    :param csv_files: list of files
-    :type csv_files: list
-    :return: List of :class:`collections.OrderedDict`, first row column names.
-    :rtype: list
-    """
-
-    print('Processing files: %s.' % ', '.join(csv_files))
-    raw_data = fileinput.FileInput(
-        files=csv_files, openhook=fileinput.hook_encoded('utf-8')
-    )
-    print('Done.')
-
-    print('Collecting field data...')
-    sorted_data = organize_data(raw_data, columns)
     sys.stdout.write('\n')
     sys.stdout.flush()
 
     print('Processing complete.')
-    print('normalizeing data to CSV-friendly format.')
 
-    data = [columns[:]]  # Add columns to first row
-    data += [r.values() for r in [v for v in sorted_data.values()]]  # Data
+    return items
 
-    print('Conversion to CSV-friendly format complete.')
 
-    return data
+def load_data(files, fields):
+    """Extract zip and process information into CSV's."""
+
+    print('Loading data: %s.' % ', '.join(files))
+    raw_data = fileinput.FileInput(
+        files=files, openhook=fileinput.hook_encoded('utf-8')
+    )
+    print('Done loading data.')
+    return raw_data
 
 
 def has_valid_zip(zip_path):
@@ -397,29 +387,36 @@ def get_parser():
     return parser
 
 
-def tabularize(zip_path, input_files, work_dir, fields, destination):
-    """Extract zip and process information into CSV's."""
+def listify(data, fields):
+    """Convert tabularized data to a CSV-friendly list.
 
-    for k in INDEX_FIELDS:
-        if k not in fields:
-            fields = [k] + fields
-
-    files = [
-        os.path.join(work_dir, f)
-        for f in input_files
-    ]
-    print('export work_dir: %s' % work_dir)
-    return normalize_files(files, fields)
+    :param data: List of dicts
+    :type data: list
+    :params fields: keys/columns, e.g. ['kDictionary']
+    :type fields: list
+    """
+    list_data = [fields[:]]  # Add fields to first row
+    list_data += [r.values() for r in [v for v in data.values()]]  # Data
+    return list_data
 
 
-def export_csv(data, destination):
-    with open(destination, 'w+') as f:
+def export_csv(data, destination, fields):
+    data = listify(data, fields)
+
+    with open('%s.csv' % destination, 'w+') as f:
         if PY2:
             csvwriter = UnicodeWriter(f)
         else:
             csvwriter = csv.writer(f)
         csvwriter.writerows(data)
-        print('Saved output to: %s.' % destination)
+        print('Saved output to: %s.csv' % destination)
+
+
+def export_json(data, destination):
+    with open('%s.json' % destination, 'w+') as f:
+        import json
+        json.dump(data, f, indent=4)
+        print('Saved output to: %s.json' % destination)
 
 
 def validate_options(options):
@@ -484,14 +481,22 @@ class Packager(object):
     def export(self):
         """Extract zip and process information into CSV's."""
 
-        data = tabularize(
-            zip_path=self.options['zip_path'],
-            input_files=self.options['input_files'],
-            work_dir=self.options['work_dir'],
-            fields=self.options['fields'],
-            destination=self.options['destination']
+        for k in INDEX_FIELDS:
+            if k not in self.options['fields']:
+                fields = [k] + self.options['fields']
+
+        files = [
+            os.path.join(self.options['work_dir'], f)
+            for f in self.options['input_files']
+        ]
+
+        data = load_data(
+            files=files,
+            fields=fields,
         )
-        export_csv(data, self.options['destination'])
+        data = normalize(data, fields)
+        #  export_json(data, self.options['destination'])
+        export_csv(data, self.options['destination'], fields)
 
     @classmethod
     def from_cli(cls, argv):
