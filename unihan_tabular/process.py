@@ -272,8 +272,8 @@ def normalize(raw_data, fields):
     :type raw_data: str
     :param fields: list of columns to pull
     :type fields: list
-    :return: List of :class:`collections.OrderedDict`, first row column names.
-    :rtype: list
+    :return: dictionary
+    :rtype: dict
     """
 
     print('Collecting field data...')
@@ -285,7 +285,7 @@ def normalize(raw_data, fields):
                 item = dict(zip(['ucn', 'field', 'value'], l))
                 char = ucn_to_unicode(item['ucn'])
                 if char not in items:
-                    items[char] = collections.OrderedDict().fromkeys(fields)
+                    items[char] = dict().fromkeys(fields)
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
                 items[char][item['field']] = text_type(item['value'])

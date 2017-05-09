@@ -185,6 +185,10 @@ def test_normalize_only_output_requested_columns(tmpdir):
     )
 
     items = process.normalize(data, columns)
+
+    for k, v in items.items():
+        assert set(columns) == set(v.keys())
+
     items = process.listify(items, columns)
 
     not_in_columns = []
