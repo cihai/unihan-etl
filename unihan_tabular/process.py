@@ -199,9 +199,91 @@ default_options = {
     'zip_path': UNIHAN_ZIP_PATH,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
+    'format': 'json',
     'input_files': UNIHAN_FILES,
     'download': False
 }
+
+
+def get_parser():
+    """Return :py:class:`argparse.ArgumentParser` instance for CLI.
+
+    :returns: argument parser for CLI use.
+    :rtype: :py:class:`argparse.ArgumentParser`
+
+    """
+    parser = argparse.ArgumentParser(
+        prog=about['__title__'],
+        description=about['__description__']
+    )
+    parser.add_argument(
+        "-s", "--source", dest="source",
+        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
+    parser.add_argument(
+        "-z", "--zip_path", dest="zip_path",
+        help="Path the zipfile is downloaded to. Default: %s" %
+        UNIHAN_ZIP_PATH
+    )
+    parser.add_argument(
+        "-d", "--destination", dest="destination",
+        help="Output of .csv. Default: %s" % UNIHAN_DEST
+    )
+    parser.add_argument(
+        "-w", "--work-dir", dest="work_dir",
+        help="Default: %s" % WORK_DIR
+    )
+    parser.add_argument(
+        "-F", "--format", dest="format",
+        choices=['json', 'csv'],
+        help="Default: %s" % default_options['format']
+    )
+    parser.add_argument(
+        "-f", "--fields", dest="fields", nargs="*",
+        help="Default: %s" % UNIHAN_FIELDS
+    )
+    parser.add_argument(
+        "-i", "--input-files", dest="input_files", nargs='*',
+        help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
+    )
+    return parser
+
+
+def has_valid_zip(zip_path):
+    """Return True if valid zip exists.
+
+    :param zip_path: absolute path to zip
+    :type zip_path: str
+    :returns: True if valid zip exists at path
+    :rtype: bool
+    """
+
+    if os.path.isfile(zip_path):
+        if zipfile.is_zipfile(zip_path):
+            print("Exists, is valid zip. %s" % zip_path)
+            return True
+        else:
+            print("Not a valid zip. %s" % zip_path)
+            return False
+    else:
+        print("File doesn't exist. %s" % zip_path)
+        return False
+
+
+def zip_has_files(files, zip_file):
+    """Return True if zip has the files inside.
+
+    :param files: list of files inside zip
+    :type files: list
+    :param zip_file: zip file to look inside.
+    :type zip_file: :py:class:`zipfile.ZipFile`
+    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
+    :rtype: bool
+
+    """
+    if set(files).issubset(set(zip_file.namelist())):
+        return True
+    else:
+        return False
 
 
 def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
@@ -309,82 +391,6 @@ def load_data(files, fields):
     )
     print('Done loading data.')
     return raw_data
-
-
-def has_valid_zip(zip_path):
-    """Return True if valid zip exists.
-
-    :param zip_path: absolute path to zip
-    :type zip_path: str
-    :returns: True if valid zip exists at path
-    :rtype: bool
-    """
-
-    if os.path.isfile(zip_path):
-        if zipfile.is_zipfile(zip_path):
-            print("Exists, is valid zip. %s" % zip_path)
-            return True
-        else:
-            print("Not a valid zip. %s" % zip_path)
-            return False
-    else:
-        print("File doesn't exist. %s" % zip_path)
-        return False
-
-
-def zip_has_files(files, zip_file):
-    """Return True if zip has the files inside.
-
-    :param files: list of files inside zip
-    :type files: list
-    :param zip_file: zip file to look inside.
-    :type zip_file: :py:class:`zipfile.ZipFile`
-    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
-    :rtype: bool
-
-    """
-    if set(files).issubset(set(zip_file.namelist())):
-        return True
-    else:
-        return False
-
-
-def get_parser():
-    """Return :py:class:`argparse.ArgumentParser` instance for CLI.
-
-    :returns: argument parser for CLI use.
-    :rtype: :py:class:`argparse.ArgumentParser`
-
-    """
-    parser = argparse.ArgumentParser(
-        prog=about['__title__'],
-        description=about['__description__']
-    )
-    parser.add_argument(
-        "-s", "--source", dest="source",
-        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
-    parser.add_argument(
-        "-z", "--zip_path", dest="zip_path",
-        help="Path the zipfile is downloaded to. Default: %s" %
-        UNIHAN_ZIP_PATH
-    )
-    parser.add_argument(
-        "-d", "--destination", dest="destination",
-        help="Output of .csv. Default: %s" % UNIHAN_DEST
-    )
-    parser.add_argument(
-        "-w", "--work-dir", dest="work_dir",
-        help="Default: %s" % WORK_DIR
-    )
-    parser.add_argument(
-        "-f", "--fields", dest="fields", nargs="*",
-        help="Default: %s" % UNIHAN_FIELDS
-    )
-    parser.add_argument(
-        "-i", "--input-files", dest="input_files", nargs='*',
-        help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
-    )
-    return parser
 
 
 def listify(data, fields):
@@ -495,8 +501,12 @@ class Packager(object):
             fields=fields,
         )
         data = normalize(data, fields)
-        #  export_json(data, self.options['destination'])
-        export_csv(data, self.options['destination'], fields)
+        if self.options['format'] == 'json':
+            export_json(data, self.options['destination'])
+        elif self.options['format'] == 'csv':
+            export_csv(data, self.options['destination'], fields)
+        else:
+            print('Format %s does not exist' % self.options['format'])
 
     @classmethod
     def from_cli(cls, argv):
