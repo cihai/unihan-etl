@@ -397,7 +397,7 @@ def get_parser():
     return parser
 
 
-def export(zip_path, input_files, work_dir, fields, destination):
+def tabularize(zip_path, input_files, work_dir, fields, destination):
     """Extract zip and process information into CSV's."""
 
     for k in INDEX_FIELDS:
@@ -409,8 +409,10 @@ def export(zip_path, input_files, work_dir, fields, destination):
         for f in input_files
     ]
     print('export work_dir: %s' % work_dir)
-    data = normalize_files(files, fields)
+    return normalize_files(files, fields)
 
+
+def export(data, destination):
     with open(destination, 'w+') as f:
         if PY2:
             csvwriter = UnicodeWriter(f)
@@ -482,13 +484,14 @@ class Packager(object):
     def export(self):
         """Extract zip and process information into CSV's."""
 
-        export(
+        data = tabularize(
             zip_path=self.options['zip_path'],
             input_files=self.options['input_files'],
             work_dir=self.options['work_dir'],
             fields=self.options['fields'],
             destination=self.options['destination']
         )
+        export(data, self.options['destination'])
 
     @classmethod
     def from_cli(cls, argv):

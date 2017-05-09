@@ -12,8 +12,8 @@ import zipfile
 import pytest
 
 from unihan_tabular import process
-from unihan_tabular.process import (UNIHAN_ZIP_PATH, Packager, default_options,
-                             zip_has_files)
+from unihan_tabular.process import (
+    UNIHAN_ZIP_PATH, Packager, default_options, zip_has_files)
 from unihan_tabular.test import assert_dict_contains_subset, get_datapath
 from unihan_tabular.util import merge_dict
 
@@ -165,8 +165,8 @@ def test_extract_zip(mock_zip_file, tmpdir):
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
-def test_export(mock_zip_file, mock_test_dir):
-    process.export(
+def test_tabularize(mock_zip_file, mock_test_dir):
+    data = process.tabularize(
         zip_path=str(mock_zip_file),
         input_files=['Unihan_Readings.txt'],
         work_dir=str(mock_test_dir.join('downloads')),
@@ -178,6 +178,7 @@ def test_export(mock_zip_file, mock_test_dir):
         ],
         destination=str(mock_test_dir.join('unihan.csv'))
     )
+    process.export(data, str(mock_test_dir.join('unihan.csv')))
 
 
 def test_normalize_only_output_requested_columns(tmpdir):
