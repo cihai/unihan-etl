@@ -383,7 +383,7 @@ def normalize(raw_data, fields):
     """
 
     print('Collecting field data...')
-    items = collections.OrderedDict()
+    items = dict()
     for idx, l in enumerate(raw_data):
         if not_junk(l):
             l = l.strip().split('\t')
@@ -443,7 +443,7 @@ def export_json(data, destination):
 def export_yaml(data, destination):
     _file = '%s.yaml' % destination
     with open(_file, 'w+') as f:
-        yaml.dump(data, stream=f)
+        yaml.safe_dump(data, stream=f, allow_unicode=True)
         print('Saved output to: %s' % _file)
 
 
