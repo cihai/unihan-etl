@@ -181,7 +181,6 @@ def test_normalize_only_output_requested_columns(tmpdir):
 
     data = process.load_data(
         files=csv_files,
-        fields=columns,
     )
 
     items = process.normalize(data, columns)
@@ -223,7 +222,6 @@ def test_normalize_simple_data_format():
 
     data = process.load_data(
         files=csv_files,
-        fields=columns
     )
 
     items = process.normalize(data, columns)

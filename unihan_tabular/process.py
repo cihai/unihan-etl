@@ -395,8 +395,14 @@ def listify(data, fields):
     return list_data
 
 
-def load_data(files, fields):
-    """Extract zip and process information into CSV's."""
+def load_data(files):
+    """Extract zip and process information into CSV's.
+
+    :param files:
+    :type files: list
+    :rtype: str
+    :returns: string of combined data from files
+    """
 
     print('Loading data: %s.' % ', '.join(files))
     raw_data = fileinput.FileInput(
@@ -498,7 +504,6 @@ class Packager(object):
 
         data = load_data(
             files=files,
-            fields=fields,
         )
         data = normalize(data, fields)
         if self.options['format'] == 'json':
