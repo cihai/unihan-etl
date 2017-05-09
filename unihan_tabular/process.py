@@ -442,7 +442,9 @@ def export_json(data, destination):
 def export_yaml(data, destination):
     _file = '%s.yaml' % destination
     with open(_file, 'w+') as f:
-        yaml.safe_dump(data, stream=f, allow_unicode=True)
+        yaml.safe_dump(data, stream=f,
+                       allow_unicode=True,
+                       default_flow_style=False)
         print('Saved output to: %s' % _file)
 
 
