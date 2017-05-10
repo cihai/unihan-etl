@@ -20,48 +20,49 @@ JSON (default output: *./data/unihan.json*):
 
 .. code-block:: json
 
-   {
-     "丘": {
-      "char": "丘",
-      "kDefinition": "same as U+4E18 丘) hillock or moundd",
-      "kHanyuPinyin": null,
-      "kMandarin": "qiū"
+   [
+     {
+       "char": "㐀",
+       "ucn": "U+3400",
+       "kCantonese": "jau1",
+       "kDefinition": "(same as U+4E18 丘) hillock or mound",
+       "kHanyuPinyin": null,
+       "kMandarin": "qiū"
      },
-     "㐁": {
+     {
        "char": "㐁",
+       "ucn": "U+3401",
        "kCantonese": "tim2",
-       "kDefinition": "to lock; to taste, a mat, bamboo bark",
-       "kHanyuPinyin": "10019.020:\"tiàn",
+       "kDefinition": "to lick; to taste, a mat, bamboo bark",
+       "kHanyuPinyin": "10019.020:tiàn",
        "kMandarin": "tiàn"
      }
-   }
-
-CSV (default output: *./data/unihan.csv*):
-
-.. code-block:: csv
-
-    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
-    丘,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
-    㐁,U+3401,tim2,"to lock; to taste, a mat, bamboo bark",10019.020:"tiàn,tiàn"
+   ]
 
 YAML (default output: *./data/unihan.yaml*):
 
 .. code-block:: yaml
 
-    㐀:
-      char: 㐀
+    - char: 㐀
       kCantonese: jau1
       kDefinition: (same as U+4E18 丘) hillock or mound
       kHanyuPinyin: null
       kMandarin: qiū
       ucn: U+3400
-    㐁:
-      char: 㐁
+    - char: 㐁
       kCantonese: tim2
       kDefinition: to lick; to taste, a mat, bamboo bark
       kHanyuPinyin: 10019.020:tiàn
       kMandarin: tiàn
       ucn: U+3401
+
+CSV (default output: *./data/unihan.csv*):
+
+.. code-block:: csv
+
+   char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
+   㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
+   㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
 ``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
