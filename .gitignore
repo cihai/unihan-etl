@@ -46,3 +46,6 @@ doc/_build
 .idea
 
 data/
+
+# visual studio code
+.vscode/
