@@ -382,7 +382,6 @@ def normalize(raw_data, fields):
     :return: dictionary
     :rtype: dict
     """
-
     print('Collecting field data...')
     items = dict()
     for idx, l in enumerate(raw_data):
@@ -509,9 +508,10 @@ class Packager(object):
     def export(self):
         """Extract zip and process information into CSV's."""
 
+        fields = self.options['fields']
         for k in INDEX_FIELDS:
-            if k not in self.options['fields']:
-                fields = [k] + self.options['fields']
+            if k not in fields:
+                fields = [k] + fields
 
         files = [
             os.path.join(self.options['work_dir'], f)
