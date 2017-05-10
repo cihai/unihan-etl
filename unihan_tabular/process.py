@@ -528,6 +528,8 @@ class Packager(object):
             export_csv(data, self.options['destination'], fields)
         elif self.options['format'] == 'yaml':
             export_yaml(data, self.options['destination'])
+        elif self.options['format'] == 'python':
+            return data
         else:
             print('Format %s does not exist' % self.options['format'])
 
