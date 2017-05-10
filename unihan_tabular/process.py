@@ -379,8 +379,8 @@ def normalize(raw_data, fields):
     :type raw_data: str
     :param fields: list of columns to pull
     :type fields: list
-    :return: dictionary
-    :rtype: dict
+    :return: list of unihan character information
+    :rtype: list
     """
     print('Collecting field data...')
     items = dict()
