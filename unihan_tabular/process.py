@@ -201,7 +201,7 @@ try:
 except ImportError:
     pass
 
-default_options = {
+DEFAULT_OPTIONS = {
     'source': UNIHAN_URL,
     'destination': UNIHAN_DEST,
     'zip_path': UNIHAN_ZIP_PATH,
@@ -243,7 +243,7 @@ def get_parser():
     parser.add_argument(
         "-F", "--format", dest="format",
         choices=ALLOWED_EXPORT_TYPES,
-        help="Default: %s" % default_options['format']
+        help="Default: %s" % DEFAULT_OPTIONS['format']
     )
     parser.add_argument(
         "-f", "--fields", dest="fields", nargs="*",
@@ -488,7 +488,7 @@ class Packager(object):
         """
         validate_options(options)
 
-        self.options = merge_dict(default_options.copy(), options)
+        self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
 
     def download(self, urlretrieve_fn=urlretrieve):
         """Download raw UNIHAN data if not exists.
