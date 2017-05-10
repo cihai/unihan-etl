@@ -396,15 +396,13 @@ def normalize(raw_data, fields):
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
                 items[char][item['field']] = text_type(item['value'])
-        sys.stdout.write('\rProcessing line %i.' % (idx))
+        sys.stdout.write('\rProcessing line %i' % (idx))
         sys.stdout.flush()
 
     sys.stdout.write('\n')
     sys.stdout.flush()
 
-    print('Processing complete.')
-
-    return items
+    return [item for item in items.values()]
 
 
 def listify(data, fields):
@@ -416,7 +414,7 @@ def listify(data, fields):
     :type fields: list
     """
     list_data = [fields[:]]  # Add fields to first row
-    list_data += [r.values() for r in [v for v in data.values()]]  # Data
+    list_data += [r.values() for r in [v for v in data]]  # Data
     return list_data
 
 
