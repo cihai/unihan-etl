@@ -16,6 +16,14 @@ Unihan's data is dispersed across multiple files in the format of::
 ``unihan_tabular/process.py`` will download Unihan.zip and build all files into a
 single tabular friendly format.
 
+CSV (default output: *./data/unihan.csv*):
+
+.. code-block:: csv
+
+   char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
+   㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
+   㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
+
 JSON (default output: *./data/unihan.json*):
 
 .. code-block:: json
@@ -55,14 +63,6 @@ YAML (default output: *./data/unihan.yaml*):
       kHanyuPinyin: 10019.020:tiàn
       kMandarin: tiàn
       ucn: U+3401
-
-CSV (default output: *./data/unihan.csv*):
-
-.. code-block:: csv
-
-   char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
-   㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
-   㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
 ``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
 arguments`_ for information on how you can specify custom columns, files,
