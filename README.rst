@@ -16,9 +16,7 @@ Unihan's data is dispersed across multiple files in the format of::
 ``unihan_tabular/process.py`` will download Unihan.zip and build all files into a
 single tabular friendly format.
 
-CSV (default output: *./data/unihan.csv*):
-
-.. code-block:: csv
+CSV (default output: *./data/unihan.csv*)::
 
    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
