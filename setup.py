@@ -4,7 +4,7 @@
 
 import sys
 
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 about = {}
@@ -54,7 +54,7 @@ setup(
     cmdclass={'test': PyTest},
     zip_safe=False,
     keywords=about['__title__'],
-    package=find_packages(exclude=["doc"]),
+    packages=['unihan_tabular'],
     entry_points=dict(
         console_scripts=['unihan-tabular=unihan_tabular.__main__:run']
     ),
