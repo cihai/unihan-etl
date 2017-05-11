@@ -25,7 +25,7 @@ else:
     import csv
 
 about = {}
-about_file = os.path.join(os.path.dirname(__file__), '..', '__about__.py')
+about_file = os.path.join(os.path.dirname(__file__), '__about__.py')
 with open(about_file) as fp:
     exec(fp.read(), about)
 

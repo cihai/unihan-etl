@@ -8,7 +8,7 @@ from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 about = {}
-with open("__about__.py") as fp:
+with open("unihan_tabular/__about__.py") as fp:
     exec(fp.read(), about)
 
 with open('requirements/base.txt') as f:

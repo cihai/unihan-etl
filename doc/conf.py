@@ -15,7 +15,7 @@ sys.path.append(os.path.abspath(
 
 # package data
 about = {}
-with open("../__about__.py") as fp:
+with open("../unihan_tabular/__about__.py") as fp:
     exec(fp.read(), about)
 
 
