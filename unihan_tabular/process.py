@@ -423,7 +423,7 @@ def listify(data, fields):
 def export_csv(data, destination, fields):
     data = listify(data, fields)
 
-    with codecs.open(destination, 'w', encoding='utf-8') as f:
+    with open(destination, 'w') as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(data)
         print('Saved output to: %s' % destination)
