@@ -109,11 +109,14 @@ Structure
 
 .. code-block:: bash
 
-    # output (JSON)
-    data/unihan.json
+    # output w/ JSON
+    {XDG data dir}/unihan_tabular/unihan.json
 
-    # output (CSV)
-    data/unihan.csv
+    # output w/ CSV
+    {XDG data dir}/unihan_tabular/unihan.csv
+
+    # output w/ yaml (requires pyyaml)
+    {XDG data dir}/unihan_tabular/unihan.yaml
 
     # script to download + build a SDF csv of unihan.
     unihan_tabular/process.py
@@ -121,9 +124,8 @@ Structure
     # unit tests to verify behavior / consistency of builder
     tests/*
 
-    # python 2/3 compatibility modules
+    # python 2/3 compatibility module
     unihan_tabular/_compat.py
-    unihan_tabular/unicodecsv.py
 
     # utility / helper functions
     unihan_tabular/util.py
