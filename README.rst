@@ -62,7 +62,7 @@ YAML (``$ unihan-tabular -F yaml``):
       kMandarin: tiàn
       ucn: U+3401
 
-``process.py`` supports command line arguments. See `unihan_tabular/process.py CLI
+``unihan-tabular`` supports command line arguments. See `unihan_tabular CLI
 arguments`_ for information on how you can specify custom columns, files,
 download URL's and output destinations.
 
@@ -75,7 +75,7 @@ download URL's and output destinations.
 Usage
 -----
 
-To download and build your own ``unihan.csv``:
+To download and build your own UNIHAN export:
 
 .. code-block:: bash
 
@@ -108,9 +108,9 @@ To output to a custom file (templated file extension):
 
     $ unihan-tabular -F csv --destination ./exported.{ext}
 
-See `unihan_tabular/process.py CLI arguments`_ for advanced usage examples.
+See `unihan_tabular CLI arguments`_ for advanced usage examples.
 
-.. _unihan_tabular/process.py CLI arguments: http://unihan-tabular.readthedocs.org/en/latest/cli.html
+.. _unihan_tabular CLI arguments: http://unihan-tabular.readthedocs.org/en/latest/cli.html
 
 Structure
 ---------
