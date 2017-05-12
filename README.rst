@@ -16,13 +16,13 @@ Unihan's data is dispersed across multiple files in the format of::
 ``$ unihan-tabular`` will download Unihan.zip and build all files into a
 single tabular friendly format.
 
-CSV (``$ unihan-tabular -F csv``)::
+CSV (default), ``$ unihan-tabular``::
 
    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
    㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
-JSON (default, ``$ unihan-tabular``):
+JSON, ``$ unihan-tabular -F json``:
 
 .. code-block:: json
 
@@ -45,7 +45,7 @@ JSON (default, ``$ unihan-tabular``):
      }
    ]
 
-YAML (``$ unihan-tabular -F yaml``):
+YAML ``$ unihan-tabular -F yaml``:
 
 .. code-block:: yaml
 
@@ -81,15 +81,15 @@ To download and build your own UNIHAN export:
 
    $ pip install unihan-tabular
 
-To output JSON, the default format:
+To output CSV, the default format:
 
 .. code-block:: bash
 
     $ unihan-tabular
 
-To output CSV::
+To output JSON::
 
-    $ unihan-tabular -F csv
+    $ unihan-tabular -F json
 
 To output YAML::
 
@@ -98,15 +98,19 @@ To output YAML::
 
 To only output the kDefinition field in a csv::
 
-    $ unihan-tabular -F csv -f kDefinition
+    $ unihan-tabular -f kDefinition
+
+To output multiple fields, separate with spaces::
+
+    $ unihan-tabular -f kCantonese kDefinition
 
 To output to a custom file::
 
-    $ unihan-tabular -F csv --destination ./exported.csv
+    $ unihan-tabular --destination ./exported.csv
 
 To output to a custom file (templated file extension)::
 
-    $ unihan-tabular -F csv --destination ./exported.{ext}
+    $ unihan-tabular --destination ./exported.{ext}
 
 See `unihan-tabular CLI arguments`_ for advanced usage examples.
 
