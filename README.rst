@@ -62,7 +62,7 @@ YAML (``$ unihan-tabular -F yaml``):
       kMandarin: tiàn
       ucn: U+3401
 
-``unihan-tabular`` supports command line arguments. See `unihan_tabular CLI
+``unihan-tabular`` supports command line arguments. See `unihan-tabular CLI
 arguments`_ for information on how you can specify custom columns, files,
 download URL's and output destinations.
 
@@ -100,17 +100,17 @@ To only output the kDefinition field in a csv::
 
     $ unihan-tabular -F csv -f kDefinition
 
-To output to a custom file:
+To output to a custom file::
 
     $ unihan-tabular -F csv --destination ./exported.csv
 
-To output to a custom file (templated file extension):
+To output to a custom file (templated file extension)::
 
     $ unihan-tabular -F csv --destination ./exported.{ext}
 
-See `unihan_tabular CLI arguments`_ for advanced usage examples.
+See `unihan-tabular CLI arguments`_ for advanced usage examples.
 
-.. _unihan_tabular CLI arguments: http://unihan-tabular.readthedocs.org/en/latest/cli.html
+.. _unihan-tabular CLI arguments: http://unihan-tabular.readthedocs.org/en/latest/cli.html
 
 Structure
 ---------
