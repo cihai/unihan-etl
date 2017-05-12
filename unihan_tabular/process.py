@@ -209,7 +209,7 @@ DEFAULT_OPTIONS = {
     'zip_path': UNIHAN_ZIP_PATH,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
-    'format': 'json',
+    'format': 'csv',
     'input_files': UNIHAN_FILES,
     'download': False
 }
