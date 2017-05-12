@@ -13,16 +13,16 @@ Unihan's data is dispersed across multiple files in the format of::
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-``unihan_tabular/process.py`` will download Unihan.zip and build all files into a
+``$ unihan-tabular`` will download Unihan.zip and build all files into a
 single tabular friendly format.
 
-CSV (default output: *./data/unihan.csv*)::
+CSV (``$ unihan-tabular -F csv``)::
 
    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
    㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
-JSON (default output: *./data/unihan.json*):
+JSON (default, ``$ unihan-tabular``):
 
 .. code-block:: json
 
@@ -45,7 +45,7 @@ JSON (default output: *./data/unihan.json*):
      }
    ]
 
-YAML (default output: *./data/unihan.yaml*):
+YAML (``$ unihan-tabular -F yaml``):
 
 .. code-block:: yaml
 
@@ -81,11 +81,11 @@ To download and build your own ``unihan.csv``:
 
    $ pip install unihan-tabular
 
+To output JSON, the default format:
+
 .. code-block:: bash
 
     $ unihan-tabular
-
-Creates ``data/unihan.json``.
 
 To output CSV::
 
@@ -129,9 +129,6 @@ Structure
 
     # utility / helper functions
     unihan_tabular/util.py
-
-- ``data/unihan.csv`` - CSV export file.
-- ``unihan_tabular/process.py`` - create a ``data/unihan.csv``.
 
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
