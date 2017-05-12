@@ -20,7 +20,7 @@ from unihan_tabular._compat import urlretrieve, text_type, PY2
 from unihan_tabular.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if PY2:
-    from unihan_tabular.unicodecsv import UnicodeWriter
+    import unicodecsv as csv
 else:
     import csv
 
@@ -422,10 +422,7 @@ def export_csv(data, destination, fields):
     _file = '%s.csv' % destination
 
     with codecs.open(_file, 'w', encoding='utf-8') as f:
-        if PY2:
-            csvwriter = UnicodeWriter(f)
-        else:
-            csvwriter = csv.writer(f)
+        csvwriter = csv.writer(f)
         csvwriter.writerows(data)
         print('Saved output to: %s' % _file)
 
