@@ -157,6 +157,27 @@ def test_download_mock(tmpdir, mock_zip_file, mock_test_dir):
     p.export()
 
 
+def test_export_format(tmpdir, mock_zip_file, mock_test_dir):
+    data_path = tmpdir.join('data')
+    dest_path = data_path.join('data', 'hey.zip')
+
+    def urlretrieve(url, filename, url_retrieve, reporthook=None):
+        mock_zip_file.copy(dest_path)
+
+    p = Packager(merge_dict(test_options.copy, {
+        'fields': ['kDefinition'],
+        'zip_path': str(dest_path),
+        'work_dir': str(mock_test_dir.join('downloads')),
+        'destination': str(data_path.join('unihan.{ext}')),
+        'format': 'json'
+    }))
+    p.download(urlretrieve_fn=urlretrieve)
+    assert os.path.exists(str(dest_path))
+    p.export()
+    assert str(data_path.join('unihan.json')) == p.options['destination']
+    assert os.path.exists(p.options['destination'])
+
+
 def test_extract_zip(mock_zip_file, tmpdir):
     zf = process.extract_zip(str(mock_zip_file), str(tmpdir))
 

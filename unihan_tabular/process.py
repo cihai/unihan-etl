@@ -14,7 +14,7 @@ import os
 import sys
 import zipfile
 
-sys.path.insert(0, os.getcwd())  # NOQA we want to grab this:
+from appdirs import AppDirs
 
 from unihan_tabular._compat import urlretrieve, text_type, PY2
 from unihan_tabular.util import _dl_progress, merge_dict, ucn_to_unicode
@@ -28,6 +28,12 @@ about = {}
 about_file = os.path.join(os.path.dirname(__file__), '__about__.py')
 with open(about_file) as fp:
     exec(fp.read(), about)
+
+dirs = AppDirs(
+    about['__package_name__'],  # appname
+    about['__author__']    # app author
+)
+
 
 UNIHAN_MANIFEST = {
     'Unihan_DictionaryIndices.txt': [
@@ -177,18 +183,14 @@ def get_files(fields):
     return list(files)
 
 
-#: Directory to use for downloading files.
-DATA_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.pardir, 'data'
-))
 #: Directory to use for processing intermittent files.
-WORK_DIR = os.path.join(DATA_DIR, 'downloads')
+WORK_DIR = os.path.join(dirs.user_cache_dir, 'downloads')
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 #: URI of Unihan.zip data.
 UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
 #: Filepath to output built CSV file to.
-UNIHAN_DEST = os.path.join(DATA_DIR, 'unihan')
+DESTINATION_DIR = dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
@@ -203,7 +205,7 @@ except ImportError:
 
 DEFAULT_OPTIONS = {
     'source': UNIHAN_URL,
-    'destination': UNIHAN_DEST,
+    'destination': '%s/unihan.{ext}' % DESTINATION_DIR,
     'zip_path': UNIHAN_ZIP_PATH,
     'work_dir': WORK_DIR,
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
@@ -234,7 +236,8 @@ def get_parser():
     )
     parser.add_argument(
         "-d", "--destination", dest="destination",
-        help="Output of .csv. Default: %s" % UNIHAN_DEST
+        help="Output of .csv. Default: %s/unihan.{json,csv,yaml}" %
+        DESTINATION_DIR
     )
     parser.add_argument(
         "-w", "--work-dir", dest="work_dir",
@@ -359,7 +362,7 @@ def extract_zip(zip_path, dest_dir):
     :param zip_path: filepath to extract.
     :type zip_path: str
     :param dest_dir: (optional) directory to extract to.
-    :type work_dir: str
+    :type dest_dir: str
     :returns: The extracted zip.
     :rtype: :class:`zipfile.ZipFile`
 
@@ -419,28 +422,25 @@ def listify(data, fields):
 
 def export_csv(data, destination, fields):
     data = listify(data, fields)
-    _file = '%s.csv' % destination
 
-    with codecs.open(_file, 'w', encoding='utf-8') as f:
+    with codecs.open(destination, 'w', encoding='utf-8') as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(data)
-        print('Saved output to: %s' % _file)
+        print('Saved output to: %s' % destination)
 
 
 def export_json(data, destination):
-    _file = '%s.json' % destination
-    with codecs.open(_file, 'w', encoding='utf-8') as f:
+    with codecs.open(destination, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-        print('Saved output to: %s' % _file)
+        print('Saved output to: %s' % destination)
 
 
 def export_yaml(data, destination):
-    _file = '%s.yaml' % destination
-    with codecs.open(_file, 'w', encoding='utf-8') as f:
+    with codecs.open(destination, 'w', encoding='utf-8') as f:
         yaml.safe_dump(data, stream=f,
                        allow_unicode=True,
                        default_flow_style=False)
-        print('Saved output to: %s' % _file)
+        print('Saved output to: %s' % destination)
 
 
 def validate_options(options):
@@ -514,6 +514,14 @@ class Packager(object):
             os.path.join(self.options['work_dir'], f)
             for f in self.options['input_files']
         ]
+
+        # Replace {ext} with extension to use.
+        self.options['destination'] = self.options['destination'].format(
+            ext=self.options['format']
+        )
+
+        if not os.path.exists(os.path.dirname(self.options['destination'])):
+            os.makedirs(self.options['destination'])
 
         data = load_data(
             files=files,
