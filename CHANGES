@@ -4,6 +4,10 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :release:`0.7.1 <2017-05-12>`
+- :bug:`-` Fix python 2 CSV output
+- :support:`-` Default to CSV output
+
 - :release:`0.7.0 <2017-05-12>`
 - :support:`-` Move unicodecsv module to dependency package
 - :feature:`-` Support for XDG directory specification
