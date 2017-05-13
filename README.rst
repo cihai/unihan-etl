@@ -3,7 +3,7 @@ like python, JSON, CSV and YAML. Part of the `cihai`_ project.
 
 |pypi| |docs| |build-status| |coverage| |license|
 
-Unihan's data is dispersed across multiple files in the format of::
+`UNIHAN`_'s data is dispersed across multiple files in the format of::
 
     U+3400	kCantonese	jau1
     U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
@@ -62,9 +62,21 @@ YAML ``$ unihan-tabular -F yaml``:
       kMandarin: tiàn
       ucn: U+3401
 
-``unihan-tabular`` supports command line arguments. See `unihan-tabular CLI
-arguments`_ for information on how you can specify custom columns, files,
-download URL's and output destinations.
+Features
+--------
+
+* automatically downloads UNIHAN from the internet
+* export to JSON, CSV and YAML (requires `pyyaml`_) via ``-F``
+* configurable to export specific fields via ``-f``
+* accounts for encoding conflicts due to the Unicode-heavy content
+* designed as a technical proof for future CJK (Chinese, Japanese,
+  Korean) datasets
+* core component and dependency of `cihai`_, a CJK library
+* `data package`_ support
+* supports python 2.7, >= 3.5 and pypy
+
+If you encounter a problem or have a question, please `create an
+issue`_.
 
 .. _cihai: https://cihai.git-pull.com
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
@@ -74,6 +86,10 @@ download URL's and output destinations.
 
 Usage
 -----
+
+``unihan-tabular`` supports command line arguments. See `unihan-tabular CLI
+arguments`_ for information on how you can specify custom columns, files,
+download URL's and output destinations.
 
 To download and build your own UNIHAN export:
 
@@ -145,6 +161,9 @@ Structure
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
 .. _UNIHAN: http://www.unicode.org/charts/unihan.html
+.. _create an issue: https://github.com/cihai/unihan-tabular/issues/new
+.. _Data Package: http://frictionlessdata.io/data-packages/
+.. _pyyaml: http://pyyaml.org/
 
 .. |pypi| image:: https://img.shields.io/pypi/v/unihan-tabular.svg
     :alt: Python Package
