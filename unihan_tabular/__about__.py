@@ -1,6 +1,6 @@
 __title__ = 'unihan-tabular'
 __package_name__ = 'unihan_tabular'
-__description__ = 'Download and export UNIHAN to Python, CSV, JSON and YAML'
+__description__ = 'Export UNIHAN to Python, DataPackage, CSV, JSON and YAML'
 __version__ = '0.7.1'
 __author__ = 'Tony Narlock'
 __email__ = 'cihai@git-pull.com'
