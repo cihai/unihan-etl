@@ -11,6 +11,7 @@ import fileinput
 import glob
 import json
 import os
+import shutil
 import sys
 import zipfile
 
@@ -166,6 +167,11 @@ def get_fields(d):
 def filter_manifest(files):
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
+
+
+def files_exist(path, files):
+    """Return True if all files exist in specified path."""
+    return all(os.path.exists(os.path.join(path, f)) for f in files)
 
 
 #: Return list of files from list of fields.
@@ -331,7 +337,9 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
         if not_downloaded():
             print('Downloading Unihan.zip...')
             print('%s to %s' % (url, dest))
-            if reporthook:
+            if os.path.isfile(url):
+                shutil.copy(url, dest)
+            elif reporthook:
                 urlretrieve_fn(url, dest, reporthook)
             else:
                 urlretrieve_fn(url, dest)
@@ -495,12 +503,11 @@ class Packager(object):
                 self.options['source'], self.options['zip_path'],
                 urlretrieve_fn=urlretrieve_fn, reporthook=_dl_progress
             )
-            zip_file = extract_zip(
-                self.options['zip_path'], self.options['work_dir']
-            )
 
-            if zip_has_files(self.options['input_files'], zip_file):
-                print('All files in zip.')
+        if not files_exist(
+            self.options['work_dir'], self.options['input_files']
+        ):
+            extract_zip(self.options['zip_path'], self.options['work_dir'])
 
     def export(self):
         """Extract zip and process information into CSV's."""
