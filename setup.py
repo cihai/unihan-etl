@@ -59,7 +59,7 @@ setup(
         console_scripts=['unihan-tabular=unihan_tabular.__main__:run']
     ),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         "License :: OSI Approved :: MIT License",
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -70,5 +70,6 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: PyPy',
         "Topic :: Utilities",
+        "Topic :: Software Development :: Internationalization",
     ],
 )
