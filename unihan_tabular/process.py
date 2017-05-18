@@ -10,6 +10,7 @@ import codecs
 import fileinput
 import glob
 import json
+import logging
 import os
 import shutil
 import sys
@@ -17,7 +18,9 @@ import zipfile
 
 from appdirs import AppDirs
 
-from unihan_tabular._compat import urlretrieve, text_type, PY2
+from unihan_tabular.__about__ import (__author__, __description__,
+                                      __package_name__, __title__)
+from unihan_tabular._compat import PY2, text_type, urlretrieve
 from unihan_tabular.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if PY2:
@@ -25,14 +28,11 @@ if PY2:
 else:
     import csv
 
-about = {}
-about_file = os.path.join(os.path.dirname(__file__), '__about__.py')
-with open(about_file) as fp:
-    exec(fp.read(), about)
+log = logging.getLogger(__name__)
 
 dirs = AppDirs(
-    about['__package_name__'],  # appname
-    about['__author__']    # app author
+    __package_name__,  # appname
+    __author__    # app author
 )
 
 
@@ -229,8 +229,8 @@ def get_parser():
 
     """
     parser = argparse.ArgumentParser(
-        prog=about['__title__'],
-        description=about['__description__']
+        prog=__title__,
+        description=__description__
     )
     parser.add_argument(
         "-s", "--source", dest="source",
@@ -276,13 +276,13 @@ def has_valid_zip(zip_path):
 
     if os.path.isfile(zip_path):
         if zipfile.is_zipfile(zip_path):
-            print("Exists, is valid zip. %s" % zip_path)
+            log.info("Exists, is valid zip. %s" % zip_path)
             return True
         else:
-            print("Not a valid zip. %s" % zip_path)
+            log.info("Not a valid zip. %s" % zip_path)
             return False
     else:
-        print("File doesn't exist. %s" % zip_path)
+        log.info("File doesn't exist. %s" % zip_path)
         return False
 
 
@@ -335,8 +335,8 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
 
     if no_unihan_files_exist():
         if not_downloaded():
-            print('Downloading Unihan.zip...')
-            print('%s to %s' % (url, dest))
+            log.info('Downloading Unihan.zip...')
+            log.info('%s to %s' % (url, dest))
             if os.path.isfile(url):
                 shutil.copy(url, dest)
             elif reporthook:
@@ -356,11 +356,11 @@ def load_data(files):
     :returns: string of combined data from files
     """
 
-    print('Loading data: %s.' % ', '.join(files))
+    log.info('Loading data: %s.' % ', '.join(files))
     raw_data = fileinput.FileInput(
         files=files, openhook=fileinput.hook_encoded('utf-8')
     )
-    print('Done loading data.')
+    log.info('Done loading data.')
     return raw_data
 
 
@@ -377,7 +377,7 @@ def extract_zip(zip_path, dest_dir):
     """
 
     z = zipfile.ZipFile(zip_path)
-    print('extract_zip dest dir: %s' % dest_dir)
+    log.info('extract_zip dest dir: %s' % dest_dir)
     z.extractall(dest_dir)
 
     return z
@@ -393,7 +393,7 @@ def normalize(raw_data, fields):
     :return: list of unihan character information
     :rtype: list
     """
-    print('Collecting field data...')
+    log.info('Collecting field data...')
     items = dict()
     for idx, l in enumerate(raw_data):
         if not_junk(l):
@@ -406,11 +406,13 @@ def normalize(raw_data, fields):
                     items[char]['ucn'] = item['ucn']
                     items[char]['char'] = char
                 items[char][item['field']] = text_type(item['value'])
-        sys.stdout.write('\rProcessing line %i' % (idx))
-        sys.stdout.flush()
+        if log.isEnabledFor(logging.DEBUG):
+            sys.stdout.write('\rProcessing line %i' % (idx))
+            sys.stdout.flush()
 
-    sys.stdout.write('\n')
-    sys.stdout.flush()
+    if log.isEnabledFor(logging.DEBUG):
+        sys.stdout.write('\n')
+        sys.stdout.flush()
 
     return [item for item in items.values()]
 
@@ -434,13 +436,13 @@ def export_csv(data, destination, fields):
     with open(destination, 'w') as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(data)
-        print('Saved output to: %s' % destination)
+        log.info('Saved output to: %s' % destination)
 
 
 def export_json(data, destination):
     with codecs.open(destination, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-        print('Saved output to: %s' % destination)
+        log.info('Saved output to: %s' % destination)
 
 
 def export_yaml(data, destination):
@@ -448,7 +450,7 @@ def export_yaml(data, destination):
         yaml.safe_dump(data, stream=f,
                        allow_unicode=True,
                        default_flow_style=False)
-        print('Saved output to: %s' % destination)
+        log.info('Saved output to: %s' % destination)
 
 
 def validate_options(options):
@@ -488,6 +490,7 @@ class Packager(object):
         :type options: dict
 
         """
+        setup_logger()
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
@@ -543,7 +546,7 @@ class Packager(object):
         elif self.options['format'] == 'python':
             return data
         else:
-            print('Format %s does not exist' % self.options['format'])
+            log.info('Format %s does not exist' % self.options['format'])
 
     @classmethod
     def from_cli(cls, argv):
@@ -563,6 +566,22 @@ class Packager(object):
             return cls({k: v for k, v in vars(args).items() if v})
         except Exception as e:
             sys.exit(e)
+
+
+def setup_logger(logger=None, level='DEBUG'):
+    """Setup logging for CLI use.
+
+    :param logger: instance of logger
+    :type logger: :py:class:`Logger`
+
+    """
+    if not logger:
+        logger = logging.getLogger()
+    if not logger.handlers:
+        channel = logging.StreamHandler()
+
+        logger.setLevel(level)
+        logger.addHandler(channel)
 
 
 if __name__ == "__main__":
