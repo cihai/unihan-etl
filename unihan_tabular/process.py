@@ -486,14 +486,13 @@ def validate_options(options):
 
 
 class Packager(object):
+    """Download and generate a tabular release of
+    `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
 
     def __init__(self, options):
-        """Download and generate a tabular release of
-        `unihan <http://www.unicode.org/reports/tr38/>`_.
-
+        """
         :param options: options values to override defaults.
         :type options: dict
-
         """
         setup_logger(
             None, options.get('log_level', DEFAULT_OPTIONS['log_level'])
