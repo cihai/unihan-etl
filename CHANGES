@@ -4,6 +4,10 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :release:`0.8.0 <2017-05-17>`
+- :feature:`-` Support for configuring logging via options and CLI
+- :support:`-` Convert all print statements to use logger
+
 - :release:`0.7.4 <2017-05-14>`
 - :feature:`-` Allow for local / file system sources for Unihan.zip
 - :support:`-` Only extract zip if unextracted
