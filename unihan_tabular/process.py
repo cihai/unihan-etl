@@ -217,7 +217,8 @@ DEFAULT_OPTIONS = {
     'fields': INDEX_FIELDS + UNIHAN_FIELDS,
     'format': 'csv',
     'input_files': UNIHAN_FILES,
-    'download': False
+    'download': False,
+    'log_level': 'INFO',
 }
 
 
@@ -261,6 +262,10 @@ def get_parser():
     parser.add_argument(
         "-i", "--input-files", dest="input_files", nargs='*',
         help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
+    )
+    parser.add_argument(
+        "-l", "--log_level", dest="log_level",
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     )
     return parser
 
@@ -490,7 +495,9 @@ class Packager(object):
         :type options: dict
 
         """
-        setup_logger()
+        setup_logger(
+            None, options.get('log_level', DEFAULT_OPTIONS['log_level'])
+        )
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
