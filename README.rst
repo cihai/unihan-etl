@@ -39,7 +39,10 @@ JSON, ``$ unihan-tabular -F json``:
        "char": "㐁",
        "ucn": "U+3401",
        "kCantonese": "tim2",
-       "kDefinition": "to lick; to taste, a mat, bamboo bark",
+       "kDefinition": [
+         "to lick",
+         "to taste, a mat, bamboo bark"
+       ],
        "kHanyuPinyin": "10019.020:tiàn",
        "kMandarin": "tiàn"
      }
@@ -57,7 +60,9 @@ YAML ``$ unihan-tabular -F yaml``:
       ucn: U+3400
     - char: 㐁
       kCantonese: tim2
-      kDefinition: to lick; to taste, a mat, bamboo bark
+      kDefinition:
+      - to lick
+      - to taste, a mat, bamboo bark
       kHanyuPinyin: 10019.020:tiàn
       kMandarin: tiàn
       ucn: U+3401
@@ -73,6 +78,8 @@ Features
   Korean) datasets
 * core component and dependency of `cihai`_, a CJK library
 * `data package`_ support
+* expansion of multi-value delimited fields in YAML, JSON and python
+  dictionaries 
 * supports python 2.7, >= 3.5 and pypy
 
 If you encounter a problem or have a question, please `create an
