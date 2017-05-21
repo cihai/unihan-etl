@@ -4,6 +4,10 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :release:`0.8.1 <2017-05-20>`
+- :support:`-` Update to add *kJa* and adjust source file of
+  *kCompatibilityVariant* per Unicode 8.0.0.
+
 - :release:`0.8.0 <2017-05-17>`
 - :feature:`-` Support for configuring logging via options and CLI
 - :support:`-` Convert all print statements to use logger
