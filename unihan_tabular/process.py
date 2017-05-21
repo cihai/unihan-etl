@@ -502,8 +502,12 @@ def expand_delimiters(normalized_data):
     """
     for char in normalized_data:
         for field in char.keys():
-            if field in MULTI_VALUE_FIELDS:
+            if not char[field]:
+                continue
+            if field in MULTI_VALUE_FIELDS and char[field]:
                 char[field] = char[field].split(' ')
+            if field == 'kDefinition':
+                char[field] = [c.strip() for c in char[field].split(';')]
     return normalized_data
 
 

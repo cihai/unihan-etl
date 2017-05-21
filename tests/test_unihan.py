@@ -29,6 +29,29 @@ U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
 U+3401	kHanyuPinyin	10019.020:tiàn
 """
 
+
+@pytest.fixture
+def fixture_files(tmpdir):
+    fixture_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
+
+    files = [
+        'Unihan_DictionaryIndices.txt',
+        'Unihan_DictionaryLikeData.txt',
+        'Unihan_IRGSources.txt',
+        'Unihan_NumericValues.txt',
+        'Unihan_OtherMappings.txt',
+        'Unihan_RadicalStrokeCounts.txt',
+        'Unihan_Readings.txt',
+        'Unihan_Variants.txt'
+    ]
+    return [os.path.join(fixture_dir, f) for f in files]
+
+
+@pytest.fixture
+def sample_data2(fixture_files):
+    return process.load_data(files=fixture_files)
+
+
 test_options = merge_dict(DEFAULT_OPTIONS.copy(), {
     'input_files': ['Unihan_Readings.txt'],
 })
@@ -226,30 +249,42 @@ def test_normalize_only_output_requested_columns(tmpdir):
     )
 
 
-def test_expand_delimiter(tmpdir):
-    csv_file = tmpdir.join('test.csv')
-
-    csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
-
-    csv_files = [str(csv_file)]
-
+def test_expand_delimiter(tmpdir, sample_data2, fixture_files):
     columns = [
         'kTotalStrokes',
         'kPhonetic',
         'kCantonese',
         'kDefinition',
-    ] + process.INDEX_FIELDS
+    ] + process.MULTI_VALUE_FIELDS + process.INDEX_FIELDS
 
     data = process.load_data(
-        files=csv_files,
+        files=fixture_files,
     )
 
     items = process.normalize(data, columns)
-    items = process.expand_delimiters(data)
+    print('after normalize %s' % len(items))
+    items = process.expand_delimiters(items)
+    print('after expand_delimiters %s' % len(items))
     for item in items:
         for field in item.keys():
-            if field in process.MULTI_VALUE_FIELDS:
+            if field in process.MULTI_VALUE_FIELDS and item[field]:
                 assert isinstance(item[field], list)
+
+    item = [i for i in items if i['ucn'] == 'U+346E'][0]
+    if item['ucn'] == 'U+346E':
+        assert set(item['kCantonese']) == set(['gwaat1', 'waan4'])
+    else:
+        assert False, "Missing field U+346E kCantonese"
+
+    item = [i for i in items if i['ucn'] == 'U+37AE'][0]
+    if item['ucn'] == 'U+37AE':
+        assert set(item['kJapaneseKun']) == set(['DERU', 'DASU'])
+        assert set(item['kJapaneseOn']) == set(['SHUTSU', 'SUI'])
+        assert set(item['kDefinition']) == set([
+            'variant of 出 U+51FA, to go out, send out',
+            'to stand',
+            'to produce'
+        ])
 
 
 def test_normalize_simple_data_format():
