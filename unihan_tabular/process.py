@@ -146,6 +146,7 @@ UNIHAN_MANIFEST = {
     ]
 }
 
+#: Fields with multiple values UNIHAN delimits by spaces
 MULTI_VALUE_FIELDS = [
     'kAccountingNumberic',
     'kCantonese',
@@ -499,6 +500,10 @@ def expand_delimiters(normalized_data):
         fields (so all fields stay consistent).
     :rtype: list of dict
     """
+    for char in normalized_data:
+        for field in char.keys():
+            if field in MULTI_VALUE_FIELDS:
+                char[field] = char[field].split(' ')
     return normalized_data
 
 
