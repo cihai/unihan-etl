@@ -226,6 +226,32 @@ def test_normalize_only_output_requested_columns(tmpdir):
     )
 
 
+def test_expand_delimiter(tmpdir):
+    csv_file = tmpdir.join('test.csv')
+
+    csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
+
+    csv_files = [str(csv_file)]
+
+    columns = [
+        'kTotalStrokes',
+        'kPhonetic',
+        'kCantonese',
+        'kDefinition',
+    ] + process.INDEX_FIELDS
+
+    data = process.load_data(
+        files=csv_files,
+    )
+
+    items = process.normalize(data, columns)
+    items = process.expand_delimiters(data)
+    for item in items:
+        for field in item.keys():
+            if field in process.MULTI_VALUE_FIELDS:
+                assert isinstance(item[field], list)
+
+
 def test_normalize_simple_data_format():
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
