@@ -4,6 +4,8 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :feature:`-` Initial support for expanding multi-value fields.
+
 - :release:`0.8.1 <2017-05-20>`
 - :support:`-` Update to add *kJa* and adjust source file of
   *kCompatibilityVariant* per Unicode 8.0.0.
