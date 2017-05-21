@@ -71,6 +71,7 @@ UNIHAN_MANIFEST = {
         'kTotalStrokes',
     ],
     'Unihan_IRGSources.txt': [
+        'kCompatibilityVariant',
         'kIICore',
         'kIRG_GSource',
         'kIRG_HSource',
@@ -81,7 +82,6 @@ UNIHAN_MANIFEST = {
         'kIRG_TSource',
         'kIRG_USource',
         'kIRG_VSource',
-        'kCompatibilityVariant',
     ],
     'Unihan_NumericValues.txt': [
         'kAccountingNumeric',
@@ -102,6 +102,7 @@ UNIHAN_MANIFEST = {
         'kGB8',
         'kHKSCS',
         'kIBMJapan',
+        'kJa',
         'kJis0',
         'kJis1',
         'kJIS0213',
