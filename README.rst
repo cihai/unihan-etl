@@ -214,9 +214,9 @@ The solution to allow the data to be accessible requires a format that
 supports lists, hashes and hierarchies. Namely, JSON and YAML.
 
 This in itself is inherent with pitfalls, since unihan-tabular is in python,
-there are issues of encodings to overcome. unihan-tabular is tested in
-`continuous integration`_ against both 2.7 and python 3 to assure consistency
-across encoding differences.
+there are issues of encoding working as expected across versions. unihan-tabular
+is tested in `continuous integration`_ against both 2.7 and python 3 to assure
+consistent output.
 
 Future versions of unihan-tabular will split the delimiters of
 UNIHAN's "multi value" fields for users. This can be done in such a way there
