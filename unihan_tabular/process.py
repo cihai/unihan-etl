@@ -285,6 +285,7 @@ DEFAULT_OPTIONS = {
     'format': 'csv',
     'input_files': UNIHAN_FILES,
     'download': False,
+    'expand': True,
     'log_level': 'INFO',
 }
 
@@ -321,6 +322,14 @@ def get_parser():
         "-F", "--format", dest="format",
         choices=ALLOWED_EXPORT_TYPES,
         help="Default: %s" % DEFAULT_OPTIONS['format']
+    )
+    parser.add_argument(
+        "--no-expand", dest="expand",
+        action='store_false',
+        help=(
+            "Don't expand values to lists in multi-value UNIHAN fields. " +
+            "Doesn't apply to CSVs."
+        )
     )
     parser.add_argument(
         "-f", "--fields", dest="fields", nargs="*",
@@ -589,6 +598,8 @@ class Packager(object):
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
+        print(DEFAULT_OPTIONS)
+        print(options)
 
     def download(self, urlretrieve_fn=urlretrieve):
         """Download raw UNIHAN data if not exists.
@@ -628,10 +639,13 @@ class Packager(object):
         if not os.path.exists(os.path.dirname(self.options['destination'])):
             os.makedirs(self.options['destination'])
 
-        data = load_data(
-            files=files,
-        )
+        data = load_data(files=files)
         data = normalize(data, fields)
+
+        # expand data hierarchically
+        if self.options['expand'] and self.options['format'] != 'csv':
+            data = expand_delimiters(data)
+
         if self.options['format'] == 'json':
             export_json(data, self.options['destination'])
         elif self.options['format'] == 'csv':
@@ -658,7 +672,7 @@ class Packager(object):
         args = parser.parse_args(argv)
 
         try:
-            return cls({k: v for k, v in vars(args).items() if v})
+            return cls({k: v for k, v in vars(args).items() if v is not None})
         except Exception as e:
             sys.exit(e)
 
