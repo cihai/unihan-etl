@@ -107,7 +107,6 @@ def test_in_fields():
 def test_filter_manifest():
     expected = {
         'Unihan_Variants.txt': [
-            'kCompatibilityVariant',
             'kSemanticVariant',
             'kSimplifiedVariant',
             'kSpecializedSemanticVariant',
