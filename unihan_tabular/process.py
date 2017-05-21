@@ -81,6 +81,7 @@ UNIHAN_MANIFEST = {
         'kIRG_TSource',
         'kIRG_USource',
         'kIRG_VSource',
+        'kCompatibilityVariant',
     ],
     'Unihan_NumericValues.txt': [
         'kAccountingNumeric',
@@ -136,7 +137,6 @@ UNIHAN_MANIFEST = {
         'kXHC1983',
     ],
     'Unihan_Variants.txt': [
-        'kCompatibilityVariant',
         'kSemanticVariant',
         'kSimplifiedVariant',
         'kSpecializedSemanticVariant',
