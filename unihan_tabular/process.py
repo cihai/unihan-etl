@@ -488,6 +488,20 @@ def normalize(raw_data, fields):
     return [item for item in items.values()]
 
 
+def expand_delimiters(normalized_data):
+    """Return expanded multi-value fields in UNIHAN.
+
+    :param normalized: Expects data in list of hashes, per
+        :meth:`process.normalize`
+    :type normalized: list of dict
+    :returns: Items which have fields with delimiters and custom separation
+        rules, will be expanded. Including multi-value fields not using both
+        fields (so all fields stay consistent).
+    :rtype: list of dict
+    """
+    return normalized_data
+
+
 def listify(data, fields):
     """Convert tabularized data to a CSV-friendly list.
 
