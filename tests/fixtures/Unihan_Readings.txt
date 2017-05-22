@@ -547,6 +547,14 @@ U+81B0	kJapaneseOn	HAN
 U+81B0	kKorean	PEN
 U+81B0	kMandarin	fán
 U+81B0	kXHC1983	0300.080:fán
+U+34CE	kCantonese	caam1 saam6
+U+34CE	kDefinition	cold, cold air, bitterly cold
+U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
+U+34CE	kMandarin	qīn
+U+34D8	kCantonese	suk1
+U+34D8	kDefinition	(same as U+738A 玊) jade with some defects, a lapidary, to polish gems; a surname
+U+34D8	kHanyuPinyin	10278.080,10278.090:sù
+U+34D8	kMandarin	sù
 
 
 # EOF
