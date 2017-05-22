@@ -185,6 +185,7 @@ MULTI_VALUE_FIELDS = [
     'kKSC1',
     'kLua',
     'kMainlandTelegraph',
+    'kMandarin',
     'kMatthews',
     'kMeyerWempe',
     'kMorohashi',
