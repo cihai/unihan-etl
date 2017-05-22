@@ -515,6 +515,38 @@ U+5EFE	kJapaneseKun	SASAGERU
 U+5EFE	kJapaneseOn	KYOU KU
 U+5EFE	kMandarin	gǒng
 U+5EFE	kVietnamese	trấp
+U+4FFE	kCantonese	bei2
+U+4FFE	kDefinition	so that, in order that; to cause; (Cant.) to give (synonymous with Mandarin 給)
+U+4FFE	kHangul	비
+U+4FFE	kHanyuPinyin	10180.020:bǐ,bì,bēi,pì
+U+4FFE	kJapaneseKun	SHIMU
+U+4FFE	kJapaneseOn	HI HEI
+U+4FFE	kKorean	PI
+U+4FFE	kMandarin	bǐ bì
+U+4FFE	kTang	byɛ̌
+U+4FFE	kXHC1983	0056.010:bǐ
+U+4FFF	kHanyuPinyin	10175.050:hǔ,chí
+U+4FFF	kJapaneseKun	KATATAGAI
+U+4FFF	kJapaneseOn	CHI JI
+U+91B1	kCantonese	put3
+U+91B1	kDefinition	to brew for the second time
+U+91B1	kHangul	발
+U+91B1	kHanyuPinyin	63599.090:pō,fā
+U+91B1	kJapaneseKun	KAMOSU
+U+91B1	kJapaneseOn	HATSU
+U+91B1	kKorean	PAL
+U+91B1	kMandarin	fā pò
+U+91B1	kTang	pɑt
+U+91B1	kXHC1983	0295.011:fā 0884.081:pō
+U+81B0	kCantonese	faan4
+U+81B0	kDefinition	to cook meat for a sacrifice or offering
+U+81B0	kHangul	번
+U+81B0	kHanyuPinyin	32112.080:fán,pán
+U+81B0	kJapaneseKun	HIMOROGI
+U+81B0	kJapaneseOn	HAN
+U+81B0	kKorean	PEN
+U+81B0	kMandarin	fán
+U+81B0	kXHC1983	0300.080:fán
 
 
 # EOF
