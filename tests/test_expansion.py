@@ -167,3 +167,54 @@ def test_expand_HanYu(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kHanYu'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+4E9D      kRSAdobe_Japan1_6       C+17245+7.2.6 C+17245+28.2.6
+    ("U+4E9D", [{
+        "type": "C",
+        "cid": 17245,
+        "radical-stroke": "7.2.6"
+    }, {
+        "type": "C",
+        "cid": 17245,
+        "radical-stroke": "28.2.6"
+    }]),
+    # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
+    ("U+4E9E", [{
+        "type": "C",
+        "cid": 4108,
+        "radical-stroke": "7.2.6"
+    }]),
+    # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
+    ("U+4E30", [{
+        "type": "C",
+        "cid": 14301,
+        "radical-stroke": "2.1.3"
+    }, {
+        "type": "V",
+        "cid": 15386,
+        "radical-stroke": "2.1.3"
+    }]),
+])
+def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
+    """
+    The value consists of a number of space-separated entries. Each entry
+    consists of three pieces of information separated by a plus sign:
+
+    1) C or V. “C” indicates that the Unicode code point maps directly to the
+    Adobe-Japan1-6 CID that appears after it, and “V” indicates that it is
+    considered a variant form, and thus not directly encoded.
+
+    2) The Adobe-Japan1-6 CID.
+
+    3) Radical-stroke data for the indicated Adobe-Japan1-6 CID. The
+    radical-stroke data consists of three pieces separated by periods: the
+    KangXi radical (1-214), the number of strokes in the form the radical
+    takes in the glyph, and the number of strokes in the residue. The standard
+    Unicode radical-stroke form can be obtained by omitting the second value,
+    and the total strokes in the glyph from adding the second and third
+    values.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kRSAdobe_Japan1_6'] == expected
