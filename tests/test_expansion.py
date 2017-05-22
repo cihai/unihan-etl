@@ -130,3 +130,23 @@ def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kHanyuPinyin'] == expected
+
+
+def test_expand_HanYu(expanded_data):
+    """
+    The character references are given in the form “ABCDE.XYZ”, in which: “A”
+    is the volume number [1..8]; “BCDE” is the zero-padded page number
+    [0001..4809]; “XY” is the zero-padded number of the character on the page
+    [01..32]; “Z” is “0” for a character actually in the dictionary, and
+    greater than 0 for a character assigned a “virtual” position in the
+    dictionary. For example, 53024.060 indicates an actual HDZ character, the
+    6th character on Page 3,024 of Volume 5 (i.e. 籉 [U+7C49]). Note that the
+    Volume 8 “BCDE” references are in the range [0008..0044] inclusive,
+    referring to the pagination of the “Appendix of Addendum” at the end of
+    that volume (beginning after p. 5746).
+
+    The first character assigned a given virtual position has an index ending
+    in 1; the second assigned the same virtual position has an index ending in
+    2; and so on.
+    """
+    pass
