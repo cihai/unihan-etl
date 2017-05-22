@@ -82,8 +82,8 @@ def TestPackager(mock_test_dir, mock_zip_file):
 @pytest.fixture(scope="session")
 def columns():
     return (
-        process.CUSTOM_DELIMITED_FIELDS +
-        process.SPACE_DELIMITED_FIELDS + process.INDEX_FIELDS
+        process.CUSTOM_DELIMITED_FIELDS + process.INDEX_FIELDS +
+        process.SPACE_DELIMITED_FIELDS
     )
 
 
