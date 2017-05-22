@@ -566,6 +566,19 @@ def expand_delimiters(normalized_data):
                         "cid": int(vals[1]),
                         "radical-stroke": vals[2]
                     }
+            if any(field == f for f in [
+                'kRSJapanese',
+                'kRSKangXi',
+                'kRSKanWa',
+                'kRSKorean',
+                'kRSUnicode',
+            ]):
+                for i, value in enumerate(char[field]):
+                    vals = value.split('.')
+                    char[field][i] = {
+                        "radical": int(vals[0]),
+                        "stroke-count": int(vals[1]),
+                    }
 
     return normalized_data
 
