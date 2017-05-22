@@ -146,8 +146,13 @@ UNIHAN_MANIFEST = {
     ]
 }
 
+#: FIELDS with multiple values via custom delimiters
+CUSTOM_DELIMITED_FIELDS = [
+    'kDefinition'
+]
+
 #: Fields with multiple values UNIHAN delimits by spaces
-MULTI_VALUE_FIELDS = [
+SPACE_DELIMITED_FIELDS = [
     'kAccountingNumberic',
     'kCantonese',
     'kCCCII',
@@ -514,7 +519,7 @@ def expand_delimiters(normalized_data):
         for field in char.keys():
             if not char[field]:
                 continue
-            if field in MULTI_VALUE_FIELDS and char[field]:
+            if field in SPACE_DELIMITED_FIELDS and char[field]:
                 char[field] = char[field].split(' ')
             if field == 'kDefinition':
                 char[field] = [c.strip() for c in char[field].split(';')]

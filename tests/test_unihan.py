@@ -249,34 +249,37 @@ def test_normalize_only_output_requested_columns(tmpdir):
     )
 
 
-def test_expand_delimiter(tmpdir, sample_data2, fixture_files):
-    columns = [
-        'kTotalStrokes',
-        'kPhonetic',
-        'kCantonese',
-        'kDefinition',
-    ] + process.MULTI_VALUE_FIELDS + process.INDEX_FIELDS
+@pytest.fixture
+def expanded_data(fixture_files):
+    columns = (
+        process.CUSTOM_DELIMITED_FIELDS +
+        process.SPACE_DELIMITED_FIELDS + process.INDEX_FIELDS
+    )
 
     data = process.load_data(
         files=fixture_files,
     )
 
     items = process.normalize(data, columns)
-    print('after normalize %s' % len(items))
-    items = process.expand_delimiters(items)
-    print('after expand_delimiters %s' % len(items))
-    for item in items:
+    return process.expand_delimiters(items)
+
+
+def test_expand_delimiter(expanded_data):
+
+    for item in expanded_data:
         for field in item.keys():
-            if field in process.MULTI_VALUE_FIELDS and item[field]:
+            if field in process.SPACE_DELIMITED_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
-    item = [i for i in items if i['ucn'] == 'U+342B'][0]
+    # test kCantonese
+    item = [i for i in expanded_data if i['ucn'] == 'U+342B'][0]
     if item['ucn'] == 'U+342B':
         assert set(item['kCantonese']) == set(['gun3', 'hung1', 'zung1'])
     else:
         assert False, "Missing field U+342B kCantonese"
 
-    item = [i for i in items if i['ucn'] == 'U+37AE'][0]
+    # test kDefinition (split on ;), kJapanese, kJapaneseKun
+    item = [i for i in expanded_data if i['ucn'] == 'U+37AE'][0]
     if item['ucn'] == 'U+37AE':
         assert set(item['kJapaneseKun']) == set(['DERU', 'DASU'])
         assert set(item['kJapaneseOn']) == set(['SHUTSU', 'SUI'])
