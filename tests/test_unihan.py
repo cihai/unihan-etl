@@ -7,7 +7,6 @@ from __future__ import (absolute_import, division, print_function,
 import logging
 import os
 import shutil
-import zipfile
 
 import pytest
 
@@ -18,86 +17,6 @@ from unihan_tabular.test import assert_dict_contains_subset, get_datapath
 from unihan_tabular.util import merge_dict
 
 log = logging.getLogger(__name__)
-
-
-SAMPLE_DATA = """\
-U+3400	kCantonese	jau1
-U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
-U+3400	kMandarin	qiū
-U+3401	kCantonese	tim2
-U+3401	kDefinition	to lick; to taste, a mat, bamboo bark
-U+3401	kHanyuPinyin	10019.020:tiàn
-"""
-
-
-@pytest.fixture
-def fixture_files(tmpdir):
-    fixture_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
-
-    files = [
-        'Unihan_DictionaryIndices.txt',
-        'Unihan_DictionaryLikeData.txt',
-        'Unihan_IRGSources.txt',
-        'Unihan_NumericValues.txt',
-        'Unihan_OtherMappings.txt',
-        'Unihan_RadicalStrokeCounts.txt',
-        'Unihan_Readings.txt',
-        'Unihan_Variants.txt'
-    ]
-    return [os.path.join(fixture_dir, f) for f in files]
-
-
-@pytest.fixture
-def sample_data2(fixture_files):
-    return process.load_data(files=fixture_files)
-
-
-test_options = merge_dict(DEFAULT_OPTIONS.copy(), {
-    'input_files': ['Unihan_Readings.txt'],
-})
-
-
-MOCK_ZIP_FILENAME = 'Unihan.zip'
-
-
-@pytest.fixture(scope="session")
-def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp('unihan_tabular')
-    return fn
-
-
-@pytest.fixture(scope="session")
-def mock_zip_file(mock_test_dir):
-    return mock_test_dir.join(MOCK_ZIP_FILENAME)
-
-
-@pytest.fixture(scope="session")
-def mock_zip(mock_zip_file):
-    zf = zipfile.ZipFile(str(mock_zip_file), 'a')
-    zf.writestr("Unihan_Readings.txt", SAMPLE_DATA.encode('utf-8'))
-    zf.close()
-    return zf
-
-
-@pytest.fixture(scope="session")
-def TestPackager(mock_test_dir, mock_zip_file):
-    # monkey-patching builder
-    options = {
-        'work_dir': str(mock_test_dir),
-        'zip_path': str(mock_zip_file),
-        'destination': str(
-            mock_test_dir.join('unihan.csv')
-        )
-    }
-    return Packager(options)
-
-
-@pytest.mark.skip(reason="slow and may remove this")
-def test_builder_mock(TestPackager):
-    b = TestPackager
-
-    assert test_options == b.options
-    assert DEFAULT_OPTIONS != b.options
 
 
 def test_zip_has_files(mock_zip):
@@ -152,8 +71,8 @@ def test_get_files():
     assert set(result) == set(expected)
 
 
-def test_download(tmpdir, mock_zip_file):
-    dest_filepath = tmpdir.join('data', MOCK_ZIP_FILENAME)
+def test_download(tmpdir, mock_zip, mock_zip_file, mock_zip_filename):
+    dest_filepath = tmpdir.join('data', mock_zip_filename)
 
     process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
@@ -161,7 +80,9 @@ def test_download(tmpdir, mock_zip_file):
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_download_mock(tmpdir, mock_zip_file, mock_test_dir):
+def test_download_mock(
+    tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options
+):
     data_path = tmpdir.join('data')
     dest_path = data_path.join('data', 'hey.zip')
 
@@ -179,7 +100,9 @@ def test_download_mock(tmpdir, mock_zip_file, mock_test_dir):
     p.export()
 
 
-def test_export_format(tmpdir, mock_zip_file, mock_test_dir):
+def test_export_format(
+    tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options
+):
     data_path = tmpdir.join('data')
     dest_path = data_path.join('data', 'hey.zip')
 
@@ -200,7 +123,7 @@ def test_export_format(tmpdir, mock_zip_file, mock_test_dir):
     assert os.path.exists(p.options['destination'])
 
 
-def test_extract_zip(mock_zip_file, tmpdir):
+def test_extract_zip(mock_zip, mock_zip_file, tmpdir):
     zf = process.extract_zip(str(mock_zip_file), str(tmpdir))
 
     assert len(zf.infolist()) == 1
@@ -230,28 +153,6 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
     assert set(in_columns).issubset(set(columns)), (
         "normalize returns correct columns specified + ucn and char."
     )
-
-
-@pytest.fixture
-def columns():
-    return (
-        process.CUSTOM_DELIMITED_FIELDS +
-        process.SPACE_DELIMITED_FIELDS + process.INDEX_FIELDS
-    )
-
-
-@pytest.fixture
-def normalized_data(columns, fixture_files):
-    data = process.load_data(
-        files=fixture_files,
-    )
-
-    return process.normalize(data, columns)
-
-
-@pytest.fixture
-def expanded_data(normalized_data):
-    return process.expand_delimiters(normalized_data)
 
 
 def test_expand_delimiter(expanded_data):
