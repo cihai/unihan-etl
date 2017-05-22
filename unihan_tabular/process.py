@@ -639,8 +639,6 @@ class Packager(object):
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
-        print(DEFAULT_OPTIONS)
-        print(options)
 
     def download(self, urlretrieve_fn=urlretrieve):
         """Download raw UNIHAN data if not exists.
