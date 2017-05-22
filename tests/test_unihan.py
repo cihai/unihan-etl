@@ -208,33 +208,16 @@ def test_extract_zip(mock_zip_file, tmpdir):
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
-def test_normalize_only_output_requested_columns(tmpdir):
-    csv_file = tmpdir.join('test.csv')
-
-    csv_file.write(SAMPLE_DATA.encode('utf-8'), mode='wb')
-
-    csv_files = [str(csv_file)]
-
-    columns = [
-        'kTotalStrokes',
-        'kPhonetic',
-        'kCantonese',
-        'kDefinition',
-    ] + process.INDEX_FIELDS
-
-    data = process.load_data(
-        files=csv_files,
-    )
-
-    items = process.normalize(data, columns)
+def test_normalize_only_output_requested_columns(normalized_data, columns):
+    items = normalized_data
+    in_columns = ['kDefinition', 'kCantonese']
 
     for v in items:
         assert set(columns) == set(v.keys())
 
-    items = process.listify(items, columns)
+    items = process.listify(items, in_columns)
 
     not_in_columns = []
-    in_columns = ['kDefinition', 'kCantonese']
 
     # columns not selected in normalize must not be in result.
     for v in items[0]:
@@ -250,18 +233,25 @@ def test_normalize_only_output_requested_columns(tmpdir):
 
 
 @pytest.fixture
-def expanded_data(fixture_files):
-    columns = (
+def columns():
+    return (
         process.CUSTOM_DELIMITED_FIELDS +
         process.SPACE_DELIMITED_FIELDS + process.INDEX_FIELDS
     )
 
+
+@pytest.fixture
+def normalized_data(columns, fixture_files):
     data = process.load_data(
         files=fixture_files,
     )
 
-    items = process.normalize(data, columns)
-    return process.expand_delimiters(items)
+    return process.normalize(data, columns)
+
+
+@pytest.fixture
+def expanded_data(normalized_data):
+    return process.expand_delimiters(normalized_data)
 
 
 def test_expand_delimiter(expanded_data):
