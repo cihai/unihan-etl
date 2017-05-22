@@ -155,32 +155,6 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
     )
 
 
-def test_expand_delimiter(expanded_data):
-
-    for item in expanded_data:
-        for field in item.keys():
-            if field in process.SPACE_DELIMITED_FIELDS and item[field]:
-                assert isinstance(item[field], list)
-
-    # test kCantonese
-    item = [i for i in expanded_data if i['ucn'] == 'U+342B'][0]
-    if item['ucn'] == 'U+342B':
-        assert set(item['kCantonese']) == set(['gun3', 'hung1', 'zung1'])
-    else:
-        assert False, "Missing field U+342B kCantonese"
-
-    # test kDefinition (split on ;), kJapanese, kJapaneseKun
-    item = [i for i in expanded_data if i['ucn'] == 'U+37AE'][0]
-    if item['ucn'] == 'U+37AE':
-        assert set(item['kJapaneseKun']) == set(['DERU', 'DASU'])
-        assert set(item['kJapaneseOn']) == set(['SHUTSU', 'SUI'])
-        assert set(item['kDefinition']) == set([
-            'variant of 出 U+51FA, to go out, send out',
-            'to stand',
-            'to produce'
-        ])
-
-
 def test_normalize_simple_data_format():
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
