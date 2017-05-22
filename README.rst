@@ -71,6 +71,8 @@ Features
 --------
 
 * automatically downloads UNIHAN from the internet
+* strives for accuracy with the specifications described in `UNIHAN's database
+  design <http://www.unicode.org/reports/tr38/>`_
 * export to JSON, CSV and YAML (requires `pyyaml`_) via ``-F``
 * configurable to export specific fields via ``-f``
 * accounts for encoding conflicts due to the Unicode-heavy content
