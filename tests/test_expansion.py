@@ -40,16 +40,22 @@ def test_expand(expanded_data, ucn, field, expected):
     assert set(item[field]) == set(expected)
 
 
-def test_expand_kMandarin(expanded_data):
+@pytest.mark.parametrize("ucn,expected", [
+    ("U+346E", {
+        "zh-Hans": "hún",
+        "zh-Hant": "hún"
+    }),
+    ("U+4FFE", {
+        "zh-Hans": "bǐ",
+        "zh-Hant": "bì"
+    })
+])
+def test_expand_kMandarin(expanded_data, ucn, expected):
     """
     The most customary pinyin reading for this character. When there are two
     values, then the first is preferred for zh-Hans (CN) and the second is
     preferred for zh-Hant (TW). When there is only one value, it is appropriate
     for both.
     """
-    ucn = "U+4FFE"
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
-    assert item['kMandarin'] == {
-        "zh-Hans": "bǐ",
-        "zh-Hant": "bì"
-    }
+    assert item['kMandarin'] == expected
