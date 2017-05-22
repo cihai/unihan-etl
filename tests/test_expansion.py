@@ -218,3 +218,47 @@ def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kRSAdobe_Japan1_6'] == expected
+
+
+@pytest.mark.parametrize("field,ucn,expected", [
+    # U+4E55      kRSJapanese     4.6
+    ('kRSJapanese', 'U+4E55', [{
+        "radical": 4,
+        "stroke-count": 6
+    }]),
+    # U+4E99      kRSKangXi       7.4
+    ('kRSKangXi', 'U+4E99', [{
+        "radical": 7,
+        "stroke-count": 4
+    }]),
+    # U+4E9A      kRSKangXi       1.5
+    ('kRSKangXi', 'U+4E9A', [{
+        "radical": 1,
+        "stroke-count": 5
+    }]),
+    # U+4E54      kRSKanWa        37.3
+    ('kRSKanWa', 'U+4E54', [{
+        "radical": 37,
+        "stroke-count": 3
+    }]),
+    # U+4E55      kRSKanWa        4.6
+    ('kRSKanWa', 'U+4E55', [{
+        "radical": 4,
+        "stroke-count": 6
+    }]),
+    # U+5378      kRSKorean       26.7
+    ('kRSKorean', 'U+5378', [{
+        "radical": 26,
+        "stroke-count": 7
+    }]),
+    # U+3491      kRSUnicode      9.13
+    ('kRSUnicode', 'U+3491', [{
+        "radical": 9,
+        "stroke-count": 13
+    }]),
+])
+def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
+    """kRSJapanese
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item[field] == expected
