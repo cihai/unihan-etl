@@ -132,7 +132,23 @@ def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
     assert item['kHanyuPinyin'] == expected
 
 
-def test_expand_HanYu(expanded_data):
+@pytest.mark.parametrize("ucn,expected", [
+    ("U+34B9", [{  # U+34B9	kHanYu	10254.060 10254.100
+        "volume": 1,
+        "page": 254,
+        "character": 60
+    }, {
+        "volume": 1,
+        "page": 254,
+        "character": 100
+    }]),
+    ('U+34AD', [{  # U+34AD	kHanYu	10273.120
+        "volume": 1,
+        "page": 273,
+        "character": 120
+    }])
+])
+def test_expand_HanYu(expanded_data, ucn, expected):
     """
     The character references are given in the form “ABCDE.XYZ”, in which: “A”
     is the volume number [1..8]; “BCDE” is the zero-padded page number
@@ -149,4 +165,5 @@ def test_expand_HanYu(expanded_data):
     in 1; the second assigned the same virtual position has an index ending in
     2; and so on.
     """
-    pass
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kHanYu'] == expected
