@@ -542,6 +542,15 @@ def expand_delimiters(normalized_data):
                     "zh-Hans": cn,
                     "zh-Hant": tw
                 }
+            if field == 'kHanyuPinyin':
+                for i, value in enumerate(char[field]):
+                    value = [c.strip() for c in value.split(':')]
+                    char[field][i] = {
+                        "locations": value[0],
+                        "readings": value[1]
+                    }
+                    for k, v in char[field][i].items():
+                        char[field][i][k] = v.split(',')
     return normalized_data
 
 

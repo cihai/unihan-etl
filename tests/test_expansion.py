@@ -41,11 +41,11 @@ def test_expand(expanded_data, ucn, field, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
-    ("U+346E", {
+    ("U+346E", {  # U+346E	kMandarin	hún
         "zh-Hans": "hún",
         "zh-Hant": "hún"
     }),
-    ("U+4FFE", {
+    ("U+4FFE", {  # U+4FFE	kMandarin	bǐ bì
         "zh-Hans": "bǐ",
         "zh-Hant": "bì"
     })
@@ -59,3 +59,74 @@ def test_expand_kMandarin(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kMandarin'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    ("U+5EFE", [{  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
+        "locations": [
+            "10513.110",
+            "10514.010",
+            "10514.020"
+        ],
+        "readings": [
+            "gǒng"
+        ]
+    }]),
+    ("U+5364", [{  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
+        "locations": [
+            "10093.130"
+        ],
+        "readings": [
+            "xī",
+            "lǔ"
+        ]
+    }, {
+        "locations": [
+            "74609.020"
+        ],
+        "readings": [
+            "lǔ",
+            "xī"
+        ]
+    }]),
+    ("U+34D8", [{  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
+        "locations": [
+            "10278.080",
+            "10278.090"
+        ],
+        "readings": [
+            "sù"
+        ]
+    }]),
+    ("U+34CE", [{  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
+        "locations": [
+            "10297.260"
+        ],
+        "readings": [
+            "qīn", "qìn", "qǐn"
+        ]
+    }])
+])
+def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
+    """
+    Each location has the form “ABCDE.XYZ” (as in “kHanYu”); multiple
+    locations for a given pīnyīn reading are separated by “,” (comma). The
+    list of locations is followed by “:” (colon), followed by a
+    comma-separated list of one or more pīnyīn readings. Where multiple
+    pīnyīn readings are associated with a given mapping, these are ordered as
+    in HDZ (for the most part reflecting relative commonality). The following
+    are representative records.
+
+    | U+34CE | 㓎 | 10297.260: qīn,qìn,qǐn |
+    | U+34D8 | 㓘 | 10278.080,10278.090: sù |
+    | U+5364 | 卤 | 10093.130: xī,lǔ 74609.020: lǔ,xī |
+    | U+5EFE | 廾 | 10513.110,10514.010,10514.020: gǒng |
+
+    For example, the “kHanyuPinyin” value for 卤 U+5364 is
+    10093.130: xī,lǔ 74609.020: lǔ,xī”. This means that 卤 U+5364 is found in
+    kHanYu” at entries 10093.130 and 74609.020. The former entry has the two
+    pīnyīn readings xī and lǔ (in that order), whereas the latter entry has
+    the readings lǔ and xī (reversing the order).
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kHanyuPinyin'] == expected
