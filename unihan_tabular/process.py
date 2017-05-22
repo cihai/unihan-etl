@@ -558,6 +558,15 @@ def expand_delimiters(normalized_data):
                     }
                     for k, v in char[field][i].items():
                         char[field][i][k] = v.split(',')
+            if field == 'kRSAdobe_Japan1_6':
+                for i, value in enumerate(char[field]):
+                    vals = value.split('+')
+                    char[field][i] = {
+                        "type": vals[0],
+                        "cid": int(vals[1]),
+                        "radical-stroke": vals[2]
+                    }
+
     return normalized_data
 
 
