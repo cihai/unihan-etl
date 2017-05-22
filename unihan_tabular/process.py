@@ -151,8 +151,13 @@ CUSTOM_DELIMITED_FIELDS = [
     'kDefinition'
 ]
 
-#: Fields with multiple values UNIHAN delimits by spaces
-SPACE_DELIMITED_FIELDS = [
+#: Fields with multiple values UNIHAN delimits by spaces -> dict
+SPACE_DELIMITED_DICT_FIELDS = [
+    'kMandarin',
+]
+
+#: Fields with multiple values UNIHAN delimits by spaces -> list
+SPACE_DELIMITED_LIST_FIELDS = [
     'kAccountingNumberic',
     'kCantonese',
     'kCCCII',
@@ -190,7 +195,6 @@ SPACE_DELIMITED_FIELDS = [
     'kKSC1',
     'kLua',
     'kMainlandTelegraph',
-    'kMandarin',
     'kMatthews',
     'kMeyerWempe',
     'kMorohashi',
@@ -217,6 +221,11 @@ SPACE_DELIMITED_FIELDS = [
     'kXHC1983',
     'kZVariant',
 ]
+
+#: Any space delimited field regardless of expanded form
+SPACE_DELIMITED_FIELDS = (
+    SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIELDS
+)
 
 #: Default index fields for unihan csv's. You probably want these.
 INDEX_FIELDS = ['ucn', 'char']
@@ -523,6 +532,16 @@ def expand_delimiters(normalized_data):
                 char[field] = char[field].split(' ')
             if field == 'kDefinition':
                 char[field] = [c.strip() for c in char[field].split(';')]
+            if field == 'kMandarin':
+                cn = char[field][0]
+                if len(char[field]) == 1:
+                    tw = char[field][0]
+                else:
+                    tw = char[field][1]
+                char[field] = {
+                    "zh-Hans": cn,
+                    "zh-Hant": tw
+                }
     return normalized_data
 
 

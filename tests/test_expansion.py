@@ -12,7 +12,7 @@ from unihan_tabular import process
 def test_expands_spaces(expanded_data):
     for item in expanded_data:
         for field in item.keys():
-            if field in process.SPACE_DELIMITED_FIELDS and item[field]:
+            if field in process.SPACE_DELIMITED_LIST_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
 
@@ -47,4 +47,9 @@ def test_expand_kMandarin(expanded_data):
     preferred for zh-Hant (TW). When there is only one value, it is appropriate
     for both.
     """
-    pass
+    ucn = "U+4FFE"
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kMandarin'] == {
+        "zh-Hans": "bǐ",
+        "zh-Hant": "bì"
+    }
