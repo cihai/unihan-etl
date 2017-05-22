@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Test expansion of multi-value fields in UNIHAN."""
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
