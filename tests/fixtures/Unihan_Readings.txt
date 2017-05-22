@@ -502,5 +502,19 @@ U+34C2	kCantonese	kaau3 taau3
 U+37AE	kDefinition	variant of 出 U+51FA, to go out, send out; to stand; to produce
 U+37AE	kJapaneseKun	DERU DASU
 U+37AE	kJapaneseOn	SHUTSU SUI
+U+5364	kCantonese	lou5
+U+5364	kDefinition	salt
+U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
+U+5364	kJapaneseOn	SEI
+U+5364	kMandarin	lǔ
+U+5364	kXHC1983	0737.050:lǔ
+U+5EFE	kCantonese	gung2
+U+5EFE	kDefinition	two hands; KangXi radical 55
+U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
+U+5EFE	kJapaneseKun	SASAGERU
+U+5EFE	kJapaneseOn	KYOU KU
+U+5EFE	kMandarin	gǒng
+U+5EFE	kVietnamese	trấp
+
 
 # EOF
