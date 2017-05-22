@@ -270,11 +270,11 @@ def test_expand_delimiter(tmpdir, sample_data2, fixture_files):
             if field in process.MULTI_VALUE_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
-    item = [i for i in items if i['ucn'] == 'U+346E'][0]
-    if item['ucn'] == 'U+346E':
-        assert set(item['kCantonese']) == set(['gwaat1', 'waan4'])
+    item = [i for i in items if i['ucn'] == 'U+342B'][0]
+    if item['ucn'] == 'U+342B':
+        assert set(item['kCantonese']) == set(['gun3', 'hung1', 'zung1'])
     else:
-        assert False, "Missing field U+346E kCantonese"
+        assert False, "Missing field U+342B kCantonese"
 
     item = [i for i in items if i['ucn'] == 'U+37AE'][0]
     if item['ucn'] == 'U+37AE':
