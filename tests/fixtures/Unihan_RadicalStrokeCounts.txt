@@ -499,5 +499,7 @@ U+4E9E	kRSKangXi	7.6
 U+4E9F	kRSAdobe_Japan1_6	C+4109+7.2.6
 U+4E9F	kRSKangXi	7.6
 U+4EA0	kRSAdobe_Japan1_6	C+4110+8.2.0
+U+5378	kRSKorean	26.7
+
 
 # EOF
