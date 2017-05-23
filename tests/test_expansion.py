@@ -335,3 +335,28 @@ def test_expand_kCihaiT(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kCihaiT'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+9F7C  kDaeJaweon      2075.100
+    ("U+9F7C", {
+        "page": 2075,
+        "position": 10,
+        "virtual": 0
+    }),
+    # U+4E37  kDaeJaweon      0162.211
+    ("U+4E37", {
+        "page": 162,
+        "position": 21,
+        "virtual": 1
+    }),
+])
+def test_expand_kDaeJaweon(expanded_data, ucn, expected):
+    """
+    The position is in the form “page.position” with the final digit in the
+    position being “0” for characters actually in the dictionary and “1” for
+    characters not found in the dictionary and assigned a “virtual” position in
+    the dictionary.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kDaeJaweon'] == expected
