@@ -361,11 +361,18 @@ def get_parser():
 
     parser.add_argument(
         "-f", "--fields", dest="fields", nargs="*",
-        help="Default: %s" % UNIHAN_FIELDS
+        help=(
+            "Fields to use in export. All fields used by default."
+            "Fields: %s" % ', '.join(UNIHAN_FIELDS)
+        )
     )
     parser.add_argument(
         "-i", "--input-files", dest="input_files", nargs='*',
-        help="Default: %s, files inside zip to pull data from." % UNIHAN_FILES
+        help=(
+            "Files inside zip to pull data from. Separated by spaces."
+            "All files used by default. Files: %s" %
+            ', '.join(UNIHAN_FILES)
+        )
     )
     parser.add_argument(
         "-l", "--log_level", dest="log_level",
