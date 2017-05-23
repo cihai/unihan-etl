@@ -593,6 +593,12 @@ def expand_delimiters(normalized_data):
                     "position": int(vals[1][0:2]),
                     "virtual": int(vals[1][2]),
                 }
+            if field == 'kFenn':
+                for i, value in enumerate(char[field]):
+                    char[field][i] = {
+                        "phonetic": int(char[field][i][0:3]),
+                        "frequency": char[field][i][3]
+                    }
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',
