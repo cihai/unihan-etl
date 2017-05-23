@@ -1,10 +1,10 @@
 .. _api:
 
-.. module:: unihan_tabular
-
 ===
 API
 ===
+
+.. module:: unihan_tabular
 
 .. automodule:: unihan_tabular.process
     :members:

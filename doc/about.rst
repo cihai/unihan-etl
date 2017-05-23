@@ -30,7 +30,7 @@ Formats
 - CSV
 - JSON
 - YAML (requires `pyyaml <http://pyyaml.org/>`_)
-- Python dict (via :ref:`API`)
+- Python dict (via :ref:`api`)
 
 Structured output
 """""""""""""""""
