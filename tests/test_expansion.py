@@ -261,17 +261,39 @@ def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
         "radical": 26,
         "strokes": 7
     }]),
-    # U+3491      kRSUnicode      9.13
-    ('kRSUnicode', 'U+3491', [{
-        "radical": 9,
-        "strokes": 13
-    }]),
 ])
 def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
     """kRSJapanese
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item[field] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+3491      kRSUnicode      9.13
+    ('U+3491', [{
+        "radical": 9,
+        "strokes": 13,
+        "simplified": False
+    }]),
+    # U+4336       kRSUnicode      120'.3
+    ('U+4336', [{
+        "radical": 120,
+        "strokes": 3,
+        "simplified": True
+    }]),
+])
+def test_expand_kRSUnihan(expanded_data, ucn, expected):
+    """
+    The standard radical/stroke count for this character in the form
+    “radical.additional strokes”. The radical is indicated by a number in the
+    range (1..214) inclusive. An apostrophe (') after the radical indicates a
+    simplified version of the given radical. The “additional strokes” value is
+    the residual stroke-count, the count of all strokes remaining after
+    eliminating all strokes associated with the radical.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kRSUnicode'] == expected
 
 
 @pytest.mark.parametrize("ucn,expected", [
