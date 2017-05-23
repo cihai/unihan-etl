@@ -599,6 +599,13 @@ def expand_delimiters(normalized_data):
                         "phonetic": int(char[field][i][0:3]),
                         "frequency": char[field][i][3]
                     }
+            if field == 'kHanyuPinlu':
+                for i, value in enumerate(char[field]):
+                    v = char[field][i]
+                    char[field][i] = {
+                        "phonetic": v[0:v.find("(")],
+                        "frequency": int(v[v.find("(")+1:v.find(")")])
+                    }
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',

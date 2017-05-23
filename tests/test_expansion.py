@@ -377,3 +377,29 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
 def test_expand_kFenn(expanded_data, ucn, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kFenn'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+4E0B      kHanyuPinlu     xià(6430) xia(249)
+    ("U+4E0B", [{
+        "phonetic": "xià",
+        "frequency": 6430
+    }, {
+        "phonetic": "xia",
+        "frequency": 249
+    }]),
+    # U+4E09      kHanyuPinlu     sān(3030)
+    ("U+4E09", [{
+        "phonetic": "sān",
+        "frequency": 3030
+    }])
+])
+def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
+    """
+    Immediately following the pronunciation, a numeric string appears in
+    parentheses: e.g. in “ā(392)” the numeric string “392” indicates the sum
+    total of the frequencies of the pronunciations of the character as given in
+    HYPLCD.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kHanyuPinlu'] == expected
