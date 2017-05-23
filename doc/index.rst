@@ -11,5 +11,6 @@ unihan-tabular
 
     api
     about
+    unihan
     cli
     history
