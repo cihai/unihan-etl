@@ -360,3 +360,20 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kDaeJaweon'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+342C      kFenn   871P
+    ("U+342C", [{
+        "phonetic": 871,
+        "frequency": "P"
+    }]),
+    # U+3431      kFenn   281K
+    ("U+3431", [{
+        "phonetic": 281,
+        "frequency": "K"
+    }])
+])
+def test_expand_kFenn(expanded_data, ucn, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kFenn'] == expected
