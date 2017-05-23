@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-"""Build Unihan into tabular friendly format and export it."""
+"""Build Unihan into tabular / structured format and export it."""
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
