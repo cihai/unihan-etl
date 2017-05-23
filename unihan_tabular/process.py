@@ -148,7 +148,8 @@ UNIHAN_MANIFEST = {
 
 #: FIELDS with multiple values via custom delimiters
 CUSTOM_DELIMITED_FIELDS = [
-    'kDefinition'
+    'kDefinition',
+    'kDaeJaweon'
 ]
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
@@ -585,6 +586,13 @@ def expand_delimiters(normalized_data):
                         "row": int(vals[1][0]),
                         "position": int(vals[1][1:3]),
                     }
+            if field == 'kDaeJaweon':
+                vals = char[field].split('.')
+                char[field] = {
+                    "page": int(vals[0]),
+                    "position": int(vals[1][0:2]),
+                    "virtual": int(vals[1][2]),
+                }
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',
