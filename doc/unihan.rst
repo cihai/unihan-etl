@@ -7,7 +7,7 @@ About UNIHAN
 .. seealso::
 
     - `Wikipedia article <https://en.wikipedia.org/wiki/Han_unification>`_
-    - `Documentation of the UNIHAN Database <http://www.unicode.org/reports/tr38/>`_
+    - `UNIHAN database documentation`_
 
 What is UNIHAN?
 ---------------
@@ -21,16 +21,66 @@ challenge.
 
 The advantage that UNIHAN provides to east asian researchers, including
 sinologists and japanologists, linguists, anaylsts, language learners, and
-hobbyists cannot be understated. Despite its use under the hood in many
-applications and websites, it is underrepresented and often overlooked as a
-source of reliable information. It's potential uses are not readily
-understood without reading into the standard and wrangling the data.
+hobbyists cannot be understated. Unbeknownst to users, its used under the hood
+in many applications and websites.
 
-It isn't readily accessible in data form for developers. Even some of the public
-implementers of UNIHAN haven't fully exploited its potential.
+The database
+------------
+
+UNIHAN provides a database of its information, which is the culmination
+of CJK information  that has been vetted and proofed painstakingly over years.
+
+You can view the `UNIHAN Database documentation`_ to see where information
+on each field of information is derived from. For instance:
+
+- `kCantonese <http://www.unicode.org/reports/tr38/#kCantonese>`_: 
+  The Cantonese pronunciation(s) for this character using the
+  `jyutping romanization`_.
+
+  Bibliography:
+
+  1. Casey, G. Hugh, S.J. Ten Thousand Characters: An Analytic Dictionary. Hong Kong: Kelley and Walsh,1980 (kPhonetic).
+
+  2. Cheung Kwan-hin and Robert S. Bauer, The Representation of Cantonese with Chinese Characters, Journal of Chinese Linguistics Monograph Series Number 18, 2002.
+
+  3. Roy T. Cowles, A Pocket Dictionary of Cantonese, Hong Kong: University Press, 1999 (kCowles).
+
+  4. Sidney Lau, A Practical Cantonese-English Dictionary, Hong Kong: Government Printer, 1977 (kLau).
+
+  5. Bernard F. Meyer and Theodore F. Wempe, Student’s Cantonese-English Dictionary, Maryknoll, New York: Catholic Foreign Mission Society of America, 1947 (kMeyerWempe).
+
+  6. 饒秉才, ed. 廣州音字典, Hong Kong: Joint Publishing (H.K.) Co., Ltd., 1989.
+
+  7. 中華新字典, Hong Kong:中華書局, 1987.
+
+  8. 黃港生, ed. 商務新詞典, Hong Kong: The Commercial Press, 1991.
+
+  9. 朗文初級中文詞典, Hong Kong: Longman, 2001.
+
+- `kHanYu <http://www.unicode.org/reports/tr38/#kHanYu>`_: The position of this
+  character in the Hanyu Da Zidian (HDZ) Chinese character dictionary.
+
+  Bibliography:
+
+  1. <Hanyu Da Zidian> [‘Great Chinese Character Dictionary’ (in 8 Volumes)]. XU Zhongshu (Editor in Chief). Wuhan, Hubei Province (PRC): Hubei and Sichuan Dictionary Publishing Collectives, 1986-1990. ISBN: 7-5403-0030-2/H.16.
+
+- `kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_:
+  The 漢語拼音 Hànyǔ Pīnyīn reading(s) appearing in the edition of 《漢語大字典
+  `Hànyǔ Dà Zìdiǎn`_ (HDZ) specified in the “kHanYu” property description (q.v.).
+
+  Bibliography:
+
+  - This data was originally input by 井作恆 Jǐng Zuòhéng
+  - proofed by 聃媽歌 Dān Māgē (Magda Danish, using software donated by 文林 Wénlín Institute, Inc. and tables prepared by 曲理查 Qū Lǐchá),
+  - and proofed again and prepared for the Unicode Consortium by 曲理查 Qū Lǐchá (2008-01-14).
+
+Han Unification is a global effort. And it's available free to the world.
 
 .. _Unicode Standard: https://en.wikipedia.org/wiki/Unicode
 .. _Han unification: https://en.wikipedia.org/wiki/Han_unification
+.. _UNIHAN database documentation: http://www.unicode.org/reports/tr38/
+.. _jyutping romanization: https://en.wikipedia.org/wiki/Jyutping
+.. _Hànyǔ Dà Zìdiǎn: https://en.wikipedia.org/wiki/Hanyu_Da_Zidian
 
 The problem
 -----------
