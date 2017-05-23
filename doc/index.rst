@@ -10,5 +10,6 @@ unihan-tabular
     :maxdepth: 2
 
     api
+    about
     cli
     history
