@@ -577,6 +577,14 @@ def expand_delimiters(normalized_data):
                         "strokes": int(vals[2].split('.')[1]),
                         "strokes-residue": int(vals[2].split('.')[2])
                     }
+            if field == 'kCihaiT':
+                for i, value in enumerate(char[field]):
+                    vals = value.split('.')
+                    char[field][i] = {
+                        "page": int(vals[0]),
+                        "row": int(vals[1][0]),
+                        "position": int(vals[1][1:3]),
+                    }
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',
