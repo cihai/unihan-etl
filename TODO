@@ -2,7 +2,10 @@
 TODO
 ====
 
-now
+- kTotalStrokes support for zh-Hant and zh-Hans
+- Cast string-integers to integers
+
+Old
 ---
 
 - Test for data returning in Simple Data Format.
