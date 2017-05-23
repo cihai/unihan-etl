@@ -304,6 +304,7 @@ DEFAULT_OPTIONS = {
     'input_files': UNIHAN_FILES,
     'download': False,
     'expand': True,
+    'prune_empty': True,
     'log_level': 'INFO',
 }
 
@@ -349,6 +350,15 @@ def get_parser():
             "Doesn't apply to CSVs."
         )
     )
+    parser.add_argument(
+        "--no-prune", dest="prune_empty",
+        action='store_false',
+        help=(
+            "Don't prune fields with empty keys" +
+            "Doesn't apply to CSVs."
+        )
+    )
+
     parser.add_argument(
         "-f", "--fields", dest="fields", nargs="*",
         help="Default: %s" % UNIHAN_FIELDS
@@ -766,6 +776,12 @@ class Packager(object):
         # expand data hierarchically
         if self.options['expand'] and self.options['format'] != 'csv':
             data = expand_delimiters(data)
+
+            if self.options['prune_empty']:
+                for char in data:
+                    for field in list(char.keys()):
+                        if not char[field]:
+                            char.pop(field, None)
 
         if self.options['format'] == 'json':
             export_json(data, self.options['destination'])
