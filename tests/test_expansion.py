@@ -403,3 +403,27 @@ def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kHanyuPinlu'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+4E00  kHDZRadBreak    ⼀[U+2F00]:10001.010
+    ('U+4E00', {
+        "radical": "⼀",
+        "ucn": "U+2F00",
+        "location": "10001.010"
+    }),
+    # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
+    ('U+4E59', {
+        "radical": "⼄",
+        "ucn": "U+2F04",
+        "location": "10047.040"
+    }),
+])
+def test_expand_kHDZRadBreak(expanded_data, ucn, expected):
+    """
+    Hanyu Da Zidian has a radical break beginning at this character’s position.
+    The field consists of the radical (with its Unicode code point), a colon,
+    and then the Hanyu Da Zidian position as in the kHanyu field.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kHDZRadBreak'] == expected
