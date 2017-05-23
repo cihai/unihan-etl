@@ -316,4 +316,21 @@ def test_expand_kCheungBauer(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kCheungBauer'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+34D6      kCihaiT 170.105
+    ("U+34D6", [{
+        "page": 170,
+        "row": 1,
+        "position": 5
+    }])
+])
+def test_expand_kCihaiT(expanded_data, ucn, expected):
+    """
+    The position is indicated by a decimal number. The digits to the left of
+    the decimal are the page number. The first digit after the decimal is the
+    row on the page, and the remaining two digits after the decimal are the
+    position on the row.
+    """
     pass
