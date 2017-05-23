@@ -4,15 +4,22 @@
 About unihan-tabular
 ====================
 
+unihan-tabular provides configurable, self-serve data exports of the
+:ref:`UNIHAN` database.
+
 Handles encoding
 ----------------
 
 Dealing with unicode encodings can be cumbersome across platforms.
+unihan-tabular deals with handling output encoding issues that could
+come up if you were to try to export the data yourself.
 
 Python 2 and 3
 --------------
 
-Designed and tested to work across Python versions.
+Designed and tested to work across Python versions. View the `travis test
+matrix <https://travis-ci.org/cihai/unihan-tabular>`_ for what this
+software is tested against.
 
 Customizable output
 -------------------
@@ -42,3 +49,9 @@ Filtering
 """""""""
 
 Support for filtering by fields and files.
+
+To specify which fields to output, use ``-f`` / ``--fields`` and separate
+them in spaces. ``-f kDefinition kCantonese kHanyuPinyin``.
+
+For files, ``-i`` / ``--input-files``. Example: ``-i
+Unihan_DictionaryLikeData.txt Unihan_Readings.txt``.
