@@ -597,7 +597,7 @@ def expand_delimiters(normalized_data):
                 }
             if field == 'kFenn':
                 for i, value in enumerate(char[field]):
-                    v = re.match(r'(\d*)(\w*)', char[field][i])
+                    v = re.split(r'(\d+)(\w+)', char[field][i])
                     char[field][i] = {
                         "phonetic": int(v[1]),
                         "frequency": v[2]
