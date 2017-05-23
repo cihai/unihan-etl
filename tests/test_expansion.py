@@ -333,4 +333,5 @@ def test_expand_kCihaiT(expanded_data, ucn, expected):
     row on the page, and the remaining two digits after the decimal are the
     position on the row.
     """
-    pass
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kCihaiT'] == expected
