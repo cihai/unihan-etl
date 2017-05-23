@@ -615,12 +615,21 @@ def expand_delimiters(normalized_data):
                     "ucn": rad.split('[')[1].replace(']', ''),
                     "location": loc
                 }
+            if field == 'kRSUnicode':
+                for i, value in enumerate(char[field]):
+                    vals = value.split('.')
+                    simp = vals[0][-1] == "'"
+                    char[field][i] = {
+                        "radical": int(vals[0].replace("'", '')),
+                        "strokes": int(vals[1]),
+                        "simplified": simp
+                    }
+
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',
                 'kRSKanWa',
                 'kRSKorean',
-                'kRSUnicode',
             ]):
                 for i, value in enumerate(char[field]):
                     vals = value.split('.')
