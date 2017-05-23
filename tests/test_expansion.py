@@ -174,27 +174,37 @@ def test_expand_HanYu(expanded_data, ucn, expected):
     ("U+4E9D", [{
         "type": "C",
         "cid": 17245,
-        "radical-stroke": "7.2.6"
+        "radical": 7,
+        "strokes": 2,
+        "strokes-residue": 6
     }, {
         "type": "C",
         "cid": 17245,
-        "radical-stroke": "28.2.6"
+        "radical": 28,
+        "strokes": 2,
+        "strokes-residue": 6
     }]),
     # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
     ("U+4E9E", [{
         "type": "C",
         "cid": 4108,
-        "radical-stroke": "7.2.6"
+        "radical": 7,
+        "strokes": 2,
+        "strokes-residue": 6
     }]),
     # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
     ("U+4E30", [{
         "type": "C",
         "cid": 14301,
-        "radical-stroke": "2.1.3"
+        "radical": 2,
+        "strokes": 1,
+        "strokes-residue": 3
     }, {
         "type": "V",
         "cid": 15386,
-        "radical-stroke": "2.1.3"
+        "radical": 2,
+        "strokes": 1,
+        "strokes-residue": 3
     }]),
 ])
 def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):

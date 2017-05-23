@@ -573,7 +573,9 @@ def expand_delimiters(normalized_data):
                     char[field][i] = {
                         "type": vals[0],
                         "cid": int(vals[1]),
-                        "radical-stroke": vals[2]
+                        "radical": int(vals[2].split('.')[0]),
+                        "strokes": int(vals[2].split('.')[1]),
+                        "strokes-residue": int(vals[2].split('.')[2])
                     }
             if any(field == f for f in [
                 'kRSJapanese',
