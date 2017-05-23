@@ -16,8 +16,12 @@ The *Unicode Consortium*, authors of the `Unicode Standard`_, provide a standard
 of consistently representing and encoding the world's writing systems.
 
 UNIHAN, short for `Han unification`_, is the effort of the consortium map CJK
-languages into unified characters. A very time-consuming and painstaking
-challenge.
+languages into unified characters. In addition, it pulls together various
+sources of information that detail characteristics of the glyphs, and vet
+them through a thorough proofreading process. It is a professional effort,
+with industrial ramifications - glyphs once only noted in dictionaries and
+antiquity are set in stone with their own codepoints, carefully
+cross-referenced with information from, often multiple, distinct sources.
 
 The advantage that UNIHAN provides to east asian researchers, including
 sinologists and japanologists, linguists, anaylsts, language learners, and
