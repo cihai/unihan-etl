@@ -1,4 +1,4 @@
-*unihan-tabular* - tool to build `UNIHAN`_ into tabular-friendly formats
+*unihan-tabular* - tool to build `UNIHAN`_ into tabular / structured formats
 like python, JSON, CSV and YAML. Part of the `cihai`_ project. Compare to
 `libUnihan <http://libunihan.sourceforge.net/>`_.
 
@@ -31,8 +31,8 @@ separated by commas. This is just one of 90 fields contained in the
 database.
 
 ``$ unihan-tabular`` will download Unihan.zip and build all files into a
-single tabular friendly format, or a detailed, structured format if using YAML
-and JSON.
+single tabular-friendly format, or a detailed, structured format if using YAML
+or JSON.
 
 CSV (default), ``$ unihan-tabular``::
 
