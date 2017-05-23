@@ -499,5 +499,7 @@ U+34D6	kCangjie	IMWTJ
 U+34D6	kCihaiT	170.105
 U+34D6	kTotalStrokes	13
 U+34D7	kCangjie	IMQHF
+U+356C	kCheungBauer	030/04;;gung1
+U+3598	kCheungBauer	030/07;RMMV;san2,seon2
 
 # EOF
