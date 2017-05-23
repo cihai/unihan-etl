@@ -149,7 +149,8 @@ UNIHAN_MANIFEST = {
 #: FIELDS with multiple values via custom delimiters
 CUSTOM_DELIMITED_FIELDS = [
     'kDefinition',
-    'kDaeJaweon'
+    'kDaeJaweon',
+    'kHDZRadBreak'
 ]
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
@@ -606,6 +607,14 @@ def expand_delimiters(normalized_data):
                         "phonetic": v[0:v.find("(")],
                         "frequency": int(v[v.find("(")+1:v.find(")")])
                     }
+            if field == 'kHDZRadBreak':
+                rad, loc = char[field].split(':')
+
+                char[field] = {
+                    "radical": rad.split('[')[0],
+                    "ucn": rad.split('[')[1].replace(']', ''),
+                    "location": loc
+                }
             if any(field == f for f in [
                 'kRSJapanese',
                 'kRSKangXi',
