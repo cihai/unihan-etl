@@ -30,7 +30,8 @@ Structured output
 
 *JSON, YAML, and python dict only*
 
-Support for expanding detailed information in fields.
+Support for structured output of information in fields. unihan-tabular
+refers to this as *expansion*.
 
 Users can opt-out via ``--no-expand``. This will preserve the values in
 each field as they are in the raw database.
