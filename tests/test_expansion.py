@@ -394,7 +394,12 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
     ("U+3431", [{
         "phonetic": 281,
         "frequency": "K"
-    }])
+    }]),
+    # U+9918      kFenn   31A
+    ("U+9918", [{
+        "phonetic": 31,
+        "frequency": "A"
+    }]),
 ])
 def test_expand_kFenn(expanded_data, ucn, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
