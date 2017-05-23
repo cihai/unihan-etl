@@ -502,5 +502,8 @@ U+34D7	kCangjie	IMQHF
 U+356C	kCheungBauer	030/04;;gung1
 U+3598	kCheungBauer	030/07;RMMV;san2,seon2
 U+64D4	kFenn	741C 741G
+U+4E00	kHDZRadBreak	⼀[U+2F00]:10001.010
+U+4E59	kHDZRadBreak	⼄[U+2F04]:10047.040
+
 
 # EOF
