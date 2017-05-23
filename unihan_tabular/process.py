@@ -14,6 +14,7 @@ import logging
 import os
 import shutil
 import sys
+import re
 import zipfile
 
 from appdirs import AppDirs
@@ -596,9 +597,10 @@ def expand_delimiters(normalized_data):
                 }
             if field == 'kFenn':
                 for i, value in enumerate(char[field]):
+                    v = re.match(r'(\d*)(\w*)', char[field][i])
                     char[field][i] = {
-                        "phonetic": int(char[field][i][0:3]),
-                        "frequency": char[field][i][3]
+                        "phonetic": int(v[1]),
+                        "frequency": v[2]
                     }
             if field == 'kHanyuPinlu':
                 for i, value in enumerate(char[field]):
