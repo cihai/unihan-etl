@@ -4,7 +4,9 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
-- :feature:`-` Initial support for expanding multi-value fields.
+- :feature:`-` Initial support for expanding multi-value fields
+- :support:`-` Improve help dialog
+- :support:`-` Added a page about UNIHAN and the project to documentation
 
 - :release:`0.8.1 <2017-05-20>`
 - :support:`-` Update to add *kJa* and adjust source file of
