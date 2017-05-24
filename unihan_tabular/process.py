@@ -588,6 +588,13 @@ def expand_delimiters(normalized_data):
                     }
                     for k, v in char[field][i].items():
                         char[field][i][k] = v.split(',')
+                        if k == "locations":
+                            for ii, vvalue in enumerate(char[field][i][k]):
+                                char[field][i][k][ii] = {
+                                    "volume": int(vvalue[0]),
+                                    "page": int(vvalue[1:5]),
+                                    "character": int(vvalue[6:9])
+                                }
             if field == 'kCheungBauer':
                 for i, value in enumerate(char[field]):
                     value = [c.strip() for c in value.split(';')]

@@ -85,9 +85,21 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
 @pytest.mark.parametrize("ucn,expected", [
     ("U+5EFE", [{  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
         "locations": [
-            "10513.110",
-            "10514.010",
-            "10514.020"
+            {
+                "volume": 1,
+                "page": 513,
+                "character": 110
+            },
+            {
+                "volume": 1,
+                "page": 514,
+                "character": 10
+            },
+            {
+                "volume": 1,
+                "page": 514,
+                "character": 20
+            }
         ],
         "readings": [
             "gǒng"
@@ -95,7 +107,11 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
     }]),
     ("U+5364", [{  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
         "locations": [
-            "10093.130"
+            {
+                "volume": 1,
+                "page": 93,
+                "character": 130
+            }
         ],
         "readings": [
             "xī",
@@ -103,7 +119,11 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
         ]
     }, {
         "locations": [
-            "74609.020"
+            {
+                "volume": 7,
+                "page": 4609,
+                "character": 20
+            }
         ],
         "readings": [
             "lǔ",
@@ -112,8 +132,16 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
     }]),
     ("U+34D8", [{  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
         "locations": [
-            "10278.080",
-            "10278.090"
+            {
+                "volume": 1,
+                "page": 278,
+                "character": 80
+            },
+            {
+                "volume": 1,
+                "page": 278,
+                "character": 90
+            }
         ],
         "readings": [
             "sù"
@@ -121,7 +149,11 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
     }]),
     ("U+34CE", [{  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
         "locations": [
-            "10297.260"
+            {
+                "volume": 1,
+                "page": 297,
+                "character": 260
+            }
         ],
         "readings": [
             "qīn", "qìn", "qǐn"
