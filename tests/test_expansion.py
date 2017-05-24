@@ -62,6 +62,27 @@ def test_expand_kMandarin(expanded_data, ucn, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
+    ("U+8303", {  # U+8303	kTotalStrokes	8 9
+        "zh-Hans": 8,
+        "zh-Hant": 9
+    }),
+    ("U+34D6", {  # U+34D6	kTotalStrokes	13
+        "zh-Hans": 13,
+        "zh-Hant": 13
+    })
+])
+def test_expand_kTotalStrokes(expanded_data, ucn, expected):
+    """
+    The total number of strokes in the character (including the radical). When
+    there are two values, then the first is preferred for zh-Hans (CN) and the
+    second is preferred for zh-Hant (TW). When there is only one value, it is
+    appropriate for both.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kTotalStrokes'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
     ("U+5EFE", [{  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
         "locations": [
             "10513.110",

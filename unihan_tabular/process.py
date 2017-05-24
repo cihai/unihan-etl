@@ -156,8 +156,9 @@ CUSTOM_DELIMITED_FIELDS = [
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
 SPACE_DELIMITED_DICT_FIELDS = [
-    'kMandarin',
     'kHanYu',
+    'kMandarin',
+    'kTotalStrokes',
 ]
 
 #: Fields with multiple values UNIHAN delimits by spaces -> list
@@ -217,7 +218,6 @@ SPACE_DELIMITED_LIST_FIELDS = [
     'kSpecializedSemanticVariant',
     'kTaiwanTelegraph',
     'kTang',
-    'kTotalStrokes',
     'kTraditionalVariant',
     'kVietnamese',
     'kXerox',
@@ -561,6 +561,16 @@ def expand_delimiters(normalized_data):
                 char[field] = {
                     "zh-Hans": cn,
                     "zh-Hant": tw
+                }
+            if field == 'kTotalStrokes':
+                cn = char[field][0]
+                if len(char[field]) == 1:
+                    tw = char[field][0]
+                else:
+                    tw = char[field][1]
+                char[field] = {
+                    "zh-Hans": int(cn),
+                    "zh-Hant": int(tw)
                 }
             if field == 'kHanYu':
                 for i, value in enumerate(char[field]):
