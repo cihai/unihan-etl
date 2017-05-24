@@ -34,13 +34,33 @@ database.
 single tabular-friendly format, or a detailed, structured format if using YAML
 or JSON.
 
+"Flat" output
+-------------
+
 CSV (default), ``$ unihan-tabular``::
 
    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
    㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
-JSON, ``$ unihan-tabular -F json``:
+With ``$ unihan-tabular -F yaml --no-expand``:
+
+.. code-block:: yaml
+
+   - char: 㐀
+     kCantonese: jau1
+     kDefinition: (same as U+4E18 丘) hillock or mound
+     kHanyuPinyin: null
+     kMandarin: qiū
+     ucn: U+3400
+   - char: 㐁
+     kCantonese: tim2
+     kDefinition: to lick; to taste, a mat, bamboo bark
+     kHanyuPinyin: 10019.020:tiàn
+     kMandarin: tiàn
+     ucn: U+3401
+
+With ``$ unihan-tabular -F json --no-expand``:
 
 .. code-block:: json
 
@@ -48,42 +68,104 @@ JSON, ``$ unihan-tabular -F json``:
      {
        "char": "㐀",
        "ucn": "U+3400",
-       "kCantonese": "jau1",
        "kDefinition": "(same as U+4E18 丘) hillock or mound",
+       "kCantonese": "jau1",
        "kHanyuPinyin": null,
        "kMandarin": "qiū"
      },
      {
        "char": "㐁",
        "ucn": "U+3401",
+       "kDefinition": "to lick; to taste, a mat, bamboo bark",
        "kCantonese": "tim2",
-       "kDefinition": [
-         "to lick",
-         "to taste, a mat, bamboo bark"
-       ],
        "kHanyuPinyin": "10019.020:tiàn",
        "kMandarin": "tiàn"
      }
+   ]
+
+"Structured" output
+-------------------
+
+UNIHAN database's documentation specifies how multiple values (lists) and
+structured information (hashes/dicts) are packed into fields. unihan-tabular
+carefully handles these fields in a uniform output. Support only available on
+JSON, YAML and python output.
+
+JSON, ``$ unihan-tabular -F json``:
+
+.. code-block:: json
+
+  [
+    {
+      "char": "㐀",
+      "ucn": "U+3400",
+      "kDefinition": [
+        "(same as U+4E18 丘) hillock or mound"
+      ],
+      "kCantonese": [
+        "jau1"
+      ],
+      "kMandarin": {
+        "zh-Hans": "qiū",
+        "zh-Hant": "qiū"
+      }
+    },
+    {
+      "char": "㐁",
+      "ucn": "U+3401",
+      "kDefinition": [
+        "to lick",
+        "to taste, a mat, bamboo bark"
+      ],
+      "kCantonese": [
+        "tim2"
+      ],
+      "kHanyuPinyin": [
+        {
+          "locations": [
+            "10019.020"
+          ],
+          "readings": [
+            "tiàn"
+          ]
+        }
+      ],
+      "kMandarin": {
+        "zh-Hans": "tiàn",
+        "zh-Hant": "tiàn"
+      }
+    }
    ]
 
 YAML ``$ unihan-tabular -F yaml``:
 
 .. code-block:: yaml
 
-    - char: 㐀
-      kCantonese: jau1
-      kDefinition: (same as U+4E18 丘) hillock or mound
-      kHanyuPinyin: null
-      kMandarin: qiū
-      ucn: U+3400
-    - char: 㐁
-      kCantonese: tim2
-      kDefinition:
-      - to lick
-      - to taste, a mat, bamboo bark
-      kHanyuPinyin: 10019.020:tiàn
-      kMandarin: tiàn
-      ucn: U+3401
+   - char: 㐀
+     kCantonese:
+     - jau1
+     kDefinition:
+     - (same as U+4E18 丘) hillock or mound
+     kMandarin:
+       zh-Hans: qiū
+       zh-Hant: qiū
+     ucn: U+3400
+   - char: 㐁
+     kCantonese:
+     - tim2
+     kDefinition:
+     - to lick
+     - to taste, a mat, bamboo bark
+     kHanyuPinyin:
+     - locations:
+       - '10019.020'
+       readings:
+       - tiàn
+     kMandarin:
+       zh-Hans: tiàn
+       zh-Hant: tiàn
+     ucn: U+3401
+
 
 Features
 --------
