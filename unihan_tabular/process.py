@@ -577,7 +577,8 @@ def expand_delimiters(normalized_data):
                     char[field][i] = {
                         "volume": int(value[0]),
                         "page": int(value[1:5]),
-                        "character": int(value[6:9])
+                        "character": int(value[6:8]),
+                        "virtual": int(value[8])
                     }
             if field == 'kHanyuPinyin':
                 for i, value in enumerate(char[field]):
@@ -593,7 +594,8 @@ def expand_delimiters(normalized_data):
                                 char[field][i][k][ii] = {
                                     "volume": int(vvalue[0]),
                                     "page": int(vvalue[1:5]),
-                                    "character": int(vvalue[6:9])
+                                    "character": int(vvalue[6:8]),
+                                    "virtual": int(vvalue[8])
                                 }
             if field == 'kCheungBauer':
                 for i, value in enumerate(char[field]):

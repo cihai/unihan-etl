@@ -88,17 +88,20 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
             {
                 "volume": 1,
                 "page": 513,
-                "character": 110
+                "character": 11,
+                "virtual": 0
             },
             {
                 "volume": 1,
                 "page": 514,
-                "character": 10
+                "character": 1,
+                "virtual": 0
             },
             {
                 "volume": 1,
                 "page": 514,
-                "character": 20
+                "character": 2,
+                "virtual": 0
             }
         ],
         "readings": [
@@ -110,7 +113,8 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
             {
                 "volume": 1,
                 "page": 93,
-                "character": 130
+                "character": 13,
+                "virtual": 0
             }
         ],
         "readings": [
@@ -122,7 +126,8 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
             {
                 "volume": 7,
                 "page": 4609,
-                "character": 20
+                "character": 2,
+                "virtual": 0
             }
         ],
         "readings": [
@@ -135,12 +140,14 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
             {
                 "volume": 1,
                 "page": 278,
-                "character": 80
+                "character": 8,
+                "virtual": 0
             },
             {
                 "volume": 1,
                 "page": 278,
-                "character": 90
+                "character": 9,
+                "virtual": 0
             }
         ],
         "readings": [
@@ -152,7 +159,8 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
             {
                 "volume": 1,
                 "page": 297,
-                "character": 260
+                "character": 26,
+                "virtual": 0,
             }
         ],
         "readings": [
@@ -186,19 +194,28 @@ def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
+    ("U+9BF5", [{  # U+9BF5 kHanYu  74699.122
+        "volume": 7,
+        "page": 4699,
+        "character": 12,
+        "virtual": 2
+    }]),
     ("U+34B9", [{  # U+34B9	kHanYu	10254.060 10254.100
         "volume": 1,
         "page": 254,
-        "character": 60
+        "character": 6,
+        "virtual": 0
     }, {
         "volume": 1,
         "page": 254,
-        "character": 100
+        "character": 10,
+        "virtual": 0
     }]),
     ('U+34AD', [{  # U+34AD	kHanYu	10273.120
         "volume": 1,
         "page": 273,
-        "character": 120
+        "character": 12,
+        "virtual": 0
     }])
 ])
 def test_expand_HanYu(expanded_data, ucn, expected):
