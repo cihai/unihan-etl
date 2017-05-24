@@ -123,7 +123,12 @@ JSON, ``$ unihan-tabular -F json``:
       "kHanyuPinyin": [
         {
           "locations": [
-            "10019.020"
+            {
+              "volume": 1,
+              "page": 19,
+              "character": 2,
+              "virtual": 0
+            }
           ],
           "readings": [
             "tiàn"
@@ -158,7 +163,10 @@ YAML ``$ unihan-tabular -F yaml``:
      - to taste, a mat, bamboo bark
      kHanyuPinyin:
      - locations:
-       - '10019.020'
+       - character: 2
+         page: 19
+         virtual: 0
+         volume: 1
        readings:
        - tiàn
      kMandarin:
