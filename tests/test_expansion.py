@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import pytest
 
-from unihan_tabular import constants, expansion
+from unihan_etl import constants, expansion
 
 
 def test_expands_spaces(expanded_data):

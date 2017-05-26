@@ -8,9 +8,9 @@ import pytest
 import zipfile
 import os
 
-from unihan_tabular import process, constants
-from unihan_tabular.process import DEFAULT_OPTIONS, Packager
-from unihan_tabular.util import merge_dict
+from unihan_etl import process, constants
+from unihan_etl.process import DEFAULT_OPTIONS, Packager
+from unihan_etl.util import merge_dict
 
 
 @pytest.fixture
@@ -52,7 +52,7 @@ def sample_data2(fixture_files):
 
 @pytest.fixture(scope="session")
 def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp('unihan_tabular')
+    fn = tmpdir_factory.mktemp('unihan_etl')
     return fn
 
 

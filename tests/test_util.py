@@ -2,8 +2,8 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
-from unihan_tabular._compat import text_type
-from unihan_tabular.util import ucn_to_unicode, ucnstring_to_unicode
+from unihan_etl._compat import text_type
+from unihan_etl.util import ucn_to_unicode, ucnstring_to_unicode
 
 
 def test_conversion_ucn_to_unicode():

@@ -1,4 +1,4 @@
-*unihan-tabular* - `ETL`_ tool `UNIHAN`_. Retrieve, extract and transform
+*unihan-etl* - `ETL`_ tool `UNIHAN`_. Retrieve, extract and transform
 UNIHAN into tabular or structured format. Load into python objects, JSON,
 CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
@@ -30,13 +30,13 @@ values. This is just one of 90 fields contained in the database.
 Tabular, "Flat" output
 ----------------------
 
-CSV (default), ``$ unihan-tabular``::
+CSV (default), ``$ unihan-etl``::
 
    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
    㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
 
-With ``$ unihan-tabular -F yaml --no-expand``:
+With ``$ unihan-etl -F yaml --no-expand``:
 
 .. code-block:: yaml
 
@@ -53,7 +53,7 @@ With ``$ unihan-tabular -F yaml --no-expand``:
      kMandarin: tiàn
      ucn: U+3401
 
-With ``$ unihan-tabular -F json --no-expand``:
+With ``$ unihan-etl -F json --no-expand``:
 
 .. code-block:: json
 
@@ -80,11 +80,11 @@ With ``$ unihan-tabular -F json --no-expand``:
 -------------------
 
 UNIHAN database's documentation specifies how multiple values (lists) and
-structured information (hashes/dicts) are packed into fields. unihan-tabular
+structured information (hashes/dicts) are packed into fields. unihan-etl
 carefully handles these fields in a uniform output. Support only available on
 JSON, YAML and python output.
 
-JSON, ``$ unihan-tabular -F json``:
+JSON, ``$ unihan-etl -F json``:
 
 .. code-block:: json
 
@@ -135,7 +135,7 @@ JSON, ``$ unihan-tabular -F json``:
     }
    ]
 
-YAML ``$ unihan-tabular -F yaml``:
+YAML ``$ unihan-etl -F yaml``:
 
 .. code-block:: yaml
 
@@ -192,12 +192,11 @@ issue`_.
 .. _cihai-handbook: https://github.com/cihai/cihai-handbook
 .. _cihai team: https://github.com/cihai?tab=members
 .. _cihai-python: https://github.com/cihai/cihai-python
-.. _unihan-tabular on github: https://github.com/cihai/unihan-tabular
 
 Usage
 -----
 
-``unihan-tabular`` supports command line arguments. See `unihan-tabular CLI
+``unihan-etl`` supports command line arguments. See `unihan-etl CLI
 arguments`_ for information on how you can specify custom columns, files,
 download URL's and output destinations.
 
@@ -205,42 +204,42 @@ To download and build your own UNIHAN export:
 
 .. code-block:: bash
 
-   $ pip install unihan-tabular
+   $ pip install unihan-etl
 
 To output CSV, the default format:
 
 .. code-block:: bash
 
-    $ unihan-tabular
+    $ unihan-etl
 
 To output JSON::
 
-    $ unihan-tabular -F json
+    $ unihan-etl -F json
 
 To output YAML::
 
     $ pip install pyyaml
-    $ unihan-tabular -F yaml
+    $ unihan-etl -F yaml
 
 To only output the kDefinition field in a csv::
 
-    $ unihan-tabular -f kDefinition
+    $ unihan-etl -f kDefinition
 
 To output multiple fields, separate with spaces::
 
-    $ unihan-tabular -f kCantonese kDefinition
+    $ unihan-etl -f kCantonese kDefinition
 
 To output to a custom file::
 
-    $ unihan-tabular --destination ./exported.csv
+    $ unihan-etl --destination ./exported.csv
 
 To output to a custom file (templated file extension)::
 
-    $ unihan-tabular --destination ./exported.{ext}
+    $ unihan-etl --destination ./exported.{ext}
 
-See `unihan-tabular CLI arguments`_ for advanced usage examples.
+See `unihan-etl CLI arguments`_ for advanced usage examples.
 
-.. _unihan-tabular CLI arguments: http://unihan-tabular.readthedocs.org/en/latest/cli.html
+.. _unihan-etl CLI arguments: https://unihan-etl.git-pull.com/en/latest/cli.html
 
 Structure
 ---------
@@ -248,50 +247,50 @@ Structure
 .. code-block:: bash
 
     # output w/ JSON
-    {XDG data dir}/unihan_tabular/unihan.json
+    {XDG data dir}/unihan_etl/unihan.json
 
     # output w/ CSV
-    {XDG data dir}/unihan_tabular/unihan.csv
+    {XDG data dir}/unihan_etl/unihan.csv
 
     # output w/ yaml (requires pyyaml)
-    {XDG data dir}/unihan_tabular/unihan.yaml
+    {XDG data dir}/unihan_etl/unihan.yaml
 
     # script to download + build a SDF csv of unihan.
-    unihan_tabular/process.py
+    unihan_etl/process.py
 
     # unit tests to verify behavior / consistency of builder
     tests/*
 
     # python 2/3 compatibility module
-    unihan_tabular/_compat.py
+    unihan_etl/_compat.py
 
     # utility / helper functions
-    unihan_tabular/util.py
+    unihan_etl/util.py
 
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
 .. _UNIHAN: http://www.unicode.org/charts/unihan.html
 .. _ETL: https://en.wikipedia.org/wiki/Extract,_transform,_load
-.. _create an issue: https://github.com/cihai/unihan-tabular/issues/new
+.. _create an issue: https://github.com/cihai/unihan-etl/issues/new
 .. _Data Package: http://frictionlessdata.io/data-packages/
 .. _pyyaml: http://pyyaml.org/
 
-.. |pypi| image:: https://img.shields.io/pypi/v/unihan-tabular.svg
+.. |pypi| image:: https://img.shields.io/pypi/v/unihan-etl.svg
     :alt: Python Package
-    :target: http://badge.fury.io/py/unihan-tabular
+    :target: http://badge.fury.io/py/unihan-etl
 
-.. |build-status| image:: https://img.shields.io/travis/cihai/unihan-tabular.svg
+.. |build-status| image:: https://img.shields.io/travis/cihai/unihan-etl.svg
    :alt: Build Status
-   :target: https://travis-ci.org/cihai/unihan-tabular
+   :target: https://travis-ci.org/cihai/unihan-etl
 
-.. |coverage| image:: https://codecov.io/gh/cihai/unihan-tabular/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg
     :alt: Code Coverage
-    :target: https://codecov.io/gh/cihai/unihan-tabular
+    :target: https://codecov.io/gh/cihai/unihan-etl
 
-.. |license| image:: https://img.shields.io/github/license/cihai/unihan-tabular.svg
+.. |license| image:: https://img.shields.io/github/license/cihai/unihan-etl.svg
     :alt: License 
 
-.. |docs| image:: https://readthedocs.org/projects/unihan-tabular/badge/?version=latest
+.. |docs| image:: https://readthedocs.org/projects/unihan-etl/badge/?version=latest
     :alt: Documentation Status
     :scale: 100%
-    :target: https://readthedocs.org/projects/unihan-tabular/
+    :target: https://readthedocs.org/projects/unihan-etl/

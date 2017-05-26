@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import re
 
-from unihan_tabular.constants import SPACE_DELIMITED_FIELDS
+from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
 
 #: IRG G Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource

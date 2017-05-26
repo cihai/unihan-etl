@@ -4,24 +4,24 @@
 API
 ===
 
-.. module:: unihan_tabular
+.. module:: unihan_etl
 
-.. automodule:: unihan_tabular.process
+.. automodule:: unihan_etl.process
     :members:
 
-    .. autoclass:: unihan_tabular.process.Packager
+    .. autoclass:: unihan_etl.process.Packager
        :members:
        :inherited-members:
        :private-members:
 
-.. automodule:: unihan_tabular.constants
+.. automodule:: unihan_etl.constants
     :members:
 
-.. automodule:: unihan_tabular.expansion
+.. automodule:: unihan_etl.expansion
     :members:
 
-.. automodule:: unihan_tabular.util
+.. automodule:: unihan_etl.util
     :members:
 
-.. automodule:: unihan_tabular.test
+.. automodule:: unihan_etl.test
     :members:

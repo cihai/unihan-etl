@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 - *-
-"""unihan-tabular lives at <https://github.com/cihai/unihan-tabular>."""
+"""unihan-etl lives at <https://unihan-etl.git-pull.com>."""
 
 import sys
 
@@ -8,7 +8,7 @@ from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 about = {}
-with open("unihan_tabular/__about__.py") as fp:
+with open("unihan_etl/__about__.py") as fp:
     exec(fp.read(), about)
 
 with open('requirements/base.txt') as f:
@@ -41,8 +41,8 @@ class PyTest(TestCommand):
 setup(
     name=about['__title__'],
     version=about['__version__'],
-    url='https://unihan-tabular.git-pull.com',
-    download_url='https://pypi.python.org/pypi/unihan-tabular',
+    url='https://unihan-etl.git-pull.com',
+    download_url='https://pypi.python.org/pypi/unihan-etl',
     license=about['__license__'],
     author=about['__author__'],
     author_email=about['__email__'],
@@ -54,9 +54,9 @@ setup(
     cmdclass={'test': PyTest},
     zip_safe=False,
     keywords=about['__title__'],
-    packages=['unihan_tabular'],
+    packages=['unihan_etl'],
     entry_points=dict(
-        console_scripts=['unihan-tabular=unihan_tabular.__main__:run']
+        console_scripts=['unihan-etl=unihan_etl.__main__:run']
     ),
     classifiers=[
         'Development Status :: 4 - Beta',
