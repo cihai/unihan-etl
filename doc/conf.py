@@ -67,6 +67,7 @@ html_theme_options = {
     'github_user': 'cihai',
     'github_repo': 'unihan-etl',
     'github_type': 'star',
+    'github_banner': True,
     'projects': alagitpull.projects,
 }
 
