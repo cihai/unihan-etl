@@ -9,7 +9,7 @@ from unihan_tabular.constants import SPACE_DELIMITED_FIELDS
 
 
 def expand_field(field, fvalue):
-    """Return structured value of information in UNIHAN field
+    """Return structured value of information in UNIHAN field.
 
     :param field: field name
     :type field: str
