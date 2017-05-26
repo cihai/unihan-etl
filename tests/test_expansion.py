@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import pytest
 
-from unihan_tabular import constants, process
+from unihan_tabular import constants, expansion
 
 
 def test_expands_spaces(expanded_data):
@@ -553,9 +553,9 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     assert item['kSBGY'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
+@pytest.mark.parametrize("ucn,fieldval,expected", [
     # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
-    ("U+91B1", [{
+    ("U+91B1", "0295.011:fā 0884.081:pō", [{
         "locations": [{
             "page": 295,
             "position": 1,
@@ -573,7 +573,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
         "reading": "pō"
     }]),
     # U+379E  kXHC1983        1092.070*,1092.071:sóng
-    ("U+379E", [{
+    ("U+379E", "1092.070*,1092.071:sóng", [{
         "locations": [{
             "page": 1092,
             "position": 7,
@@ -588,7 +588,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
         "reading": "sóng"
     }]),
     # U+5750  kXHC1983        1551.040,1552.011:zuò
-    ("U+5750", [{
+    ("U+5750", "1551.040,1552.011:zuò", [{
         "locations": [{
             "page": 1551,
             "position": 4,
@@ -603,7 +603,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
         "reading": "zuò"
     }])
 ])
-def test_expand_kXHC1983(expanded_data, ucn, expected):
+def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
     """
     Each pīnyīn reading is preceded by the character’s location(s) in the
     dictionary, separated from the reading by “:” (colon); multiple locations
@@ -628,3 +628,5 @@ def test_expand_kXHC1983(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kXHC1983'] == expected
+
+    assert expansion.expand_field('kXHC1983', fieldval) == expected
