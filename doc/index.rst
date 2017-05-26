@@ -1,8 +1,8 @@
 .. _index:
 
-==============
-unihan-tabular
-==============
+==========
+unihan-etl
+==========
 
 .. include:: ../README.rst
 

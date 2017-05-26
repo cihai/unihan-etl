@@ -10,11 +10,11 @@ import shutil
 
 import pytest
 
-from unihan_tabular import constants, process
-from unihan_tabular.process import (DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager,
-                                    zip_has_files)
-from unihan_tabular.test import assert_dict_contains_subset
-from unihan_tabular.util import merge_dict
+from unihan_etl import constants, process
+from unihan_etl.process import (DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager,
+                                zip_has_files)
+from unihan_etl.test import assert_dict_contains_subset
+from unihan_etl.util import merge_dict
 
 log = logging.getLogger(__name__)
 

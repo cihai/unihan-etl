@@ -1,30 +1,30 @@
 .. _about:
 
-====================
-About unihan-tabular
-====================
+================
+About unihan-etl
+================
 
-unihan-tabular provides configurable, self-serve data exports of the
+unihan-etl provides configurable, self-serve data exports of the
 :ref:`UNIHAN` database.
 
 Retrieval
 ---------
 
-unihan-tabular will download and cache the raw database files for the
+unihan-etl will download and cache the raw database files for the
 user.
 
 Handles encoding
 ----------------
 
 Dealing with unicode encodings can be cumbersome across platforms.
-unihan-tabular deals with handling output encoding issues that could
+unihan-etl deals with handling output encoding issues that could
 come up if you were to try to export the data yourself.
 
 Python 2 and 3
 --------------
 
 Designed and tested to work across Python versions. View the `travis test
-matrix <https://travis-ci.org/cihai/unihan-tabular>`_ for what this
+matrix <https://travis-ci.org/cihai/unihan-etl>`_ for what this
 software is tested against.
 
 Customizable output
@@ -43,7 +43,7 @@ Structured output
 
 *JSON, YAML, and python dict only*
 
-Support for structured output of information in fields. unihan-tabular
+Support for structured output of information in fields. unihan-etl
 refers to this as *expansion*.
 
 Users can opt-out via ``--no-expand``. This will preserve the values in

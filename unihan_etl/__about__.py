@@ -1,5 +1,5 @@
 __title__ = 'unihan-etl'
-__package_name__ = 'unihan_tabular'
+__package_name__ = 'unihan_etl'
 __description__ = 'Export UNIHAN to Python, Data Package, CSV, JSON and YAML'
 __version__ = '0.8.1'
 __author__ = 'Tony Narlock'

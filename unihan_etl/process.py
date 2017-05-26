@@ -18,12 +18,12 @@ import zipfile
 
 from appdirs import AppDirs
 
-from unihan_tabular import expansion
-from unihan_tabular.__about__ import (__author__, __description__,
-                                      __package_name__, __title__)
-from unihan_tabular._compat import PY2, text_type, urlretrieve
-from unihan_tabular.constants import INDEX_FIELDS, UNIHAN_MANIFEST
-from unihan_tabular.util import _dl_progress, merge_dict, ucn_to_unicode
+from unihan_etl import expansion
+from unihan_etl.__about__ import (__author__, __description__,
+                                  __package_name__, __title__)
+from unihan_etl._compat import PY2, text_type, urlretrieve
+from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
+from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if PY2:
     import unicodecsv as csv

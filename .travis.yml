@@ -15,6 +15,6 @@ before_install:
   - git config --global user.email 'travis@nowhere.edu'
 install:
   - "pip install -e ."
-script: coverage run --source=cihaidata_unihan setup.py test
+script: coverage run --source=unihan_etl setup.py test
 after_success:
   - bash <(curl -s https://codecov.io/bash)
