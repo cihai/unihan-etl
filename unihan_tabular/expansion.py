@@ -257,12 +257,16 @@ expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
 
 
-def expand_kIRG_GSource(value):
+def _expand_kIRG_GenericSource(value):
     v = value.split('-')
     return {
         "source": v[0],
         "location": v[1]
     }
+
+
+expand_kIRG_GSource = _expand_kIRG_GenericSource
+expand_kIRG_HSource = _expand_kIRG_GenericSource
 
 
 def expand_field(field, fvalue):

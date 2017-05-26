@@ -117,6 +117,7 @@ CUSTOM_DELIMITED_FIELDS = (
     'kDaeJaweon',
     'kHDZRadBreak',
     'kIRG_GSource',
+    'kIRG_HSource',
 )
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
