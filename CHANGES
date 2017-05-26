@@ -2,8 +2,9 @@
 Changelog
 =========
 
-Here you can find the recent changes to cihai.
+Here you can find the recent changes to the project.
 
+- :release:`0.9.0 <2017-05-26>`
 - :bug:`-` Fix bug where destination file was made into directory on
   first run
 - :support:`-` Rename from unihan-tabular to unihan-etl
