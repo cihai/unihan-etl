@@ -13,7 +13,7 @@ import pytest
 from unihan_tabular import constants, process
 from unihan_tabular.process import (DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager,
                                     zip_has_files)
-from unihan_tabular.test import assert_dict_contains_subset, get_datapath
+from unihan_tabular.test import assert_dict_contains_subset
 from unihan_tabular.util import merge_dict
 
 log = logging.getLogger(__name__)
@@ -155,11 +155,11 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
     )
 
 
-def test_normalize_simple_data_format():
+def test_normalize_simple_data_format(fixture_dir):
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
-        get_datapath('Unihan_DictionaryLikeData.txt'),
-        get_datapath('Unihan_Readings.txt'),
+        os.path.join(fixture_dir, 'Unihan_DictionaryLikeData.txt'),
+        os.path.join(fixture_dir, 'Unihan_Readings.txt'),
     ]
 
     columns = (

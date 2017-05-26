@@ -26,9 +26,12 @@ def mock_zip_filename():
 
 
 @pytest.fixture(scope="session")
-def fixture_files():
-    fixture_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
+def fixture_dir():
+    return str(os.path.join(os.path.dirname(__file__), 'fixtures'))
 
+
+@pytest.fixture(scope="session")
+def fixture_files(fixture_dir):
     files = [
         'Unihan_DictionaryIndices.txt',
         'Unihan_DictionaryLikeData.txt',
