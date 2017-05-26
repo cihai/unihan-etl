@@ -649,3 +649,27 @@ def test_expand_kIRG_GSource(expanded_data, ucn, fieldval, expected):
     assert item['kIRG_GSource'] == expected
 
     assert expansion.expand_field('kIRG_GSource', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+347E      kIRG_HSource    H-8F59
+    ("U+347E", "H-8F59", {
+        "source": "H",
+        "location": "8F59"
+    }),
+    # U+4E00      kIRG_HSource    HB1-A440
+    ("U+4E00", "HB1-A440", {
+        "source": "HB1",
+        "location": "A440"
+    }),
+    # U+4E07      kIRG_HSource    HB2-C945
+    ("U+4E07", "HB2-C945", {
+        "source": "HB2",
+        "location": "C945"
+    }),
+])
+def test_expand_kIRG_HSource(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIRG_HSource'] == expected
+
+    assert expansion.expand_field('kIRG_HSource', fieldval) == expected
