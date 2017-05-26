@@ -9,8 +9,8 @@ import re
 from unihan_tabular.constants import SPACE_DELIMITED_FIELDS
 
 
-#: IRG Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
-IRG_SOURCES = {
+#: IRG G Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
+IRG_G_SOURCES = {
     'G0': 'GB2312-80',
     'G1': 'GB12345-90',
     'G3': 'GB7589-87 unsimplified forms',
@@ -255,6 +255,14 @@ expand_kRSJapanese = _expand_kRSGeneric
 expand_kRSKangXi = _expand_kRSGeneric
 expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
+
+
+def expand_kIRG_GSource(value):
+    v = value.split('-')
+    return {
+        "source": v[0],
+        "location": v[1]
+    }
 
 
 def expand_field(field, fvalue):
