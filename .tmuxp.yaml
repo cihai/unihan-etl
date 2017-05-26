@@ -1,8 +1,8 @@
-session_name: unihan-tabular
+session_name: unihan-etl
 start_directory: ./ # load session relative to config location (project root).
 before_script: ./bootstrap_env.py # ./ to load relative to project root.
 windows:
-- window_name: unihan-tabular
+- window_name: unihan-etl
   focus: True
   layout: main-horizontal
   options:
