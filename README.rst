@@ -14,10 +14,10 @@ CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libun
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-Field types contain additional information to extract. For instance,
-*kHanyuPinyin*, which maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
-the value ``10019.020:tiàn`` is a simple case. The database `also can show
-something like these <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_::
+Field types contain additional information to extract. For example,
+`kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_,
+which maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
+``10019.020:tiàn`` represents a minimal case. More::
 
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
