@@ -2,7 +2,7 @@
 
 
 UNIHAN_MANIFEST = {
-    'Unihan_DictionaryIndices.txt': [
+    'Unihan_DictionaryIndices.txt': (
         'kCheungBauerIndex',
         'kCowles',
         'kDaeJaweon',
@@ -21,8 +21,8 @@ UNIHAN_MANIFEST = {
         'kMorohashi',
         'kNelson',
         'kSBGY',
-    ],
-    'Unihan_DictionaryLikeData.txt': [
+    ),
+    'Unihan_DictionaryLikeData.txt': (
         'kCangjie',
         'kCheungBauer',
         'kCihaiT',
@@ -34,8 +34,8 @@ UNIHAN_MANIFEST = {
         'kHKGlyph',
         'kPhonetic',
         'kTotalStrokes',
-    ],
-    'Unihan_IRGSources.txt': [
+    ),
+    'Unihan_IRGSources.txt': (
         'kCompatibilityVariant',
         'kIICore',
         'kIRG_GSource',
@@ -47,13 +47,13 @@ UNIHAN_MANIFEST = {
         'kIRG_TSource',
         'kIRG_USource',
         'kIRG_VSource',
-    ],
-    'Unihan_NumericValues.txt': [
+    ),
+    'Unihan_NumericValues.txt': (
         'kAccountingNumeric',
         'kOtherNumeric',
         'kPrimaryNumeric',
-    ],
-    'Unihan_OtherMappings.txt': [
+    ),
+    'Unihan_OtherMappings.txt': (
         'kBigFive',
         'kCCCII',
         'kCNS1986',
@@ -79,16 +79,16 @@ UNIHAN_MANIFEST = {
         'kPseudoGB1',
         'kTaiwanTelegraph',
         'kXerox',
-    ],
-    'Unihan_RadicalStrokeCounts.txt': [
+    ),
+    'Unihan_RadicalStrokeCounts.txt': (
         'kRSAdobe_Japan1_6',
         'kRSJapanese',
         'kRSKangXi',
         'kRSKanWa',
         'kRSKorean',
         'kRSUnicode',
-    ],
-    'Unihan_Readings.txt': [
+    ),
+    'Unihan_Readings.txt': (
         'kCantonese',
         'kDefinition',
         'kHangul',
@@ -101,33 +101,33 @@ UNIHAN_MANIFEST = {
         'kTang',
         'kVietnamese',
         'kXHC1983',
-    ],
-    'Unihan_Variants.txt': [
+    ),
+    'Unihan_Variants.txt': (
         'kSemanticVariant',
         'kSimplifiedVariant',
         'kSpecializedSemanticVariant',
         'kTraditionalVariant',
         'kZVariant',
-    ]
+    )
 }
 
 #: FIELDS with multiple values via custom delimiters
-CUSTOM_DELIMITED_FIELDS = [
+CUSTOM_DELIMITED_FIELDS = (
     'kDefinition',
     'kDaeJaweon',
     'kHDZRadBreak'
-]
+)
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
-SPACE_DELIMITED_DICT_FIELDS = [
+SPACE_DELIMITED_DICT_FIELDS = (
     'kHanYu',
     'kXHC1983',
     'kMandarin',
     'kTotalStrokes',
-]
+)
 
 #: Fields with multiple values UNIHAN delimits by spaces -> list
-SPACE_DELIMITED_LIST_FIELDS = [
+SPACE_DELIMITED_LIST_FIELDS = (
     'kAccountingNumberic',
     'kCantonese',
     'kCCCII',
@@ -187,7 +187,7 @@ SPACE_DELIMITED_LIST_FIELDS = [
     'kVietnamese',
     'kXerox',
     'kZVariant',
-]
+)
 
 #: Any space delimited field regardless of expanded form
 SPACE_DELIMITED_FIELDS = (
@@ -195,4 +195,4 @@ SPACE_DELIMITED_FIELDS = (
 )
 
 #: Default index fields for unihan csv's. You probably want these.
-INDEX_FIELDS = ['ucn', 'char']
+INDEX_FIELDS = ('ucn', 'char')

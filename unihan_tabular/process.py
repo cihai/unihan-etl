@@ -45,7 +45,7 @@ def not_junk(line):
 
 def in_fields(c, fields):
     """Return True if string is in the default fields."""
-    return c in fields + INDEX_FIELDS
+    return c in tuple(fields) + INDEX_FIELDS
 
 
 def get_fields(d):
@@ -89,7 +89,7 @@ DESTINATION_DIR = dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
 #: Default Unihan fields
-UNIHAN_FIELDS = get_fields(UNIHAN_MANIFEST)
+UNIHAN_FIELDS = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
 ALLOWED_EXPORT_TYPES = ['json', 'csv']
 try:
@@ -103,7 +103,7 @@ DEFAULT_OPTIONS = {
     'destination': '%s/unihan.{ext}' % DESTINATION_DIR,
     'zip_path': UNIHAN_ZIP_PATH,
     'work_dir': WORK_DIR,
-    'fields': INDEX_FIELDS + UNIHAN_FIELDS,
+    'fields': (INDEX_FIELDS + UNIHAN_FIELDS),
     'format': 'csv',
     'input_files': UNIHAN_FILES,
     'download': False,
