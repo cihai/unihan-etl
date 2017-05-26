@@ -7,6 +7,12 @@ About unihan-tabular
 unihan-tabular provides configurable, self-serve data exports of the
 :ref:`UNIHAN` database.
 
+Retrieval
+---------
+
+unihan-tabular will download and cache the raw database files for the
+user.
+
 Handles encoding
 ----------------
 
