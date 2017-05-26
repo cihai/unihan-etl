@@ -9,6 +9,56 @@ import re
 from unihan_tabular.constants import SPACE_DELIMITED_FIELDS
 
 
+#: IRG Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
+IRG_SOURCES = {
+    'G0': 'GB2312-80',
+    'G1': 'GB12345-90',
+    'G3': 'GB7589-87 unsimplified forms',
+    'G5': 'GB7590-87 unsimplified forms',
+    'G7': ('General Purpose Hanzi List for Modern Chinese Language, and ',
+           'General List of Simplified Hanzi'),
+    'GS': 'Singapore Characters',
+    'G8': 'GB8565-88',
+    'G9': 'GB18030-2000',
+    'GE': 'GB16500-95',
+    'G4K': 'Siku Quanshu (四庫全書)',
+    'GBK': 'Chinese Encyclopedia (中國大百科全書)',
+    'GCH': 'Ci Hai (辞海)',
+    'GCY': 'Ci Yuan (辭源)',
+    'GCYY ': (
+        'Chinese Academy of Surveying and Mapping Ideographs '
+        '(中国测绘科学院用字)'
+    ),
+    'GDZ': 'Geographic Publishing House Ideographs (地质出版社用字)',
+    'GFZ': 'Founder Press System (方正排版系统)',
+    'GGH': 'Gudai Hanyu Cidian (古代汉语词典)',
+    'GH': 'GB/T 15564-1995',
+    'GHC': 'Hanyu Dacidian (漢語大詞典)',
+    'GHZ': 'Hanyu Dazidian ideographs (漢語大字典)',
+    'GIDC': 'ID system of the Ministry of Public Security of China, 2009',
+    'GJZ': 'Commercial Press Ideographs (商务印书馆用字)',
+    'GK': 'GB 12052-89',
+    'GKX': (
+        'Kangxi Dictionary ideographs (康熙字典) 9th edition (1958) '
+        'including the addendum (康熙字典)補遺'
+    ),
+    'GRM': 'People’s Daily Ideographs (人民日报用字)',
+    'GWZ': (
+        'Hanyu Dacidian Publishing House Ideographs (漢語大詞典出版社用字)'
+    ),
+    'GXC': 'Xiandai Hanyu Cidian (现代汉语词典)',
+    'GXH': 'Xinhua Zidian (新华字典)',
+    'GZFY': 'Hanyu Fangyan Dacidian (汉语方言大词典)',
+    'GZH': 'ZhongHua ZiHai (中华字海)',
+    'GZJW': 'Yinzhou Jinwen Jicheng Yinde (殷周金文集成引得)',
+    'GFC': (
+        'Modern Chinese Standard Dictionary (现代汉语规范词典第二版。主编:李'
+        '行健。北京:外语 教学与研究出版社) 2010, ISBN:978-7-5600-9518-9'
+    ),
+    'GGFZ': 'Tongyong Guifan Hanzi Zidian (通用规范汉字字典)'
+}
+
+
 def expand_kDefinition(value):
     return [c.strip() for c in value.split(';')]
 
