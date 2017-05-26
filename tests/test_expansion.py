@@ -630,3 +630,22 @@ def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
     assert item['kXHC1983'] == expected
 
     assert expansion.expand_field('kXHC1983', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+348C      kIRG_GSource    GKX-0118.03
+    ("U+348C", "GKX-0118.03", {
+        "source": "GKX",
+        "location": "0118.03"
+    }),
+    # U+348D      kIRG_GSource    G5-3272
+    ("U+348D", "G5-3272", {
+        "source": "G5",
+        "location": "3272"
+    }),
+])
+def test_expand_kIRG_GSource(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIRG_GSource'] == expected
+
+    assert expansion.expand_field('kIRG_GSource', fieldval) == expected

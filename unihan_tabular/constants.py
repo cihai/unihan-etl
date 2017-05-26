@@ -115,7 +115,8 @@ UNIHAN_MANIFEST = {
 CUSTOM_DELIMITED_FIELDS = (
     'kDefinition',
     'kDaeJaweon',
-    'kHDZRadBreak'
+    'kHDZRadBreak',
+    'kIRG_GSource',
 )
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
