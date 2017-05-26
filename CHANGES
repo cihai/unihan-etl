@@ -4,6 +4,7 @@ Changelog
 
 Here you can find the recent changes to cihai.
 
+- :support:`-` Rename from unihan-tabular to unihan-etl
 - :feature:`-` Support for expanding multi-value fields
 - :feature:`-` Support for pruning empty fields
 - :support:`-` Improve help dialog
