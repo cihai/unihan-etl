@@ -524,3 +524,30 @@ def test_expand_kHDZRadBreak(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kHDZRadBreak'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+349D      kSBGY   479.12 495.09
+    ("U+349D", [{
+        "page": 479,
+        "character": 12
+    }, {
+        "page": 495,
+        "character": 9
+    }]),
+    # U+349F      kSBGY   296.38
+    ("U+349F", [{
+        "page": 296,
+        "character": 38
+    }])
+])
+def test_expand_kSBGY(expanded_data, ucn, expected):
+    """
+    The 25334 character references are given in the form “ABC.XY”, in which:
+    "ABC” is the zero-padded page number [004..546]; “XY” is the zero-padded
+    number of the character on the page [01..73]. For example, 364.38
+    indicates the 38th character on Page 364 (i.e. 澍). Where a given Unicode
+    Scalar Value (USV) has more than one reference, these are space-delimited.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kSBGY'] == expected

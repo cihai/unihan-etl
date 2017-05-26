@@ -653,6 +653,13 @@ def expand_delimiters(normalized_data):
                     "ucn": rad.split('[')[1].replace(']', ''),
                     "location": loc
                 }
+            if field == 'kSBGY':
+                for i, value in enumerate(char[field]):
+                    vals = value.split('.')
+                    char[field][i] = {
+                        "page": int(vals[0]),
+                        "character": int(vals[1])
+                    }
             if field == 'kRSUnicode':
                 for i, value in enumerate(char[field]):
                     vals = value.split('.')
