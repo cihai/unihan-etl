@@ -1,6 +1,6 @@
-*unihan-tabular* - tool to build `UNIHAN`_ into tabular / structured formats
-like python, JSON, CSV and YAML. Part of the `cihai`_ project. See also: 
-`libUnihan <http://libunihan.sourceforge.net/>`_.
+*unihan-tabular* - ETL tool `UNIHAN`_. Retrieve, extract and transform
+UNIHAN into tabular or structured format. Load into python objects, JSON,
+CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
 |pypi| |docs| |build-status| |coverage| |license|
 
@@ -14,28 +14,21 @@ like python, JSON, CSV and YAML. Part of the `cihai`_ project. See also:
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-In addition, information stored within the database's fields contain
-structured detail, which may need to be parsed and structured independently. For
-instance, *kHanyuPinyin*, which map Unicode codepoints to
-`Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_, the value
-``10019.020:tiàn`` is a simple case. But the database `also can show
+Field types contain additional information to extract. For instance,
+*kHanyuPinyin*, which maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
+the value ``10019.020:tiàn`` is a simple case. The database `also can show
 something like these <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_::
 
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
 
-A *kHanyuPinyin* field can contain *multiple* values, which are delimited by
-spaces. The location in the work and its pinyin readings are separated by
-a ":" (colon). Within either of these, it can be one or more values
-separated by commas. This is just one of 90 fields contained in the
-database.
+The *kHanyuPinyin* field supports multiple entries, delimited by spaces.
+Within an entry, a ":" (colon) separates locations in the work and pinyin
+readings. Within these split values, a "," (comma) can separate multiple
+values. This is just one of 90 fields contained in the database.
 
-``$ unihan-tabular`` will download Unihan.zip and build all files into a
-single tabular-friendly format, or a detailed, structured format if using YAML
-or JSON.
-
-"Flat" output
--------------
+Tabular, "Flat" output
+----------------------
 
 CSV (default), ``$ unihan-tabular``::
 
