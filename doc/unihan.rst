@@ -9,24 +9,50 @@ About UNIHAN
     - `Wikipedia article <https://en.wikipedia.org/wiki/Han_unification>`_
     - `UNIHAN database documentation`_
 
+Languages and computers
+-----------------------
+
+There are many languages and writing systems around the world. Computers
+internally use numbers to represent characters in writing systems. As
+computers became more popular, hundreds of encoding systems were
+developed to handle writing systems from different regions.
+
+No single encoding system covered all languages. To add to the complexity,
+encodings conflicted with each other on the numbers assigned to
+characters. Any data decoded with the wrong standard would turn up as
+gibberish.
+
+`Unicode`_ is a standard devised to provide a unique number for every
+character.
+
+This entails pulling together minds from around the world to assign codepoints.
+
+The *Unicode Consortium* is a non-profit organization founded to develop,
+extend and promote use of the Unicode Standard.
+
 What is UNIHAN?
 ---------------
 
-The *Unicode Consortium*, authors of the `Unicode Standard`_, provide a standard
-of consistently representing and encoding the world's writing systems.
+UNIHAN, short for `Han unification`_, is the effort of the consortium
+assign codepoints to CJK characters. Any single `han character` can
+multiple historical or regional variants to account for, hence "unification".
 
-UNIHAN, short for `Han unification`_, is the effort of the consortium map CJK
-languages into unified characters. In addition, it pulls together various
-sources of information that detail characteristics of the glyphs, and vet
-them through a thorough proofreading process. It is a professional effort,
-with industrial ramifications - glyphs once only noted in dictionaries and
-antiquity are set in stone with their own codepoints, carefully
-cross-referenced with information from, often multiple, distinct sources.
+In order to do this, the effort pulls together various sources of information
+to detail characteristics of the glyphs, and vet them through a thorough
+proofreading process. It is an international effort, hallmarked by
+cooperation between researchers and groups like the `Ideographic Rapporteur
+Group`_.  Glyphs once only noted in dictionaries and antiquity are set in stone
+with their own codepoints, carefully cross-referenced with information from,
+often multiple, distinct sources.
 
 The advantage that UNIHAN provides to east asian researchers, including
 sinologists and japanologists, linguists, anaylsts, language learners, and
 hobbyists cannot be understated. Unbeknownst to users, its used under the hood
 in many applications and websites.
+
+The resulting standard has industrial ramifications downstream to
+software developers and computer users. When a version of Unicode is
+released, it is then incorporated downstream in software projects.
 
 The database
 ------------
@@ -80,8 +106,10 @@ on each field of information is derived from. For instance:
 
 Han Unification is a global effort. And it's available free to the world.
 
-.. _Unicode Standard: https://en.wikipedia.org/wiki/Unicode
+.. _Unicode: https://en.wikipedia.org/wiki/Unicode
 .. _Han unification: https://en.wikipedia.org/wiki/Han_unification
+.. _Ideographic Rapporteur Group: https://en.wikipedia.org/wiki/Ideographic_Rapporteur_Group
+.. _han character: https://en.wikipedia.org/wiki/Chinese_characters
 .. _UNIHAN database documentation: http://www.unicode.org/reports/tr38/
 .. _jyutping romanization: https://en.wikipedia.org/wiki/Jyutping
 .. _Hànyǔ Dà Zìdiǎn: https://en.wikipedia.org/wiki/Hanyu_Da_Zidian
