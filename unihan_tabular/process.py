@@ -157,6 +157,7 @@ CUSTOM_DELIMITED_FIELDS = [
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
 SPACE_DELIMITED_DICT_FIELDS = [
     'kHanYu',
+    'kXHC1983',
     'kMandarin',
     'kTotalStrokes',
 ]
@@ -221,7 +222,6 @@ SPACE_DELIMITED_LIST_FIELDS = [
     'kTraditionalVariant',
     'kVietnamese',
     'kXerox',
-    'kXHC1983',
     'kZVariant',
 ]
 
@@ -596,6 +596,26 @@ def expand_delimiters(normalized_data):
                                     "page": int(vvalue[1:5]),
                                     "character": int(vvalue[6:8]),
                                     "virtual": int(vvalue[8])
+                                }
+            if field == 'kXHC1983':
+                for i, value in enumerate(char[field]):
+                    vals = value.split(':')
+                    char[field][i] = {
+                        "locations": vals[0],
+                        "reading": vals[1],
+                    }
+                    for k, v in char[field][i].items():
+                        if k == "locations":
+                            char[field][i][k] = v.split(',')
+                            for ii, vvalue in enumerate(char[field][i][k]):
+                                valz = vvalue.split('.')
+                                substituted = valz[1][-1] == "*"
+                                valz[1] = valz[1].replace("*", '')
+                                char[field][i][k][ii] = {
+                                    "page": int(valz[0]),
+                                    "position": int(valz[1][0:2]),
+                                    "entry": int(valz[1][2]),
+                                    "substituted": substituted
                                 }
             if field == 'kCheungBauer':
                 for i, value in enumerate(char[field]):
