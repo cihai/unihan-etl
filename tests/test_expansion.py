@@ -551,3 +551,80 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     """
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kSBGY'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
+    # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
+    ("U+91B1", [{
+        "locations": [{
+            "page": 295,
+            "position": 1,
+            "entry": 1,
+            "substituted": False
+        }],
+        "reading": "fā"
+    }, {
+        "locations": [{
+            "page": 884,
+            "position": 8,
+            "entry": 1,
+            "substituted": False
+        }],
+        "reading": "pō"
+    }]),
+    # U+379E  kXHC1983        1092.070*,1092.071:sóng
+    ("U+379E", [{
+        "locations": [{
+            "page": 1092,
+            "position": 7,
+            "entry": 0,
+            "substituted": True
+        }, {
+            "page": 1092,
+            "position": 7,
+            "entry": 1,
+            "substituted": False
+        }],
+        "reading": "sóng"
+    }]),
+    # U+5750  kXHC1983        1551.040,1552.011:zuò
+    ("U+5750", [{
+        "locations": [{
+            "page": 1551,
+            "position": 4,
+            "entry": 0,
+            "substituted": False
+        }, {
+            "page": 1552,
+            "position": 1,
+            "entry": 1,
+            "substituted": False
+        }],
+        "reading": "zuò"
+    }])
+])
+def test_expand_kXHC1983(expanded_data, ucn, expected):
+    """
+    Each pīnyīn reading is preceded by the character’s location(s) in the
+    dictionary, separated from the reading by “:” (colon); multiple locations
+    for a given reading are separated by “,” (comma); multiple “location:
+    reading” values are separated by “ ” (space). Each location reference is of
+    the form /[0-9]{4}\.[0-9]{3}\*?/ . The number preceding the period is the
+    page number, zero-padded to four digits. The first two digits of the number
+    following the period are the entry’s position on the page, zero-padded. The
+    third digit is 0 for a main entry and greater than 0 for a parenthesized
+    variant of the main entry. A trailing “*” (asterisk) on the location
+    indicates an encoded variant substituted for an unencoded character (see
+    below).
+
+    As of the present writing (Unicode 5.1), the XHC source data contains 204
+    unencoded characters (198 of which were represented by PUA or CJK
+    Compatibility [or in one case, by non-CJK, see below] characters), for the
+    most part simplified variants. Each of these 198 characters in the source
+    is replaced by one or more encoded variants (references in all 204 cases
+    are marked with a trailing “*”; see above). Many of these unencoded forms
+    are already in the pipeline for future encoding, and future revisions of
+    this data will eliminate trailing asterisks from mappings.
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kXHC1983'] == expected
