@@ -285,8 +285,8 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     """Picks file automatically if none specified and fields are."""
 
     fields = (
-        process.UNIHAN_MANIFEST['Unihan_Readings.txt'] +
-        process.UNIHAN_MANIFEST['Unihan_Variants.txt']
+        constants.UNIHAN_MANIFEST['Unihan_Readings.txt'] +
+        constants.UNIHAN_MANIFEST['Unihan_Variants.txt']
     )
 
     options = {
