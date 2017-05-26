@@ -10,7 +10,7 @@ import shutil
 
 import pytest
 
-from unihan_tabular import process
+from unihan_tabular import process, constants
 from unihan_tabular.process import (
     UNIHAN_ZIP_PATH, Packager, DEFAULT_OPTIONS, zip_has_files)
 from unihan_tabular.test import assert_dict_contains_subset, get_datapath
@@ -162,12 +162,12 @@ def test_normalize_simple_data_format():
         get_datapath('Unihan_Readings.txt'),
     ]
 
-    columns = [
+    columns = (
         'kTotalStrokes',
         'kPhonetic',
         'kCantonese',
         'kDefinition',
-    ] + process.INDEX_FIELDS
+    ) + constants.INDEX_FIELDS
 
     data = process.load_data(
         files=csv_files,
