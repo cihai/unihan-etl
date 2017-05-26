@@ -2,7 +2,7 @@
 
 import os
 import sys
-import alabaster
+import alagitpull
 
 
 # Get the project root dir, which is the parent dir of this
@@ -24,14 +24,14 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'releases',
-    'alabaster',
+    'alagitpull',
     'sphinxarg.ext'            # sphinx-argparse
 ]
 
 releases_unstable_prehistory = True
 releases_document_name = "history"
-releases_issue_uri = "https://github.com/cihai/unihan-tabular/issues/%s"
-releases_release_uri = "https://github.com/cihai/unihan-tabular/tree/v%s"
+releases_issue_uri = "https://github.com/cihai/unihan-etl/issues/%s"
+releases_release_uri = "https://github.com/cihai/unihan-etl/tree/v%s"
 
 templates_path = ['_templates']
 
@@ -49,13 +49,12 @@ exclude_patterns = ['_build']
 
 pygments_style = 'sphinx'
 
-html_theme_path = [alabaster.get_path()]
+html_theme_path = [alagitpull.get_path()]
 html_favicon = 'favicon.ico'
-html_theme = 'alabaster'
+html_theme = 'alagitpull'
 html_sidebars = {
     '**': [
         'about.html',
-        'star.html',
         'navigation.html',
         'relations.html',
         'more.html',
@@ -65,8 +64,13 @@ html_sidebars = {
 
 html_theme_options = {
     'logo': 'img/cihai.svg',
+    'github_user': 'cihai',
+    'github_repo': 'unihan-etl',
+    'github_type': 'star',
+    'projects': alagitpull.projects,
 }
 
+html_short_title = about['__title__']
 html_theme_path = ['_themes']
 html_static_path = ['_static']
 
