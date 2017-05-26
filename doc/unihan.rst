@@ -14,10 +14,10 @@ Languages and computers
 
 There are many languages and writing systems around the world. Computers
 internally use numbers to represent characters in writing systems. As
-computers became more popular, hundreds of encoding systems were
+computers became more prominent, hundreds of encoding systems were
 developed to handle writing systems from different regions.
 
-No single encoding system covered all languages. To add to the complexity,
+No single encoding system covered all languages. Adding to the complexity,
 encodings conflicted with each other on the numbers assigned to
 characters. Any data decoded with the wrong standard would turn up as
 gibberish.
