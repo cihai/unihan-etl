@@ -2,7 +2,8 @@
 TODO
 ====
 
-- kTotalStrokes support for zh-Hant and zh-Hans
+- kIRGHanyuDaZidian, kIRGKangXi, etc. dictionary indice values
+- kTotalStrokes support for zh-Hant and zh-Hans [done]
 - Cast string-integers to integers
 
 Old
