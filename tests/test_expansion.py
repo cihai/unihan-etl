@@ -692,3 +692,67 @@ def test_expand_kIRG_JSource(expanded_data, ucn, fieldval, expected):
     assert item['kIRG_JSource'] == expected
 
     assert expansion.expand_field('kIRG_JSource', fieldval) == expected
+
+
+@pytest.mark.parametrize("field,ucn,fieldval,expected", [
+    # U+3ED0  kIRG_KPSource   KP0-EAB2
+    ("kIRG_KPSource", "U+3ED0", "KP0-EAB2", {
+        "source": "KP0",
+        "location": "EAB2"
+    }),
+    # U+340C  kIRG_KPSource   KP1-3451
+    ("kIRG_KPSource", "U+340C", "KP1-3451", {
+        "source": "KP1",
+        "location": "3451"
+    }),
+    # U+4E06  kIRG_KSource    K2-2121
+    ("kIRG_KSource", "U+4E06", "K2-2121", {
+        "source": "K2",
+        "location": "2121"
+    }),
+    # U+3401  kIRG_KSource    K3-2121
+    ("kIRG_KSource", "U+3401", "K3-2121", {
+        "source": "K3",
+        "location": "2121"
+    }),
+    # U+21290	kIRG_MSource	MAC-00077
+    ("kIRG_MSource", "U+21290", "MAC-00077", {
+        "source": "MAC",
+        "location": "00077"
+    }),
+    # U+3400  kIRG_TSource    T6-222C
+    ("kIRG_TSource", "U+3400", "T6-222C", {
+        "source": "T6",
+        "location": "222C"
+    }),
+    # U+3401  kIRG_TSource    T4-2224
+    ("kIRG_TSource", "U+3401", "T4-2224", {
+        "source": "T4",
+        "location": "2224"
+    }),
+    # U+22016 kIRG_USource    UTC-00069
+    ("kIRG_USource", "U+22016", "UTC-00069", {
+        "source": "UTC",
+        "location": "00069"
+    }),
+    # U+221EC kIRG_USource    UCI-00937
+    ("kIRG_USource", "U+221EC", "UCI-00937", {
+        "source": "UCI",
+        "location": "00937"
+    }),
+    # U+346B  kIRG_VSource    V0-3034
+    ("kIRG_VSource", "U+346B", "V0-3034", {
+        "source": "V0",
+        "location": "3034"
+    }),
+    # U+340C  kIRG_VSource    V2-8874
+    ("kIRG_VSource", "U+340C", "V2-8874", {
+        "source": "V2",
+        "location": "8874"
+    }),
+])
+def test_expand_kIRG_KPSource(expanded_data, field, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item[field] == expected
+
+    assert expansion.expand_field(field, fieldval) == expected
