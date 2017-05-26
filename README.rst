@@ -1,5 +1,5 @@
 *unihan-tabular* - tool to build `UNIHAN`_ into tabular / structured formats
-like python, JSON, CSV and YAML. Part of the `cihai`_ project. Compare to
+like python, JSON, CSV and YAML. Part of the `cihai`_ project. See also: 
 `libUnihan <http://libunihan.sourceforge.net/>`_.
 
 |pypi| |docs| |build-status| |coverage| |license|
