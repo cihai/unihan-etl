@@ -334,7 +334,7 @@ def normalize(raw_data, fields):
         sys.stdout.write('\n')
         sys.stdout.flush()
 
-    return [item for item in items.values()]
+    return [i for i in items.values()]
 
 
 def expand_delimiters(normalized_data):
