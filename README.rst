@@ -1,4 +1,4 @@
-*unihan-tabular* - ETL tool `UNIHAN`_. Retrieve, extract and transform
+*unihan-tabular* - `ETL`_ tool `UNIHAN`_. Retrieve, extract and transform
 UNIHAN into tabular or structured format. Load into python objects, JSON,
 CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
@@ -271,6 +271,7 @@ Structure
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
 .. _UNIHAN: http://www.unicode.org/charts/unihan.html
+.. _ETL: https://en.wikipedia.org/wiki/Extract,_transform,_load
 .. _create an issue: https://github.com/cihai/unihan-tabular/issues/new
 .. _Data Package: http://frictionlessdata.io/data-packages/
 .. _pyyaml: http://pyyaml.org/
