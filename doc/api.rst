@@ -14,6 +14,11 @@ API
        :inherited-members:
        :private-members:
 
+.. automodule:: unihan_tabular.constants
+    :members:
+
+.. automodule:: unihan_tabular.expansion
+    :members:
 
 .. automodule:: unihan_tabular.util
     :members:

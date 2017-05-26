@@ -8,7 +8,7 @@ import pytest
 import zipfile
 import os
 
-from unihan_tabular import process
+from unihan_tabular import process, constants
 from unihan_tabular.process import DEFAULT_OPTIONS, Packager
 from unihan_tabular.util import merge_dict
 
@@ -82,8 +82,8 @@ def TestPackager(mock_test_dir, mock_zip_file):
 @pytest.fixture(scope="session")
 def columns():
     return (
-        process.CUSTOM_DELIMITED_FIELDS + process.INDEX_FIELDS +
-        process.SPACE_DELIMITED_FIELDS
+        constants.CUSTOM_DELIMITED_FIELDS + constants.INDEX_FIELDS +
+        constants.SPACE_DELIMITED_FIELDS
     )
 
 

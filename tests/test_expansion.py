@@ -6,13 +6,13 @@ from __future__ import (absolute_import, division, print_function,
 
 import pytest
 
-from unihan_tabular import process
+from unihan_tabular import process, constants
 
 
 def test_expands_spaces(expanded_data):
     for item in expanded_data:
         for field in item.keys():
-            if field in process.SPACE_DELIMITED_LIST_FIELDS and item[field]:
+            if field in constants.SPACE_DELIMITED_LIST_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
 
