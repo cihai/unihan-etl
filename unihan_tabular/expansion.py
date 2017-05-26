@@ -5,6 +5,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
 import re
+
 from unihan_tabular.constants import SPACE_DELIMITED_FIELDS
 
 

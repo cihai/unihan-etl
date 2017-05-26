@@ -10,9 +10,9 @@ import shutil
 
 import pytest
 
-from unihan_tabular import process, constants
-from unihan_tabular.process import (
-    UNIHAN_ZIP_PATH, Packager, DEFAULT_OPTIONS, zip_has_files)
+from unihan_tabular import constants, process
+from unihan_tabular.process import (DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager,
+                                    zip_has_files)
 from unihan_tabular.test import assert_dict_contains_subset, get_datapath
 from unihan_tabular.util import merge_dict
 
