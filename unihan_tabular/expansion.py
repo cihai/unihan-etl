@@ -267,6 +267,7 @@ def _expand_kIRG_GenericSource(value):
 
 expand_kIRG_GSource = _expand_kIRG_GenericSource
 expand_kIRG_HSource = _expand_kIRG_GenericSource
+expand_kIRG_JSource = _expand_kIRG_GenericSource
 
 
 def expand_field(field, fvalue):
