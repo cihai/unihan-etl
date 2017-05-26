@@ -118,6 +118,13 @@ CUSTOM_DELIMITED_FIELDS = (
     'kHDZRadBreak',
     'kIRG_GSource',
     'kIRG_HSource',
+    'kIRG_JSource',
+    'kIRG_KPSource',
+    'kIRG_KSource',
+    'kIRG_MSource',
+    'kIRG_TSource',
+    'kIRG_USource',
+    'kIRG_VSource',
 )
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
