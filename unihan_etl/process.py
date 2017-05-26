@@ -472,7 +472,7 @@ class Packager(object):
         )
 
         if not os.path.exists(os.path.dirname(self.options['destination'])):
-            os.makedirs(self.options['destination'])
+            os.makedirs(os.path.dirname(self.options['destination']))
 
         data = load_data(files=files)
         data = normalize(data, fields)
