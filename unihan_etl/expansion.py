@@ -150,9 +150,11 @@ def expand_kXHC1983(value):
 
 def expand_kCheungBauer(value):
     for i, v in enumerate(value):
-        matches = re.split(
-            r'([0-9]{3})\/([0-9]{2});([A-Z]*);([a-z1-6\[\]\/,]+)', v
-        )
+        matches = re.compile(r"""
+            ([0-9]{3})\/([0-9]{2});
+            ([A-Z]*);
+            ([a-z1-6\[\]\/,]+)
+        """, re.X).split(v)
         value[i] = {
             "radical": int(matches[1]),
             "strokes": int(matches[2]),
