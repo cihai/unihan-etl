@@ -505,6 +505,7 @@ U+64D4	kFenn	741C 741G
 U+4E00	kHDZRadBreak	⼀[U+2F00]:10001.010
 U+4E59	kHDZRadBreak	⼄[U+2F04]:10047.040
 U+8303	kTotalStrokes	8 9
+U+9918	kFenn	31A
 
 
 # EOF
