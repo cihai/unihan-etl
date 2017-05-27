@@ -1,6 +1,6 @@
-*unihan-etl* - `ETL`_ tool `UNIHAN`_. Retrieve, extract and transform
-UNIHAN into tabular or structured format. Load into python objects, JSON,
-CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
+*unihan-etl* - `ETL`_ tool `UNIHAN`_. Retrieve, extract, and transform
+the UNIHAN database into tabular or structured format. Load into python objects,
+JSON, CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
 |pypi| |docs| |build-status| |coverage| |license|
 
