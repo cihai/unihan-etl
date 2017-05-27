@@ -233,12 +233,11 @@ def expand_kSBGY(value):
 
 def expand_kRSUnicode(value):
     for i, v in enumerate(value):
-        vals = v.split('.')
-        simp = vals[0][-1] == "'"
+        match = re.split(r'([1-9][0-9]{0,2})(\'?)\.(-?[0-9]{1,2})', v)
         value[i] = {
-            "radical": int(vals[0].replace("'", '')),
-            "strokes": int(vals[1]),
-            "simplified": simp
+            "radical": int(match[1]),
+            "strokes": int(match[3]),
+            "simplified": match[2] == "'"
         }
     return value
 
