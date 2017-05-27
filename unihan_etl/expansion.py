@@ -281,6 +281,17 @@ expand_kIRG_USource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
+def expand_kGSR(value):
+    for i, v in enumerate(value):
+        vre = re.split(r'([0-9]{4})([a-vx-z])(\')?', v)
+        value[i] = {
+            "set": int(vre[1]),
+            "letter": vre[2],
+            "apostrophe": vre[3] == "'"
+        }
+    return value
+
+
 def expand_field(field, fvalue):
     """Return structured value of information in UNIHAN field.
 
