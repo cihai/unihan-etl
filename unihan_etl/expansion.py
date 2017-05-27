@@ -183,18 +183,18 @@ def expand_kCihaiT(value):
 
 
 def expand_kDaeJaweon(value):
-    vals = value.split('.')
+    match = re.split(r'([0-9]{4})\.([0-9]{2})([01])', value)
     value = {
-        "page": int(vals[0]),
-        "position": int(vals[1][0:2]),
-        "virtual": int(vals[1][2]),
+        "page": int(match[1]),
+        "position": int(match[2]),
+        "virtual": int(match[3]),
     }
     return value
 
 
 def expand_kFenn(value):
     for i, v in enumerate(value):
-        vre = re.split(r'(\d+)(\w+)', value[i])
+        vre = re.split(r'([0-9]+a?)([A-KP*])', value[i])
         value[i] = {
             "phonetic": int(vre[1]),
             "frequency": vre[2]
