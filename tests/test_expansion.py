@@ -756,3 +756,34 @@ def test_expand_kIRG_KPSource(expanded_data, field, ucn, fieldval, expected):
     assert item[field] == expected
 
     assert expansion.expand_field(field, fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+340C  kGSR    0004f
+    ("U+340C", "0004f", [{
+        "set": 4,
+        "letter": "f",
+        "apostrophe": False
+    }]),
+    # U+371D	kGSR	0651k'
+    ("U+371D", "0651k'", [{
+        "set": 651,
+        "letter": "k",
+        "apostrophe": True
+    }]),
+    # U+9AE2  kGSR    0004e' 0850s
+    ("U+9AE2", "0004e' 0850s", [{
+        "set": 4,
+        "letter": "e",
+        "apostrophe": True
+    }, {
+        "set": 850,
+        "letter": "s",
+        "apostrophe": False
+    }]),
+])
+def test_expand_kGSR(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kGSR'] == expected
+
+    assert expansion.expand_field('kGSR', fieldval) == expected
