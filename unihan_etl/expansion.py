@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import re
 import zhon.pinyin
+import zhon.hanzi
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
@@ -218,9 +219,12 @@ def expand_kHanyuPinlu(value):
 def expand_kHDZRadBreak(value):
     rad, loc = value.split(':')
 
+    vre = re.split(r'([{}]+)\[(U\+2F[0-9A-D][0-9A-F])\]'.format(
+        zhon.hanzi.radicals), rad, re.UNICODE)
+
     return {
-        "radical": rad.split('[')[0],
-        "ucn": rad.split('[')[1].replace(']', ''),
+        "radical": vre[1],
+        "ucn": vre[2],
         "location": loc
     }
 
