@@ -5,6 +5,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
 
 import re
+import zhon.pinyin
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
@@ -204,9 +205,12 @@ def expand_kFenn(value):
 
 def expand_kHanyuPinlu(value):
     for i, v in enumerate(value):
+        vre = re.split(
+            r'([a-z{}]+)\(([0-9]+)\)'.format(zhon.pinyin.lowercase), v
+        )
         value[i] = {
-            "phonetic": v[0:v.find("(")],
-            "frequency": int(v[v.find("(")+1:v.find(")")])
+            "phonetic": vre[1],
+            "frequency": int(vre[2])
         }
     return value
 
