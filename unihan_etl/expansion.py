@@ -240,12 +240,15 @@ def expand_kHanyuPinlu(value):
 def expand_kHDZRadBreak(value):
     rad, loc = value.split(':')
 
-    m = re.split(r'([{}]+)\[(U\+2F[0-9A-D][0-9A-F])\]'.format(
-        zhon.hanzi.radicals), rad, re.UNICODE)
+    pattern = re.compile(r"""
+        (?P<radical>[{}]+)
+        \[(?P<ucn>U\+2F[0-9A-D][0-9A-F])\]
+    """.format(zhon.hanzi.radicals), re.X)
+    m = pattern.match(rad).groupdict()
 
     return {
-        "radical": m[1],
-        "ucn": m[2],
+        "radical": m['radical'],
+        "ucn": m['ucn'],
         "location": loc
     }
 
