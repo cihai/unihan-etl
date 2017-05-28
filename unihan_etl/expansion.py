@@ -94,9 +94,6 @@ def expand_kMandarin(value):
 
 
 def expand_kTotalStrokes(value):
-    """
-    :note: Similar to kMandarin, except return values are int.
-    """
     cn = value[0]
     if len(value) == 1:
         tw = value[0]
