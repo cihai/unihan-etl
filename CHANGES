@@ -4,6 +4,9 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :feature:`-` Support for expanding kGSR
+- :support:`-` Convert some field expansions to use regexes
+
 - :release:`0.9.0 <2017-05-26>`
 - :bug:`-` Fix bug where destination file was made into directory on
   first run
