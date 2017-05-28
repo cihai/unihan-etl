@@ -223,13 +223,16 @@ def expand_kFenn(value):
 
 
 def expand_kHanyuPinlu(value):
+    pattern = re.compile(r"""
+        (?P<phonetic>[a-z{}]+)
+        \((?P<frequency>[0-9]+)\)
+    """.format(zhon.pinyin.lowercase), re.X)
+
     for i, v in enumerate(value):
-        m = re.split(
-            r'([a-z{}]+)\(([0-9]+)\)'.format(zhon.pinyin.lowercase), v
-        )
+        m = pattern.match(v).groupdict()
         value[i] = {
-            "phonetic": m[1],
-            "frequency": int(m[2])
+            "phonetic": m['phonetic'],
+            "frequency": int(m['frequency'])
         }
     return value
 
