@@ -150,16 +150,16 @@ def expand_kXHC1983(value):
 
 def expand_kCheungBauer(value):
     for i, v in enumerate(value):
-        matches = re.compile(r"""
-            ([0-9]{3})\/([0-9]{2});
-            ([A-Z]*);
-            ([a-z1-6\[\]\/,]+)
-        """, re.X).split(v)
+        m = re.compile(r"""
+            (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
+            (?P<cangjie>[A-Z]*);
+            (?P<readings>[a-z1-6\[\]\/,]+)
+        """, re.X).match(v).groupdict()
         value[i] = {
-            "radical": int(matches[1]),
-            "strokes": int(matches[2]),
-            "cangjie": matches[3] or None,
-            "readings": matches[4].split(',')
+            "radical": int(m['radical']),
+            "strokes": int(m['strokes']),
+            "cangjie": m['cangjie'] or None,
+            "readings": m['readings'].split(',')
         }
     return value
 
