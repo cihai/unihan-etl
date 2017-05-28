@@ -3,9 +3,11 @@
 
 .. note::
 
-    :func:`re.compile` operations are inside of expand functions since
-    module-level function bytecode is cached in python.
+    :func:`re.compile` operations are inside of expand functions:
 
+        1. readability
+        2. module-level function bytecode is cached in python
+        3. the last used compiled regexes are cached
 """
 
 from __future__ import (absolute_import, division, print_function,
