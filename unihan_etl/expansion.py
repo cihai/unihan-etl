@@ -10,6 +10,22 @@ import zhon.hanzi
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
+#: kCheungBauer regex pattern
+kCheungBauer_pattern = re.compile(r"""
+    (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
+    (?P<cangjie>[A-Z]*);
+    (?P<readings>[a-z1-6\[\]\/,]+)
+""", re.X)
+
+#: kRSAdobe_Japan1_6 regex pattern
+kRSAdobe_Japan1_6_pattern = re.compile(r"""
+    (?P<type>[CV])\+
+    (?P<cid>[0-9]{1,5})\+
+    (?P<radical>[1-9][0-9]{0,2})\.
+    (?P<strokes>[1-9][0-9]?)\.
+    (?P<strokes_residue>[0-9]{1,2})
+""", re.X)
+
 
 #: IRG G Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
 IRG_G_SOURCES = {
@@ -143,14 +159,8 @@ def expand_kXHC1983(value):
 
 
 def expand_kCheungBauer(value):
-    pattern = re.compile(r"""
-        (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
-        (?P<cangjie>[A-Z]*);
-        (?P<readings>[a-z1-6\[\]\/,]+)
-    """, re.X)
-
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
+        m = kCheungBauer_pattern.match(v).groupdict()
         value[i] = {
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
@@ -161,16 +171,8 @@ def expand_kCheungBauer(value):
 
 
 def expand_kRSAdobe_Japan1_6(value):
-    pattern = re.compile(r"""
-        (?P<type>[CV])\+
-        (?P<cid>[0-9]{1,5})\+
-        (?P<radical>[1-9][0-9]{0,2})\.
-        (?P<strokes>[1-9][0-9]?)\.
-        (?P<strokes_residue>[0-9]{1,2})
-    """, re.X)
-
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
+        m = kRSAdobe_Japan1_6_pattern.match(v).groupdict()
 
         value[i] = {
             "type": m['type'],
