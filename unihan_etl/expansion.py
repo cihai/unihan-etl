@@ -143,12 +143,14 @@ def expand_kXHC1983(value):
 
 
 def expand_kCheungBauer(value):
+    pattern = re.compile(r"""
+        (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
+        (?P<cangjie>[A-Z]*);
+        (?P<readings>[a-z1-6\[\]\/,]+)
+    """, re.X)
+
     for i, v in enumerate(value):
-        m = re.compile(r"""
-            (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
-            (?P<cangjie>[A-Z]*);
-            (?P<readings>[a-z1-6\[\]\/,]+)
-        """, re.X).match(v).groupdict()
+        m = pattern.match(v).groupdict()
         value[i] = {
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
@@ -159,14 +161,16 @@ def expand_kCheungBauer(value):
 
 
 def expand_kRSAdobe_Japan1_6(value):
+    pattern = re.compile(r"""
+        (?P<type>[CV])\+
+        (?P<cid>[0-9]{1,5})\+
+        (?P<radical>[1-9][0-9]{0,2})\.
+        (?P<strokes>[1-9][0-9]?)\.
+        (?P<strokes_residue>[0-9]{1,2})
+    """, re.X)
+
     for i, v in enumerate(value):
-        m = re.compile(r"""
-            (?P<type>[CV])\+
-            (?P<cid>[0-9]{1,5})\+
-            (?P<radical>[1-9][0-9]{0,2})\.
-            (?P<strokes>[1-9][0-9]?)\.
-            (?P<strokes_residue>[0-9]{1,2})
-        """, re.X).match(v).groupdict()
+        m = pattern.match(v).groupdict()
 
         value[i] = {
             "type": m['type'],
