@@ -258,12 +258,18 @@ def expand_kSBGY(value):
 
 
 def expand_kRSUnicode(value):
+    pattern = re.compile(r"""
+        (?P<radical>[1-9][0-9]{0,2})
+        (?P<simplified>\'?)\.
+        (?P<strokes>-?[0-9]{1,2})
+    """, re.X)
+
     for i, v in enumerate(value):
-        match = re.split(r'([1-9][0-9]{0,2})(\'?)\.(-?[0-9]{1,2})', v)
+        m = pattern.match(v).groupdict()
         value[i] = {
-            "radical": int(match[1]),
-            "strokes": int(match[3]),
-            "simplified": match[2] == "'"
+            "radical": int(m['radical']),
+            "strokes": int(m['strokes']),
+            "simplified": m['simplified'] == "'"
         }
     return value
 
