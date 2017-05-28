@@ -246,26 +246,25 @@ Structure
 
 .. code-block:: bash
 
-    # output w/ JSON
-    {XDG data dir}/unihan_etl/unihan.json
+    # cache dir (Unihan.zip is downloaded, contents extracted)
+    {XDG cache dir}/unihan_etl/
 
-    # output w/ CSV
-    {XDG data dir}/unihan_etl/unihan.csv
+    # output dir
+    {XDG data dir}/unihan_etl/
+      unihan.json
+      unihan.csv
+      unihan.yaml   # (requires pyyaml)
 
-    # output w/ yaml (requires pyyaml)
-    {XDG data dir}/unihan_etl/unihan.yaml
+    # package dir
+    unihan_etl/
+      process.py    # argparse, download, extract, transform UNIHAN's data
+      constants.py  # immutable data vars (field to filename mappings, etc)
+      expansion.py  # extracting details baked inside of fields
+      _compat.py    # python 2/3 compatibility module
+      util.py       # utility / helper functions
 
-    # script to download + build a SDF csv of unihan.
-    unihan_etl/process.py
-
-    # unit tests to verify behavior / consistency of builder
+    # test suite
     tests/*
-
-    # python 2/3 compatibility module
-    unihan_etl/_compat.py
-
-    # utility / helper functions
-    unihan_etl/util.py
 
 .. _MIT: http://opensource.org/licenses/MIT
 .. _API: http://cihai.readthedocs.org/en/latest/api.html
