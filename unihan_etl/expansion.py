@@ -132,14 +132,12 @@ def expand_kXHC1983(value):
         }
 
         for n, loc in enumerate(value[i]['locations']):
-            lre = re.split(
-                r'([0-9]{4})\.([0-9]{3})(\*?)', loc
-            )
+            lre = re.split(r'([0-9]{4})\.([0-9]{2})([0-9]{1})(\*?)', loc)
             value[i]['locations'][n] = {
                 "page": int(lre[1]),
-                "position": int(lre[2][0:2]),
-                "entry": int(lre[2][2]),
-                "substituted": lre[3] == "*"
+                "position": int(lre[2]),
+                "entry": int(lre[3]),
+                "substituted": lre[4] == "*"
             }
     return value
 
