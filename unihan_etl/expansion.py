@@ -166,19 +166,20 @@ def expand_kCheungBauer(value):
 
 def expand_kRSAdobe_Japan1_6(value):
     for i, v in enumerate(value):
-        vre = re.compile(r"""([CV])\+
-            ([0-9]{1,5})\+
-            ([1-9][0-9]{0,2})\.
-            ([1-9][0-9]?)\.
-            ([0-9]{1,2})
-        """, re.X).split(v)
+        m = re.compile(r"""
+            (?P<type>[CV])\+
+            (?P<cid>[0-9]{1,5})\+
+            (?P<radical>[1-9][0-9]{0,2})\.
+            (?P<strokes>[1-9][0-9]?)\.
+            (?P<strokes_residue>[0-9]{1,2})
+        """, re.X).match(v).groupdict()
 
         value[i] = {
-            "type": vre[1],
-            "cid": int(vre[2]),
-            "radical": int(vre[3]),
-            "strokes": int(vre[4]),
-            "strokes-residue": int(vre[5])
+            "type": m['type'],
+            "cid": int(m['cid']),
+            "radical": int(m['radical']),
+            "strokes": int(m['strokes']),
+            "strokes-residue": int(m['strokes_residue'])
         }
     return value
 
