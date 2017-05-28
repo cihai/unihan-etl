@@ -209,21 +209,32 @@ def expand_kCihaiT(value):
 
 
 def expand_kDaeJaweon(value):
-    match = re.split(r'([0-9]{4})\.([0-9]{2})([01])', value)
+    pattern = re.compile(r"""
+        (?P<page>[0-9]{4})\.
+        (?P<position>[0-9]{2})
+        (?P<virtual>[01])
+    """, re.X)
+    m = pattern.match(value).groupdict()
+
     value = {
-        "page": int(match[1]),
-        "position": int(match[2]),
-        "virtual": int(match[3]),
+        "page": int(m['page']),
+        "position": int(m['position']),
+        "virtual": int(m['virtual']),
     }
     return value
 
 
 def expand_kFenn(value):
+    pattern = re.compile(r"""
+        (?P<phonetic>[0-9]+a?)
+        (?P<frequency>[A-KP*])
+    """, re.X)
+
     for i, v in enumerate(value):
-        m = re.split(r'([0-9]+a?)([A-KP*])', value[i])
+        m = pattern.match(v).groupdict(v)
         value[i] = {
-            "phonetic": int(m[1]),
-            "frequency": m[2]
+            "phonetic": int(m['phonetic']),
+            "frequency": m['frequency']
         }
     return value
 
@@ -322,12 +333,18 @@ expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
 def expand_kGSR(value):
+    pattern = re.compile(r"""
+        (?P<set>[0-9]{4})
+        (?P<letter>[a-vx-z])
+        (?P<apostrophe>\')?
+    """, re.X)
+
     for i, v in enumerate(value):
-        m = re.split(r'([0-9]{4})([a-vx-z])(\')?', v)
+        m = pattern.match(v).groupdict()
         value[i] = {
-            "set": int(m[1]),
-            "letter": m[2],
-            "apostrophe": m[3] == "'"
+            "set": int(m['set']),
+            "letter": m['letter'],
+            "apostrophe": m['apostrophe'] == "'"
         }
     return value
 
