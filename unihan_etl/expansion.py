@@ -127,24 +127,20 @@ def expand_kXHC1983(value):
     for i, v in enumerate(value):
         vals = v.split(':')
         value[i] = {
-            "locations": vals[0],
+            "locations": vals[0].split(','),
             "reading": vals[1],
         }
 
-        for k in value[i].keys():
-            if k != 'locations':
-                continue
-            value[i]['locations'] = v.split(',')
-            for ii, vvalue in enumerate(value[i]['locations']):
-                lre = re.split(
-                    r'([0-9]{4})\.([0-9]{3})(\*?)', vvalue
-                )
-                value[i]['locations'][ii] = {
-                    "page": int(lre[1]),
-                    "position": int(lre[2][0:2]),
-                    "entry": int(lre[2][2]),
-                    "substituted": lre[3] == "*"
-                }
+        for n, loc in enumerate(value[i]['locations']):
+            lre = re.split(
+                r'([0-9]{4})\.([0-9]{3})(\*?)', loc
+            )
+            value[i]['locations'][n] = {
+                "page": int(lre[1]),
+                "position": int(lre[2][0:2]),
+                "entry": int(lre[2][2]),
+                "substituted": lre[3] == "*"
+            }
     return value
 
 
