@@ -1,5 +1,12 @@
 # -*- coding: utf8 -*-
-"""Functions to uncompact details inside field values."""
+"""Functions to uncompact details inside field values.
+
+.. note::
+
+    :func:`re.compile` operations are inside of expand functions since
+    module-level function bytecode is cached in python.
+
+"""
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals, with_statement)
@@ -9,30 +16,6 @@ import zhon.pinyin
 import zhon.hanzi
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
-
-#: kCheungBauer regex pattern
-kCheungBauer_pattern = re.compile(r"""
-    (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
-    (?P<cangjie>[A-Z]*);
-    (?P<readings>[a-z1-6\[\]\/,]+)
-""", re.X)
-
-#: kRSAdobe_Japan1_6 regex pattern
-kRSAdobe_Japan1_6_pattern = re.compile(r"""
-    (?P<type>[CV])\+
-    (?P<cid>[0-9]{1,5})\+
-    (?P<radical>[1-9][0-9]{0,2})\.
-    (?P<strokes>[1-9][0-9]?)\.
-    (?P<strokes_residue>[0-9]{1,2})
-""", re.X)
-
-#: kXHC1983 regex pattern
-kXHC1983_pattern = re.compile(r"""
-    (?P<page>[0-9]{4})\.
-    (?P<position>[0-9]{2})
-    (?P<entry>[0-9]{1})
-    (?P<substituted>\*?)
-""", re.X)
 
 #: IRG G Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
 IRG_G_SOURCES = {
@@ -144,6 +127,13 @@ def expand_kHanyuPinyin(value):
 
 
 def expand_kXHC1983(value):
+    pattern = re.compile(r"""
+        (?P<page>[0-9]{4})\.
+        (?P<position>[0-9]{2})
+        (?P<entry>[0-9]{1})
+        (?P<substituted>\*?)
+    """, re.X)
+
     for i, v in enumerate(value):
         vals = v.split(':')
         value[i] = {
@@ -152,7 +142,7 @@ def expand_kXHC1983(value):
         }
 
         for n, loc in enumerate(value[i]['locations']):
-            m = kXHC1983_pattern.match(loc).groupdict()
+            m = pattern.match(loc).groupdict()
             value[i]['locations'][n] = {
                 "page": int(m['page']),
                 "position": int(m['position']),
@@ -163,8 +153,13 @@ def expand_kXHC1983(value):
 
 
 def expand_kCheungBauer(value):
+    pattern = re.compile(r"""
+        (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
+        (?P<cangjie>[A-Z]*);
+        (?P<readings>[a-z1-6\[\]\/,]+)
+    """, re.X)
     for i, v in enumerate(value):
-        m = kCheungBauer_pattern.match(v).groupdict()
+        m = pattern.match(v).groupdict()
         value[i] = {
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
@@ -175,8 +170,16 @@ def expand_kCheungBauer(value):
 
 
 def expand_kRSAdobe_Japan1_6(value):
+    pattern = re.compile(r"""
+        (?P<type>[CV])\+
+        (?P<cid>[0-9]{1,5})\+
+        (?P<radical>[1-9][0-9]{0,2})\.
+        (?P<strokes>[1-9][0-9]?)\.
+        (?P<strokes_residue>[0-9]{1,2})
+    """, re.X)
+
     for i, v in enumerate(value):
-        m = kRSAdobe_Japan1_6_pattern.match(v).groupdict()
+        m = pattern.match(v).groupdict()
 
         value[i] = {
             "type": m['type'],
