@@ -14,11 +14,20 @@ API
        :inherited-members:
        :private-members:
 
+Constants
+---------
+
 .. automodule:: unihan_etl.constants
     :members:
 
+Expansion
+---------
+
 .. automodule:: unihan_etl.expansion
     :members:
+
+Utilities and test helpers
+--------------------------
 
 .. automodule:: unihan_etl.util
     :members:
