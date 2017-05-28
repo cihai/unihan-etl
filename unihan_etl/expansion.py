@@ -132,12 +132,12 @@ def expand_kXHC1983(value):
         }
 
         for n, loc in enumerate(value[i]['locations']):
-            lre = re.split(r'([0-9]{4})\.([0-9]{2})([0-9]{1})(\*?)', loc)
+            m = re.split(r'([0-9]{4})\.([0-9]{2})([0-9]{1})(\*?)', loc)
             value[i]['locations'][n] = {
-                "page": int(lre[1]),
-                "position": int(lre[2]),
-                "entry": int(lre[3]),
-                "substituted": lre[4] == "*"
+                "page": int(m[1]),
+                "position": int(m[2]),
+                "entry": int(m[3]),
+                "substituted": m[4] == "*"
             }
     return value
 
@@ -201,22 +201,22 @@ def expand_kDaeJaweon(value):
 
 def expand_kFenn(value):
     for i, v in enumerate(value):
-        vre = re.split(r'([0-9]+a?)([A-KP*])', value[i])
+        m = re.split(r'([0-9]+a?)([A-KP*])', value[i])
         value[i] = {
-            "phonetic": int(vre[1]),
-            "frequency": vre[2]
+            "phonetic": int(m[1]),
+            "frequency": m[2]
         }
     return value
 
 
 def expand_kHanyuPinlu(value):
     for i, v in enumerate(value):
-        vre = re.split(
+        m = re.split(
             r'([a-z{}]+)\(([0-9]+)\)'.format(zhon.pinyin.lowercase), v
         )
         value[i] = {
-            "phonetic": vre[1],
-            "frequency": int(vre[2])
+            "phonetic": m[1],
+            "frequency": int(m[2])
         }
     return value
 
@@ -224,12 +224,12 @@ def expand_kHanyuPinlu(value):
 def expand_kHDZRadBreak(value):
     rad, loc = value.split(':')
 
-    vre = re.split(r'([{}]+)\[(U\+2F[0-9A-D][0-9A-F])\]'.format(
+    m = re.split(r'([{}]+)\[(U\+2F[0-9A-D][0-9A-F])\]'.format(
         zhon.hanzi.radicals), rad, re.UNICODE)
 
     return {
-        "radical": vre[1],
-        "ucn": vre[2],
+        "radical": m[1],
+        "ucn": m[2],
         "location": loc
     }
 
@@ -292,11 +292,11 @@ expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 def expand_kGSR(value):
     for i, v in enumerate(value):
-        vre = re.split(r'([0-9]{4})([a-vx-z])(\')?', v)
+        m = re.split(r'([0-9]{4})([a-vx-z])(\')?', v)
         value[i] = {
-            "set": int(vre[1]),
-            "letter": vre[2],
-            "apostrophe": vre[3] == "'"
+            "set": int(m[1]),
+            "letter": m[2],
+            "apostrophe": m[3] == "'"
         }
     return value
 
