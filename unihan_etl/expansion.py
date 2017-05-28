@@ -107,22 +107,28 @@ def expand_kHanYu(value):
 
 
 def expand_kHanyuPinyin(value):
+    location_pattern = re.compile(r"""
+        (?P<volume>[1-8])
+        (?P<page>[0-9]{4})\.
+        (?P<character>[0-3][0-9])
+        (?P<virtual>[0-3])
+    """, re.X)
+
     for i, v in enumerate(value):
-        v = [c.strip() for c in v.split(':')]
+        v = [s.split(',') for s in v.split(':')]
         value[i] = {
             "locations": v[0],
             "readings": v[1]
         }
-        for k, v in value[i].items():
-            value[i][k] = v.split(',')
-            if k == "locations":
-                for ii, vvalue in enumerate(value[i][k]):
-                    value[i][k][ii] = {
-                        "volume": int(vvalue[0]),
-                        "page": int(vvalue[1:5]),
-                        "character": int(vvalue[6:8]),
-                        "virtual": int(vvalue[8])
-                    }
+
+        for n, loc in enumerate(value[i]['locations']):
+            m = location_pattern.match(loc).groupdict()
+            value[i]['locations'][n] = {
+                "volume": int(m['volume']),
+                "page": int(m['page']),
+                "character": int(m['character']),
+                "virtual": int(m['virtual'])
+            }
     return value
 
 
