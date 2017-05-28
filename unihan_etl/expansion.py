@@ -26,6 +26,13 @@ kRSAdobe_Japan1_6_pattern = re.compile(r"""
     (?P<strokes_residue>[0-9]{1,2})
 """, re.X)
 
+#: kXHC1983 regex pattern
+kXHC1983_pattern = re.compile(r"""
+    (?P<page>[0-9]{4})\.
+    (?P<position>[0-9]{2})
+    (?P<entry>[0-9]{1})
+    (?P<substituted>\*?)
+""", re.X)
 
 #: IRG G Sources from http://www.unicode.org/reports/tr38/#kIRG_GSource
 IRG_G_SOURCES = {
@@ -145,12 +152,12 @@ def expand_kXHC1983(value):
         }
 
         for n, loc in enumerate(value[i]['locations']):
-            m = re.split(r'([0-9]{4})\.([0-9]{2})([0-9]{1})(\*?)', loc)
+            m = kXHC1983_pattern.match(loc).groupdict()
             value[i]['locations'][n] = {
-                "page": int(m[1]),
-                "position": int(m[2]),
-                "entry": int(m[3]),
-                "substituted": m[4] == "*"
+                "page": int(m['page']),
+                "position": int(m['position']),
+                "entry": int(m['entry']),
+                "substituted": m['substituted'] == "*"
             }
     return value
 
