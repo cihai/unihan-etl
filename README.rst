@@ -82,7 +82,7 @@ With ``$ unihan-etl -F json --no-expand``:
 UNIHAN database's documentation specifies how multiple values (lists) and
 structured information (hashes/dicts) are packed into fields. unihan-etl
 carefully handles these fields in a uniform output. Support only available on
-JSON, YAML and python output.
+JSON, YAML and python output. It also removes null values.
 
 JSON, ``$ unihan-etl -F json``:
 
