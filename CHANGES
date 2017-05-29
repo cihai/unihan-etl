@@ -4,7 +4,7 @@ Changelog
 
 Here you can find the recent changes to the project.
 
-- :release:`0.9.1 <2017-05-27`
+- :release:`0.9.1 <2017-05-27>`
 - :feature:`-` Support for expanding kGSR
 - :support:`-` Convert some field expansions to use regexes
 
