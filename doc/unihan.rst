@@ -37,6 +37,10 @@ UNIHAN, short for `Han unification`_, is the effort of the consortium
 assign codepoints to CJK characters. Any single `han character` can
 multiple historical or regional variants to account for, hence "unification".
 
+.. image:: _static/img/sword_variants.png
+   :width: 300px 
+   :align: center
+
 In order to do this, the effort pulls together various sources of information
 to detail characteristics of the glyphs, and vet them through a thorough
 proofreading process. It is an international effort, hallmarked by
