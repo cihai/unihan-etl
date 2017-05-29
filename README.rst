@@ -79,10 +79,12 @@ With ``$ unihan-etl -F json --no-expand``:
 "Structured" output
 -------------------
 
-UNIHAN database's documentation specifies how multiple values (lists) and
-structured information (hashes/dicts) are packed into fields. unihan-etl
-carefully handles these fields in a uniform output. Support only available on
-JSON, YAML and python output. It also removes null values.
+The UNIHAN database packs multiple values, nested values, and optional flags
+(such as apostrophes) into fields. unihan-etl carefully extracts these values in
+a uniform manner. Empty values are pruned.
+
+Due to the nested nature of this output, its only supported on JSON, YAML, and
+python output.
 
 JSON, ``$ unihan-etl -F json``:
 
