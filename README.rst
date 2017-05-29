@@ -268,8 +268,6 @@ Structure
     # test suite
     tests/*
 
-.. _MIT: http://opensource.org/licenses/MIT
-.. _API: http://cihai.readthedocs.org/en/latest/api.html
 .. _UNIHAN: http://www.unicode.org/charts/unihan.html
 .. _ETL: https://en.wikipedia.org/wiki/Extract,_transform,_load
 .. _create an issue: https://github.com/cihai/unihan-etl/issues/new
