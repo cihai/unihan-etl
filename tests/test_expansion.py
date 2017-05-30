@@ -482,6 +482,34 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
+    # U+48D3  kIICore CG
+    ("U+48D3", [{
+        'priority': 'C',
+        'sources': ['G']
+    }]),
+    # U+4E09  kIICore AGTJHKMP
+    ("U+4E09", [{
+        'priority': 'A',
+        'sources': ['G', 'T', 'J', 'H', 'K', 'M', 'P']
+    }]),
+    # U+4E0E  kIICore AGJ
+    ("U+4E0E", [{
+        'priority': 'A',
+        'sources': ['G', 'J']
+    }]),
+])
+def test_expand_kIICore(expanded_data, ucn, expected):
+    """
+    Each value consists of a letter (A, B, or C), indicating priority value,
+    and one or more letters (G, H, J, K, M, P, or T), indicating source. The
+    source letters are the same as used for IRG sources, except that "P" is
+    used instead of "KP".
+    """
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIICore'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
     # U+4E07  kIRGDaeJaweon   0137.070
     ("U+4E07", [{
         "page": 137,

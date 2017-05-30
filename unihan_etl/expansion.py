@@ -193,6 +193,15 @@ def expand_kCihaiT(value):
     return value
 
 
+def expand_kIICore(value):
+    for i, v in enumerate(value):
+        value[i] = {
+            "priority": v[0],
+            "sources": list(v[1:])
+        }
+    return value
+
+
 def expand_kDaeJaweon(value):
     pattern = re.compile(r"""
         (?P<page>[0-9]{4})\.
