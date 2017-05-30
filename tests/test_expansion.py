@@ -304,32 +304,38 @@ def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
     # U+4E55      kRSJapanese     4.6
     ('kRSJapanese', 'U+4E55', [{
         "radical": 4,
-        "strokes": 6
+        "strokes": 6,
+        "simplified": False
     }]),
     # U+4E99      kRSKangXi       7.4
     ('kRSKangXi', 'U+4E99', [{
         "radical": 7,
-        "strokes": 4
+        "strokes": 4,
+        "simplified": False
     }]),
     # U+4E9A      kRSKangXi       1.5
     ('kRSKangXi', 'U+4E9A', [{
         "radical": 1,
-        "strokes": 5
+        "strokes": 5,
+        "simplified": False
     }]),
     # U+4E54      kRSKanWa        37.3
     ('kRSKanWa', 'U+4E54', [{
         "radical": 37,
-        "strokes": 3
+        "strokes": 3,
+        "simplified": False
     }]),
     # U+4E55      kRSKanWa        4.6
     ('kRSKanWa', 'U+4E55', [{
         "radical": 4,
-        "strokes": 6
+        "strokes": 6,
+        "simplified": False
     }]),
     # U+5378      kRSKorean       26.7
     ('kRSKorean', 'U+5378', [{
         "radical": 26,
-        "strokes": 7
+        "strokes": 7,
+        "simplified": False
     }]),
 ])
 def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
