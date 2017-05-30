@@ -151,12 +151,17 @@ def expand_kRSAdobe_Japan1_6(value):
 
 
 def expand_kCihaiT(value):
+    pattern = re.compile(r"""
+        (?P<page>[1-9][0-9]{0,3})\.
+        (?P<row>[0-9]{1})
+        (?P<character>[0-9]{2})
+    """, re.X)
     for i, v in enumerate(value):
-        vals = v.split('.')
+        m = pattern.match(v).groupdict()
         value[i] = {
-            "page": int(vals[0]),
-            "row": int(vals[1][0]),
-            "character": int(vals[1][1:3]),
+            "page": int(m['page']),
+            "row": int(m['row']),
+            "character": int(m['character']),
         }
     return value
 
