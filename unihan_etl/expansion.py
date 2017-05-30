@@ -137,7 +137,7 @@ def expand_kHanyuPinyin(value):
 def expand_kXHC1983(value):
     pattern = re.compile(r"""
         (?P<page>[0-9]{4})\.
-        (?P<position>[0-9]{2})
+        (?P<character>[0-9]{2})
         (?P<entry>[0-9]{1})
         (?P<substituted>\*?)
     """, re.X)
@@ -153,7 +153,7 @@ def expand_kXHC1983(value):
             m = pattern.match(loc).groupdict()
             value[i]['locations'][n] = {
                 "page": int(m['page']),
-                "position": int(m['position']),
+                "character": int(m['character']),
                 "entry": int(m['entry']),
                 "substituted": m['substituted'] == "*"
             }
@@ -205,7 +205,7 @@ def expand_kCihaiT(value):
         value[i] = {
             "page": int(vals[0]),
             "row": int(vals[1][0]),
-            "position": int(vals[1][1:3]),
+            "character": int(vals[1][1:3]),
         }
     return value
 
@@ -213,14 +213,14 @@ def expand_kCihaiT(value):
 def expand_kDaeJaweon(value):
     pattern = re.compile(r"""
         (?P<page>[0-9]{4})\.
-        (?P<position>[0-9]{2})
+        (?P<character>[0-9]{2})
         (?P<virtual>[01])
     """, re.X)
     m = pattern.match(value).groupdict()
 
     value = {
         "page": int(m['page']),
-        "position": int(m['position']),
+        "character": int(m['character']),
         "virtual": int(m['virtual']),
     }
     return value
