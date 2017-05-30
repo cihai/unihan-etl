@@ -282,7 +282,7 @@ def expand_kSBGY(value):
     return value
 
 
-def expand_kRSUnicode(value):
+def _expand_kRSGeneric(value):
     pattern = re.compile(r"""
         (?P<radical>[1-9][0-9]{0,2})
         (?P<simplified>\'?)\.
@@ -299,16 +299,7 @@ def expand_kRSUnicode(value):
     return value
 
 
-def _expand_kRSGeneric(value):
-    for i, v in enumerate(value):
-        vals = v.split('.')
-        value[i] = {
-            "radical": int(vals[0]),
-            "strokes": int(vals[1]),
-        }
-    return value
-
-
+expand_kRSUnicode = _expand_kRSGeneric
 expand_kRSJapanese = _expand_kRSGeneric
 expand_kRSKangXi = _expand_kRSGeneric
 expand_kRSKanWa = _expand_kRSGeneric
