@@ -67,6 +67,25 @@ def expand_kHanYu(value):
     return value
 
 
+def expand_kIRGHanyuDaZidian(value):
+    pattern = re.compile(r"""
+        (?P<volume>[1-8])
+        (?P<page>[0-9]{4})\.
+        (?P<character>[0-3][0-9])
+        (?P<virtual>[01])
+    """, re.X)
+
+    for i, v in enumerate(value):
+        m = pattern.match(v).groupdict()
+        value[i] = {
+            "volume": int(m['volume']),
+            "page": int(m['page']),
+            "character": int(m['character']),
+            "virtual": int(m['virtual'])
+        }
+    return value
+
+
 def expand_kHanyuPinyin(value):
     location_pattern = re.compile(r"""
         (?P<volume>[1-8])
