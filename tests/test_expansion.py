@@ -421,7 +421,7 @@ def test_expand_kCheungBauer(expanded_data, ucn, expected):
     ("U+34D6", [{
         "page": 170,
         "row": 1,
-        "position": 5
+        "character": 5
     }])
 ])
 def test_expand_kCihaiT(expanded_data, ucn, expected):
@@ -439,13 +439,13 @@ def test_expand_kCihaiT(expanded_data, ucn, expected):
     # U+9F7C  kDaeJaweon      2075.100
     ("U+9F7C", {
         "page": 2075,
-        "position": 10,
+        "character": 10,
         "virtual": 0
     }),
     # U+4E37  kDaeJaweon      0162.211
     ("U+4E37", {
         "page": 162,
-        "position": 21,
+        "character": 21,
         "virtual": 1
     }),
 ])
@@ -564,7 +564,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     ("U+91B1", "0295.011:fā 0884.081:pō", [{
         "locations": [{
             "page": 295,
-            "position": 1,
+            "character": 1,
             "entry": 1,
             "substituted": False
         }],
@@ -572,7 +572,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     }, {
         "locations": [{
             "page": 884,
-            "position": 8,
+            "character": 8,
             "entry": 1,
             "substituted": False
         }],
@@ -582,12 +582,12 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     ("U+379E", "1092.070*,1092.071:sóng", [{
         "locations": [{
             "page": 1092,
-            "position": 7,
+            "character": 7,
             "entry": 0,
             "substituted": True
         }, {
             "page": 1092,
-            "position": 7,
+            "character": 7,
             "entry": 1,
             "substituted": False
         }],
@@ -597,12 +597,12 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     ("U+5750", "1551.040,1552.011:zuò", [{
         "locations": [{
             "page": 1551,
-            "position": 4,
+            "character": 4,
             "entry": 0,
             "substituted": False
         }, {
             "page": 1552,
-            "position": 1,
+            "character": 1,
             "entry": 1,
             "substituted": False
         }],
