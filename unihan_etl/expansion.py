@@ -49,12 +49,20 @@ def expand_kTotalStrokes(value):
 
 
 def expand_kHanYu(value):
+    pattern = re.compile(r"""
+        (?P<volume>[1-8])
+        (?P<page>[0-9]{4})\.
+        (?P<character>[0-3][0-9])
+        (?P<virtual>[0-3])
+    """, re.X)
+
     for i, v in enumerate(value):
+        m = pattern.match(v).groupdict()
         value[i] = {
-            "volume": int(v[0]),
-            "page": int(v[1:5]),
-            "character": int(v[6:8]),
-            "virtual": int(v[8])
+            "volume": int(m['volume']),
+            "page": int(m['page']),
+            "character": int(m['character']),
+            "virtual": int(m['virtual'])
         }
     return value
 
