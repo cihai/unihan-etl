@@ -13,4 +13,5 @@ unihan-etl
     about
     unihan
     cli
+    FAQ
     history
