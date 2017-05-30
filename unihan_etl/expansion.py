@@ -209,6 +209,12 @@ def expand_kDaeJaweon(value):
     return value
 
 
+def expand_kIRGDaeJaweon(value):
+    for i, v in enumerate(value):
+        value[i] = expand_kDaeJaweon(v)
+    return value
+
+
 def expand_kFenn(value):
     pattern = re.compile(r"""
         (?P<phonetic>[0-9]+a?)
