@@ -83,6 +83,27 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
+    # U+34AD      kIRGHanyuDaZidian       10273.120
+    ("U+34AD", [{
+        "volume": 1,
+        "page": 273,
+        "character": 12,
+        "virtual": 0
+    }]),
+    # U+34AF      kIRGHanyuDaZidian       10275.091
+    ("U+34AF", [{
+        "volume": 1,
+        "page": 275,
+        "character": 9,
+        "virtual": 1
+    }]),
+])
+def test_expand_kIRGHanyuDaZidian(ucn, expected, expanded_data):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIRGHanyuDaZidian'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
     ("U+5EFE", [{  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
         "locations": [
             {
