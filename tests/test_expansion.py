@@ -482,6 +482,25 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
 
 
 @pytest.mark.parametrize("ucn,expected", [
+    # U+4E07  kIRGDaeJaweon   0137.070
+    ("U+4E07", [{
+        "page": 137,
+        "character": 7,
+        "virtual": 0
+    }]),
+    # U+4E37  kIRGDaeJaweon   0162.211
+    ("U+4E37", [{
+        "page": 162,
+        "character": 21,
+        "virtual": 1
+    }]),
+])
+def test_expand_kIRGDaeJaweon(expanded_data, ucn, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIRGDaeJaweon'] == expected
+
+
+@pytest.mark.parametrize("ucn,expected", [
     # U+342C      kFenn   871P
     ("U+342C", [{
         "phonetic": 871,
