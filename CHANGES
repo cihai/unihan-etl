@@ -4,6 +4,9 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :release:`0.9.3 <2017-05-31>`
+- :support:`-` Add expansion for kIRGKangXi
+
 - :release:`0.9.2 <2017-05-31>`
 - :support:`-` Normalize Radical-Stroke expansion for kRSUnicode
 - :support:`-` Migrate more fields to regular expressions
