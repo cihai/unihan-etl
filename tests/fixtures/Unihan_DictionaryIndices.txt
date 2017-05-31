@@ -507,6 +507,8 @@ U+371D	kGSR	0651k'
 U+9AE2	kGSR	0004e' 0850s
 U+4E07	kIRGDaeJaweon	0137.070
 U+4E37	kIRGDaeJaweon	0162.211
+U+34BC	kCheungBauerIndex	402.06
+U+3578	kCheungBauerIndex	351.02 351.03
 
 
 # EOF
