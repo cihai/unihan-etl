@@ -902,3 +902,24 @@ def test_expand_kFennIndex(expanded_data, ucn, fieldval, expected):
     assert item['kFennIndex'] == expected
 
     assert expansion.expand_field('kFennIndex', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+34AD      kIRGKangXi      0125.190
+    ("U+34AD", "0125.190", [{
+        "page": 125,
+        "character": 19,
+        "virtual": 0
+    }]),
+    # U+34AE      kIRGKangXi      0125.201
+    ("U+34AE", "0125.201", [{
+        "page": 125,
+        "character": 20,
+        "virtual": 1
+    }]),
+])
+def test_expand_kIRGKangXi(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kIRGKangXi'] == expected
+
+    assert expansion.expand_field('kIRGKangXi', fieldval) == expected
