@@ -350,6 +350,9 @@ def expand_kCheungBauerIndex(value):
     return value
 
 
+expand_kFennIndex = expand_kCheungBauerIndex
+
+
 def expand_field(field, fvalue):
     """Return structured value of information in UNIHAN field.
 
