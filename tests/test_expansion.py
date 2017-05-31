@@ -883,3 +883,22 @@ def test_expand_kCheungBauerIndex(expanded_data, ucn, fieldval, expected):
     assert item['kCheungBauerIndex'] == expected
 
     assert expansion.expand_field('kCheungBauerIndex', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+348B      kFennIndex      480.05
+    ("U+348B", "480.05", [{
+        "page": 480,
+        "character": 5
+    }]),
+    # U+349A      kFennIndex      602.04
+    ("U+349A", "602.04", [{
+        "page": 602,
+        "character": 4
+    }])
+])
+def test_expand_kFennIndex(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kFennIndex'] == expected
+
+    assert expansion.expand_field('kFennIndex', fieldval) == expected
