@@ -506,6 +506,8 @@ U+4E00	kHDZRadBreak	⼀[U+2F00]:10001.010
 U+4E59	kHDZRadBreak	⼄[U+2F04]:10047.040
 U+8303	kTotalStrokes	8 9
 U+9918	kFenn	31A
-
+U+4E00	kFourCornerCode	1000.0
+U+9FA4	kFourCornerCode	8126.1
+U+4E2B	kFourCornerCode	8020.0 8020.7
 
 # EOF
