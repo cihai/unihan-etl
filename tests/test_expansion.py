@@ -861,3 +861,25 @@ def test_expand_kGSR(expanded_data, ucn, fieldval, expected):
     assert item['kGSR'] == expected
 
     assert expansion.expand_field('kGSR', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+34BC  kCheungBauerIndex       402.06
+    ("U+34BC", "402.06", [{
+        "page": 402,
+        "character": 6
+    }]),
+    # U+3578  kCheungBauerIndex       351.02 351.03
+    ("U+3578", "351.02 351.03", [{
+        "page": 351,
+        "character": 2
+    }, {
+        "page": 351,
+        "character": 3
+    }])
+])
+def test_expand_kCheungBauerIndex(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kCheungBauerIndex'] == expected
+
+    assert expansion.expand_field('kCheungBauerIndex', fieldval) == expected

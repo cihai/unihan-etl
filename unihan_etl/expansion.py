@@ -340,6 +340,16 @@ def expand_kGSR(value):
     return value
 
 
+def expand_kCheungBauerIndex(value):
+    for i, v in enumerate(value):
+        m = v.split('.')
+        value[i] = {
+            "page": int(m[0]),
+            "character": int(m[1]),
+        }
+    return value
+
+
 def expand_field(field, fvalue):
     """Return structured value of information in UNIHAN field.
 
