@@ -5,8 +5,10 @@ Changelog
 Here you can find the recent changes to the project.
 
 - :support:`-` Normalize Radical-Stroke expansion for kRSUnicode
+- :support:`-` Migrate more fields to regular expressions
 - :support:`-` Normalize character field for kDaeJaweon, kHanyuPinyin,
-  and kCheungBauer
+  and kCheungBauer, kFennIndex, kCheungBauerIndex, kIICore,
+  kIRGHanyuDaZidian
 
 - :release:`0.9.1 <2017-05-27>`
 - :feature:`-` Support for expanding kGSR
