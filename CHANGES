@@ -4,6 +4,7 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :bug:`-` Fix kIRG_GSource without location
 - :bug:`-` Fix kFenn output
 - :bug:`-` Fix kHanyuPinlu support output for n diacritics
 
