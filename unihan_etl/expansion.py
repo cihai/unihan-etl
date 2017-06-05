@@ -239,7 +239,7 @@ def expand_kFenn(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict(v)
         value[i] = {
-            "phonetic": int(m['phonetic']),
+            "phonetic": m['phonetic'],
             "frequency": m['frequency']
         }
     return value

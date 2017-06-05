@@ -531,17 +531,22 @@ def test_expand_kIRGDaeJaweon(expanded_data, ucn, expected):
 @pytest.mark.parametrize("ucn,expected", [
     # U+342C      kFenn   871P
     ("U+342C", [{
-        "phonetic": 871,
+        "phonetic": '871',
         "frequency": "P"
     }]),
     # U+3431      kFenn   281K
     ("U+3431", [{
-        "phonetic": 281,
+        "phonetic": '281',
         "frequency": "K"
     }]),
     # U+9918      kFenn   31A
     ("U+9918", [{
-        "phonetic": 31,
+        "phonetic": '31',
+        "frequency": "A"
+    }]),
+    # U+807D      kFenn   381aA
+    ("U+807D", [{
+        "phonetic": '381a',
         "frequency": "A"
     }]),
 ])
