@@ -737,6 +737,11 @@ def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
         "source": "GKX",
         "location": "0118.03"
     }),
+    # U+2A660  kIRG_GSource    G4K
+    ("U+2A660", "G4K", {
+        "source": "G4K",
+        "location": None
+    }),
     # U+348D      kIRG_GSource    G5-3272
     ("U+348D", "G5-3272", {
         "source": "G5",

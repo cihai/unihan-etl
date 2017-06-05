@@ -317,9 +317,10 @@ expand_kRSKorean = _expand_kRSGeneric
 
 def _expand_kIRG_GenericSource(value):
     v = value.split('-')
+
     return {
         "source": v[0],
-        "location": v[1]
+        "location": v[1] if len(v) > 1 else None
     }
 
 
