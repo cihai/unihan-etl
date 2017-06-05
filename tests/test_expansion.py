@@ -568,7 +568,27 @@ def test_expand_kFenn(expanded_data, ucn, expected):
     ("U+4E09", [{
         "phonetic": "sān",
         "frequency": 3030
-    }])
+    }]),
+    # U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
+    ("U+55EF", [{
+        "phonetic": "ń",
+        "frequency": 48
+    }, {
+        "phonetic": "ň",
+        "frequency": 48
+    }, {
+        "phonetic": "ǹ",
+        "frequency": 48
+    }, {
+        "phonetic": "ńg",
+        "frequency": 48
+    }, {
+        "phonetic": "ňg",
+        "frequency": 48
+    }, {
+        "phonetic": "ǹg",
+        "frequency": 48
+    }]),
 ])
 def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
     """

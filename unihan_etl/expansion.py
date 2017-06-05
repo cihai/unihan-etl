@@ -19,6 +19,9 @@ import zhon.hanzi
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
+#: diacritics from kHanyuPinlu
+N_DIACRITICS = 'ńňǹ'
+
 
 def expand_kDefinition(value):
     return [c.strip() for c in value.split(';')]
@@ -247,11 +250,16 @@ def expand_kFenn(value):
 
 def expand_kHanyuPinlu(value):
     pattern = re.compile(r"""
-        (?P<phonetic>[a-z{}]+)
+        (?P<phonetic>[a-z({}{}]+)
         \((?P<frequency>[0-9]+)\)
-    """.format(zhon.pinyin.lowercase), re.X)
+    """.format(
+        zhon.pinyin.lowercase, N_DIACRITICS
+    ), re.X)
 
     for i, v in enumerate(value):
+        if not pattern.match(v):
+            print(v)
+            print(value)
         m = pattern.match(v).groupdict()
         value[i] = {
             "phonetic": m['phonetic'],
