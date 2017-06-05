@@ -257,9 +257,6 @@ def expand_kHanyuPinlu(value):
     ), re.X)
 
     for i, v in enumerate(value):
-        if not pattern.match(v):
-            print(v)
-            print(value)
         m = pattern.match(v).groupdict()
         value[i] = {
             "phonetic": m['phonetic'],
