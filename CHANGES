@@ -5,6 +5,7 @@ Changelog
 Here you can find the recent changes to the project.
 
 - :bug:`-` Fix kFenn output
+- :bug:`-` Fix kHanyuPinlu support output for n diacritics
 
 - :release:`0.9.3 <2017-05-31>`
 - :support:`-` Add expansion for kIRGKangXi
