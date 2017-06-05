@@ -557,6 +557,7 @@ U+34D8	kHanyuPinyin	10278.080,10278.090:sù
 U+34D8	kMandarin	sù
 U+4E0B	kHanyuPinlu	xià(6430) xia(249)
 U+4E09	kHanyuPinlu	sān(3030)
+U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
 U+379E	kXHC1983	1092.070*,1092.071:sóng
 U+5750	kXHC1983	1551.040,1552.011:zuò
 
