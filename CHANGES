@@ -4,6 +4,9 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :release:`0.9.5 <2017-06-26>`
+- :support:`-` Enhance support for locations on *kHDZRadBreak* fields.
+
 - :release:`0.9.4 <2017-06-05>`
 - :bug:`-` Fix kIRG_GSource without location
 - :bug:`-` Fix kFenn output
