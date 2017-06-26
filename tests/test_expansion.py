@@ -606,13 +606,23 @@ def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
     ('U+4E00', {
         "radical": "⼀",
         "ucn": "U+2F00",
-        "location": "10001.010"
+        "location": {
+            "volume": 1,
+            "page": 1,
+            "character": 1,
+            "virtual": False
+        }
     }),
     # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
     ('U+4E59', {
         "radical": "⼄",
         "ucn": "U+2F04",
-        "location": "10047.040"
+        "location": {
+            "volume": 1,
+            "page": 47,
+            "character": 4,
+            "virtual": False
+        }
     }),
 ])
 def test_expand_kHDZRadBreak(expanded_data, ucn, expected):

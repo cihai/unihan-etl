@@ -268,6 +268,21 @@ def expand_kHanyuPinlu(value):
 def expand_kHDZRadBreak(value):
     rad, loc = value.split(':')
 
+    location_pattern = re.compile(r"""
+        (?P<volume>[1-8])
+        (?P<page>[0-9]{4})\.
+        (?P<character>[0-3][0-9])
+        (?P<virtual>[01])
+    """, re.X)
+
+    l = location_pattern.match(loc).groupdict()
+    location = {
+        "volume": int(l['volume']),
+        "page": int(l['page']),
+        "character": int(l['character']),
+        "virtual": int(l['virtual'])
+    }
+
     pattern = re.compile(r"""
         (?P<radical>[{}]+)
         \[(?P<ucn>U\+2F[0-9A-D][0-9A-F])\]
@@ -277,7 +292,7 @@ def expand_kHDZRadBreak(value):
     return {
         "radical": m['radical'],
         "ucn": m['ucn'],
-        "location": loc
+        "location": location
     }
 
 
