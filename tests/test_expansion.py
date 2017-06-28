@@ -963,3 +963,16 @@ def test_expand_kIRGKangXi(expanded_data, ucn, fieldval, expected):
     assert item['kIRGKangXi'] == expected
 
     assert expansion.expand_field('kIRGKangXi', fieldval) == expected
+
+
+@pytest.mark.parametrize("ucn,fieldval,expected", [
+    # U+4E00	kCCCII	213021
+    ("U+4E00", "213021", ["213021"]),
+    # U+4E0D	kCCCII	21302A
+    ("U+4E0D", "21302A", ["21302A"]),
+])
+def test_expand_kCCCII(expanded_data, ucn, fieldval, expected):
+    item = [i for i in expanded_data if i['ucn'] == ucn][0]
+    assert item['kCCCII'] == expected
+
+    assert expansion.expand_field('kCCCII', fieldval) == expected
