@@ -49,3 +49,7 @@ data/
 
 # visual studio code
 .vscode/
+
+.cache/
+.eggs/
+.venv/
