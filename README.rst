@@ -1,6 +1,12 @@
-*unihan-etl* - `ETL`_ tool for `UNIHAN`_. Retrieve, extract, and transform
-UNIHAN database builds to tabular or structured format. Load into python objects,
-JSON, CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http://libunihan.sourceforge.net/>`_.
+*unihan-etl* - `ETL`_ tool for Unicode's Han Unification (`UNIHAN`_) database
+releases. unihan-etl retrieves (downloads), extracts (unzips), and transforms the
+database from Unicode's website to a flat, tabular or structured, tree-like
+format.
+
+unihan-etl can be used as a python library through its `API`_, to retrieve data
+as a python object, or through the `CLI`_ to retrieve a CSV, JSON, or YAML file.
+
+Part of the `cihai`_ project. Similar project: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
 |pypi| |docs| |build-status| |coverage| |license|
 
@@ -14,10 +20,11 @@ JSON, CSV, and YAML.  Part of the `cihai`_ project. See also: `libUnihan <http:/
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-Field types contain additional information to extract. For example,
+Field types vary in additional information to extract. For example,
 `kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_,
 which maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
-``10019.020:tiàn`` represents a minimal case. More::
+``10019.020:tiàn`` represents a entry. Additionally, these structures
+are are valid entries in UNIHAN which have to be supported::
 
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
@@ -26,6 +33,9 @@ The *kHanyuPinyin* field supports multiple entries, delimited by spaces.
 Within an entry, a ":" (colon) separates locations in the work and pinyin
 readings. Within these split values, a "," (comma) can separate multiple
 values. This is just one of 90 fields contained in the database.
+
+.. _API: https://unihan-etl.git-pull.com/en/latest/api.html
+.. _CLI: https://unihan-etl.git-pull.com/en/latest/cli.html
 
 Tabular, "Flat" output
 ----------------------
