@@ -253,8 +253,8 @@ See `unihan-etl CLI arguments`_ for advanced usage examples.
 
 .. _unihan-etl CLI arguments: https://unihan-etl.git-pull.com/en/latest/cli.html
 
-Structure
----------
+Code layout
+-----------
 
 .. code-block:: bash
 
