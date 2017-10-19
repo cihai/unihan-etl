@@ -1,14 +1,14 @@
 session_name: unihan-etl
 start_directory: ./ # load session relative to config location (project root).
-before_script: ./bootstrap_env.py # ./ to load relative to project root.
+before_script: pipenv install --dev --skip-lock
+shell_command_before: 
+  - '[ -d `pipenv --venv` ] && source `pipenv --venv`/bin/activate && reset'
 windows:
 - window_name: unihan-etl
   focus: True
   layout: main-horizontal
   options:
     main-pane-height: 35
-  shell_command_before:
-    - '[ -d .venv -a -f .venv/bin/activate ] && source .venv/bin/activate'
   panes:
   - focus: true
   - pane 
@@ -19,8 +19,6 @@ windows:
   options:
     main-pane-height: 35
   start_directory: doc/
-  shell_command_before: 
-    - '[ -d ../.venv -a -f ../.venv/bin/activate ] && source ../.venv/bin/activate'
   panes:
   - focus: true
   - pane
