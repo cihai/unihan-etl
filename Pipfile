@@ -5,14 +5,14 @@ name = "pypi"
 
 [dev-packages]
 
-alagitpull = "==0.0.13"
+alagitpull = "==0.0.19"
 "sphinx-argparse" = "==0.2.1"
-pytest = "==3.2.3"
-isort = "==4.2.15"
-"flake8" = "==3.4.1"
+pytest = "==3.4.0"
+isort = "==4.3.4"
+"flake8" = "==3.5.0"
 vulture = "==0.26"
 releases = "==1.4.0"
-sphinx = "*"
+sphinx = "==1.7.0"
 
 
 [packages]
