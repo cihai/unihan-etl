@@ -114,11 +114,14 @@ DEFAULT_OPTIONS = {
 
 
 def get_parser():
-    """Return :py:class:`argparse.ArgumentParser` instance for CLI.
+    """
+    Return :py:class:`argparse.ArgumentParser` instance for CLI.
 
-    :returns: argument parser for CLI use.
-    :rtype: :py:class:`argparse.ArgumentParser`
+    Returns
+    -------
 
+    :py:class:`argparse.ArgumentParser` :
+        argument parser for CLI use.
     """
     parser = argparse.ArgumentParser(
         prog=__title__,
@@ -186,12 +189,18 @@ def get_parser():
 
 
 def has_valid_zip(zip_path):
-    """Return True if valid zip exists.
+    """
+    Return True if valid zip exists.
 
-    :param zip_path: absolute path to zip
-    :type zip_path: str
-    :returns: True if valid zip exists at path
-    :rtype: bool
+    Parameters
+    ----------
+    zip_path : str
+        absolute path to zip
+
+    Returns
+    -------
+    bool :
+        True if valid zip exists at path
     """
 
     if os.path.isfile(zip_path):
@@ -207,15 +216,19 @@ def has_valid_zip(zip_path):
 
 
 def zip_has_files(files, zip_file):
-    """Return True if zip has the files inside.
+    """
+    Return True if zip has the files inside.
 
-    :param files: list of files inside zip
-    :type files: list
-    :param zip_file: zip file to look inside.
-    :type zip_file: :py:class:`zipfile.ZipFile`
-    :returns: True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`.
-    :rtype: bool
+    Parameters
+    ----------
+    files : list of str
+        files inside zip file
+    zip_file : :py:class:`zipfile.ZipFile`
 
+    Returns
+    -------
+    bool :
+        True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`
     """
     if set(files).issubset(set(zip_file.namelist())):
         return True
@@ -224,19 +237,24 @@ def zip_has_files(files, zip_file):
 
 
 def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
-    """Download a file to a destination.
+    """
+    Download file at URL to a destination.
 
-    :param url: URL to download from.
-    :type url: str
-    :param dest: file path where download is to be saved.
-    :type dest: str
-    :param urlretrieve_fn: function to download file
-    :type urlretrieve_fn: function
-    :param reporthook: Function to write progress bar to stdout buffer.
-    :type reporthook: function
-    :returns: destination where file downloaded to.
-    :rtype: str
+    Parameters
+    ----------
+    url : str
+        URL to download from.
+    dest : str
+        file path where download is to be saved.
+    urlretrieve_fn: callable
+        function to download file
+    reporthook : function
+        Function to write progress bar to stdout buffer.
 
+    Returns
+    -------
+    str :
+        destination where file downloaded to.
     """
 
     datadir = os.path.dirname(dest)
@@ -268,12 +286,17 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
 
 
 def load_data(files):
-    """Extract zip and process information into CSV's.
+    """
+    Extract zip and process information into CSV's.
 
-    :param files:
-    :type files: list
-    :rtype: str
-    :returns: string of combined data from files
+    Parameters
+    ----------
+    files : list of str
+
+    Returns
+    -------
+    str :
+        combined data from files
     """
 
     log.info('Loading data: %s.' % ', '.join(files))
@@ -285,15 +308,20 @@ def load_data(files):
 
 
 def extract_zip(zip_path, dest_dir):
-    """Extract zip file. Return :class:`zipfile.ZipFile` instance.
+    """
+    Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
-    :param zip_path: filepath to extract.
-    :type zip_path: str
-    :param dest_dir: (optional) directory to extract to.
-    :type dest_dir: str
-    :returns: The extracted zip.
-    :rtype: :class:`zipfile.ZipFile`
+    Parameters
+    ----------
+    zip_file : str
+        filepath to extract.
+    dest_dir : str
+        directory to extract to.
 
+    Returns
+    -------
+    :class:`zipfile.ZipFile` :
+        The extracted zip.
     """
 
     z = zipfile.ZipFile(zip_path)
@@ -304,14 +332,20 @@ def extract_zip(zip_path, dest_dir):
 
 
 def normalize(raw_data, fields):
-    """Return normalized data from a UNIHAN data files.
+    """
+    Return normalized data from a UNIHAN data files.
 
-    :param raw_data: combined text files from UNIHAN
-    :type raw_data: str
-    :param fields: list of columns to pull
-    :type fields: list
-    :return: list of unihan character information
-    :rtype: list
+    Parameters
+    ----------
+    raw_data : str
+        combined text files from UNIHAN
+    fields : list of str
+        list of columns to pull
+
+    Returns
+    -------
+    list :
+        list of unihan character information
     """
     log.info('Collecting field data...')
     items = dict()
@@ -338,15 +372,20 @@ def normalize(raw_data, fields):
 
 
 def expand_delimiters(normalized_data):
-    """Return expanded multi-value fields in UNIHAN.
+    """
+    Return expanded multi-value fields in UNIHAN.
 
-    :param normalized: Expects data in list of hashes, per
-        :meth:`process.normalize`
-    :type normalized: list of dict
-    :returns: Items which have fields with delimiters and custom separation
-        rules, will be expanded. Including multi-value fields not using both
-        fields (so all fields stay consistent).
-    :rtype: list of dict
+    Parameters
+    ----------
+    normalized_data : list of dict
+        Expects data in list of hashes, per :meth:`process.normalize`
+
+    Returns
+    -------
+    list of dict :
+        Items which have fields with delimiters and custom separation rules,
+        will  be expanded. Including multi-value fields not using both fields
+        (so all fields stay consistent).
     """
     for char in normalized_data:
         for field in char.keys():
@@ -358,12 +397,14 @@ def expand_delimiters(normalized_data):
 
 
 def listify(data, fields):
-    """Convert tabularized data to a CSV-friendly list.
+    """
+    Convert tabularized data to a CSV-friendly list.
 
-    :param data: List of dicts
-    :type data: list
-    :params fields: keys/columns, e.g. ['kDictionary']
-    :type fields: list
+    Parameters
+    ----------
+    data : list of dict
+    params : list of str
+        keys/columns, e.g. ['kDictionary']
     """
     list_data = [fields[:]]  # Add fields to first row
     list_data += [r.values() for r in [v for v in data]]  # Data
@@ -500,13 +541,18 @@ class Packager(object):
 
     @classmethod
     def from_cli(cls, argv):
-        """Create Packager instance from CLI :mod:`argparse` arguments.
+        """
+        Create Packager instance from CLI :mod:`argparse` arguments.
 
-        :param argv: Arguments passed in via CLI.
-        :type argv: list
-        :returns: builder
-        :rtype: :class:`~.Packager`
+        Parameters
+        ----------
+        argv : list
+            Arguments passed in via CLI.
 
+        Returns
+        -------
+        :class:`~.Packager` :
+            builder
         """
         parser = get_parser()
 
@@ -519,11 +565,15 @@ class Packager(object):
 
 
 def setup_logger(logger=None, level='DEBUG'):
-    """Setup logging for CLI use.
+    """
+    Setup logging for CLI use.
 
-    :param logger: instance of logger
-    :type logger: :py:class:`Logger`
-
+    Parameters
+    ----------
+    logger : :py:class:`Logger`
+        instance of logger
+    level : str
+        logging level, e.g. 'DEBUG'
     """
     if not logger:
         logger = logging.getLogger()
