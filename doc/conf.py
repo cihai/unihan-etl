@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
+    'sphinxcontrib.napoleon',
     'releases',
     'alagitpull',
     'sphinxarg.ext'            # sphinx-argparse
