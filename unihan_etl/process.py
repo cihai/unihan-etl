@@ -467,8 +467,10 @@ class Packager(object):
 
     def __init__(self, options):
         """
-        :param options: options values to override defaults.
-        :type options: dict
+        Parameters
+        ----------
+        options : dict
+            options values to override defaults.
         """
         setup_logger(
             None, options.get('log_level', DEFAULT_OPTIONS['log_level'])
@@ -478,10 +480,14 @@ class Packager(object):
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
 
     def download(self, urlretrieve_fn=urlretrieve):
-        """Download raw UNIHAN data if not exists.
+        """
+        Download raw UNIHAN data if not exists.
 
-        :param urlretrieve_fn: function to download file
-        :type urlretrieve_fn: function
+        Parameters
+        ----------
+
+        urlretrieve_fn : function
+            function to download file
         """
         while not has_valid_zip(self.options['zip_path']):
             download(
