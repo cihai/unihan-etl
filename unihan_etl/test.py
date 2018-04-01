@@ -6,14 +6,17 @@ from __future__ import (absolute_import, division, print_function,
 
 
 def assert_dict_contains_subset(subset, dictionary, msg=None):
-    """Ported assertion for dict subsets in py.test.
+    """
+    Ported assertion for dict subsets in py.test.
 
-    :param subset: needle
-    :type subset: dict
-    :param dictionary: haystack
-    :type dictionary: dict
-    :param msg: message for assert if failure found
-    :type msg: str
+    Parameters
+    ----------
+    subset : dict
+        needle
+    dictionary : dict
+        haystack
+    msg : str, optional
+        message display if assertion fails
     """
     for key, value in subset.items():
         assert key in dictionary, msg
