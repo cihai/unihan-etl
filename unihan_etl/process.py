@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 """Build Unihan into tabular / structured format and export it."""
-
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals, with_statement)
+from __future__ import absolute_import, unicode_literals
 
 import argparse
 import codecs
@@ -19,8 +17,12 @@ import zipfile
 from appdirs import AppDirs
 
 from unihan_etl import expansion
-from unihan_etl.__about__ import (__author__, __description__,
-                                  __package_name__, __title__)
+from unihan_etl.__about__ import (
+    __author__,
+    __description__,
+    __package_name__,
+    __title__,
+)
 from unihan_etl._compat import PY2, text_type, urlretrieve
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode

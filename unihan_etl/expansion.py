@@ -15,8 +15,9 @@ Notes
 from __future__ import absolute_import, unicode_literals
 
 import re
-import zhon.pinyin
+
 import zhon.hanzi
+import zhon.pinyin
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
