@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals, with_statement)
+import os
+import zipfile
 
 import pytest
 
-import zipfile
-import os
-
-from unihan_etl import process, constants
+from unihan_etl import constants, process
 from unihan_etl.process import DEFAULT_OPTIONS, Packager
 from unihan_etl.util import merge_dict
 
