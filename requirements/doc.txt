@@ -1,4 +1,4 @@
-sphinx==1.7.3
+sphinx==1.7.4
 alagitpull==0.0.20
 releases==1.4.1
 sphinx-argparse==0.2.1
