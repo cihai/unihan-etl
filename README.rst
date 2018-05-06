@@ -20,11 +20,11 @@ Part of the `cihai`_ project. Similar project: `libUnihan <http://libunihan.sour
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-Field types vary in additional information to extract. For example,
+But: field types can vary in the shape / structure of their data. For example,
 `kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_,
-which maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
-``10019.020:tiàn`` represents a entry. Additionally, these structures
-are are valid entries in UNIHAN which have to be supported::
+a field mapping Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
+``10019.020:tiàn`` represents an entry. In addition, these variables are
+possible::
 
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī

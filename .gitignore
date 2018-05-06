@@ -51,5 +51,6 @@ data/
 .vscode/
 
 .cache/
+.pytest_cache/
 .eggs/
 .venv/

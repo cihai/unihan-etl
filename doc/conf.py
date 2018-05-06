@@ -2,8 +2,8 @@
 
 import os
 import sys
-import alagitpull
 
+import alagitpull
 
 # Get the project root dir, which is the parent dir of this
 cwd = os.getcwd()
@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
+    'sphinxcontrib.napoleon',
     'releases',
     'alagitpull',
     'sphinxarg.ext'            # sphinx-argparse
