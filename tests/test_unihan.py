@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for unihan data download and processing."""
-
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals, with_statement)
+from __future__ import absolute_import, unicode_literals
 
 import logging
 import os
@@ -11,8 +9,12 @@ import shutil
 import pytest
 
 from unihan_etl import constants, process
-from unihan_etl.process import (DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager,
-                                zip_has_files)
+from unihan_etl.process import (
+    DEFAULT_OPTIONS,
+    UNIHAN_ZIP_PATH,
+    Packager,
+    zip_has_files,
+)
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import merge_dict
 

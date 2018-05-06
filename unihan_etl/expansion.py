@@ -1,21 +1,23 @@
 # -*- coding: utf8 -*-
-"""Functions to uncompact details inside field values.
+"""
+Functions to uncompact details inside field values.
 
-.. note::
+Notes
+-----
 
-    :func:`re.compile` operations are inside of expand functions:
+:func:`re.compile` operations are inside of expand functions:
 
-    1. readability
-    2. module-level function bytecode is cached in python
-    3. the last used compiled regexes are cached
+1. readability
+2. module-level function bytecode is cached in python
+3. the last used compiled regexes are cached
 """
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals, with_statement)
+from __future__ import absolute_import, unicode_literals
 
 import re
-import zhon.pinyin
+
 import zhon.hanzi
+import zhon.pinyin
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
@@ -381,15 +383,20 @@ expand_kFennIndex = expand_kCheungBauerIndex
 
 
 def expand_field(field, fvalue):
-    """Return structured value of information in UNIHAN field.
+    """
+    Return structured value of information in UNIHAN field.
 
-    :param field: field name
-    :type field: str
-    :param fvalue: value of field
-    :type favalue: str
-    :returns: list or dict of expanded field information per UNIHAN's
-        documentation
-    :rtype: list or dict
+    Parameters
+    ----------
+    field : str
+        field name
+    fvalue : str
+        value of field
+
+    Returns
+    -------
+    list or dict :
+        expanded field information per UNIHAN's documentation
     """
     if field in SPACE_DELIMITED_FIELDS and fvalue:
         fvalue = fvalue.split(' ')
