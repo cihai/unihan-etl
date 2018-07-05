@@ -163,8 +163,8 @@ relative commonality). The following are representative records."::
     U+5364  kHanyuPinyin    10093.130:xī,lǔ 74609.020:lǔ,xī
     U+5EFE  kHanyuPinyin    10513.110,10514.010,10514.020:gǒng
 
-Data could be exported to a CSV. Users would have to still be left to their own
-devices handle delimited values and structured information that's held within.
+Data could be exported to a CSV, but users wouldn't be able to 
+handle delimited values and structured information held within.
 
 Since CSV does not support structured information, another format that
 supports needs to be found.
