@@ -222,7 +222,7 @@ To download and build your own UNIHAN export:
 
 .. code-block:: bash
 
-   $ pip install unihan-etl
+   $ pip install --user unihan-etl
 
 To output CSV, the default format:
 
@@ -236,7 +236,7 @@ To output JSON::
 
 To output YAML::
 
-    $ pip install pyyaml
+    $ pip install --user pyyaml
     $ unihan-etl -F yaml
 
 To only output the kDefinition field in a csv::
