@@ -9,8 +9,8 @@ About UNIHAN
     - `Wikipedia article <https://en.wikipedia.org/wiki/Han_unification>`_
     - `UNIHAN database documentation`_
 
-Languages and computers
------------------------
+Languages, Computers, and You
+-----------------------------
 
 There are many languages and writing systems around the world. Computers
 internally use numbers to represent characters in writing systems. As
@@ -41,12 +41,12 @@ multiple historical or regional variants to account for, hence "unification".
    :width: 300px 
    :align: center
 
-In order to do this, the effort pulls together various sources of information
+To do this, various sources of information are pulled together and cross-referenced
 to detail characteristics of the glyphs, and vet them through a thorough
-proofreading process. It is an international effort, hallmarked by
-cooperation between researchers and groups like the `Ideographic Rapporteur
-Group`_.  Glyphs once only noted in dictionaries and antiquity are set in stone
-with their own codepoints, carefully cross-referenced with information from,
+proofreading process. It's an international effort, hallmarked by between
+researchers and groups like the `Ideographic Rapporteur Group`_. Glyphs 
+once only noted in dictionaries and antiquity are set in stone with 
+their own codepoints, carefully cross-referenced with information from,
 often multiple, distinct sources.
 
 The advantage that UNIHAN provides to east asian researchers, including
