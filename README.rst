@@ -21,7 +21,7 @@ Part of the `cihai`_ project. Similar project: `libUnihan <http://libunihan.sour
     U+3401	kMandarin	tiàn
 
 Values vary in shape and structure depending on their field type.
-`kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_,
+`kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_
 maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
 where ``10019.020:tiàn`` represents an entry. Complicating it further,
 more variations::
@@ -29,10 +29,10 @@ more variations::
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
 
-*kHanyuPinyin* field supports multiple entries delimited by spaces.
-":" (colon) separates locations in the work from pinyin readings. Within
-either group, "," (comma) separates multiple values. This is just one of
-90 fields contained in the database.
+*kHanyuPinyin* supports multiple entries delimited by spaces. ":"
+(colon) separate locations in the work from pinyin readings. ","
+(comma) separate multiple entries/readings. This is just one of 90 
+fields contained in the database.
 
 .. _API: https://unihan-etl.git-pull.com/en/latest/api.html
 .. _CLI: https://unihan-etl.git-pull.com/en/latest/cli.html
