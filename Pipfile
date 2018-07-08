@@ -4,18 +4,22 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-alagitpull = "==0.0.20"
+alagitpull = "==0.0.21"
 "sphinx-argparse" = "==0.2.2"
-pytest = "==3.5.1"
+pytest = "==3.6.3"
 isort = "==4.3.4"
 "flake8" = "==3.5.0"
-vulture = "==0.26"
-releases = "==1.5.0"
+vulture = "==0.28"
+releases = "==1.6.1"
 sphinxcontrib-napoleon = "==0.6.1"
 unicodecsv = "==0.14.1"
 appdirs = "==1.4.3"
 zhon = "==1.1.5"
-Sphinx = "==1.7.4"
+Sphinx = "==1.7.5"
 
 [packages]
 "e1839a8" = {path = ".", editable = true}
+unicodecsv = "==0.14.1"
+appdirs = "==1.4.3"
+zhon = "==1.1.5"
+unihan-etl = {path = ".", editable = true}
