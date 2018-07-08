@@ -13,8 +13,8 @@ Retrieval
 unihan-etl will download and cache the raw database files for the
 user.
 
-Handles encoding
-----------------
+No encoding headaches
+---------------------
 
 Dealing with unicode encodings can be cumbersome across platforms.
 unihan-etl deals with handling output encoding issues that could
@@ -38,8 +38,8 @@ Formats
 - YAML (requires `pyyaml <http://pyyaml.org/>`_)
 - Python dict (via :ref:`api`)
 
-Structured output
-"""""""""""""""""
+"Structured" output
+"""""""""""""""""""
 
 *JSON, YAML, and python dict only*
 
