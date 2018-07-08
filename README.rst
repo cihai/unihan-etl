@@ -20,19 +20,19 @@ Part of the `cihai`_ project. Similar project: `libUnihan <http://libunihan.sour
     U+3401	kHanyuPinyin	10019.020:tiàn
     U+3401	kMandarin	tiàn
 
-But: field types can vary in the shape / structure of their data. For example,
+Values vary in shape and structure depending on their field type.
 `kHanyuPinyin <http://www.unicode.org/reports/tr38/#kHanyuPinyin>`_,
-a field mapping Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
-``10019.020:tiàn`` represents an entry. In addition, these variables are
-possible::
+maps Unicode codepoints to `Hànyǔ Dà Zìdiǎn <https://en.wikipedia.org/wiki/Hanyu_Da_Zidian>`_,
+where ``10019.020:tiàn`` represents an entry. Complicating it further,
+more variations::
 
     U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
     U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
 
-The *kHanyuPinyin* field supports multiple entries, delimited by spaces.
-Within an entry, a ":" (colon) separates locations in the work and pinyin
-readings. Within these split values, a "," (comma) can separate multiple
-values. This is just one of 90 fields contained in the database.
+*kHanyuPinyin* field supports multiple entries delimited by spaces.
+":" (colon) separates locations in the work from pinyin readings. Within
+either group, "," (comma) separates multiple values. This is just one of
+90 fields contained in the database.
 
 .. _API: https://unihan-etl.git-pull.com/en/latest/api.html
 .. _CLI: https://unihan-etl.git-pull.com/en/latest/cli.html
@@ -89,12 +89,17 @@ With ``$ unihan-etl -F json --no-expand``:
 "Structured" output
 -------------------
 
-The UNIHAN database packs multiple values, nested values, and optional flags
-(such as apostrophes) into fields. unihan-etl carefully extracts these values in
-a uniform manner. Empty values are pruned.
+Codepoints can pack a lot more detail, unihan-etl carefully extracts these values
+in a uniform manner. Empty values are pruned.
 
-Due to the nested nature of this output, its only supported on JSON, YAML, and
-python output.
+To make this possible, unihan-etl exports to JSON, YAML, and python
+list/dicts.
+
+.. admonition:: Why not CSV?
+   
+   Unfortunately, CSV is only suitable for storing table-like 
+   information. File formats such as JSON and YAML accept key-values and
+   hierarchical entries.
 
 JSON, ``$ unihan-etl -F json``:
 
@@ -208,9 +213,10 @@ issue`_.
 Usage
 -----
 
-``unihan-etl`` supports command line arguments. See `unihan-etl CLI
-arguments`_ for information on how you can specify custom columns, files,
-download URL's and output destinations.
+``unihan-etl`` offers customizable builds via its command line arguments.
+
+See `unihan-etl CLI arguments`_ for information on how you can specify 
+columns, files, download URL's, and output destination.
 
 To download and build your own UNIHAN export:
 
