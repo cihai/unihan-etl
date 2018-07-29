@@ -14,6 +14,7 @@ Here you can find the recent changes to the project.
   - kTGH
 
   UNIHAN Revision 25 was released 2018-05-18 and issued for Unicode **11.0**:
+- :support:`-` Add tests and example corpus for kCCCII
 - :support:`-` Add configuration / make tests for isort, flake8
 - :support:`-` Switch tmuxp config to use pipenv
 - :support:`-` Add *Pipfile*
