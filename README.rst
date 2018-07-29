@@ -8,9 +8,9 @@ as a python object, or through the `CLI`_ to retrieve a CSV, JSON, or YAML file.
 
 Part of the `cihai`_ project. Similar project: `libUnihan <http://libunihan.sourceforge.net/>`_.
 
-UNIHAN Version compatibility (as of unihan-etl v0.9.5):
-`8.0.0 <https://www.unicode.org/reports/tr38/tr38-19.html#History>`__
-(released 2015-06-01, revision 19).
+UNIHAN Version compatibility (as of unihan-etl v0.10.0):
+`11.0.0 <https://www.unicode.org/reports/tr38/tr38-25.html#History>`__
+(released 2018-05-08, revision 25).
 
 |pypi| |docs| |build-status| |coverage| |license|
 
