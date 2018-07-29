@@ -4,6 +4,17 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :support:`91` New fields from UNIHAN
+  `Revision 25 <https://www.unicode.org/reports/tr38/tr38-25.html>`__.
+
+  - kJinmeiyoKanji
+  - kJoyoKanji
+  - kKoreanEducationHanja
+  - kKoreanName
+  - kTGH
+
+  UNIHAN Revision 25 was released 2018-05-18 and issued for Unicode **11.0**:
+
 - :release:`0.9.5 <2017-06-26>`
 - :support:`-` Enhance support for locations on *kHDZRadBreak* fields.
 
