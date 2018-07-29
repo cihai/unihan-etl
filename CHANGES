@@ -4,7 +4,7 @@ Changelog
 
 Here you can find the recent changes to the project.
 
-- :support:`91` New fields from UNIHAN
+- :feature:`91` New fields from UNIHAN
   `Revision 25 <https://www.unicode.org/reports/tr38/tr38-25.html>`__.
 
   - kJinmeiyoKanji
