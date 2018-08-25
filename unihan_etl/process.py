@@ -34,10 +34,7 @@ else:
 
 log = logging.getLogger(__name__)
 
-dirs = AppDirs(
-    __package_name__,  # appname
-    __author__    # app author
-)
+dirs = AppDirs(__package_name__, __author__)  # appname  # app author
 
 
 def not_junk(line):
@@ -96,6 +93,7 @@ UNIHAN_FIELDS = tuple(get_fields(UNIHAN_MANIFEST))
 ALLOWED_EXPORT_TYPES = ['json', 'csv']
 try:
     import yaml
+
     ALLOWED_EXPORT_TYPES += ['yaml']
 except ImportError:
     pass
@@ -125,67 +123,76 @@ def get_parser():
     :py:class:`argparse.ArgumentParser` :
         argument parser for CLI use.
     """
-    parser = argparse.ArgumentParser(
-        prog=__title__,
-        description=__description__
+    parser = argparse.ArgumentParser(prog=__title__, description=__description__)
+    parser.add_argument(
+        "-s",
+        "--source",
+        dest="source",
+        help="URL or path of zipfile. Default: %s" % UNIHAN_URL,
     )
     parser.add_argument(
-        "-s", "--source", dest="source",
-        help="URL or path of zipfile. Default: %s" % UNIHAN_URL)
-    parser.add_argument(
-        "-z", "--zip-path", dest="zip_path",
-        help="Path the zipfile is downloaded to. Default: %s" %
-        UNIHAN_ZIP_PATH
+        "-z",
+        "--zip-path",
+        dest="zip_path",
+        help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_PATH,
     )
     parser.add_argument(
-        "-d", "--destination", dest="destination",
-        help="Output of .csv. Default: %s/unihan.{json,csv,yaml}" %
-        DESTINATION_DIR
+        "-d",
+        "--destination",
+        dest="destination",
+        help="Output of .csv. Default: %s/unihan.{json,csv,yaml}" % DESTINATION_DIR,
     )
     parser.add_argument(
-        "-w", "--work-dir", dest="work_dir",
-        help="Default: %s" % WORK_DIR
+        "-w", "--work-dir", dest="work_dir", help="Default: %s" % WORK_DIR
     )
     parser.add_argument(
-        "-F", "--format", dest="format",
+        "-F",
+        "--format",
+        dest="format",
         choices=ALLOWED_EXPORT_TYPES,
-        help="Default: %s" % DEFAULT_OPTIONS['format']
+        help="Default: %s" % DEFAULT_OPTIONS['format'],
     )
     parser.add_argument(
-        "--no-expand", dest="expand",
+        "--no-expand",
+        dest="expand",
         action='store_false',
         help=(
-            "Don't expand values to lists in multi-value UNIHAN fields. " +
-            "Doesn't apply to CSVs."
-        )
+            "Don't expand values to lists in multi-value UNIHAN fields. "
+            + "Doesn't apply to CSVs."
+        ),
     )
     parser.add_argument(
-        "--no-prune", dest="prune_empty",
+        "--no-prune",
+        dest="prune_empty",
         action='store_false',
-        help=(
-            "Don't prune fields with empty keys" +
-            "Doesn't apply to CSVs."
-        )
+        help=("Don't prune fields with empty keys" + "Doesn't apply to CSVs."),
     )
 
     parser.add_argument(
-        "-f", "--fields", dest="fields", nargs="*",
+        "-f",
+        "--fields",
+        dest="fields",
+        nargs="*",
         help=(
             "Fields to use in export. Separated by spaces. "
             "All fields used by default. Fields: %s" % ', '.join(UNIHAN_FIELDS)
-        )
+        ),
     )
     parser.add_argument(
-        "-i", "--input-files", dest="input_files", nargs='*',
+        "-i",
+        "--input-files",
+        dest="input_files",
+        nargs='*',
         help=(
             "Files inside zip to pull data from. Separated by spaces. "
-            "All files used by default. Files: %s" %
-            ', '.join(UNIHAN_FILES)
-        )
+            "All files used by default. Files: %s" % ', '.join(UNIHAN_FILES)
+        ),
     )
     parser.add_argument(
-        "-l", "--log_level", dest="log_level",
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+        "-l",
+        "--log_level",
+        dest="log_level",
+        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
     )
     return parser
 
@@ -264,14 +271,10 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
         os.makedirs(datadir)
 
     def no_unihan_files_exist():
-        return not glob.glob(
-            os.path.join(datadir, 'Unihan*.txt')
-        )
+        return not glob.glob(os.path.join(datadir, 'Unihan*.txt'))
 
     def not_downloaded():
-        return not os.path.exists(
-            os.path.join(datadir, 'Unihan.zip')
-        )
+        return not os.path.exists(os.path.join(datadir, 'Unihan.zip'))
 
     if no_unihan_files_exist():
         if not_downloaded():
@@ -430,9 +433,7 @@ def export_json(data, destination):
 
 def export_yaml(data, destination):
     with codecs.open(destination, 'w', encoding='utf-8') as f:
-        yaml.safe_dump(data, stream=f,
-                       allow_unicode=True,
-                       default_flow_style=False)
+        yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
         log.info('Saved output to: %s' % destination)
 
 
@@ -440,9 +441,7 @@ def validate_options(options):
     if 'input_files' in options and 'fields' not in options:
         # Filter fields when only files specified.
         try:
-            options['fields'] = get_fields(
-                filter_manifest(options['input_files'])
-            )
+            options['fields'] = get_fields(filter_manifest(options['input_files']))
         except KeyError as e:
             raise KeyError('File {0} not found in file list.'.format(e))
     elif 'fields' in options and 'input_files' not in options:
@@ -452,14 +451,10 @@ def validate_options(options):
         # Filter fields when only files specified.
         fields_in_files = get_fields(filter_manifest(options['input_files']))
 
-        not_in_field = [
-            h for h in options['fields'] if h not in fields_in_files
-        ]
+        not_in_field = [h for h in options['fields'] if h not in fields_in_files]
         if not_in_field:
             raise KeyError(
-                'Field {0} not found in file list.'.format(
-                    ', '.join(not_in_field)
-                )
+                'Field {0} not found in file list.'.format(', '.join(not_in_field))
             )
 
 
@@ -474,9 +469,7 @@ class Packager(object):
         options : dict
             options values to override defaults.
         """
-        setup_logger(
-            None, options.get('log_level', DEFAULT_OPTIONS['log_level'])
-        )
+        setup_logger(None, options.get('log_level', DEFAULT_OPTIONS['log_level']))
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
@@ -493,13 +486,13 @@ class Packager(object):
         """
         while not has_valid_zip(self.options['zip_path']):
             download(
-                self.options['source'], self.options['zip_path'],
-                urlretrieve_fn=urlretrieve_fn, reporthook=_dl_progress
+                self.options['source'],
+                self.options['zip_path'],
+                urlretrieve_fn=urlretrieve_fn,
+                reporthook=_dl_progress,
             )
 
-        if not files_exist(
-            self.options['work_dir'], self.options['input_files']
-        ):
+        if not files_exist(self.options['work_dir'], self.options['input_files']):
             extract_zip(self.options['zip_path'], self.options['work_dir'])
 
     def export(self):

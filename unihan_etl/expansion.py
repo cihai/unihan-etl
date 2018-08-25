@@ -35,10 +35,7 @@ def expand_kMandarin(value):
         tw = value[0]
     else:
         tw = value[1]
-    return {
-        "zh-Hans": cn,
-        "zh-Hant": tw
-    }
+    return {"zh-Hans": cn, "zh-Hant": tw}
 
 
 def expand_kTotalStrokes(value):
@@ -47,19 +44,19 @@ def expand_kTotalStrokes(value):
         tw = value[0]
     else:
         tw = value[1]
-    return {
-        "zh-Hans": int(cn),
-        "zh-Hant": int(tw)
-    }
+    return {"zh-Hans": int(cn), "zh-Hant": int(tw)}
 
 
 def expand_kHanYu(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<volume>[1-8])
         (?P<page>[0-9]{4})\.
         (?P<character>[0-3][0-9])
         (?P<virtual>[0-3])
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
@@ -67,18 +64,21 @@ def expand_kHanYu(value):
             "volume": int(m['volume']),
             "page": int(m['page']),
             "character": int(m['character']),
-            "virtual": int(m['virtual'])
+            "virtual": int(m['virtual']),
         }
     return value
 
 
 def expand_kIRGHanyuDaZidian(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<volume>[1-8])
         (?P<page>[0-9]{4})\.
         (?P<character>[0-3][0-9])
         (?P<virtual>[01])
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
@@ -86,25 +86,25 @@ def expand_kIRGHanyuDaZidian(value):
             "volume": int(m['volume']),
             "page": int(m['page']),
             "character": int(m['character']),
-            "virtual": int(m['virtual'])
+            "virtual": int(m['virtual']),
         }
     return value
 
 
 def expand_kHanyuPinyin(value):
-    location_pattern = re.compile(r"""
+    location_pattern = re.compile(
+        r"""
         (?P<volume>[1-8])
         (?P<page>[0-9]{4})\.
         (?P<character>[0-3][0-9])
         (?P<virtual>[0-3])
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         v = [s.split(',') for s in v.split(':')]
-        value[i] = {
-            "locations": v[0],
-            "readings": v[1]
-        }
+        value[i] = {"locations": v[0], "readings": v[1]}
 
         for n, loc in enumerate(value[i]['locations']):
             m = location_pattern.match(loc).groupdict()
@@ -112,25 +112,25 @@ def expand_kHanyuPinyin(value):
                 "volume": int(m['volume']),
                 "page": int(m['page']),
                 "character": int(m['character']),
-                "virtual": int(m['virtual'])
+                "virtual": int(m['virtual']),
             }
     return value
 
 
 def expand_kXHC1983(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<page>[0-9]{4})\.
         (?P<character>[0-9]{2})
         (?P<entry>[0-9]{1})
         (?P<substituted>\*?)
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         vals = v.split(':')
-        value[i] = {
-            "locations": vals[0].split(','),
-            "reading": vals[1],
-        }
+        value[i] = {"locations": vals[0].split(','), "reading": vals[1]}
 
         for n, loc in enumerate(value[i]['locations']):
             m = pattern.match(loc).groupdict()
@@ -138,36 +138,42 @@ def expand_kXHC1983(value):
                 "page": int(m['page']),
                 "character": int(m['character']),
                 "entry": int(m['entry']),
-                "substituted": m['substituted'] == "*"
+                "substituted": m['substituted'] == "*",
             }
     return value
 
 
 def expand_kCheungBauer(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
         (?P<cangjie>[A-Z]*);
         (?P<readings>[a-z1-6\[\]\/,]+)
-    """, re.X)
+    """,
+        re.X,
+    )
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
             "cangjie": m['cangjie'] or None,
-            "readings": m['readings'].split(',')
+            "readings": m['readings'].split(','),
         }
     return value
 
 
 def expand_kRSAdobe_Japan1_6(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<type>[CV])\+
         (?P<cid>[0-9]{1,5})\+
         (?P<radical>[1-9][0-9]{0,2})\.
         (?P<strokes>[1-9][0-9]?)\.
         (?P<strokes_residue>[0-9]{1,2})
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
@@ -177,17 +183,20 @@ def expand_kRSAdobe_Japan1_6(value):
             "cid": int(m['cid']),
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
-            "strokes-residue": int(m['strokes_residue'])
+            "strokes-residue": int(m['strokes_residue']),
         }
     return value
 
 
 def expand_kCihaiT(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<page>[1-9][0-9]{0,3})\.
         (?P<row>[0-9]{1})
         (?P<character>[0-9]{2})
-    """, re.X)
+    """,
+        re.X,
+    )
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
@@ -200,19 +209,19 @@ def expand_kCihaiT(value):
 
 def expand_kIICore(value):
     for i, v in enumerate(value):
-        value[i] = {
-            "priority": v[0],
-            "sources": list(v[1:])
-        }
+        value[i] = {"priority": v[0], "sources": list(v[1:])}
     return value
 
 
 def expand_kDaeJaweon(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<page>[0-9]{4})\.
         (?P<character>[0-9]{2})
         (?P<virtual>[01])
-    """, re.X)
+    """,
+        re.X,
+    )
     m = pattern.match(value).groupdict()
 
     value = {
@@ -236,91 +245,95 @@ def expand_kIRGDaeJaweon(value):
 
 
 def expand_kFenn(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<phonetic>[0-9]+a?)
         (?P<frequency>[A-KP*])
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict(v)
-        value[i] = {
-            "phonetic": m['phonetic'],
-            "frequency": m['frequency']
-        }
+        value[i] = {"phonetic": m['phonetic'], "frequency": m['frequency']}
     return value
 
 
 def expand_kHanyuPinlu(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<phonetic>[a-z({}{}]+)
         \((?P<frequency>[0-9]+)\)
     """.format(
-        zhon.pinyin.lowercase, N_DIACRITICS
-    ), re.X)
+            zhon.pinyin.lowercase, N_DIACRITICS
+        ),
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
-        value[i] = {
-            "phonetic": m['phonetic'],
-            "frequency": int(m['frequency'])
-        }
+        value[i] = {"phonetic": m['phonetic'], "frequency": int(m['frequency'])}
     return value
 
 
 def expand_kHDZRadBreak(value):
     rad, loc = value.split(':')
 
-    location_pattern = re.compile(r"""
+    location_pattern = re.compile(
+        r"""
         (?P<volume>[1-8])
         (?P<page>[0-9]{4})\.
         (?P<character>[0-3][0-9])
         (?P<virtual>[01])
-    """, re.X)
+    """,
+        re.X,
+    )
 
     l = location_pattern.match(loc).groupdict()
     location = {
         "volume": int(l['volume']),
         "page": int(l['page']),
         "character": int(l['character']),
-        "virtual": int(l['virtual'])
+        "virtual": int(l['virtual']),
     }
 
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<radical>[{}]+)
         \[(?P<ucn>U\+2F[0-9A-D][0-9A-F])\]
-    """.format(zhon.hanzi.radicals), re.X)
+    """.format(
+            zhon.hanzi.radicals
+        ),
+        re.X,
+    )
     m = pattern.match(rad).groupdict()
 
-    return {
-        "radical": m['radical'],
-        "ucn": m['ucn'],
-        "location": location
-    }
+    return {"radical": m['radical'], "ucn": m['ucn'], "location": location}
 
 
 def expand_kSBGY(value):
     for i, v in enumerate(value):
         vals = v.split('.')
-        value[i] = {
-            "page": int(vals[0]),
-            "character": int(vals[1])
-        }
+        value[i] = {"page": int(vals[0]), "character": int(vals[1])}
     return value
 
 
 def _expand_kRSGeneric(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<radical>[1-9][0-9]{0,2})
         (?P<simplified>\'?)\.
         (?P<strokes>-?[0-9]{1,2})
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
             "radical": int(m['radical']),
             "strokes": int(m['strokes']),
-            "simplified": m['simplified'] == "'"
+            "simplified": m['simplified'] == "'",
         }
     return value
 
@@ -335,10 +348,7 @@ expand_kRSKorean = _expand_kRSGeneric
 def _expand_kIRG_GenericSource(value):
     v = value.split('-')
 
-    return {
-        "source": v[0],
-        "location": v[1] if len(v) > 1 else None
-    }
+    return {"source": v[0], "location": v[1] if len(v) > 1 else None}
 
 
 expand_kIRG_GSource = _expand_kIRG_GenericSource
@@ -353,18 +363,21 @@ expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
 def expand_kGSR(value):
-    pattern = re.compile(r"""
+    pattern = re.compile(
+        r"""
         (?P<set>[0-9]{4})
         (?P<letter>[a-vx-z])
         (?P<apostrophe>\')?
-    """, re.X)
+    """,
+        re.X,
+    )
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
             "set": int(m['set']),
             "letter": m['letter'],
-            "apostrophe": m['apostrophe'] == "'"
+            "apostrophe": m['apostrophe'] == "'",
         }
     return value
 
@@ -372,10 +385,7 @@ def expand_kGSR(value):
 def expand_kCheungBauerIndex(value):
     for i, v in enumerate(value):
         m = v.split('.')
-        value[i] = {
-            "page": int(m[0]),
-            "character": int(m[1]),
-        }
+        value[i] = {"page": int(m[0]), "character": int(m[1])}
     return value
 
 
