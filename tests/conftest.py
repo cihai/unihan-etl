@@ -13,9 +13,7 @@ from unihan_etl.util import merge_dict
 
 @pytest.fixture
 def test_options():
-    return merge_dict(DEFAULT_OPTIONS.copy(), {
-        'input_files': ['Unihan_Readings.txt'],
-    })
+    return merge_dict(DEFAULT_OPTIONS.copy(), {'input_files': ['Unihan_Readings.txt']})
 
 
 @pytest.fixture(scope="session")
@@ -38,7 +36,7 @@ def fixture_files(fixture_dir):
         'Unihan_OtherMappings.txt',
         'Unihan_RadicalStrokeCounts.txt',
         'Unihan_Readings.txt',
-        'Unihan_Variants.txt'
+        'Unihan_Variants.txt',
     ]
     return [os.path.join(fixture_dir, f) for f in files]
 
@@ -73,9 +71,7 @@ def TestPackager(mock_test_dir, mock_zip_file):
     options = {
         'work_dir': str(mock_test_dir),
         'zip_path': str(mock_zip_file),
-        'destination': str(
-            mock_test_dir.join('unihan.csv')
-        )
+        'destination': str(mock_test_dir.join('unihan.csv')),
     }
     return Packager(options)
 
@@ -83,16 +79,15 @@ def TestPackager(mock_test_dir, mock_zip_file):
 @pytest.fixture(scope="session")
 def columns():
     return (
-        constants.CUSTOM_DELIMITED_FIELDS + constants.INDEX_FIELDS +
-        constants.SPACE_DELIMITED_FIELDS
+        constants.CUSTOM_DELIMITED_FIELDS
+        + constants.INDEX_FIELDS
+        + constants.SPACE_DELIMITED_FIELDS
     )
 
 
 @pytest.fixture(scope="session")
 def normalized_data(columns, fixture_files):
-    data = process.load_data(
-        files=fixture_files,
-    )
+    data = process.load_data(files=fixture_files)
 
     return process.normalize(data, columns)
 
