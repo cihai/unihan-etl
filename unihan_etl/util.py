@@ -40,9 +40,7 @@ def ucnstring_to_python(ucn_string):
     """
     res = re.findall("U\+[0-9a-fA-F]*", ucn_string)
     for r in res:
-        ucn_string = ucn_string.replace(
-            text_type(r), text_type(ucn_to_unicode(r))
-        )
+        ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
 
     ucn_string = ucn_string.encode('utf-8')
 
@@ -65,6 +63,7 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
     Modification for testing: http://stackoverflow.com/a/4220278
 
     """
+
     def format_size(bytes):
         if bytes > 1000 * 1000:
             return '%.1fMb' % (bytes / 1000.0 / 1000)
@@ -84,11 +83,8 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
     if percent > last_percent:
         # TODO: is this acceptable? Do we want to do something nicer?
         out.write(
-            '%3d%% [%s>%s]\r' % (
-                percent,
-                int(percent / 2) * '=',
-                int(50 - percent / 2) * ' '
-            )
+            '%3d%% [%s>%s]\r'
+            % (percent, int(percent / 2) * '=', int(50 - percent / 2) * ' ')
         )
         out.flush()
     if maxdownloaded >= total_size:
@@ -102,8 +98,10 @@ def merge_dict(base, additional):
     if additional is None:
         return base
 
-    if not (isinstance(base, collections.Mapping)
-            and isinstance(additional, collections.Mapping)):
+    if not (
+        isinstance(base, collections.Mapping)
+        and isinstance(additional, collections.Mapping)
+    ):
         return additional
 
     merged = base

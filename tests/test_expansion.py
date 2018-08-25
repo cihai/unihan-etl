@@ -23,31 +23,31 @@ def test_expand_kCantonese(expanded_data):
         assert False, "Missing field U+342B kCantonese"
 
 
-@pytest.mark.parametrize("ucn,field,expected", [
-    ("U+37AE", "kJapaneseKun", ['DERU', 'DASU']),
-    ("U+37AE", "kJapaneseOn", ['SHUTSU', 'SUI']),
-    ("U+37AE", "kDefinition", [
-        'variant of 出 U+51FA, to go out, send out',
-        'to stand',
-        'to produce'
-    ]),
-])
+@pytest.mark.parametrize(
+    "ucn,field,expected",
+    [
+        ("U+37AE", "kJapaneseKun", ['DERU', 'DASU']),
+        ("U+37AE", "kJapaneseOn", ['SHUTSU', 'SUI']),
+        (
+            "U+37AE",
+            "kDefinition",
+            ['variant of 出 U+51FA, to go out, send out', 'to stand', 'to produce'],
+        ),
+    ],
+)
 def test_expand(expanded_data, ucn, field, expected):
     # test kDefinition (split on ;), kJapanese, kJapaneseKun
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert set(item[field]) == set(expected)
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    ("U+346E", {  # U+346E	kMandarin	hún
-        "zh-Hans": "hún",
-        "zh-Hant": "hún"
-    }),
-    ("U+4FFE", {  # U+4FFE	kMandarin	bǐ bì
-        "zh-Hans": "bǐ",
-        "zh-Hant": "bì"
-    })
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        ("U+346E", {"zh-Hans": "hún", "zh-Hant": "hún"}),  # U+346E	kMandarin	hún
+        ("U+4FFE", {"zh-Hans": "bǐ", "zh-Hant": "bì"}),  # U+4FFE	kMandarin	bǐ bì
+    ],
+)
 def test_expand_kMandarin(expanded_data, ucn, expected):
     """
     The most customary pinyin reading for this character. When there are two
@@ -59,16 +59,13 @@ def test_expand_kMandarin(expanded_data, ucn, expected):
     assert item['kMandarin'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    ("U+8303", {  # U+8303	kTotalStrokes	8 9
-        "zh-Hans": 8,
-        "zh-Hant": 9
-    }),
-    ("U+34D6", {  # U+34D6	kTotalStrokes	13
-        "zh-Hans": 13,
-        "zh-Hant": 13
-    })
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        ("U+8303", {"zh-Hans": 8, "zh-Hant": 9}),  # U+8303	kTotalStrokes	8 9
+        ("U+34D6", {"zh-Hans": 13, "zh-Hant": 13}),  # U+34D6	kTotalStrokes	13
+    ],
+)
 def test_expand_kTotalStrokes(expanded_data, ucn, expected):
     """
     The total number of strokes in the character (including the radical). When
@@ -80,113 +77,78 @@ def test_expand_kTotalStrokes(expanded_data, ucn, expected):
     assert item['kTotalStrokes'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+34AD      kIRGHanyuDaZidian       10273.120
-    ("U+34AD", [{
-        "volume": 1,
-        "page": 273,
-        "character": 12,
-        "virtual": 0
-    }]),
-    # U+34AF      kIRGHanyuDaZidian       10275.091
-    ("U+34AF", [{
-        "volume": 1,
-        "page": 275,
-        "character": 9,
-        "virtual": 1
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+34AD      kIRGHanyuDaZidian       10273.120
+        ("U+34AD", [{"volume": 1, "page": 273, "character": 12, "virtual": 0}]),
+        # U+34AF      kIRGHanyuDaZidian       10275.091
+        ("U+34AF", [{"volume": 1, "page": 275, "character": 9, "virtual": 1}]),
+    ],
+)
 def test_expand_kIRGHanyuDaZidian(ucn, expected, expanded_data):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRGHanyuDaZidian'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    ("U+5EFE", [{  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
-        "locations": [
-            {
-                "volume": 1,
-                "page": 513,
-                "character": 11,
-                "virtual": 0
-            },
-            {
-                "volume": 1,
-                "page": 514,
-                "character": 1,
-                "virtual": 0
-            },
-            {
-                "volume": 1,
-                "page": 514,
-                "character": 2,
-                "virtual": 0
-            }
-        ],
-        "readings": [
-            "gǒng"
-        ]
-    }]),
-    ("U+5364", [{  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
-        "locations": [
-            {
-                "volume": 1,
-                "page": 93,
-                "character": 13,
-                "virtual": 0
-            }
-        ],
-        "readings": [
-            "xī",
-            "lǔ"
-        ]
-    }, {
-        "locations": [
-            {
-                "volume": 7,
-                "page": 4609,
-                "character": 2,
-                "virtual": 0
-            }
-        ],
-        "readings": [
-            "lǔ",
-            "xī"
-        ]
-    }]),
-    ("U+34D8", [{  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
-        "locations": [
-            {
-                "volume": 1,
-                "page": 278,
-                "character": 8,
-                "virtual": 0
-            },
-            {
-                "volume": 1,
-                "page": 278,
-                "character": 9,
-                "virtual": 0
-            }
-        ],
-        "readings": [
-            "sù"
-        ]
-    }]),
-    ("U+34CE", [{  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
-        "locations": [
-            {
-                "volume": 1,
-                "page": 297,
-                "character": 26,
-                "virtual": 0,
-            }
-        ],
-        "readings": [
-            "qīn", "qìn", "qǐn"
-        ]
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        (
+            "U+5EFE",
+            [
+                {  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
+                    "locations": [
+                        {"volume": 1, "page": 513, "character": 11, "virtual": 0},
+                        {"volume": 1, "page": 514, "character": 1, "virtual": 0},
+                        {"volume": 1, "page": 514, "character": 2, "virtual": 0},
+                    ],
+                    "readings": ["gǒng"],
+                }
+            ],
+        ),
+        (
+            "U+5364",
+            [
+                {  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
+                    "locations": [
+                        {"volume": 1, "page": 93, "character": 13, "virtual": 0}
+                    ],
+                    "readings": ["xī", "lǔ"],
+                },
+                {
+                    "locations": [
+                        {"volume": 7, "page": 4609, "character": 2, "virtual": 0}
+                    ],
+                    "readings": ["lǔ", "xī"],
+                },
+            ],
+        ),
+        (
+            "U+34D8",
+            [
+                {  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
+                    "locations": [
+                        {"volume": 1, "page": 278, "character": 8, "virtual": 0},
+                        {"volume": 1, "page": 278, "character": 9, "virtual": 0},
+                    ],
+                    "readings": ["sù"],
+                }
+            ],
+        ),
+        (
+            "U+34CE",
+            [
+                {  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
+                    "locations": [
+                        {"volume": 1, "page": 297, "character": 26, "virtual": 0}
+                    ],
+                    "readings": ["qīn", "qìn", "qǐn"],
+                }
+            ],
+        ),
+    ],
+)
 def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
     """
     Each location has the form “ABCDE.XYZ” (as in “kHanYu”); multiple
@@ -212,31 +174,45 @@ def test_expand_kHanyuPinyin(expanded_data, ucn, expected):
     assert item['kHanyuPinyin'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    ("U+9BF5", [{  # U+9BF5 kHanYu  74699.122
-        "volume": 7,
-        "page": 4699,
-        "character": 12,
-        "virtual": 2
-    }]),
-    ("U+34B9", [{  # U+34B9	kHanYu	10254.060 10254.100
-        "volume": 1,
-        "page": 254,
-        "character": 6,
-        "virtual": 0
-    }, {
-        "volume": 1,
-        "page": 254,
-        "character": 10,
-        "virtual": 0
-    }]),
-    ('U+34AD', [{  # U+34AD	kHanYu	10273.120
-        "volume": 1,
-        "page": 273,
-        "character": 12,
-        "virtual": 0
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        (
+            "U+9BF5",
+            [
+                {  # U+9BF5 kHanYu  74699.122
+                    "volume": 7,
+                    "page": 4699,
+                    "character": 12,
+                    "virtual": 2,
+                }
+            ],
+        ),
+        (
+            "U+34B9",
+            [
+                {  # U+34B9	kHanYu	10254.060 10254.100
+                    "volume": 1,
+                    "page": 254,
+                    "character": 6,
+                    "virtual": 0,
+                },
+                {"volume": 1, "page": 254, "character": 10, "virtual": 0},
+            ],
+        ),
+        (
+            'U+34AD',
+            [
+                {  # U+34AD	kHanYu	10273.120
+                    "volume": 1,
+                    "page": 273,
+                    "character": 12,
+                    "virtual": 0,
+                }
+            ],
+        ),
+    ],
+)
 def test_expand_HanYu(expanded_data, ucn, expected):
     """
     The character references are given in the form “ABCDE.XYZ”, in which: “A”
@@ -258,44 +234,64 @@ def test_expand_HanYu(expanded_data, ucn, expected):
     assert item['kHanYu'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+4E9D      kRSAdobe_Japan1_6       C+17245+7.2.6 C+17245+28.2.6
-    ("U+4E9D", [{
-        "type": "C",
-        "cid": 17245,
-        "radical": 7,
-        "strokes": 2,
-        "strokes-residue": 6
-    }, {
-        "type": "C",
-        "cid": 17245,
-        "radical": 28,
-        "strokes": 2,
-        "strokes-residue": 6
-    }]),
-    # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
-    ("U+4E9E", [{
-        "type": "C",
-        "cid": 4108,
-        "radical": 7,
-        "strokes": 2,
-        "strokes-residue": 6
-    }]),
-    # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
-    ("U+4E30", [{
-        "type": "C",
-        "cid": 14301,
-        "radical": 2,
-        "strokes": 1,
-        "strokes-residue": 3
-    }, {
-        "type": "V",
-        "cid": 15386,
-        "radical": 2,
-        "strokes": 1,
-        "strokes-residue": 3
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+4E9D      kRSAdobe_Japan1_6       C+17245+7.2.6 C+17245+28.2.6
+        (
+            "U+4E9D",
+            [
+                {
+                    "type": "C",
+                    "cid": 17245,
+                    "radical": 7,
+                    "strokes": 2,
+                    "strokes-residue": 6,
+                },
+                {
+                    "type": "C",
+                    "cid": 17245,
+                    "radical": 28,
+                    "strokes": 2,
+                    "strokes-residue": 6,
+                },
+            ],
+        ),
+        # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
+        (
+            "U+4E9E",
+            [
+                {
+                    "type": "C",
+                    "cid": 4108,
+                    "radical": 7,
+                    "strokes": 2,
+                    "strokes-residue": 6,
+                }
+            ],
+        ),
+        # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
+        (
+            "U+4E30",
+            [
+                {
+                    "type": "C",
+                    "cid": 14301,
+                    "radical": 2,
+                    "strokes": 1,
+                    "strokes-residue": 3,
+                },
+                {
+                    "type": "V",
+                    "cid": 15386,
+                    "radical": 2,
+                    "strokes": 1,
+                    "strokes-residue": 3,
+                },
+            ],
+        ),
+    ],
+)
 def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
     """
     The value consists of a number of space-separated entries. Each entry
@@ -319,44 +315,23 @@ def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
     assert item['kRSAdobe_Japan1_6'] == expected
 
 
-@pytest.mark.parametrize("field,ucn,expected", [
-    # U+4E55      kRSJapanese     4.6
-    ('kRSJapanese', 'U+4E55', [{
-        "radical": 4,
-        "strokes": 6,
-        "simplified": False
-    }]),
-    # U+4E99      kRSKangXi       7.4
-    ('kRSKangXi', 'U+4E99', [{
-        "radical": 7,
-        "strokes": 4,
-        "simplified": False
-    }]),
-    # U+4E9A      kRSKangXi       1.5
-    ('kRSKangXi', 'U+4E9A', [{
-        "radical": 1,
-        "strokes": 5,
-        "simplified": False
-    }]),
-    # U+4E54      kRSKanWa        37.3
-    ('kRSKanWa', 'U+4E54', [{
-        "radical": 37,
-        "strokes": 3,
-        "simplified": False
-    }]),
-    # U+4E55      kRSKanWa        4.6
-    ('kRSKanWa', 'U+4E55', [{
-        "radical": 4,
-        "strokes": 6,
-        "simplified": False
-    }]),
-    # U+5378      kRSKorean       26.7
-    ('kRSKorean', 'U+5378', [{
-        "radical": 26,
-        "strokes": 7,
-        "simplified": False
-    }]),
-])
+@pytest.mark.parametrize(
+    "field,ucn,expected",
+    [
+        # U+4E55      kRSJapanese     4.6
+        ('kRSJapanese', 'U+4E55', [{"radical": 4, "strokes": 6, "simplified": False}]),
+        # U+4E99      kRSKangXi       7.4
+        ('kRSKangXi', 'U+4E99', [{"radical": 7, "strokes": 4, "simplified": False}]),
+        # U+4E9A      kRSKangXi       1.5
+        ('kRSKangXi', 'U+4E9A', [{"radical": 1, "strokes": 5, "simplified": False}]),
+        # U+4E54      kRSKanWa        37.3
+        ('kRSKanWa', 'U+4E54', [{"radical": 37, "strokes": 3, "simplified": False}]),
+        # U+4E55      kRSKanWa        4.6
+        ('kRSKanWa', 'U+4E55', [{"radical": 4, "strokes": 6, "simplified": False}]),
+        # U+5378      kRSKorean       26.7
+        ('kRSKorean', 'U+5378', [{"radical": 26, "strokes": 7, "simplified": False}]),
+    ],
+)
 def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
     """kRSJapanese
     """
@@ -364,20 +339,15 @@ def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
     assert item[field] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+3491      kRSUnicode      9.13
-    ('U+3491', [{
-        "radical": 9,
-        "strokes": 13,
-        "simplified": False
-    }]),
-    # U+4336       kRSUnicode      120'.3
-    ('U+4336', [{
-        "radical": 120,
-        "strokes": 3,
-        "simplified": True
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+3491      kRSUnicode      9.13
+        ('U+3491', [{"radical": 9, "strokes": 13, "simplified": False}]),
+        # U+4336       kRSUnicode      120'.3
+        ('U+4336', [{"radical": 120, "strokes": 3, "simplified": True}]),
+    ],
+)
 def test_expand_kRSUnihan(expanded_data, ucn, expected):
     """
     The standard radical/stroke count for this character in the form
@@ -391,36 +361,33 @@ def test_expand_kRSUnihan(expanded_data, ucn, expected):
     assert item['kRSUnicode'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+34BC      kCheungBauer    055/08;TLBO;mang4
-    ('U+34BC', [{
-        "radical": 55,
-        "strokes": 8,
-        "cangjie": "TLBO",
-        "readings": [
-            "mang4"
-        ]
-    }]),
-    # U+356C  kCheungBauer    030/04;;gung1
-    ('U+356C', [{
-        "radical": 30,
-        "strokes": 4,
-        "cangjie": None,
-        "readings": [
-            "gung1"
-        ]
-    }]),
-    # U+3598  kCheungBauer    030/07;RMMV;san2,seon2
-    ('U+3598', [{
-        "radical": 30,
-        "strokes": 7,
-        "cangjie": "RMMV",
-        "readings": [
-            "san2",
-            "seon2"
-        ]
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+34BC      kCheungBauer    055/08;TLBO;mang4
+        (
+            'U+34BC',
+            [{"radical": 55, "strokes": 8, "cangjie": "TLBO", "readings": ["mang4"]}],
+        ),
+        # U+356C  kCheungBauer    030/04;;gung1
+        (
+            'U+356C',
+            [{"radical": 30, "strokes": 4, "cangjie": None, "readings": ["gung1"]}],
+        ),
+        # U+3598  kCheungBauer    030/07;RMMV;san2,seon2
+        (
+            'U+3598',
+            [
+                {
+                    "radical": 30,
+                    "strokes": 7,
+                    "cangjie": "RMMV",
+                    "readings": ["san2", "seon2"],
+                }
+            ],
+        ),
+    ],
+)
 def test_expand_kCheungBauer(expanded_data, ucn, expected):
     """
     Each data value consists of three pieces, separated by semicolons:
@@ -435,14 +402,13 @@ def test_expand_kCheungBauer(expanded_data, ucn, expected):
     assert item['kCheungBauer'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+34D6      kCihaiT 170.105
-    ("U+34D6", [{
-        "page": 170,
-        "row": 1,
-        "character": 5
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+34D6      kCihaiT 170.105
+        ("U+34D6", [{"page": 170, "row": 1, "character": 5}])
+    ],
+)
 def test_expand_kCihaiT(expanded_data, ucn, expected):
     """
     The position is indicated by a decimal number. The digits to the left of
@@ -454,20 +420,15 @@ def test_expand_kCihaiT(expanded_data, ucn, expected):
     assert item['kCihaiT'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+9F7C  kDaeJaweon      2075.100
-    ("U+9F7C", {
-        "page": 2075,
-        "character": 10,
-        "virtual": 0
-    }),
-    # U+4E37  kDaeJaweon      0162.211
-    ("U+4E37", {
-        "page": 162,
-        "character": 21,
-        "virtual": 1
-    }),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+9F7C  kDaeJaweon      2075.100
+        ("U+9F7C", {"page": 2075, "character": 10, "virtual": 0}),
+        # U+4E37  kDaeJaweon      0162.211
+        ("U+4E37", {"page": 162, "character": 21, "virtual": 1}),
+    ],
+)
 def test_expand_kDaeJaweon(expanded_data, ucn, expected):
     """
     The position is in the form “page.position” with the final digit in the
@@ -479,23 +440,17 @@ def test_expand_kDaeJaweon(expanded_data, ucn, expected):
     assert item['kDaeJaweon'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+48D3  kIICore CG
-    ("U+48D3", [{
-        'priority': 'C',
-        'sources': ['G']
-    }]),
-    # U+4E09  kIICore AGTJHKMP
-    ("U+4E09", [{
-        'priority': 'A',
-        'sources': ['G', 'T', 'J', 'H', 'K', 'M', 'P']
-    }]),
-    # U+4E0E  kIICore AGJ
-    ("U+4E0E", [{
-        'priority': 'A',
-        'sources': ['G', 'J']
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+48D3  kIICore CG
+        ("U+48D3", [{'priority': 'C', 'sources': ['G']}]),
+        # U+4E09  kIICore AGTJHKMP
+        ("U+4E09", [{'priority': 'A', 'sources': ['G', 'T', 'J', 'H', 'K', 'M', 'P']}]),
+        # U+4E0E  kIICore AGJ
+        ("U+4E0E", [{'priority': 'A', 'sources': ['G', 'J']}]),
+    ],
+)
 def test_expand_kIICore(expanded_data, ucn, expected):
     """
     Each value consists of a letter (A, B, or C), indicating priority value,
@@ -507,87 +462,65 @@ def test_expand_kIICore(expanded_data, ucn, expected):
     assert item['kIICore'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+4E07  kIRGDaeJaweon   0137.070
-    ("U+4E07", [{
-        "page": 137,
-        "character": 7,
-        "virtual": 0
-    }]),
-    # U+4E37  kIRGDaeJaweon   0162.211
-    ("U+4E37", [{
-        "page": 162,
-        "character": 21,
-        "virtual": 1
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+4E07  kIRGDaeJaweon   0137.070
+        ("U+4E07", [{"page": 137, "character": 7, "virtual": 0}]),
+        # U+4E37  kIRGDaeJaweon   0162.211
+        ("U+4E37", [{"page": 162, "character": 21, "virtual": 1}]),
+    ],
+)
 def test_expand_kIRGDaeJaweon(expanded_data, ucn, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRGDaeJaweon'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+342C      kFenn   871P
-    ("U+342C", [{
-        "phonetic": '871',
-        "frequency": "P"
-    }]),
-    # U+3431      kFenn   281K
-    ("U+3431", [{
-        "phonetic": '281',
-        "frequency": "K"
-    }]),
-    # U+9918      kFenn   31A
-    ("U+9918", [{
-        "phonetic": '31',
-        "frequency": "A"
-    }]),
-    # U+807D      kFenn   381aA
-    ("U+807D", [{
-        "phonetic": '381a',
-        "frequency": "A"
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+342C      kFenn   871P
+        ("U+342C", [{"phonetic": '871', "frequency": "P"}]),
+        # U+3431      kFenn   281K
+        ("U+3431", [{"phonetic": '281', "frequency": "K"}]),
+        # U+9918      kFenn   31A
+        ("U+9918", [{"phonetic": '31', "frequency": "A"}]),
+        # U+807D      kFenn   381aA
+        ("U+807D", [{"phonetic": '381a', "frequency": "A"}]),
+    ],
+)
 def test_expand_kFenn(expanded_data, ucn, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kFenn'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+4E0B      kHanyuPinlu     xià(6430) xia(249)
-    ("U+4E0B", [{
-        "phonetic": "xià",
-        "frequency": 6430
-    }, {
-        "phonetic": "xia",
-        "frequency": 249
-    }]),
-    # U+4E09      kHanyuPinlu     sān(3030)
-    ("U+4E09", [{
-        "phonetic": "sān",
-        "frequency": 3030
-    }]),
-    # U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
-    ("U+55EF", [{
-        "phonetic": "ń",
-        "frequency": 48
-    }, {
-        "phonetic": "ň",
-        "frequency": 48
-    }, {
-        "phonetic": "ǹ",
-        "frequency": 48
-    }, {
-        "phonetic": "ńg",
-        "frequency": 48
-    }, {
-        "phonetic": "ňg",
-        "frequency": 48
-    }, {
-        "phonetic": "ǹg",
-        "frequency": 48
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+4E0B      kHanyuPinlu     xià(6430) xia(249)
+        (
+            "U+4E0B",
+            [
+                {"phonetic": "xià", "frequency": 6430},
+                {"phonetic": "xia", "frequency": 249},
+            ],
+        ),
+        # U+4E09      kHanyuPinlu     sān(3030)
+        ("U+4E09", [{"phonetic": "sān", "frequency": 3030}]),
+        # U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
+        (
+            "U+55EF",
+            [
+                {"phonetic": "ń", "frequency": 48},
+                {"phonetic": "ň", "frequency": 48},
+                {"phonetic": "ǹ", "frequency": 48},
+                {"phonetic": "ńg", "frequency": 48},
+                {"phonetic": "ňg", "frequency": 48},
+                {"phonetic": "ǹg", "frequency": 48},
+            ],
+        ),
+    ],
+)
 def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
     """
     Immediately following the pronunciation, a numeric string appears in
@@ -599,30 +532,29 @@ def test_expand_kHanyuPinlu(expanded_data, ucn, expected):
     assert item['kHanyuPinlu'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+4E00  kHDZRadBreak    ⼀[U+2F00]:10001.010
-    ('U+4E00', {
-        "radical": "⼀",
-        "ucn": "U+2F00",
-        "location": {
-            "volume": 1,
-            "page": 1,
-            "character": 1,
-            "virtual": False
-        }
-    }),
-    # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
-    ('U+4E59', {
-        "radical": "⼄",
-        "ucn": "U+2F04",
-        "location": {
-            "volume": 1,
-            "page": 47,
-            "character": 4,
-            "virtual": False
-        }
-    }),
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+4E00  kHDZRadBreak    ⼀[U+2F00]:10001.010
+        (
+            'U+4E00',
+            {
+                "radical": "⼀",
+                "ucn": "U+2F00",
+                "location": {"volume": 1, "page": 1, "character": 1, "virtual": False},
+            },
+        ),
+        # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
+        (
+            'U+4E59',
+            {
+                "radical": "⼄",
+                "ucn": "U+2F04",
+                "location": {"volume": 1, "page": 47, "character": 4, "virtual": False},
+            },
+        ),
+    ],
+)
 def test_expand_kHDZRadBreak(expanded_data, ucn, expected):
     """
     Hanyu Da Zidian has a radical break beginning at this character’s position.
@@ -633,21 +565,15 @@ def test_expand_kHDZRadBreak(expanded_data, ucn, expected):
     assert item['kHDZRadBreak'] == expected
 
 
-@pytest.mark.parametrize("ucn,expected", [
-    # U+349D      kSBGY   479.12 495.09
-    ("U+349D", [{
-        "page": 479,
-        "character": 12
-    }, {
-        "page": 495,
-        "character": 9
-    }]),
-    # U+349F      kSBGY   296.38
-    ("U+349F", [{
-        "page": 296,
-        "character": 38
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,expected",
+    [
+        # U+349D      kSBGY   479.12 495.09
+        ("U+349D", [{"page": 479, "character": 12}, {"page": 495, "character": 9}]),
+        # U+349F      kSBGY   296.38
+        ("U+349F", [{"page": 296, "character": 38}]),
+    ],
+)
 def test_expand_kSBGY(expanded_data, ucn, expected):
     """
     The 25334 character references are given in the form “ABC.XY”, in which:
@@ -660,56 +586,73 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     assert item['kSBGY'] == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
-    ("U+91B1", "0295.011:fā 0884.081:pō", [{
-        "locations": [{
-            "page": 295,
-            "character": 1,
-            "entry": 1,
-            "substituted": False
-        }],
-        "reading": "fā"
-    }, {
-        "locations": [{
-            "page": 884,
-            "character": 8,
-            "entry": 1,
-            "substituted": False
-        }],
-        "reading": "pō"
-    }]),
-    # U+379E  kXHC1983        1092.070*,1092.071:sóng
-    ("U+379E", "1092.070*,1092.071:sóng", [{
-        "locations": [{
-            "page": 1092,
-            "character": 7,
-            "entry": 0,
-            "substituted": True
-        }, {
-            "page": 1092,
-            "character": 7,
-            "entry": 1,
-            "substituted": False
-        }],
-        "reading": "sóng"
-    }]),
-    # U+5750  kXHC1983        1551.040,1552.011:zuò
-    ("U+5750", "1551.040,1552.011:zuò", [{
-        "locations": [{
-            "page": 1551,
-            "character": 4,
-            "entry": 0,
-            "substituted": False
-        }, {
-            "page": 1552,
-            "character": 1,
-            "entry": 1,
-            "substituted": False
-        }],
-        "reading": "zuò"
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
+        (
+            "U+91B1",
+            "0295.011:fā 0884.081:pō",
+            [
+                {
+                    "locations": [
+                        {"page": 295, "character": 1, "entry": 1, "substituted": False}
+                    ],
+                    "reading": "fā",
+                },
+                {
+                    "locations": [
+                        {"page": 884, "character": 8, "entry": 1, "substituted": False}
+                    ],
+                    "reading": "pō",
+                },
+            ],
+        ),
+        # U+379E  kXHC1983        1092.070*,1092.071:sóng
+        (
+            "U+379E",
+            "1092.070*,1092.071:sóng",
+            [
+                {
+                    "locations": [
+                        {"page": 1092, "character": 7, "entry": 0, "substituted": True},
+                        {
+                            "page": 1092,
+                            "character": 7,
+                            "entry": 1,
+                            "substituted": False,
+                        },
+                    ],
+                    "reading": "sóng",
+                }
+            ],
+        ),
+        # U+5750  kXHC1983        1551.040,1552.011:zuò
+        (
+            "U+5750",
+            "1551.040,1552.011:zuò",
+            [
+                {
+                    "locations": [
+                        {
+                            "page": 1551,
+                            "character": 4,
+                            "entry": 0,
+                            "substituted": False,
+                        },
+                        {
+                            "page": 1552,
+                            "character": 1,
+                            "entry": 1,
+                            "substituted": False,
+                        },
+                    ],
+                    "reading": "zuò",
+                }
+            ],
+        ),
+    ],
+)
 def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
     """
     Each pīnyīn reading is preceded by the character’s location(s) in the
@@ -739,23 +682,17 @@ def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kXHC1983', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+348C      kIRG_GSource    GKX-0118.03
-    ("U+348C", "GKX-0118.03", {
-        "source": "GKX",
-        "location": "0118.03"
-    }),
-    # U+2A660  kIRG_GSource    G4K
-    ("U+2A660", "G4K", {
-        "source": "G4K",
-        "location": None
-    }),
-    # U+348D      kIRG_GSource    G5-3272
-    ("U+348D", "G5-3272", {
-        "source": "G5",
-        "location": "3272"
-    }),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+348C      kIRG_GSource    GKX-0118.03
+        ("U+348C", "GKX-0118.03", {"source": "GKX", "location": "0118.03"}),
+        # U+2A660  kIRG_GSource    G4K
+        ("U+2A660", "G4K", {"source": "G4K", "location": None}),
+        # U+348D      kIRG_GSource    G5-3272
+        ("U+348D", "G5-3272", {"source": "G5", "location": "3272"}),
+    ],
+)
 def test_expand_kIRG_GSource(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRG_GSource'] == expected
@@ -763,23 +700,17 @@ def test_expand_kIRG_GSource(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kIRG_GSource', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+347E      kIRG_HSource    H-8F59
-    ("U+347E", "H-8F59", {
-        "source": "H",
-        "location": "8F59"
-    }),
-    # U+4E00      kIRG_HSource    HB1-A440
-    ("U+4E00", "HB1-A440", {
-        "source": "HB1",
-        "location": "A440"
-    }),
-    # U+4E07      kIRG_HSource    HB2-C945
-    ("U+4E07", "HB2-C945", {
-        "source": "HB2",
-        "location": "C945"
-    }),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+347E      kIRG_HSource    H-8F59
+        ("U+347E", "H-8F59", {"source": "H", "location": "8F59"}),
+        # U+4E00      kIRG_HSource    HB1-A440
+        ("U+4E00", "HB1-A440", {"source": "HB1", "location": "A440"}),
+        # U+4E07      kIRG_HSource    HB2-C945
+        ("U+4E07", "HB2-C945", {"source": "HB2", "location": "C945"}),
+    ],
+)
 def test_expand_kIRG_HSource(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRG_HSource'] == expected
@@ -787,18 +718,15 @@ def test_expand_kIRG_HSource(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kIRG_HSource', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+3400	kIRG_JSource	JA-2121
-    ("U+3400", "JA-2121", {
-        "source": "JA",
-        "location": "2121"
-    }),
-    # U+3402	kIRG_JSource	JA3-2E23
-    ("U+3402", "JA3-2E23", {
-        "source": "JA3",
-        "location": "2E23"
-    }),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+3400	kIRG_JSource	JA-2121
+        ("U+3400", "JA-2121", {"source": "JA", "location": "2121"}),
+        # U+3402	kIRG_JSource	JA3-2E23
+        ("U+3402", "JA3-2E23", {"source": "JA3", "location": "2E23"}),
+    ],
+)
 def test_expand_kIRG_JSource(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRG_JSource'] == expected
@@ -806,63 +734,48 @@ def test_expand_kIRG_JSource(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kIRG_JSource', fieldval) == expected
 
 
-@pytest.mark.parametrize("field,ucn,fieldval,expected", [
-    # U+3ED0  kIRG_KPSource   KP0-EAB2
-    ("kIRG_KPSource", "U+3ED0", "KP0-EAB2", {
-        "source": "KP0",
-        "location": "EAB2"
-    }),
-    # U+340C  kIRG_KPSource   KP1-3451
-    ("kIRG_KPSource", "U+340C", "KP1-3451", {
-        "source": "KP1",
-        "location": "3451"
-    }),
-    # U+4E06  kIRG_KSource    K2-2121
-    ("kIRG_KSource", "U+4E06", "K2-2121", {
-        "source": "K2",
-        "location": "2121"
-    }),
-    # U+3401  kIRG_KSource    K3-2121
-    ("kIRG_KSource", "U+3401", "K3-2121", {
-        "source": "K3",
-        "location": "2121"
-    }),
-    # U+21290	kIRG_MSource	MAC-00077
-    ("kIRG_MSource", "U+21290", "MAC-00077", {
-        "source": "MAC",
-        "location": "00077"
-    }),
-    # U+3400  kIRG_TSource    T6-222C
-    ("kIRG_TSource", "U+3400", "T6-222C", {
-        "source": "T6",
-        "location": "222C"
-    }),
-    # U+3401  kIRG_TSource    T4-2224
-    ("kIRG_TSource", "U+3401", "T4-2224", {
-        "source": "T4",
-        "location": "2224"
-    }),
-    # U+22016 kIRG_USource    UTC-00069
-    ("kIRG_USource", "U+22016", "UTC-00069", {
-        "source": "UTC",
-        "location": "00069"
-    }),
-    # U+221EC kIRG_USource    UCI-00937
-    ("kIRG_USource", "U+221EC", "UCI-00937", {
-        "source": "UCI",
-        "location": "00937"
-    }),
-    # U+346B  kIRG_VSource    V0-3034
-    ("kIRG_VSource", "U+346B", "V0-3034", {
-        "source": "V0",
-        "location": "3034"
-    }),
-    # U+340C  kIRG_VSource    V2-8874
-    ("kIRG_VSource", "U+340C", "V2-8874", {
-        "source": "V2",
-        "location": "8874"
-    }),
-])
+@pytest.mark.parametrize(
+    "field,ucn,fieldval,expected",
+    [
+        # U+3ED0  kIRG_KPSource   KP0-EAB2
+        ("kIRG_KPSource", "U+3ED0", "KP0-EAB2", {"source": "KP0", "location": "EAB2"}),
+        # U+340C  kIRG_KPSource   KP1-3451
+        ("kIRG_KPSource", "U+340C", "KP1-3451", {"source": "KP1", "location": "3451"}),
+        # U+4E06  kIRG_KSource    K2-2121
+        ("kIRG_KSource", "U+4E06", "K2-2121", {"source": "K2", "location": "2121"}),
+        # U+3401  kIRG_KSource    K3-2121
+        ("kIRG_KSource", "U+3401", "K3-2121", {"source": "K3", "location": "2121"}),
+        # U+21290	kIRG_MSource	MAC-00077
+        (
+            "kIRG_MSource",
+            "U+21290",
+            "MAC-00077",
+            {"source": "MAC", "location": "00077"},
+        ),
+        # U+3400  kIRG_TSource    T6-222C
+        ("kIRG_TSource", "U+3400", "T6-222C", {"source": "T6", "location": "222C"}),
+        # U+3401  kIRG_TSource    T4-2224
+        ("kIRG_TSource", "U+3401", "T4-2224", {"source": "T4", "location": "2224"}),
+        # U+22016 kIRG_USource    UTC-00069
+        (
+            "kIRG_USource",
+            "U+22016",
+            "UTC-00069",
+            {"source": "UTC", "location": "00069"},
+        ),
+        # U+221EC kIRG_USource    UCI-00937
+        (
+            "kIRG_USource",
+            "U+221EC",
+            "UCI-00937",
+            {"source": "UCI", "location": "00937"},
+        ),
+        # U+346B  kIRG_VSource    V0-3034
+        ("kIRG_VSource", "U+346B", "V0-3034", {"source": "V0", "location": "3034"}),
+        # U+340C  kIRG_VSource    V2-8874
+        ("kIRG_VSource", "U+340C", "V2-8874", {"source": "V2", "location": "8874"}),
+    ],
+)
 def test_expand_kIRG_KPSource(expanded_data, field, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item[field] == expected
@@ -870,30 +783,24 @@ def test_expand_kIRG_KPSource(expanded_data, field, ucn, fieldval, expected):
     assert expansion.expand_field(field, fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+340C  kGSR    0004f
-    ("U+340C", "0004f", [{
-        "set": 4,
-        "letter": "f",
-        "apostrophe": False
-    }]),
-    # U+371D	kGSR	0651k'
-    ("U+371D", "0651k'", [{
-        "set": 651,
-        "letter": "k",
-        "apostrophe": True
-    }]),
-    # U+9AE2  kGSR    0004e' 0850s
-    ("U+9AE2", "0004e' 0850s", [{
-        "set": 4,
-        "letter": "e",
-        "apostrophe": True
-    }, {
-        "set": 850,
-        "letter": "s",
-        "apostrophe": False
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+340C  kGSR    0004f
+        ("U+340C", "0004f", [{"set": 4, "letter": "f", "apostrophe": False}]),
+        # U+371D	kGSR	0651k'
+        ("U+371D", "0651k'", [{"set": 651, "letter": "k", "apostrophe": True}]),
+        # U+9AE2  kGSR    0004e' 0850s
+        (
+            "U+9AE2",
+            "0004e' 0850s",
+            [
+                {"set": 4, "letter": "e", "apostrophe": True},
+                {"set": 850, "letter": "s", "apostrophe": False},
+            ],
+        ),
+    ],
+)
 def test_expand_kGSR(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kGSR'] == expected
@@ -901,21 +808,19 @@ def test_expand_kGSR(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kGSR', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+34BC  kCheungBauerIndex       402.06
-    ("U+34BC", "402.06", [{
-        "page": 402,
-        "character": 6
-    }]),
-    # U+3578  kCheungBauerIndex       351.02 351.03
-    ("U+3578", "351.02 351.03", [{
-        "page": 351,
-        "character": 2
-    }, {
-        "page": 351,
-        "character": 3
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+34BC  kCheungBauerIndex       402.06
+        ("U+34BC", "402.06", [{"page": 402, "character": 6}]),
+        # U+3578  kCheungBauerIndex       351.02 351.03
+        (
+            "U+3578",
+            "351.02 351.03",
+            [{"page": 351, "character": 2}, {"page": 351, "character": 3}],
+        ),
+    ],
+)
 def test_expand_kCheungBauerIndex(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kCheungBauerIndex'] == expected
@@ -923,18 +828,15 @@ def test_expand_kCheungBauerIndex(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kCheungBauerIndex', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+348B      kFennIndex      480.05
-    ("U+348B", "480.05", [{
-        "page": 480,
-        "character": 5
-    }]),
-    # U+349A      kFennIndex      602.04
-    ("U+349A", "602.04", [{
-        "page": 602,
-        "character": 4
-    }])
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+348B      kFennIndex      480.05
+        ("U+348B", "480.05", [{"page": 480, "character": 5}]),
+        # U+349A      kFennIndex      602.04
+        ("U+349A", "602.04", [{"page": 602, "character": 4}]),
+    ],
+)
 def test_expand_kFennIndex(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kFennIndex'] == expected
@@ -942,20 +844,15 @@ def test_expand_kFennIndex(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kFennIndex', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+34AD      kIRGKangXi      0125.190
-    ("U+34AD", "0125.190", [{
-        "page": 125,
-        "character": 19,
-        "virtual": 0
-    }]),
-    # U+34AE      kIRGKangXi      0125.201
-    ("U+34AE", "0125.201", [{
-        "page": 125,
-        "character": 20,
-        "virtual": 1
-    }]),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+34AD      kIRGKangXi      0125.190
+        ("U+34AD", "0125.190", [{"page": 125, "character": 19, "virtual": 0}]),
+        # U+34AE      kIRGKangXi      0125.201
+        ("U+34AE", "0125.201", [{"page": 125, "character": 20, "virtual": 1}]),
+    ],
+)
 def test_expand_kIRGKangXi(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kIRGKangXi'] == expected
@@ -963,12 +860,15 @@ def test_expand_kIRGKangXi(expanded_data, ucn, fieldval, expected):
     assert expansion.expand_field('kIRGKangXi', fieldval) == expected
 
 
-@pytest.mark.parametrize("ucn,fieldval,expected", [
-    # U+4E00	kCCCII	213021
-    ("U+4E00", "213021", ["213021"]),
-    # U+4E0D	kCCCII	21302A
-    ("U+4E0D", "21302A", ["21302A"]),
-])
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
+        # U+4E00	kCCCII	213021
+        ("U+4E00", "213021", ["213021"]),
+        # U+4E0D	kCCCII	21302A
+        ("U+4E0D", "21302A", ["21302A"]),
+    ],
+)
 def test_expand_kCCCII(expanded_data, ucn, fieldval, expected):
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item['kCCCII'] == expected

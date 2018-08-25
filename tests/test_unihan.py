@@ -9,12 +9,7 @@ import shutil
 import pytest
 
 from unihan_etl import constants, process
-from unihan_etl.process import (
-    DEFAULT_OPTIONS,
-    UNIHAN_ZIP_PATH,
-    Packager,
-    zip_has_files,
-)
+from unihan_etl.process import DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager, zip_has_files
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import merge_dict
 
@@ -82,42 +77,48 @@ def test_download(tmpdir, mock_zip, mock_zip_file, mock_zip_filename):
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_download_mock(
-    tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options
-):
+def test_download_mock(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options):
     data_path = tmpdir.join('data')
     dest_path = data_path.join('data', 'hey.zip')
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
         mock_zip_file.copy(dest_path)
 
-    p = Packager(merge_dict(test_options.copy, {
-        'fields': ['kDefinition'],
-        'zip_path': str(dest_path),
-        'work_dir': str(mock_test_dir.join('downloads')),
-        'destination': str(data_path.join('unihan.csv'))
-    }))
+    p = Packager(
+        merge_dict(
+            test_options.copy,
+            {
+                'fields': ['kDefinition'],
+                'zip_path': str(dest_path),
+                'work_dir': str(mock_test_dir.join('downloads')),
+                'destination': str(data_path.join('unihan.csv')),
+            },
+        )
+    )
     p.download(urlretrieve_fn=urlretrieve)
     assert os.path.exists(str(dest_path))
     p.export()
 
 
-def test_export_format(
-    tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options
-):
+def test_export_format(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options):
     data_path = tmpdir.join('data')
     dest_path = data_path.join('data', 'hey.zip')
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
         mock_zip_file.copy(dest_path)
 
-    p = Packager(merge_dict(test_options.copy, {
-        'fields': ['kDefinition'],
-        'zip_path': str(dest_path),
-        'work_dir': str(mock_test_dir.join('downloads')),
-        'destination': str(data_path.join('unihan.{ext}')),
-        'format': 'json'
-    }))
+    p = Packager(
+        merge_dict(
+            test_options.copy,
+            {
+                'fields': ['kDefinition'],
+                'zip_path': str(dest_path),
+                'work_dir': str(mock_test_dir.join('downloads')),
+                'destination': str(data_path.join('unihan.{ext}')),
+                'format': 'json',
+            },
+        )
+    )
     p.download(urlretrieve_fn=urlretrieve)
     assert os.path.exists(str(dest_path))
     p.export()
@@ -152,9 +153,9 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
             in_columns.append(v)
 
     assert [] == not_in_columns, "normalize filters columns not specified."
-    assert set(in_columns).issubset(set(columns)), (
-        "normalize returns correct columns specified + ucn and char."
-    )
+    assert set(in_columns).issubset(
+        set(columns)
+    ), "normalize returns correct columns specified + ucn and char."
 
 
 def test_normalize_simple_data_format(fixture_dir):
@@ -171,9 +172,7 @@ def test_normalize_simple_data_format(fixture_dir):
         'kDefinition',
     ) + constants.INDEX_FIELDS
 
-    data = process.load_data(
-        files=csv_files,
-    )
+    data = process.load_data(files=csv_files)
 
     items = process.normalize(data, columns)
     items = process.listify(items, columns)
@@ -186,13 +185,7 @@ def test_normalize_simple_data_format(fixture_dir):
 
 def test_flatten_fields():
 
-    single_dataset = {
-        'Unihan_Readings.txt': [
-            'kCantonese',
-            'kDefinition',
-            'kHangul',
-        ]
-    }
+    single_dataset = {'Unihan_Readings.txt': ['kCantonese', 'kDefinition', 'kHangul']}
 
     expected = ['kCantonese', 'kDefinition', 'kHangul']
     results = process.get_fields(single_dataset)
@@ -205,11 +198,7 @@ def test_flatten_fields():
             'kOtherNumeric',
             'kPrimaryNumeric',
         ],
-        'Unihan_OtherMappings.txt': [
-            'kBigFive',
-            'kCCCII',
-            'kCNS1986',
-        ]
+        'Unihan_OtherMappings.txt': ['kBigFive', 'kCCCII', 'kCNS1986'],
     }
 
     expected = [
@@ -231,10 +220,7 @@ def test_pick_files(mock_zip_file):
 
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    options = {
-        'input_files': files,
-        'zip_path': str(mock_zip_file)
-    }
+    options = {'input_files': files, 'zip_path': str(mock_zip_file)}
 
     b = process.Packager(options)
 
@@ -247,9 +233,7 @@ def test_pick_files(mock_zip_file):
 def test_raise_error_unknown_field():
     """Throw error if picking unknown field."""
 
-    options = {
-        'fields': ['kHello']
-    }
+    options = {'fields': ['kHello']}
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -259,9 +243,7 @@ def test_raise_error_unknown_field():
 def test_raise_error_unknown_file():
     """Throw error if picking unknown file."""
 
-    options = {
-        'input_files': ['Sparta.lol']
-    }
+    options = {'input_files': ['Sparta.lol']}
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -273,10 +255,7 @@ def test_raise_error_unknown_field_filtered_files():
 
     files = ['Unihan_Variants.txt']
 
-    options = {
-        'input_files': files,
-        'fields': ['kDefinition'],
-    }
+    options = {'input_files': files, 'fields': ['kDefinition']}
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -287,13 +266,11 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     """Picks file automatically if none specified and fields are."""
 
     fields = (
-        constants.UNIHAN_MANIFEST['Unihan_Readings.txt'] +
-        constants.UNIHAN_MANIFEST['Unihan_Variants.txt']
+        constants.UNIHAN_MANIFEST['Unihan_Readings.txt']
+        + constants.UNIHAN_MANIFEST['Unihan_Variants.txt']
     )
 
-    options = {
-        'fields': fields,
-    }
+    options = {'fields': fields}
 
     b = process.Packager(options)
 
@@ -308,18 +285,14 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
 
     files = ['Unihan_Readings.txt', 'Unihan_Variants.txt']
 
-    options = {
-        'input_files': files
-    }
+    options = {'input_files': files}
 
     b = process.Packager(options)
 
     results = process.get_fields(process.filter_manifest(files))
     expected = b.options['fields']
 
-    assert set(expected) == set(results), (
-        'Returns only the fields for files picked.'
-    )
+    assert set(expected) == set(results), 'Returns only the fields for files picked.'
 
 
 def test_no_args():
@@ -345,20 +318,17 @@ def test_cli_plus_defaults(mock_zip_file):
         option_subset, result, msg="fields -f allows multiple fields."
     )
 
-    option_subset = {
-        'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'
-    }
+    option_subset = {'fields': ['kDefinition', 'kXerox'], 'destination': 'data/ha.csv'}
     result = Packager.from_cli(
-        ['-f', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']).options
+        ['-f', 'kDefinition', 'kXerox', '-d', 'data/ha.csv']
+    ).options
     assert_dict_contains_subset(
         option_subset, result, msg="fields -f allows additional arguments."
     )
 
     result = Packager.from_cli(['--format', 'json']).options
     option_subset = {'format': 'json'}
-    assert_dict_contains_subset(
-        option_subset, result, msg="format argument works"
-    )
+    assert_dict_contains_subset(option_subset, result, msg="format argument works")
 
 
 def test_cli_exit_emessage_to_stderr():
