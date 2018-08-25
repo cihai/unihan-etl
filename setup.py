@@ -34,6 +34,7 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
+
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
 
@@ -55,9 +56,7 @@ setup(
     zip_safe=False,
     keywords=about['__title__'],
     packages=['unihan_etl'],
-    entry_points=dict(
-        console_scripts=['unihan-etl=unihan_etl.__main__:run']
-    ),
+    entry_points=dict(console_scripts=['unihan-etl=unihan_etl.__main__:run']),
     classifiers=[
         'Development Status :: 4 - Beta',
         "License :: OSI Approved :: MIT License",

@@ -113,7 +113,7 @@ UNIHAN_MANIFEST = {
         'kSpecializedSemanticVariant',
         'kTraditionalVariant',
         'kZVariant',
-    )
+    ),
 }
 
 #: FIELDS with multiple values via custom delimiters
@@ -133,12 +133,7 @@ CUSTOM_DELIMITED_FIELDS = (
 )
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
-SPACE_DELIMITED_DICT_FIELDS = (
-    'kHanYu',
-    'kXHC1983',
-    'kMandarin',
-    'kTotalStrokes',
-)
+SPACE_DELIMITED_DICT_FIELDS = ('kHanYu', 'kXHC1983', 'kMandarin', 'kTotalStrokes')
 
 #: Fields with multiple values UNIHAN delimits by spaces -> list
 SPACE_DELIMITED_LIST_FIELDS = (
@@ -209,9 +204,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
 )
 
 #: Any space delimited field regardless of expanded form
-SPACE_DELIMITED_FIELDS = (
-    SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIELDS
-)
+SPACE_DELIMITED_FIELDS = SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIELDS
 
 #: Default index fields for unihan csv's. You probably want these.
 INDEX_FIELDS = ('ucn', 'char')
