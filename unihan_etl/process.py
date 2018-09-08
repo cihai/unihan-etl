@@ -22,6 +22,7 @@ from unihan_etl.__about__ import (
     __description__,
     __package_name__,
     __title__,
+    __version__,
 )
 from unihan_etl._compat import PY2, text_type, urlretrieve
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
@@ -124,6 +125,12 @@ def get_parser():
         argument parser for CLI use.
     """
     parser = argparse.ArgumentParser(prog=__title__, description=__description__)
+    parser.add_argument(
+        '-v',
+        '--version',
+        action='version',
+        version='%(prog)s {version}'.format(version=__version__),
+    )
     parser.add_argument(
         "-s",
         "--source",
