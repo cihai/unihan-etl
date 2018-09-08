@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-
+import inspect
 import os
 import sys
+from os.path import dirname, relpath
 
 import alagitpull
+
+import unihan_etl
 
 # Get the project root dir, which is the parent dir of this
 cwd = os.getcwd()
@@ -23,6 +26,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinxcontrib.napoleon',
+    'sphinx.ext.linkcode',
     'releases',
     'alagitpull',
     'sphinxarg.ext',  # sphinx-argparse
@@ -116,3 +120,74 @@ intersphinx_mapping = {
     'sphinx': ('http://sphinx.readthedocs.org/en/latest/', None),
     'sqlalchemy': ('http://sqlalchemy.readthedocs.org/en/latest/', None),
 }
+
+
+def linkcode_resolve(domain, info):  # NOQA: C901
+    """
+    Determine the URL corresponding to Python object
+
+    Notes
+    -----
+    From https://github.com/numpy/numpy/blob/v1.15.1/doc/source/conf.py, 7c49cfa
+    on Jul 31. License BSD-3. https://github.com/numpy/numpy/blob/v1.15.1/LICENSE.txt
+    """
+    if domain != 'py':
+        return None
+
+    modname = info['module']
+    fullname = info['fullname']
+
+    submod = sys.modules.get(modname)
+    if submod is None:
+        return None
+
+    obj = submod
+    for part in fullname.split('.'):
+        try:
+            obj = getattr(obj, part)
+        except Exception:
+            return None
+
+    # strip decorators, which would resolve to the source of the decorator
+    # possibly an upstream bug in getsourcefile, bpo-1764286
+    try:
+        unwrap = inspect.unwrap
+    except AttributeError:
+        pass
+    else:
+        obj = unwrap(obj)
+
+    try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        return None
+
+    try:
+        source, lineno = inspect.getsourcelines(obj)
+    except Exception:
+        lineno = None
+
+    if lineno:
+        linespec = "#L%d-L%d" % (lineno, lineno + len(source) - 1)
+    else:
+        linespec = ""
+
+    fn = relpath(fn, start=dirname(unihan_etl.__file__))
+
+    if 'dev' in about['__version__']:
+        return "%s/blob/master/%s/%s%s" % (
+            about['__github__'],
+            about['__package_name__'],
+            fn,
+            linespec,
+        )
+    else:
+        return "%s/blob/v%s/%s/%s%s" % (
+            about['__github__'],
+            about['__version__'],
+            about['__package_name__'],
+            fn,
+            linespec,
+        )
