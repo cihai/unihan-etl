@@ -246,7 +246,7 @@ def expand_kIRGDaeJaweon(value):
 
 def expand_kFenn(value):
     pattern = re.compile(
-        r"""
+        """
         (?P<phonetic>[0-9]+a?)
         (?P<frequency>[A-KP*])
     """,
@@ -261,7 +261,7 @@ def expand_kFenn(value):
 
 def expand_kHanyuPinlu(value):
     pattern = re.compile(
-        r"""
+        """
         (?P<phonetic>[a-z({}{}]+)
         \((?P<frequency>[0-9]+)\)
     """.format(
