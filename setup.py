@@ -42,7 +42,7 @@ class PyTest(TestCommand):
 setup(
     name=about['__title__'],
     version=about['__version__'],
-    url='https://unihan-etl.git-pull.com',
+    url=about['__github__'],
     download_url='https://pypi.python.org/pypi/unihan-etl',
     license=about['__license__'],
     author=about['__author__'],
