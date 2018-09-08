@@ -4,6 +4,7 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- :release:`0.10.0 <2017-08-29>`
 - :feature:`91` New fields from UNIHAN
   `Revision 25 <https://www.unicode.org/reports/tr38/tr38-25.html>`__.
 
