@@ -9,9 +9,9 @@ unihan-etl
 .. toctree::
     :maxdepth: 2
 
-    api
     about
     unihan
     cli
+    api
     FAQ
     history
