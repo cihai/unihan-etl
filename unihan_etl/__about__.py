@@ -1,7 +1,7 @@
 __title__ = 'unihan-etl'
 __package_name__ = 'unihan_etl'
 __description__ = 'Export UNIHAN to Python, Data Package, CSV, JSON and YAML'
-__version__ = '0.10.0'
+__version__ = '0.10.1'
 __author__ = 'Tony Narlock'
 __email__ = 'cihai@git-pull.com'
 __github__ = 'https://github.com/cihai/unihan-etl'
