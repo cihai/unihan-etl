@@ -11,7 +11,7 @@ import collections
 import re
 import sys
 
-from ._compat import string_types, text_type, unichr
+from ._compat import Mapping, string_types, text_type, unichr
 
 
 def ucn_to_unicode(ucn):
@@ -98,15 +98,12 @@ def merge_dict(base, additional):
     if additional is None:
         return base
 
-    if not (
-        isinstance(base, collections.Mapping)
-        and isinstance(additional, collections.Mapping)
-    ):
+    if not (isinstance(base, Mapping) and isinstance(additional, Mapping)):
         return additional
 
     merged = base
     for key, value in additional.items():
-        if isinstance(value, collections.Mapping):
+        if isinstance(value, Mapping):
             merged[key] = merge_dict(merged.get(key), value)
         else:
             merged[key] = value
