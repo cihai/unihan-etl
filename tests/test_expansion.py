@@ -654,7 +654,7 @@ def test_expand_kSBGY(expanded_data, ucn, expected):
     ],
 )
 def test_expand_kXHC1983(expanded_data, ucn, fieldval, expected):
-    """
+    r"""
     Each pīnyīn reading is preceded by the character’s location(s) in the
     dictionary, separated from the reading by “:” (colon); multiple locations
     for a given reading are separated by “,” (comma); multiple “location:

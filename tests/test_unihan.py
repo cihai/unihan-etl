@@ -247,7 +247,7 @@ def test_raise_error_unknown_file():
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
-    excinfo.match('File ([a-zA-Z_\.\'].*) not found in file list.')
+    excinfo.match(r'File ([a-zA-Z_\.\'].*) not found in file list.')
 
 
 def test_raise_error_unknown_field_filtered_files():
