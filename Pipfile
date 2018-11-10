@@ -21,4 +21,4 @@ appdirs = "==1.4.3"
 zhon = "==1.1.5"
 
 [requires]
-python_version = "3.6"
+python_version = "3"
