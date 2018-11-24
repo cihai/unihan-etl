@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcihai%2Funihan-etl.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcihai%2Funihan-etl?ref=badge_shield)
+
 *unihan-etl* - `ETL`_ tool for Unicode's Han Unification (`UNIHAN`_) database
 releases. unihan-etl retrieves (downloads), extracts (unzips), and transforms the
 database from Unicode's website to a flat, tabular or structured, tree-like
@@ -313,3 +315,6 @@ Code layout
     :alt: Documentation Status
     :scale: 100%
     :target: https://readthedocs.org/projects/unihan-etl/
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcihai%2Funihan-etl.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcihai%2Funihan-etl?ref=badge_large)
