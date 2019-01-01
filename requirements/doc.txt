@@ -1,5 +1,5 @@
 sphinx==1.8.3
-alagitpull==0.0.21
+alagitpull==0.0.22
 releases==1.6.1
 sphinx-argparse==0.2.5
 sphinxcontrib-napoleon==0.7
