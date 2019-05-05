@@ -4,6 +4,13 @@ From bitprophet/releases (BSD 2-clause)
 https://github.com/bitprophet/releases/blob/35157fa/releases/__init__.py
 
 Also looking at: https://github.com/bitprophet/releases/blob/master/releases/util.py
+
+Todo / Ideas
+------------
+Create a separate sphinx extension. Integrate patterns to read through text items
+and find #23 and replace with a node reference. Look at nodes.reference automatic
+linking. The plus sign is this formatting is automated, customizable via powerful
+regular expressions (without needing to deal with boilerplate of writing roles).
 """
 import re
 
