@@ -4,12 +4,14 @@ Changelog
 
 Here you can find the recent changes to the project.
 
-- :release:`0.10.1 <2017-09-08>`
+0.10.1 <2017-09-08>
+-------------------
 - Add code links in API
 - Add ``__version__`` to ``unihan_etl``
 
-- :release:`0.10.0 <2017-08-29>`
-- :feature:`91` New fields from UNIHAN
+0.10.0 <2017-08-29>
+-------------------
+- :issue:`91` New fields from UNIHAN
   `Revision 25 <https://www.unicode.org/reports/tr38/tr38-25.html>`__.
 
   - kJinmeiyoKanji
@@ -19,14 +21,14 @@ Here you can find the recent changes to the project.
   - kTGH
 
   UNIHAN Revision 25 was released 2018-05-18 and issued for Unicode **11.0**:
-- :support:`-` Add tests and example corpus for kCCCII
-- :support:`-` Add configuration / make tests for isort, flake8
-- :support:`-` Switch tmuxp config to use pipenv
-- :support:`-` Add *Pipfile*
-- :support:`-` Add ``make sync_pipfile`` task to sync *requirements/\*.txt* files
+- Add tests and example corpus for kCCCII
+- Add configuration / make tests for isort, flake8
+- Switch tmuxp config to use pipenv
+- Add *Pipfile*
+- Add ``make sync_pipfile`` task to sync *requirements/\*.txt* files
   with *Pipfile*
-- :support:`-` Update and sync Pipfile
-- :support:`-` Developer package updates (linting / docs / testing)
+- Update and sync Pipfile
+- Developer package updates (linting / docs / testing)
 
   - isort 4.2.15 to 4.3.4
   - flake8 3.3.0 to 3.5.0
@@ -36,126 +38,149 @@ Here you can find the recent changes to the project.
   - releases 1.3.1 to 1.6.1
   - sphinx-argparse 0.2.1 to 1.6.2
   - pytest 3.1.2 to 3.6.4
-- :support:`-` Move documentation over to numpy-style
-- :support:`-` Add sphinxcontrib-napoleon 0.6.1
-- :support:`-` Update LICENSE New BSD to MIT
-- :support:`-` All future commits and contributions are licensed to the
+- Move documentation over to numpy-style
+- Add sphinxcontrib-napoleon 0.6.1
+- Update LICENSE New BSD to MIT
+- All future commits and contributions are licensed to the
   *cihai software foundation*. This includes commits by Tony Narlock (creator).
 
-- :release:`0.9.5 <2017-06-26>`
-- :support:`-` Enhance support for locations on *kHDZRadBreak* fields.
+0.9.5 <2017-06-26>
+------------------
+- Enhance support for locations on *kHDZRadBreak* fields.
 
-- :release:`0.9.4 <2017-06-05>`
-- :bug:`-` Fix kIRG_GSource without location
-- :bug:`-` Fix kFenn output
-- :bug:`-` Fix kHanyuPinlu support output for n diacritics
+0.9.4 <2017-06-05>
+------------------
+- Fix kIRG_GSource without location
+- Fix kFenn output
+- Fix kHanyuPinlu support output for n diacritics
 
-- :release:`0.9.3 <2017-05-31>`
-- :support:`-` Add expansion for kIRGKangXi
+0.9.3 <2017-05-31>
+------------------
+- Add expansion for kIRGKangXi
 
-- :release:`0.9.2 <2017-05-31>`
-- :support:`-` Normalize Radical-Stroke expansion for kRSUnicode
-- :support:`-` Migrate more fields to regular expressions
-- :feature:`-` Normalize character field for kDaeJaweon, kHanyuPinyin,
+0.9.2 <2017-05-31>
+------------------
+- Normalize Radical-Stroke expansion for kRSUnicode
+- Migrate more fields to regular expressions
+- Normalize character field for kDaeJaweon, kHanyuPinyin,
   and kCheungBauer, kFennIndex, kCheungBauerIndex, kIICore,
   kIRGHanyuDaZidian
 
-- :release:`0.9.1 <2017-05-27>`
-- :feature:`-` Support for expanding kGSR
-- :support:`-` Convert some field expansions to use regexes
+0.9.1 <2017-05-27>
+------------------
+- Support for expanding kGSR
+- Convert some field expansions to use regexes
 
-- :release:`0.9.0 <2017-05-26>`
-- :bug:`-` Fix bug where destination file was made into directory on
+0.9.0 <2017-05-26>
+------------------
+- Fix bug where destination file was made into directory on
   first run
-- :support:`-` Rename from unihan-tabular to unihan-etl
-- :feature:`-` Support for expanding multi-value fields
-- :feature:`-` Support for pruning empty fields
-- :support:`-` Improve help dialog
-- :support:`-` Added a page about UNIHAN and the project to documentation
-- :support:`-` Split constant values into their own module
-- :support:`-` Split functionality for expanding unstructured values into
+- Rename from unihan-tabular to unihan-etl
+- Support for expanding multi-value fields
+- Support for pruning empty fields
+- Improve help dialog
+- Added a page about UNIHAN and the project to documentation
+- Split constant values into their own module
+- Split functionality for expanding unstructured values into
   its own module
 
-- :release:`0.8.1 <2017-05-20>`
-- :support:`-` Update to add *kJa* and adjust source file of
+0.8.1 <2017-05-20>
+------------------
+- Update to add *kJa* and adjust source file of
   *kCompatibilityVariant* per Unicode 8.0.0.
 
-- :release:`0.8.0 <2017-05-17>`
-- :feature:`-` Support for configuring logging via options and CLI
-- :support:`-` Convert all print statements to use logger
+0.8.0 <2017-05-17>
+------------------
+- Support for configuring logging via options and CLI
+- Convert all print statements to use logger
 
-- :release:`0.7.4 <2017-05-14>`
-- :feature:`-` Allow for local / file system sources for Unihan.zip
-- :support:`-` Only extract zip if unextracted
+0.7.4 <2017-05-14>
+------------------
+- Allow for local / file system sources for Unihan.zip
+- Only extract zip if unextracted
 
-- :release:`0.7.3 <2017-05-13>`
-- :support:`-` Update package classifiers
+0.7.3 <2017-05-13>
+------------------
+- Update package classifiers
 
-- :release:`0.7.2 <2017-05-13>`
-- :support:`-` Add back datapackage
+0.7.2 <2017-05-13>
+------------------
+- Add back datapackage
 
-- :release:`0.7.1 <2017-05-12>`
-- :bug:`-` Fix python 2 CSV output
-- :support:`-` Default to CSV output
+0.7.1 <2017-05-12>
+------------------
+- Fix python 2 CSV output
+- Default to CSV output
 
-- :release:`0.7.0 <2017-05-12>`
-- :support:`-` Move unicodecsv module to dependency package
-- :feature:`-` Support for XDG directory specification
-- :feature:`-` Support for custom destination output, including replacing
+0.7.0 <2017-05-12>
+------------------
+- Move unicodecsv module to dependency package
+- Support for XDG directory specification
+- Support for custom destination output, including replacing
   template variable ``{ext}``
 
-- :release:`0.6.3 <2017-05-11>`
-- :support:`-` Move *__about__.py* to module level
+0.6.3 <2017-05-11>
+------------------
+- Move *__about__.py* to module level
 
-- :release:`0.6.2 <2017-05-11>`
-- :bug:`-` Fix python package import
+0.6.2 <2017-05-11>
+------------------
+- Fix python package import
 
-- :release:`0.6.1 <2017-05-10>`
-- :bug:`-` Fix readme bug on pypi
+0.6.1 <2017-05-10>
+------------------
+- Fix readme bug on pypi
 
-- :release:`0.6.0 <2017-05-10>`
-- :feature:`-` Support for exporting in YAML and JSON
-- :support:`-` More internal factoring and simplification
-- :support:`-` Return data as list
+0.6.0 <2017-05-10>
+------------------
+- Support for exporting in YAML and JSON
+- More internal factoring and simplification
+- Return data as list
 
-- :release:`0.5.1 <2017-05-08>`
-- :support:`-` Drop python 3.3 an 3.4 support
+0.5.1 <2017-05-08>
+------------------
+- Drop python 3.3 an 3.4 support
 
-- :release:`0.5.0 <2017-05-08>`
-- :support:`-` Rename from cihaidata_unihan unihan_tabular
-- :support:`-` Drop datapackages in favor of a universal JSON, YAML and CSV
+0.5.0 <2017-05-08>
+------------------
+- Rename from cihaidata_unihan unihan_tabular
+- Drop datapackages in favor of a universal JSON, YAML and CSV
   export.
-- :support:`-` Only use UnicodeWriter in Python 2, fixes issue with python
+- Only use UnicodeWriter in Python 2, fixes issue with python
   would encode `b` in front of values
 
-- :release:`0.4.2 <2017-05-07>`
-- :support:`-` Rename *scripts/* to *cihaidata_unihan/*
+0.4.2 <2017-05-07>
+------------------
+- Rename *scripts/* to *cihaidata_unihan/*
 
-- :release:`0.4.1 <2017-05-07>`
-- :support:`-` Enable invoking tool via ``$ cihaidata_unihan``
+0.4.1 <2017-05-07>
+------------------
+- Enable invoking tool via ``$ cihaidata_unihan``
 
-- :release:`0.4.0 <2017-05-07>`
-- :support:`-` Major internal refactor and simplification
-- :support:`-` Convert to pytest ``assert`` statements
-- :support:`-` Convert full test suite to pytest functions and fixtures
-- :support:`-` Get CLI documentation up again
-- :support:`-` Improve test coverage
-- :support:`-` Lint code, remove unused imports
-- :support:`-` Switch license BSD -> MIT
+0.4.0 <2017-05-07>
+------------------
+- Major internal refactor and simplification
+- Convert to pytest ``assert`` statements
+- Convert full test suite to pytest functions and fixtures
+- Get CLI documentation up again
+- Improve test coverage
+- Lint code, remove unused imports
+- Switch license BSD -> MIT
 
-- :release:`0.3.0 <2017-04-17>`
-- :support:`-` Rebooted
-- :support:`-` Modernize *Makefile* in docs
-- :support:`-` Add Makefile to main project
-- :support:`-` Modernize package metadata to use *__about__.py*
-- :support:`-` Update requirements to use *requirements/* folder for
+0.3.0 <2017-04-17>
+------------------
+- Rebooted
+- Modernize *Makefile* in docs
+- Add Makefile to main project
+- Modernize package metadata to use *__about__.py*
+- Update requirements to use *requirements/* folder for
   base, testing and doc dependencies.
-- :support:`-` Update sphinx theme to alabaster with new logo.
-- :support:`-` Update travis to use coverall
-- :support:`-` Update links on README to use https
-- :support:`-` Update travis to test up to python 3.6
-- :support:`-` Add support for pypy (why not)
-- :support:`-` Lock base dependencies
-- :support:`-` Add dev dependencies for isort, vulture and flake8
+- Update sphinx theme to alabaster with new logo.
+- Update travis to use coverall
+- Update links on README to use https
+- Update travis to test up to python 3.6
+- Add support for pypy (why not)
+- Lock base dependencies
+- Add dev dependencies for isort, vulture and flake8
 
 .. vim: set filetype=rst:
