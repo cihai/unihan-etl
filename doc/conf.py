@@ -34,7 +34,7 @@ extensions = [
 ]
 
 releases_unstable_prehistory = True
-releases_document_name = "history"
+releases_document_name = ["history"]
 releases_issue_uri = "https://github.com/cihai/unihan-etl/issues/%s"
 releases_release_uri = "https://github.com/cihai/unihan-etl/tree/v%s"
 
