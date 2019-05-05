@@ -68,11 +68,41 @@ def release_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     # Lol @ access back to Sphinx
     config = inliner.document.settings.env.app.config
     # Or:
-    # return [release_nodes(number, number, date, config)], []
+    return [release_nodes(number, number, date, config)], []
     nodelist = [release_nodes(number, number, date, config)]
     # Return intermediate node
     node = Release(number=number, date=date, nodelist=nodelist)
     return [node], []
+
+
+class BulletListVisitor(nodes.NodeVisitor):
+    def __init__(self, document, app):
+        nodes.NodeVisitor.__init__(self, document)
+        self.found_changelog = False
+        self.app = app
+
+    def visit_list_item(self, node):
+        # [<paragraph: <section...>>]
+
+        if len(node.children) == 1 and isinstance(node.children[0], nodes.paragraph):
+            new_node = node.children[0]
+            if len(new_node) == 1 and isinstance(new_node.children[0], nodes.section):
+                node.replace_self(node.children)
+
+    def unknown_visit(self, node):
+        pass
+
+
+def parse_changelog(app, doctree):
+    # Don't scan/mutate documents that don't match the configured document name
+    # (which by default is ['changelog.rst', ]).
+    if app.env.docname not in app.config.releases_document_name:
+        return
+
+    # Find the first bullet-list node & replace it with our organized/parsed
+    # elements.
+    changelog_visitor = BulletListVisitor(doctree, app)
+    doctree.walk(changelog_visitor)
 
 
 def setup(app):
@@ -85,8 +115,12 @@ def setup(app):
         ('release_uri', None),
         # Convenience Github version of above
         ('github_path', None),
+        # Which document to use as the changelog
+        ('document_name', ['changelog']),
     ):
         app.add_config_value(
             name='releases_{}'.format(key), default=default, rebuild='html'
         )
     app.add_role('release', release_role)
+
+    app.connect('doctree-read', parse_changelog)
