@@ -1,3 +1,4 @@
 sphinx==2.0.1
+sphinx-issues==1.2.0
 alagitpull==0.0.22
 sphinx-argparse==0.2.5

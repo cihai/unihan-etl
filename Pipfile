@@ -11,6 +11,7 @@ isort = "==4.3.18"
 flake8 = "==3.7.7"
 pytest = "==4.4.1"
 unihan-etl = {editable = true,path = "."}
+sphinx-issues = "==1.2.0"
 
 [packages]
 unicodecsv = "==0.14.1"
