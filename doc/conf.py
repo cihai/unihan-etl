@@ -27,15 +27,18 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.napoleon',
     'sphinx.ext.linkcode',
-    'releases',
     'alagitpull',
     'sphinxarg.ext',  # sphinx-argparse
+    'sphinx_issues',
+    'changelog',  # _ext/changelog.py
 ]
 
 releases_unstable_prehistory = True
-releases_document_name = "history"
+releases_document_name = ["history"]
 releases_issue_uri = "https://github.com/cihai/unihan-etl/issues/%s"
 releases_release_uri = "https://github.com/cihai/unihan-etl/tree/v%s"
+
+issues_github_path = about['__github__']
 
 templates_path = ['_templates']
 
