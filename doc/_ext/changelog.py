@@ -60,7 +60,10 @@ class TitleVisitor(nodes.NodeVisitor):
 
         if match:
             number, date = match.group(1), match.group(2)
-            node.replace_self(release_nodes(number, number, date, self.app.config))
+
+            node.parent.replace_self(
+                [release_nodes(number, number, date, self.app.config), node.parent[1]]
+            )
 
     def unknown_visit(self, node):
         pass
