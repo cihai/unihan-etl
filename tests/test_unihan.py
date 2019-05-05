@@ -8,7 +8,8 @@ import shutil
 
 import pytest
 
-from unihan_etl import constants, process, __version__
+from unihan_etl import __version__, constants, process
+from unihan_etl._compat import PY2
 from unihan_etl.process import DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager, zip_has_files
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import merge_dict
@@ -346,4 +347,8 @@ def test_cli_version(capsys, flag):
     with pytest.raises(SystemExit):
         Packager.from_cli([flag])
     captured = capsys.readouterr()
-    assert __version__ in captured.out
+
+    if PY2:  # todo: why does python 2.x return -v in error?
+        assert __version__ in captured.err
+    else:
+        assert __version__ in captured.out
