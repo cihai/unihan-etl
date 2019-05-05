@@ -67,6 +67,8 @@ def release_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     number, date = match.group(1), match.group(2)
     # Lol @ access back to Sphinx
     config = inliner.document.settings.env.app.config
+    # Or:
+    # return [release_nodes(number, number, date, config)], []
     nodelist = [release_nodes(number, number, date, config)]
     # Return intermediate node
     node = Release(number=number, date=date, nodelist=nodelist)
