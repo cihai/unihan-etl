@@ -4,19 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-alagitpull = ">=0.0.22"
-sphinx-argparse = "==0.2.5"
-Sphinx = ">=2.0.1"
-isort = "==4.3.18"
-flake8 = "==3.7.7"
-pytest = "==4.5.0"
+alagitpull = "*"
+sphinx-argparse = "*"
+Sphinx = ">=2.0.0"
+isort = "*"
+flake8 = "*"
+pytest = "*"
 unihan-etl = {path = ".",editable = true}
-sphinx-issues = "==1.2.0"
+sphinx-issues = "*"
+black = "==19.3b0"
 
 [packages]
-unicodecsv = "==0.14.1"
-appdirs = "==1.4.3"
-zhon = "==1.1.5"
+unicodecsv = "*"
+appdirs = "*"
+zhon = "*"
 
 [requires]
 python_version = "3"
