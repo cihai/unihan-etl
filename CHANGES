@@ -4,7 +4,11 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+0.10.2 <2019-08-17>
+-------------------
 - Add ``project_urls`` to setup.py
+- Use plain reStructuredText for CHANGES
+- Use ``collections`` that's compatible with python 2 and 3
 
 0.10.1 <2017-09-08>
 -------------------
