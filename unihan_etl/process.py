@@ -361,11 +361,11 @@ def normalize(raw_data, fields):
     """
     log.info('Collecting field data...')
     items = dict()
-    for idx, l in enumerate(raw_data):
-        if not_junk(l):
-            l = l.strip().split('\t')
-            if in_fields(l[1], fields):
-                item = dict(zip(['ucn', 'field', 'value'], l))
+    for idx, line in enumerate(raw_data):
+        if not_junk(line):
+            line = line.strip().split('\t')
+            if in_fields(line[1], fields):
+                item = dict(zip(['ucn', 'field', 'value'], line))
                 char = ucn_to_unicode(item['ucn'])
                 if char not in items:
                     items[char] = dict().fromkeys(fields)

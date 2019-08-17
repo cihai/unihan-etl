@@ -261,7 +261,7 @@ def expand_kFenn(value):
 
 def expand_kHanyuPinlu(value):
     pattern = re.compile(
-        """
+        r"""
         (?P<phonetic>[a-z({}{}]+)
         \((?P<frequency>[0-9]+)\)
     """.format(
@@ -289,12 +289,12 @@ def expand_kHDZRadBreak(value):
         re.X,
     )
 
-    l = location_pattern.match(loc).groupdict()
+    lmatches = location_pattern.match(loc).groupdict()
     location = {
-        "volume": int(l['volume']),
-        "page": int(l['page']),
-        "character": int(l['character']),
-        "virtual": int(l['virtual']),
+        "volume": int(lmatches['volume']),
+        "page": int(lmatches['page']),
+        "character": int(lmatches['character']),
+        "virtual": int(lmatches['virtual']),
     }
 
     pattern = re.compile(
