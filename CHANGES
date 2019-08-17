@@ -4,6 +4,8 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+- Add ``project_urls`` to setup.py
+
 0.10.1 <2017-09-08>
 -------------------
 - Add code links in API
