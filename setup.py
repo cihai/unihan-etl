@@ -43,6 +43,11 @@ setup(
     name=about['__title__'],
     version=about['__version__'],
     url=about['__github__'],
+    project_urls={
+        'Documentation': about['__docs__'],
+        'Code': about['__github__'],
+        'Issue tracker': about['__tracker__'],
+    },
     download_url=about['__pypi__'],
     license=about['__license__'],
     author=about['__author__'],
