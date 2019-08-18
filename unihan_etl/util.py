@@ -79,11 +79,16 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
     # may have downloaded less if count*block_size > total_size
     maxdownloaded = count * block_size
     percent = min(int(maxdownloaded * 100 / total_size), 100)
+    out.flush()
     if percent > last_percent:
         # TODO: is this acceptable? Do we want to do something nicer?
         out.write(
             '%3d%% [%s>%s]\r'
-            % (percent, int(percent / 2) * '=', int(50 - percent / 2) * ' ')
+            % (
+                percent,
+                int(round(percent / 2)) * '=',
+                int(round(50 - percent / 2)) * ' ',
+            )
         )
         out.flush()
     if maxdownloaded >= total_size:
