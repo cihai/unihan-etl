@@ -4,6 +4,10 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+0.10.3 <2019-08-18>
+-------------------
+- Fix flicker in download progress bar
+
 0.10.2 <2019-08-17>
 -------------------
 - Add ``project_urls`` to setup.py
