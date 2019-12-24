@@ -14,6 +14,7 @@ unihan-etl = {path = ".",editable = true}
 sphinx-issues = "*"
 black = "==19.3b0"
 pytest-cov = "*"
+coverage = "*"
 
 [packages]
 unicodecsv = "*"
