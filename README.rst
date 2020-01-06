@@ -313,3 +313,8 @@ Code layout
     :alt: Documentation Status
     :scale: 100%
     :target: https://readthedocs.org/projects/unihan-etl/
+
+
+.. image:: https://badges.gitter.im/cihai/unihan-etl.svg
+   :alt: Join the chat at https://gitter.im/cihai/unihan-etl
+   :target: https://gitter.im/cihai/unihan-etl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
