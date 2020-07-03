@@ -1,0 +1,43 @@
+[tool.black]
+skip-string-normalization = true
+
+[tool.poetry]
+name = "unihan-etl"
+version = "0.10.3"
+description = "Export UNIHAN to Python, Data Package, CSV, JSON and YAML"
+license = "MIT"
+authors = ["Tony Narlock <tony@git-pull.com>"]
+
+[tool.poetry.dependencies]
+python = "~2.7 || ^3.5"
+unicodecsv = "*"
+appdirs = "*"
+zhon = "*"
+
+[tool.poetry.dev-dependencies]
+alagitpull = "*"
+black = {version="==19.10b0", python="^3.6"}
+doc8 = "*"
+docutils = "*"
+flake8 = "*"
+isort = "*"
+pytest = [
+  {version="<4.7.0", python="<3"},
+  {version="*", python=">=3"}
+]
+pathlib2 = {version="<2.3.5", python="<3"}  # Untangle pytest peer-dependency
+pytest-rerunfailures = "*"
+sphinx = [
+  {version="<2", python="<3"},
+  {version="*", python=">=3"}
+]
+sphinx-argparse = "*"
+sphinx-issues = "*"
+twine = "*"
+codecov = "*"
+colorama = "*"
+coverage = "*"
+pytest-cov = [
+  {version="<2.10.0", python="<3"},
+  {version="*", python=">=3"}
+]
