@@ -16,7 +16,7 @@ zhon = "*"
 
 [tool.poetry.dev-dependencies]
 alagitpull = {version="*", optional = true}
-black = {version="==19.10b0", python="^3.6"}
+black = {version="==19.10b0", python="^3.6",optional = true}
 doc8 = "*"
 docutils = "*"
 flake8 = "*"
