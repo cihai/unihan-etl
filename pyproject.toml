@@ -15,7 +15,7 @@ appdirs = "*"
 zhon = "*"
 
 [tool.poetry.dev-dependencies]
-alagitpull = "*"
+alagitpull = {version="*", optional = true}
 black = {version="==19.10b0", python="^3.6"}
 doc8 = "*"
 docutils = "*"
@@ -28,11 +28,11 @@ pytest = [
 pathlib2 = {version="<2.3.5", python="<3"}  # Untangle pytest peer-dependency
 pytest-rerunfailures = "*"
 sphinx = [
-  {version="<2", python="<3"},
-  {version="*", python=">=3"}
+  {version="<2", python="<3", optional = true},
+  {version="*", python=">=3", optional = true}
 ]
-sphinx-argparse = "*"
-sphinx-issues = "*"
+sphinx-argparse = {version="*", optional = true}
+sphinx-issues = {version="*", optional = true}
 twine = "*"
 codecov = "*"
 colorama = "*"
@@ -41,3 +41,6 @@ pytest-cov = [
   {version="<2.10.0", python="<3"},
   {version="*", python=">=3"}
 ]
+
+[tool.poetry.extras]
+docs = ["sphinx", "sphinx-argparse", "sphinxissues", "alagitpull"]
