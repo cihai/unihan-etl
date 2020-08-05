@@ -9,24 +9,24 @@ Current
 
 - :issue:`228` Move from Pipfile to poetry
 
-0.10.3 <2019-08-18>
--------------------
+unihan-etl 0.10.3 (2019-08-18)
+------------------------------
 - Fix flicker in download progress bar
 
-0.10.2 <2019-08-17>
--------------------
+unihan-etl 0.10.2 (2019-08-17)
+------------------------------
 - Add ``project_urls`` to setup.py
 - Use plain reStructuredText for CHANGES
 - Use ``collections`` that's compatible with python 2 and 3
 - PEP8 tweaks
 
-0.10.1 <2017-09-08>
--------------------
+unihan-etl 0.10.1 (2017-09-08)
+------------------------------
 - Add code links in API
 - Add ``__version__`` to ``unihan_etl``
 
-0.10.0 <2017-08-29>
--------------------
+unihan-etl 0.10.0 (2017-08-29)
+------------------------------
 - :issue:`91` New fields from UNIHAN
   `Revision 25 <https://www.unicode.org/reports/tr38/tr38-25.html>`__.
 
@@ -60,35 +60,35 @@ Current
 - All future commits and contributions are licensed to the
   *cihai software foundation*. This includes commits by Tony Narlock (creator).
 
-0.9.5 <2017-06-26>
-------------------
+unihan-etl 0.9.5 (2017-06-26)
+-----------------------------
 - Enhance support for locations on *kHDZRadBreak* fields.
 
-0.9.4 <2017-06-05>
-------------------
+unihan-etl 0.9.4 (2017-06-05)
+-----------------------------
 - Fix kIRG_GSource without location
 - Fix kFenn output
 - Fix kHanyuPinlu support output for n diacritics
 
-0.9.3 <2017-05-31>
-------------------
+unihan-etl 0.9.3 (2017-05-31)
+-----------------------------
 - Add expansion for kIRGKangXi
 
-0.9.2 <2017-05-31>
-------------------
+unihan-etl 0.9.2 (2017-05-31)
+-----------------------------
 - Normalize Radical-Stroke expansion for kRSUnicode
 - Migrate more fields to regular expressions
 - Normalize character field for kDaeJaweon, kHanyuPinyin,
   and kCheungBauer, kFennIndex, kCheungBauerIndex, kIICore,
   kIRGHanyuDaZidian
 
-0.9.1 <2017-05-27>
-------------------
+unihan-etl 0.9.1 (2017-05-27)
+-----------------------------
 - Support for expanding kGSR
 - Convert some field expansions to use regexes
 
-0.9.0 <2017-05-26>
-------------------
+unihan-etl 0.9.0 (2017-05-26)
+-----------------------------
 - Fix bug where destination file was made into directory on
   first run
 - Rename from unihan-tabular to unihan-etl
@@ -100,81 +100,81 @@ Current
 - Split functionality for expanding unstructured values into
   its own module
 
-0.8.1 <2017-05-20>
-------------------
+unihan-etl 0.8.1 (2017-05-20)
+-----------------------------
 - Update to add *kJa* and adjust source file of
   *kCompatibilityVariant* per Unicode 8.0.0.
 
-0.8.0 <2017-05-17>
-------------------
+unihan-etl 0.8.0 (2017-05-17)
+-----------------------------
 - Support for configuring logging via options and CLI
 - Convert all print statements to use logger
 
-0.7.4 <2017-05-14>
-------------------
+unihan-etl 0.7.4 (2017-05-14)
+-----------------------------
 - Allow for local / file system sources for Unihan.zip
 - Only extract zip if unextracted
 
-0.7.3 <2017-05-13>
-------------------
+unihan-etl 0.7.3 (2017-05-13)
+-----------------------------
 - Update package classifiers
 
-0.7.2 <2017-05-13>
-------------------
+unihan-etl 0.7.2 (2017-05-13)
+-----------------------------
 - Add back datapackage
 
-0.7.1 <2017-05-12>
-------------------
+unihan-etl 0.7.1 (2017-05-12)
+-----------------------------
 - Fix python 2 CSV output
 - Default to CSV output
 
-0.7.0 <2017-05-12>
-------------------
+unihan-etl 0.7.0 (2017-05-12)
+-----------------------------
 - Move unicodecsv module to dependency package
 - Support for XDG directory specification
 - Support for custom destination output, including replacing
   template variable ``{ext}``
 
-0.6.3 <2017-05-11>
-------------------
+unihan-etl 0.6.3 (2017-05-11)
+-----------------------------
 - Move *__about__.py* to module level
 
-0.6.2 <2017-05-11>
-------------------
+unihan-etl 0.6.2 (2017-05-11)
+-----------------------------
 - Fix python package import
 
-0.6.1 <2017-05-10>
-------------------
+unihan-etl 0.6.1 (2017-05-10)
+-----------------------------
 - Fix readme bug on pypi
 
-0.6.0 <2017-05-10>
-------------------
+unihan-etl 0.6.0 (2017-05-10)
+-----------------------------
 - Support for exporting in YAML and JSON
 - More internal factoring and simplification
 - Return data as list
 
-0.5.1 <2017-05-08>
-------------------
+unihan-etl 0.5.1 (2017-05-08)
+-----------------------------
 - Drop python 3.3 an 3.4 support
 
-0.5.0 <2017-05-08>
-------------------
+unihan-etl 0.5.0 (2017-05-08)
+-----------------------------
 - Rename from cihaidata_unihan unihan_tabular
 - Drop datapackages in favor of a universal JSON, YAML and CSV
   export.
 - Only use UnicodeWriter in Python 2, fixes issue with python
   would encode `b` in front of values
 
-0.4.2 <2017-05-07>
-------------------
+unihan-etl 0.4.2 (2017-05-07)
+-----------------------------
 - Rename *scripts/* to *cihaidata_unihan/*
 
-0.4.1 <2017-05-07>
-------------------
+unihan-etl 0.4.1 (2017-05-07)
+-----------------------------
 - Enable invoking tool via ``$ cihaidata_unihan``
 
-0.4.0 <2017-05-07>
-------------------
+unihan-etl 0.4.0 (2017-05-07)
+-----------------------------
 - Major internal refactor and simplification
 - Convert to pytest ``assert`` statements
 - Convert full test suite to pytest functions and fixtures
@@ -183,8 +183,8 @@ Current
 - Lint code, remove unused imports
 - Switch license BSD -> MIT
 
-0.3.0 <2017-04-17>
-------------------
+unihan-etl 0.3.0 (2017-04-17)
+-----------------------------
 - Rebooted
 - Modernize *Makefile* in docs
 - Add Makefile to main project
