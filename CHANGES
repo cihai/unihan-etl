@@ -4,9 +4,10 @@ Changelog
 
 Here you can find the recent changes to the project.
 
-Current
--------
-
+unihan-etl 0.10.4 (2020-08-05)
+------------------------------
+- Update CHANGES headings to produce working links
+- Relax ``appdirs`` version constraint
 - :issue:`228` Move from Pipfile to poetry
 
 unihan-etl 0.10.3 (2019-08-18)
