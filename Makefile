@@ -1,5 +1,5 @@
 PY_FILES= find . -type f -not -path '*/\.*' | grep -i '.*[.]py$$' 2> /dev/null
-
+SHELL:=/bin/bash
 
 entr_warn:
 	@echo "----------------------------------------------------------"
@@ -28,10 +28,10 @@ watch_vulture:
 	if command -v entr > /dev/null; then ${PY_FILES} | entr -c $(MAKE) vulture; else $(MAKE) vulture entr_warn; fi
 
 build_docs:
-	cd doc && $(MAKE) html
+	pushd docs; $(MAKE) html; popd
 
 watch_docs:
-	cd doc && $(MAKE) watch_docs
+	pushd docs; $(MAKE) watch_docs; popd
 
 flake8:
 	flake8 unihan_etl tests
