@@ -502,7 +502,7 @@ class Packager(object):
         if not files_exist(self.options['work_dir'], self.options['input_files']):
             extract_zip(self.options['zip_path'], self.options['work_dir'])
 
-    def export(self):
+    def export(self):  # NOQA: C901
         """Extract zip and process information into CSV's."""
 
         fields = self.options['fields']
