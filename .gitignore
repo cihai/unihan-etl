@@ -40,7 +40,7 @@ nosetests.xml
 
 cihaidata/data/*
 
-doc/_build
+docs/_build
 
 .ropeproject
 .idea
