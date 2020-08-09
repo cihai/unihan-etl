@@ -288,11 +288,73 @@ Code layout
     # test suite
     tests/*
 
+Developing
+----------
+`poetry`_ is a required package to develop.
+
+``git clone https://github.com/cihai/unihan-etl.git``
+
+``cd unihan-etl``
+
+``poetry install -E "docs test coverage lint format"``
+
+Makefile commands prefixed with ``watch_`` will watch files and rerun.
+
+Tests
+"""""
+
+``poetry run py.test``
+
+Helpers: ``make test``
+Rerun tests on file change: ``make watch_test`` (requires `entr(1)`_)
+
+Documentation
+"""""""""""""
+Default preview server: http://localhost:8039
+
+``cd docs/`` and ``make html`` to build. ``make serve`` to start http server.
+
+Helpers:
+``make build_docs``, ``make serve_docs``
+
+Rebuild docs on file change: ``make watch_docs`` (requires `entr(1)`_)
+
+Rebuild docs and run server via one terminal: ``make dev_docs``  (requires above, and a 
+``make(1)`` with ``-J`` support, e.g. GNU Make)
+
+Formatting / Linting
+""""""""""""""""""""
+The project uses `black`_ and `isort`_ (one after the other) and runs `flake8`_ via 
+CI. See the configuration in `pyproject.toml` and `setup.cfg`:
+
+``make black isort``: Run ``black`` first, then ``isort`` to handle import nuances
+``make flake8``, to watch (requires ``entr(1)``): ``make watch_flake8`` 
+
+Releasing
+"""""""""
+
+As of 0.11, `poetry`_ handles virtualenv creation, package requirements, versioning,
+building, and publishing. Therefore there is no setup.py or requirements files.
+
+Update `__version__` in `__about__.py` and `pyproject.toml`::
+
+	git commit -m 'build(unihan-etl): Tag v0.1.1'
+	git tag v0.1.1
+	git push
+	git push --tags
+	poetry build
+	poetry deploy
+
 .. _UNIHAN: http://www.unicode.org/charts/unihan.html
 .. _ETL: https://en.wikipedia.org/wiki/Extract,_transform,_load
 .. _create an issue: https://github.com/cihai/unihan-etl/issues/new
 .. _Data Package: http://frictionlessdata.io/data-packages/
 .. _pyyaml: http://pyyaml.org/
+.. _poetry: https://python-poetry.org/
+.. _entr(1): http://eradman.com/entrproject/
+.. _black: https://github.com/psf/black
+.. _isort: https://pypi.org/project/isort/
+.. _flake8: https://flake8.pycqa.org/
 
 .. |pypi| image:: https://img.shields.io/pypi/v/unihan-etl.svg
     :alt: Python Package
