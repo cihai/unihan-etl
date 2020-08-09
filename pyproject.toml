@@ -31,6 +31,9 @@ packages = [
 
 homepage = "https://unihan-etl.git-pull.com"
 
+[tool.poetry.scripts]
+unihan-etl = 'unihan_etl.__main__:run''
+
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
 Documentation = "https://unihan-etl.git-pull.com"
