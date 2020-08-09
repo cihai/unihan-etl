@@ -3,7 +3,7 @@ skip-string-normalization = true
 
 [tool.poetry]
 name = "unihan-etl"
-version = "0.11.0a1"
+version = "0.11.0a2"
 description = "Export UNIHAN to Python, Data Package, CSV, JSON and YAML"
 license = "MIT"
 authors = ["Tony Narlock <tony@git-pull.com>"]
