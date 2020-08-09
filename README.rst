@@ -298,9 +298,13 @@ Code layout
     :alt: Python Package
     :target: http://badge.fury.io/py/unihan-etl
 
-.. |build-status| image:: https://img.shields.io/travis/cihai/unihan-etl.svg
+.. |docs| image:: https://github.com/cihai/unihan-etl/workflows/Publish%20Docs/badge.svg
+   :alt: Docs
+   :target: https://github.com/cihai/unihan-etl/actions?query=workflow%3A"Publish+Docs"
+
+.. |build-status| image:: https://github.com/cihai/unihan-etl/workflows/test/badge.svg
    :alt: Build Status
-   :target: https://travis-ci.org/cihai/unihan-etl
+   :target: https://github.com/cihai/unihan-etl/actions?query=workflow%3A"test"
 
 .. |coverage| image:: https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg
     :alt: Code Coverage
@@ -308,8 +312,3 @@ Code layout
 
 .. |license| image:: https://img.shields.io/github/license/cihai/unihan-etl.svg
     :alt: License 
-
-.. |docs| image:: https://readthedocs.org/projects/unihan-etl/badge/?version=latest
-    :alt: Documentation Status
-    :scale: 100%
-    :target: https://readthedocs.org/projects/unihan-etl/
