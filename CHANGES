@@ -4,6 +4,14 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+current
+-------
+- Move packaging / publishing to poetry
+- Self host docs
+- Add metadata / icons / etc. for doc site
+- Move travis -> github actions
+- Overhaul Makefiles
+
 unihan-etl 0.10.4 (2020-08-05)
 ------------------------------
 - Update CHANGES headings to produce working links
