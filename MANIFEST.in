@@ -1,4 +1,4 @@
-include README.rst LICENSE CHANGES .tmuxp.yaml
+include README.rst LICENSE CHANGES pyproject.toml .tmuxp.yaml
 recursive-include requirements *.txt
 recursive-include docs *.rst
 recursive-include unihan_etl *.py
