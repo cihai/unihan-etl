@@ -1,40 +1,46 @@
 PY_FILES= find . -type f -not -path '*/\.*' | grep -i '.*[.]py$$' 2> /dev/null
-SHELL:=/bin/bash
+DOC_FILES= find . -type f -not -path '*/\.*' | grep -i '.*[.]rst\$\|.*[.]md\$\|.*[.]css\$\|.*[.]py\$\|mkdocs\.yml\|CHANGES\|TODO\|.*conf\.py' 2> /dev/null
 
 entr_warn:
 	@echo "----------------------------------------------------------"
 	@echo "     ! File watching functionality non-operational !      "
-	@echo ""
+	@echo "                                                          "
 	@echo "Install entr(1) to automatically run tasks on file change."
-	@echo "See http://entrproject.org/"
+	@echo "See http://entrproject.org/                               "
 	@echo "----------------------------------------------------------"
 
 isort:
-	isort `${PY_FILES}`
+	poetry run isort `${PY_FILES}`
 
 black:
-	black `${PY_FILES}` --skip-string-normalization
+	poetry run black `${PY_FILES}` --skip-string-normalization
 
 test:
-	py.test $(test)
+	poetry run py.test $(test)
 
 watch_test:
 	if command -v entr > /dev/null; then ${PY_FILES} | entr -c $(MAKE) test; else $(MAKE) test entr_warn; fi
 
 vulture:
-	vulture unihan_etl
+	poetry run vulture unihan_etl
 
 watch_vulture:
 	if command -v entr > /dev/null; then ${PY_FILES} | entr -c $(MAKE) vulture; else $(MAKE) vulture entr_warn; fi
 
 build_docs:
-	pushd docs; $(MAKE) html; popd
+	poetry run mkdocs build
 
 watch_docs:
-	pushd docs; $(MAKE) watch_docs; popd
+	if command -v entr > /dev/null; then ${DOC_FILES} | entr -c $(MAKE) build_docs; else $(MAKE) build_docs entr_warn; fi
+
+serve_docs:
+	python -m http.server --directory site
+
+dev_docs:
+	$(MAKE) -j watch_docs serve_docs
 
 flake8:
-	flake8 unihan_etl tests
+	flake8
 
 watch_flake8:
 	if command -v entr > /dev/null; then ${PY_FILES} | entr -c $(MAKE) flake8; else $(MAKE) flake8 entr_warn; fi
