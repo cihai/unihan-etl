@@ -27,11 +27,14 @@ vulture:
 watch_vulture:
 	if command -v entr > /dev/null; then ${PY_FILES} | entr -c $(MAKE) vulture; else $(MAKE) vulture entr_warn; fi
 
+build_docs:
+	$(MAKE) -C docs html
+
 watch_docs:
 	if command -v entr > /dev/null; then ${DOC_FILES} | entr -c $(MAKE) build_docs; else $(MAKE) build_docs entr_warn; fi
 
 serve_docs:
-	python -m http.server --directory site
+	$(MAKE) -C docs serve
 
 dev_docs:
 	$(MAKE) -j watch_docs serve_docs
