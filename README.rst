@@ -364,9 +364,9 @@ Update `__version__` in `__about__.py` and `pyproject.toml`::
    :alt: Docs
    :target: https://github.com/cihai/unihan-etl/actions?query=workflow%3A"Publish+Docs"
 
-.. |build-status| image:: https://github.com/cihai/unihan-etl/workflows/test/badge.svg
+.. |build-status| image:: https://github.com/cihai/unihan-etl/workflows/tests/badge.svg
    :alt: Build Status
-   :target: https://github.com/cihai/unihan-etl/actions?query=workflow%3A"test"
+   :target: https://github.com/cihai/unihan-etl/actions?query=workflow%3A"tests"
 
 .. |coverage| image:: https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg
     :alt: Code Coverage
