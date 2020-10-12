@@ -48,7 +48,7 @@ class TitleVisitor(nodes.NodeVisitor):
 
        0.10.1 <2017-09-08>
        -------------------
-   """
+    """
 
     def __init__(self, document, app):
         nodes.NodeVisitor.__init__(self, document)
