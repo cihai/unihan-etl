@@ -333,8 +333,7 @@ def test_expand_kRSAdobe_Japan1_6(expanded_data, ucn, expected):
     ],
 )
 def test_expand_radical_stroke_counts(expanded_data, field, ucn, expected):
-    """kRSJapanese
-    """
+    """kRSJapanese"""
     item = [i for i in expanded_data if i['ucn'] == ucn][0]
     assert item[field] == expected
 
