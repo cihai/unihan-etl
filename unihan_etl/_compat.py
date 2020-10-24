@@ -11,11 +11,11 @@ if PY2:
     text_type = unicode
     string_types = (str, unicode)
 
+    from itertools import izip
+    from urllib import urlretrieve
+
     from cStringIO import StringIO as BytesIO
     from StringIO import StringIO
-
-    from urllib import urlretrieve
-    from itertools import izip
 
     Mapping = collections.Mapping
 
@@ -25,8 +25,7 @@ else:
     text_type = str
     string_types = (str,)
 
-    from io import StringIO, BytesIO
-
+    from io import BytesIO, StringIO
     from urllib.request import urlretrieve
 
     izip = zip
