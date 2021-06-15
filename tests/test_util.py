@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 from unihan_etl._compat import text_type
 from unihan_etl.util import ucn_to_unicode, ucnstring_to_unicode
 

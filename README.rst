@@ -204,7 +204,7 @@ Features
 * `data package`_ support
 * expansion of multi-value delimited fields in YAML, JSON and python
   dictionaries 
-* supports python 2.7, >= 3.5 and pypy
+* supports >= 3.6 and pypy
 
 If you encounter a problem or have a question, please `create an
 issue`_.

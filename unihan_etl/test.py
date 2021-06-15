@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """Test helpers functions for downloading and processing Unihan data."""
-from __future__ import absolute_import, unicode_literals
 
 
 def assert_dict_contains_subset(subset, dictionary, msg=None):
