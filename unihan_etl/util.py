@@ -1,12 +1,9 @@
-# -*- coding: utf8 -*-
 """Utility and helper methods for script.
 
 util
 ~~~~
 
 """
-from __future__ import absolute_import, unicode_literals
-
 import re
 import sys
 
