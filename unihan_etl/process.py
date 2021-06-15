@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
 """Build Unihan into tabular / structured format and export it."""
-from __future__ import absolute_import, unicode_literals
-
 import argparse
 import codecs
 import fileinput

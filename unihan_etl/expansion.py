@@ -1,4 +1,3 @@
-# -*- coding: utf8 -*-
 """
 Functions to uncompact details inside field values.
 
@@ -11,9 +10,6 @@ Notes
 2. module-level function bytecode is cached in python
 3. the last used compiled regexes are cached
 """
-
-from __future__ import absolute_import, unicode_literals
-
 import re
 
 import zhon.hanzi
