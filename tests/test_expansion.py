@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Test expansion of multi-value fields in UNIHAN."""
-from __future__ import absolute_import, unicode_literals
-
 import pytest
 
 from unihan_etl import constants, expansion

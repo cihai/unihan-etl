@@ -14,9 +14,7 @@ classifiers = [
   'Environment :: Web Environment',
   'Intended Audience :: Developers',
   'Programming Language :: Python',
-  'Programming Language :: Python :: 2.7',
   'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.5',
   'Programming Language :: Python :: 3.6',
   'Programming Language :: Python :: 3.7',
   'Programming Language :: Python :: 3.8',
@@ -43,27 +41,20 @@ Documentation = "https://unihan-etl.git-pull.com"
 Repository = "https://github.com/cihai/unihan-etl"
 
 [tool.poetry.dependencies]
-python = "~2.7 || ^3.5"
+python = "^3.6"
 unicodecsv = "*"
 appdirs = "*"
 zhon = "*"
 
 [tool.poetry.dev-dependencies]
 ### Docs ###
-sphinx = [
-  {version="<2", python="<3"},
-  {version="*", python=">=3"}
-]
-alagitpull = {version = "^0.1.0"}
-sphinx-issues = {version = "^1.2.0"}
-sphinx-argparse = {version = "^0.2.5"}
+sphinx = "*"
+alagitpull = "^0.1.0"
+sphinx-issues = "^1.2.0"
+sphinx-argparse = "^0.2.5"
 
 ### Testing ###
-pytest = [
-  {version="<4.7.0", python="<3"},
-  {version="*", python=">=3"}
-]
-pathlib2 = {version="<2.3.5", python="<3"}  # Untangle pytest peer-dependency
+pytest = "*"
 pytest-rerunfailures = "*"
 
 ### Coverage ###
@@ -76,17 +67,14 @@ pytest-cov = [
 
 ### Format ###
 black = {version="==21.6b0", python="^3.6.2"}
-isort = [
-  {version="<5", python="<3.6"},
-  {version="*", python=">=3.6"}
-]
+isort = "*"
 
 ### Lint ###
 flake8 = "*"
 
 [tool.poetry.extras]
 docs = ["sphinx", "sphinx-issues", "sphinx-argparse", "alagitpull"]
-test = ["pytest", "pathlib2", "pytest-rerunfailures"]
+test = ["pytest", "pytest-rerunfailures"]
 coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
 lint = ["flake8"]
