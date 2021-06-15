@@ -4,6 +4,11 @@ Changelog
 
 Here you can find the recent changes to the project.
 
+current
+-------
+- Update `black` to 21.6b0
+- Update trove classifiers to 3.9
+
 unihan-etl 0.11.0 (2020-08-09)
 ------------------------------
 - :issue:`230` Move packaging / publishing to poetry
