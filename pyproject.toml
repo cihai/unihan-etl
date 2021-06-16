@@ -25,7 +25,7 @@ classifiers = [
 ]
 keywords = ["unihan", "sqlalchemy", "cjk", "yaml", "json"]
 
-readme = 'README.rst'
+readme = 'README.md'
 packages = [
     { include = "unihan_etl" }
 ]
