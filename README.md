@@ -6,7 +6,7 @@ _unihan-etl_
 [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 ![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)
 
-[ETL](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) tool for
+[ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) tool for
 Unicode's Han Unification
 ([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases.
 unihan-etl retrieves (downloads), extracts (unzips), and transforms the
