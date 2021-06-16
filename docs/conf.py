@@ -31,6 +31,7 @@ extensions = [
     'sphinxarg.ext',  # sphinx-argparse
     'sphinx_issues',
     'changelog',  # _ext/changelog.py
+    'myst_parser',
 ]
 
 issues_github_path = about['__github__'].replace('https://github.com/', '')
@@ -38,6 +39,8 @@ issues_github_path = about['__github__'].replace('https://github.com/', '')
 templates_path = ['_templates']
 
 source_suffix = {'.rst': 'restructuredtext', '.md': 'markdown'}
+
+myst_enable_extensions = ['colon_fence']
 
 master_doc = 'index'
 
@@ -120,9 +123,8 @@ texinfo_documents = [
 ]
 
 intersphinx_mapping = {
-    'python': ('http://docs.python.org/', None),
-    'sphinx': ('http://sphinx.readthedocs.org/en/latest/', None),
-    'sqlalchemy': ('http://sqlalchemy.readthedocs.org/en/latest/', None),
+    'python': ('https://docs.python.org/', None),
+    'sqlalchemy': ('https://sqlalchemy.readthedocs.org/en/latest/', None),
 }
 
 
