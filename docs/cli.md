@@ -1,10 +1,10 @@
-.. _cli:
+(cli)=
 
-======================
-Command Line Interface
-======================
+# Command Line Interface
 
+```{eval-rst}
 .. argparse::
     :module: unihan_etl.process
     :func: get_parser
     :prog: unihan-etl
+```
