@@ -22,6 +22,7 @@ with open("../unihan_etl/__about__.py") as fp:
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx_autodoc_typehints',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.napoleon',
@@ -36,7 +37,7 @@ issues_github_path = about['__github__'].replace('https://github.com/', '')
 
 templates_path = ['_templates']
 
-source_suffix = '.rst'
+source_suffix = {'.rst': 'restructuredtext', '.md': 'markdown'}
 
 master_doc = 'index'
 
