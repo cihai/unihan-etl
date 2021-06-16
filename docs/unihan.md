@@ -4,7 +4,7 @@
 
 :::{seealso}
 
-- [Wikipedia article](<https://en.wikipedia.org/wiki/Han_unification>)
+- [Wikipedia article](https://en.wikipedia.org/wiki/Han_unification)
 - [UNIHAN database documentation][unihan database documentation]
 
 :::
@@ -26,7 +26,7 @@ character.
 
 This entails pulling together minds from around the world to assign codepoints.
 
-The *Unicode Consortium* is a non-profit organization founded to develop,
+The _Unicode Consortium_ is a non-profit organization founded to develop,
 extend and promote use of the Unicode Standard.
 
 ## What is UNIHAN?
@@ -61,12 +61,12 @@ released, it is then incorporated downstream in software projects.
 ## The database
 
 UNIHAN provides a database of its information, which is the culmination
-of CJK information  that has been vetted and proofed painstakingly over years.
+of CJK information that has been vetted and proofed painstakingly over years.
 
 You can view the [UNIHAN Database documentation][unihan database documentation] to see where information
 on each field of information is derived from. For instance:
 
-- [kCantonese](<http://www.unicode.org/reports/tr38/#kCantonese>):
+- [kCantonese](http://www.unicode.org/reports/tr38/#kCantonese):
   The Cantonese pronunciation(s) for this character using the
   [jyutping romanization][jyutping romanization].
 
@@ -81,13 +81,15 @@ on each field of information is derived from. For instance:
   7. 中華新字典, Hong Kong:中華書局, 1987.
   8. 黃港生, ed. 商務新詞典, Hong Kong: The Commercial Press, 1991.
   9. 朗文初級中文詞典, Hong Kong: Longman, 2001.
-- [kHanYu](<http://www.unicode.org/reports/tr38/#kHanYu>): The position of this
+
+- [kHanYu](http://www.unicode.org/reports/tr38/#kHanYu): The position of this
   character in the Hanyu Da Zidian (HDZ) Chinese character dictionary.
 
   Bibliography:
 
   1. <Hanyu Da Zidian> [‘Great Chinese Character Dictionary’ (in 8 Volumes)]. XU Zhongshu (Editor in Chief). Wuhan, Hubei Province (PRC): Hubei and Sichuan Dictionary Publishing Collectives, 1986-1990. ISBN: 7-5403-0030-2/H.16.
-- [kHanyuPinyin](<http://www.unicode.org/reports/tr38/#kHanyuPinyin>):
+
+- [kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin):
   The 漢語拼音 Hànyǔ Pīnyīn reading(s) appearing in the edition of 《漢語大字典
   [Hànyǔ Dà Zìdiǎn][hànyǔ dà zìdiǎn] (HDZ) specified in the “kHanYu” property description (q.v.).
 
@@ -100,17 +102,11 @@ on each field of information is derived from. For instance:
 Han Unification is a global effort. And it's available free to the world.
 
 [unicode]: https://en.wikipedia.org/wiki/Unicode
-
 [han unification]: https://en.wikipedia.org/wiki/Han_unification
-
 [ideographic rapporteur group]: https://en.wikipedia.org/wiki/Ideographic_Rapporteur_Group
-
 [han character]: https://en.wikipedia.org/wiki/Chinese_characters
-
 [unihan database documentation]: http://www.unicode.org/reports/tr38/
-
 [jyutping romanization]: https://en.wikipedia.org/wiki/Jyutping
-
 [hànyǔ dà zìdiǎn]: https://en.wikipedia.org/wiki/Hanyu_Da_Zidian
 
 ## The problem
@@ -119,24 +115,24 @@ It's difficult to readily take advantage of UNIHAN database in its
 raw form.
 
 UNIHAN comprises over 20 MB of character information, separated
-across multiple files. Within these files is *90* fields, spanning 8
+across multiple files. Within these files is _90_ fields, spanning 8
 general categories of data. Within some of fields, there are specific
 considerations to take account of to use the data correctly, for instance:
 
 UNIHAN's values place references to its own codepoints, such as
-*kDefinition*:
+_kDefinition_:
 
 ```
 U+3400       kDefinition     (same as U+4E18 丘) hillock or mound
 ```
 
-And also by spaces, such as in *kCantonese*:
+And also by spaces, such as in _kCantonese_:
 
 ```
 U+342B       kCantonese      gun3 hung1 zung1
 ```
 
-And by spaces which specify different sources, like *kMandarin*, "When
+And by spaces which specify different sources, like _kMandarin_, "When
 there are two values, then the first is preferred for zh-Hans (CN) and the
 second is preferred for zh-Hant (TW). When there is only one value, it is
 appropriate for both.":
@@ -146,14 +142,14 @@ U+7E43        kMandarin       běng bēng
 ```
 
 Another, values are delimited in various ways, for instance, by rules,
-like *kDefinition*, "Major definitions are separated by semicolons, and minor
+like _kDefinition_, "Major definitions are separated by semicolons, and minor
 definitions by commas.":
 
 ```
 U+3402       kDefinition     (J) non-standard form of U+559C 喜, to like, love, enjoy; a joyful thing
 ```
 
-More complicated yet, *kHanyuPinyin*: "multiple locations for a given
+More complicated yet, _kHanyuPinyin_: "multiple locations for a given
 pīnyīn reading are separated by “,” (comma). The list of locations is
 followed by “:” (colon), followed by a comma-separated list of one or more
 pīnyīn readings. Where multiple pīnyīn readings are associated with a
@@ -177,5 +173,3 @@ Even then, users may not want an export that expands the structured
 output of fields. So if a tool exists, exports should be configurable. Users
 could then export a field with `gun3 hung1 zung1` pristinely without
 turning it into list form.
-
-
