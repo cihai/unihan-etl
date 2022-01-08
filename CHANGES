@@ -3,9 +3,16 @@
 ## current
 
 - Updates go here
-- #296: Update poetry to 1.1
-  - CI: Use poetry 1.1.7 and `install-poetry.py` installer
+
+#### Compatibility
+- Add Python 3.10 (#248)
+- Dropped Python 3.6 (#248)
+
+#### Development
+- Update poetry to 1.1
+  - CI: Use poetry 1.1.12 and `install-poetry.py` installer (#237 + #248)
   - Relock poetry.lock at 1.1 (w/ 1.1.7's fix)
+- Add `.pre-commit-config.yaml`
 
 ## unihan-etl 0.13.0 (2021-06-16)
 
