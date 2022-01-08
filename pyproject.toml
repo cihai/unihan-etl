@@ -25,13 +25,15 @@ classifiers = [
   "Topic :: Software Development :: Internationalization"
 ]
 keywords = ["unihan", "sqlalchemy", "cjk", "yaml", "json"]
-
+homepage = "https://unihan-etl.git-pull.com"
 readme = 'README.md'
+
 packages = [
     { include = "unihan_etl" }
 ]
-
-homepage = "https://unihan-etl.git-pull.com"
+include = [
+    { path = "tests", format = "sdist" }
+]
 
 [tool.poetry.scripts]
 unihan-etl = 'unihan_etl.__main__:run'
