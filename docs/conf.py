@@ -29,12 +29,9 @@ extensions = [
     'sphinx.ext.linkcode',
     'alagitpull',
     'sphinxarg.ext',  # sphinx-argparse
-    'sphinx_issues',
     'changelog',  # _ext/changelog.py
     'myst_parser',
 ]
-
-issues_github_path = about['__github__'].replace('https://github.com/', '')
 
 templates_path = ['_templates']
 
