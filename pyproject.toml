@@ -40,6 +40,7 @@ unihan-etl = 'unihan_etl.__main__:run'
 "Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
 Documentation = "https://unihan-etl.git-pull.com"
 Repository = "https://github.com/cihai/unihan-etl"
+Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 
 [tool.poetry.dependencies]
 python = "^3.7"
