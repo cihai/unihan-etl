@@ -63,10 +63,7 @@ pytest-rerunfailures = "*"
 ### Coverage ###
 codecov = "*"
 coverage = "*"
-pytest-cov = [
-  {version="<2.10.0", python="<3"},
-  {version="*", python=">=3"}
-]
+pytest-cov = "*"
 
 ### Format ###
 black = {version="==21.9b0"}
