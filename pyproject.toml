@@ -41,7 +41,7 @@ Documentation = "https://unihan-etl.git-pull.com"
 Repository = "https://github.com/cihai/unihan-etl"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 unicodecsv = "*"
 appdirs = "*"
 zhon = "*"
@@ -68,7 +68,7 @@ pytest-cov = [
 ]
 
 ### Format ###
-black = {version="==21.9b0", python="^3.6.2"}
+black = {version="==21.9b0"}
 isort = "*"
 
 ### Lint ###
