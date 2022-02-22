@@ -18,11 +18,11 @@ import zhon.pinyin
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
 #: diacritics from kHanyuPinlu
-N_DIACRITICS = 'ńňǹ'
+N_DIACRITICS = "ńňǹ"
 
 
 def expand_kDefinition(value):
-    return [c.strip() for c in value.split(';')]
+    return [c.strip() for c in value.split(";")]
 
 
 def expand_kMandarin(value):
@@ -57,10 +57,10 @@ def expand_kHanYu(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "volume": int(m['volume']),
-            "page": int(m['page']),
-            "character": int(m['character']),
-            "virtual": int(m['virtual']),
+            "volume": int(m["volume"]),
+            "page": int(m["page"]),
+            "character": int(m["character"]),
+            "virtual": int(m["virtual"]),
         }
     return value
 
@@ -79,10 +79,10 @@ def expand_kIRGHanyuDaZidian(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "volume": int(m['volume']),
-            "page": int(m['page']),
-            "character": int(m['character']),
-            "virtual": int(m['virtual']),
+            "volume": int(m["volume"]),
+            "page": int(m["page"]),
+            "character": int(m["character"]),
+            "virtual": int(m["virtual"]),
         }
     return value
 
@@ -99,16 +99,16 @@ def expand_kHanyuPinyin(value):
     )
 
     for i, v in enumerate(value):
-        v = [s.split(',') for s in v.split(':')]
+        v = [s.split(",") for s in v.split(":")]
         value[i] = {"locations": v[0], "readings": v[1]}
 
-        for n, loc in enumerate(value[i]['locations']):
+        for n, loc in enumerate(value[i]["locations"]):
             m = location_pattern.match(loc).groupdict()
-            value[i]['locations'][n] = {
-                "volume": int(m['volume']),
-                "page": int(m['page']),
-                "character": int(m['character']),
-                "virtual": int(m['virtual']),
+            value[i]["locations"][n] = {
+                "volume": int(m["volume"]),
+                "page": int(m["page"]),
+                "character": int(m["character"]),
+                "virtual": int(m["virtual"]),
             }
     return value
 
@@ -125,16 +125,16 @@ def expand_kXHC1983(value):
     )
 
     for i, v in enumerate(value):
-        vals = v.split(':')
-        value[i] = {"locations": vals[0].split(','), "reading": vals[1]}
+        vals = v.split(":")
+        value[i] = {"locations": vals[0].split(","), "reading": vals[1]}
 
-        for n, loc in enumerate(value[i]['locations']):
+        for n, loc in enumerate(value[i]["locations"]):
             m = pattern.match(loc).groupdict()
-            value[i]['locations'][n] = {
-                "page": int(m['page']),
-                "character": int(m['character']),
-                "entry": int(m['entry']),
-                "substituted": m['substituted'] == "*",
+            value[i]["locations"][n] = {
+                "page": int(m["page"]),
+                "character": int(m["character"]),
+                "entry": int(m["entry"]),
+                "substituted": m["substituted"] == "*",
             }
     return value
 
@@ -151,10 +151,10 @@ def expand_kCheungBauer(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "radical": int(m['radical']),
-            "strokes": int(m['strokes']),
-            "cangjie": m['cangjie'] or None,
-            "readings": m['readings'].split(','),
+            "radical": int(m["radical"]),
+            "strokes": int(m["strokes"]),
+            "cangjie": m["cangjie"] or None,
+            "readings": m["readings"].split(","),
         }
     return value
 
@@ -175,11 +175,11 @@ def expand_kRSAdobe_Japan1_6(value):
         m = pattern.match(v).groupdict()
 
         value[i] = {
-            "type": m['type'],
-            "cid": int(m['cid']),
-            "radical": int(m['radical']),
-            "strokes": int(m['strokes']),
-            "strokes-residue": int(m['strokes_residue']),
+            "type": m["type"],
+            "cid": int(m["cid"]),
+            "radical": int(m["radical"]),
+            "strokes": int(m["strokes"]),
+            "strokes-residue": int(m["strokes_residue"]),
         }
     return value
 
@@ -196,9 +196,9 @@ def expand_kCihaiT(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "page": int(m['page']),
-            "row": int(m['row']),
-            "character": int(m['character']),
+            "page": int(m["page"]),
+            "row": int(m["row"]),
+            "character": int(m["character"]),
         }
     return value
 
@@ -221,9 +221,9 @@ def expand_kDaeJaweon(value):
     m = pattern.match(value).groupdict()
 
     value = {
-        "page": int(m['page']),
-        "character": int(m['character']),
-        "virtual": int(m['virtual']),
+        "page": int(m["page"]),
+        "character": int(m["character"]),
+        "virtual": int(m["virtual"]),
     }
     return value
 
@@ -251,7 +251,7 @@ def expand_kFenn(value):
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict(v)
-        value[i] = {"phonetic": m['phonetic'], "frequency": m['frequency']}
+        value[i] = {"phonetic": m["phonetic"], "frequency": m["frequency"]}
     return value
 
 
@@ -268,12 +268,12 @@ def expand_kHanyuPinlu(value):
 
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
-        value[i] = {"phonetic": m['phonetic'], "frequency": int(m['frequency'])}
+        value[i] = {"phonetic": m["phonetic"], "frequency": int(m["frequency"])}
     return value
 
 
 def expand_kHDZRadBreak(value):
-    rad, loc = value.split(':')
+    rad, loc = value.split(":")
 
     location_pattern = re.compile(
         r"""
@@ -287,10 +287,10 @@ def expand_kHDZRadBreak(value):
 
     lmatches = location_pattern.match(loc).groupdict()
     location = {
-        "volume": int(lmatches['volume']),
-        "page": int(lmatches['page']),
-        "character": int(lmatches['character']),
-        "virtual": int(lmatches['virtual']),
+        "volume": int(lmatches["volume"]),
+        "page": int(lmatches["page"]),
+        "character": int(lmatches["character"]),
+        "virtual": int(lmatches["virtual"]),
     }
 
     pattern = re.compile(
@@ -304,12 +304,12 @@ def expand_kHDZRadBreak(value):
     )
     m = pattern.match(rad).groupdict()
 
-    return {"radical": m['radical'], "ucn": m['ucn'], "location": location}
+    return {"radical": m["radical"], "ucn": m["ucn"], "location": location}
 
 
 def expand_kSBGY(value):
     for i, v in enumerate(value):
-        vals = v.split('.')
+        vals = v.split(".")
         value[i] = {"page": int(vals[0]), "character": int(vals[1])}
     return value
 
@@ -327,9 +327,9 @@ def _expand_kRSGeneric(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "radical": int(m['radical']),
-            "strokes": int(m['strokes']),
-            "simplified": m['simplified'] == "'",
+            "radical": int(m["radical"]),
+            "strokes": int(m["strokes"]),
+            "simplified": m["simplified"] == "'",
         }
     return value
 
@@ -342,7 +342,7 @@ expand_kRSKorean = _expand_kRSGeneric
 
 
 def _expand_kIRG_GenericSource(value):
-    v = value.split('-')
+    v = value.split("-")
 
     return {"source": v[0], "location": v[1] if len(v) > 1 else None}
 
@@ -371,16 +371,16 @@ def expand_kGSR(value):
     for i, v in enumerate(value):
         m = pattern.match(v).groupdict()
         value[i] = {
-            "set": int(m['set']),
-            "letter": m['letter'],
-            "apostrophe": m['apostrophe'] == "'",
+            "set": int(m["set"]),
+            "letter": m["letter"],
+            "apostrophe": m["apostrophe"] == "'",
         }
     return value
 
 
 def expand_kCheungBauerIndex(value):
     for i, v in enumerate(value):
-        m = v.split('.')
+        m = v.split(".")
         value[i] = {"page": int(m[0]), "character": int(m[1])}
     return value
 
@@ -405,10 +405,10 @@ def expand_field(field, fvalue):
         expanded field information per UNIHAN's documentation
     """
     if field in SPACE_DELIMITED_FIELDS and fvalue:
-        fvalue = fvalue.split(' ')
+        fvalue = fvalue.split(" ")
 
     try:
-        expansion_func = eval('expand_%s' % field)
+        expansion_func = eval("expand_%s" % field)
         return expansion_func(fvalue)
     except NameError:
         pass

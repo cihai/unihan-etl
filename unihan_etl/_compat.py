@@ -19,7 +19,7 @@ if PY2:
 
     Mapping = collections.Mapping
 
-    exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
+    exec("def reraise(tp, value, tb=None):\n raise tp, value, tb")
 else:
     unichr = chr
     text_type = str

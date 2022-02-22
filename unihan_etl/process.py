@@ -37,7 +37,7 @@ dirs = AppDirs(__package_name__, __author__)  # appname  # app author
 
 def not_junk(line):
     """Return False on newlines and C-style comments."""
-    return line[0] != '#' and line != '\n'
+    return line[0] != "#" and line != "\n"
 
 
 def in_fields(c, fields):
@@ -70,44 +70,44 @@ def get_files(fields):
                 if any(file_ for h in fields if h in file_fields):
                     files.add(file_)
         else:
-            raise KeyError('Field {0} not found in file list.'.format(field))
+            raise KeyError("Field {0} not found in file list.".format(field))
 
     return list(files)
 
 
 #: Directory to use for processing intermittent files.
-WORK_DIR = os.path.join(dirs.user_cache_dir, 'downloads')
+WORK_DIR = os.path.join(dirs.user_cache_dir, "downloads")
 #: Default Unihan Files
 UNIHAN_FILES = UNIHAN_MANIFEST.keys()
 #: URI of Unihan.zip data.
-UNIHAN_URL = 'http://www.unicode.org/Public/UNIDATA/Unihan.zip'
+UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
 #: Filepath to output built CSV file to.
 DESTINATION_DIR = dirs.user_data_dir
 #: Filepath to download Zip file.
-UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, 'Unihan.zip')
+UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, "Unihan.zip")
 #: Default Unihan fields
 UNIHAN_FIELDS = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
-ALLOWED_EXPORT_TYPES = ['json', 'csv']
+ALLOWED_EXPORT_TYPES = ["json", "csv"]
 try:
     import yaml
 
-    ALLOWED_EXPORT_TYPES += ['yaml']
+    ALLOWED_EXPORT_TYPES += ["yaml"]
 except ImportError:
     pass
 
 DEFAULT_OPTIONS = {
-    'source': UNIHAN_URL,
-    'destination': '%s/unihan.{ext}' % DESTINATION_DIR,
-    'zip_path': UNIHAN_ZIP_PATH,
-    'work_dir': WORK_DIR,
-    'fields': (INDEX_FIELDS + UNIHAN_FIELDS),
-    'format': 'csv',
-    'input_files': UNIHAN_FILES,
-    'download': False,
-    'expand': True,
-    'prune_empty': True,
-    'log_level': 'INFO',
+    "source": UNIHAN_URL,
+    "destination": "%s/unihan.{ext}" % DESTINATION_DIR,
+    "zip_path": UNIHAN_ZIP_PATH,
+    "work_dir": WORK_DIR,
+    "fields": (INDEX_FIELDS + UNIHAN_FIELDS),
+    "format": "csv",
+    "input_files": UNIHAN_FILES,
+    "download": False,
+    "expand": True,
+    "prune_empty": True,
+    "log_level": "INFO",
 }
 
 
@@ -123,10 +123,10 @@ def get_parser():
     """
     parser = argparse.ArgumentParser(prog=__title__, description=__description__)
     parser.add_argument(
-        '-v',
-        '--version',
-        action='version',
-        version='%(prog)s {version}'.format(version=__version__),
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=__version__),
     )
     parser.add_argument(
         "-s",
@@ -154,12 +154,12 @@ def get_parser():
         "--format",
         dest="format",
         choices=ALLOWED_EXPORT_TYPES,
-        help="Default: %s" % DEFAULT_OPTIONS['format'],
+        help="Default: %s" % DEFAULT_OPTIONS["format"],
     )
     parser.add_argument(
         "--no-expand",
         dest="expand",
-        action='store_false',
+        action="store_false",
         help=(
             "Don't expand values to lists in multi-value UNIHAN fields. "
             + "Doesn't apply to CSVs."
@@ -168,7 +168,7 @@ def get_parser():
     parser.add_argument(
         "--no-prune",
         dest="prune_empty",
-        action='store_false',
+        action="store_false",
         help=("Don't prune fields with empty keys" + "Doesn't apply to CSVs."),
     )
 
@@ -179,24 +179,24 @@ def get_parser():
         nargs="*",
         help=(
             "Fields to use in export. Separated by spaces. "
-            "All fields used by default. Fields: %s" % ', '.join(UNIHAN_FIELDS)
+            "All fields used by default. Fields: %s" % ", ".join(UNIHAN_FIELDS)
         ),
     )
     parser.add_argument(
         "-i",
         "--input-files",
         dest="input_files",
-        nargs='*',
+        nargs="*",
         help=(
             "Files inside zip to pull data from. Separated by spaces. "
-            "All files used by default. Files: %s" % ', '.join(UNIHAN_FILES)
+            "All files used by default. Files: %s" % ", ".join(UNIHAN_FILES)
         ),
     )
     parser.add_argument(
         "-l",
         "--log_level",
         dest="log_level",
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
     )
     return parser
 
@@ -275,15 +275,15 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
         os.makedirs(datadir)
 
     def no_unihan_files_exist():
-        return not glob.glob(os.path.join(datadir, 'Unihan*.txt'))
+        return not glob.glob(os.path.join(datadir, "Unihan*.txt"))
 
     def not_downloaded():
-        return not os.path.exists(os.path.join(datadir, 'Unihan.zip'))
+        return not os.path.exists(os.path.join(datadir, "Unihan.zip"))
 
     if no_unihan_files_exist():
         if not_downloaded():
-            log.info('Downloading Unihan.zip...')
-            log.info('%s to %s' % (url, dest))
+            log.info("Downloading Unihan.zip...")
+            log.info("%s to %s" % (url, dest))
             if os.path.isfile(url):
                 shutil.copy(url, dest)
             elif reporthook:
@@ -308,11 +308,11 @@ def load_data(files):
         combined data from files
     """
 
-    log.info('Loading data: %s.' % ', '.join(files))
+    log.info("Loading data: %s." % ", ".join(files))
     raw_data = fileinput.FileInput(
-        files=files, openhook=fileinput.hook_encoded('utf-8')
+        files=files, openhook=fileinput.hook_encoded("utf-8")
     )
-    log.info('Done loading data.')
+    log.info("Done loading data.")
     return raw_data
 
 
@@ -334,7 +334,7 @@ def extract_zip(zip_path, dest_dir):
     """
 
     z = zipfile.ZipFile(zip_path)
-    log.info('extract_zip dest dir: %s' % dest_dir)
+    log.info("extract_zip dest dir: %s" % dest_dir)
     z.extractall(dest_dir)
 
     return z
@@ -356,25 +356,25 @@ def normalize(raw_data, fields):
     list :
         list of unihan character information
     """
-    log.info('Collecting field data...')
+    log.info("Collecting field data...")
     items = dict()
     for idx, line in enumerate(raw_data):
         if not_junk(line):
-            line = line.strip().split('\t')
+            line = line.strip().split("\t")
             if in_fields(line[1], fields):
-                item = dict(zip(['ucn', 'field', 'value'], line))
-                char = ucn_to_unicode(item['ucn'])
+                item = dict(zip(["ucn", "field", "value"], line))
+                char = ucn_to_unicode(item["ucn"])
                 if char not in items:
                     items[char] = dict().fromkeys(fields)
-                    items[char]['ucn'] = item['ucn']
-                    items[char]['char'] = char
-                items[char][item['field']] = text_type(item['value'])
+                    items[char]["ucn"] = item["ucn"]
+                    items[char]["char"] = char
+                items[char][item["field"]] = text_type(item["value"])
         if log.isEnabledFor(logging.DEBUG):
-            sys.stdout.write('\rProcessing line %i' % (idx))
+            sys.stdout.write("\rProcessing line %i" % (idx))
             sys.stdout.flush()
 
     if log.isEnabledFor(logging.DEBUG):
-        sys.stdout.write('\n')
+        sys.stdout.write("\n")
         sys.stdout.flush()
 
     return [i for i in items.values()]
@@ -423,42 +423,42 @@ def listify(data, fields):
 def export_csv(data, destination, fields):
     data = listify(data, fields)
 
-    with open(destination, 'w') as f:
+    with open(destination, "w") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(data)
-        log.info('Saved output to: %s' % destination)
+        log.info("Saved output to: %s" % destination)
 
 
 def export_json(data, destination):
-    with codecs.open(destination, 'w', encoding='utf-8') as f:
+    with codecs.open(destination, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-        log.info('Saved output to: %s' % destination)
+        log.info("Saved output to: %s" % destination)
 
 
 def export_yaml(data, destination):
-    with codecs.open(destination, 'w', encoding='utf-8') as f:
+    with codecs.open(destination, "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
-        log.info('Saved output to: %s' % destination)
+        log.info("Saved output to: %s" % destination)
 
 
 def validate_options(options):
-    if 'input_files' in options and 'fields' not in options:
+    if "input_files" in options and "fields" not in options:
         # Filter fields when only files specified.
         try:
-            options['fields'] = get_fields(filter_manifest(options['input_files']))
+            options["fields"] = get_fields(filter_manifest(options["input_files"]))
         except KeyError as e:
-            raise KeyError('File {0} not found in file list.'.format(e))
-    elif 'fields' in options and 'input_files' not in options:
+            raise KeyError("File {0} not found in file list.".format(e))
+    elif "fields" in options and "input_files" not in options:
         # Filter files when only field specified.
-        options['input_files'] = get_files(options['fields'])
-    elif 'fields' in options and 'input_files' in options:
+        options["input_files"] = get_files(options["fields"])
+    elif "fields" in options and "input_files" in options:
         # Filter fields when only files specified.
-        fields_in_files = get_fields(filter_manifest(options['input_files']))
+        fields_in_files = get_fields(filter_manifest(options["input_files"]))
 
-        not_in_field = [h for h in options['fields'] if h not in fields_in_files]
+        not_in_field = [h for h in options["fields"] if h not in fields_in_files]
         if not_in_field:
             raise KeyError(
-                'Field {0} not found in file list.'.format(', '.join(not_in_field))
+                "Field {0} not found in file list.".format(", ".join(not_in_field))
             )
 
 
@@ -473,7 +473,7 @@ class Packager(object):
         options : dict
             options values to override defaults.
         """
-        setup_logger(None, options.get('log_level', DEFAULT_OPTIONS['log_level']))
+        setup_logger(None, options.get("log_level", DEFAULT_OPTIONS["log_level"]))
         validate_options(options)
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
@@ -488,61 +488,61 @@ class Packager(object):
         urlretrieve_fn : function
             function to download file
         """
-        while not has_valid_zip(self.options['zip_path']):
+        while not has_valid_zip(self.options["zip_path"]):
             download(
-                self.options['source'],
-                self.options['zip_path'],
+                self.options["source"],
+                self.options["zip_path"],
                 urlretrieve_fn=urlretrieve_fn,
                 reporthook=_dl_progress,
             )
 
-        if not files_exist(self.options['work_dir'], self.options['input_files']):
-            extract_zip(self.options['zip_path'], self.options['work_dir'])
+        if not files_exist(self.options["work_dir"], self.options["input_files"]):
+            extract_zip(self.options["zip_path"], self.options["work_dir"])
 
     def export(self):  # NOQA: C901
         """Extract zip and process information into CSV's."""
 
-        fields = self.options['fields']
+        fields = self.options["fields"]
         for k in INDEX_FIELDS:
             if k not in fields:
                 fields = [k] + fields
 
         files = [
-            os.path.join(self.options['work_dir'], f)
-            for f in self.options['input_files']
+            os.path.join(self.options["work_dir"], f)
+            for f in self.options["input_files"]
         ]
 
         # Replace {ext} with extension to use.
-        self.options['destination'] = self.options['destination'].format(
-            ext=self.options['format']
+        self.options["destination"] = self.options["destination"].format(
+            ext=self.options["format"]
         )
 
-        if not os.path.exists(os.path.dirname(self.options['destination'])):
-            os.makedirs(os.path.dirname(self.options['destination']))
+        if not os.path.exists(os.path.dirname(self.options["destination"])):
+            os.makedirs(os.path.dirname(self.options["destination"]))
 
         data = load_data(files=files)
         data = normalize(data, fields)
 
         # expand data hierarchically
-        if self.options['expand'] and self.options['format'] != 'csv':
+        if self.options["expand"] and self.options["format"] != "csv":
             data = expand_delimiters(data)
 
-            if self.options['prune_empty']:
+            if self.options["prune_empty"]:
                 for char in data:
                     for field in list(char.keys()):
                         if not char[field]:
                             char.pop(field, None)
 
-        if self.options['format'] == 'json':
-            export_json(data, self.options['destination'])
-        elif self.options['format'] == 'csv':
-            export_csv(data, self.options['destination'], fields)
-        elif self.options['format'] == 'yaml':
-            export_yaml(data, self.options['destination'])
-        elif self.options['format'] == 'python':
+        if self.options["format"] == "json":
+            export_json(data, self.options["destination"])
+        elif self.options["format"] == "csv":
+            export_csv(data, self.options["destination"], fields)
+        elif self.options["format"] == "yaml":
+            export_yaml(data, self.options["destination"])
+        elif self.options["format"] == "python":
             return data
         else:
-            log.info('Format %s does not exist' % self.options['format'])
+            log.info("Format %s does not exist" % self.options["format"])
 
     @classmethod
     def from_cli(cls, argv):
@@ -569,7 +569,7 @@ class Packager(object):
             sys.exit(e)
 
 
-def setup_logger(logger=None, level='DEBUG'):
+def setup_logger(logger=None, level="DEBUG"):
     """
     Setup logging for CLI use.
 
