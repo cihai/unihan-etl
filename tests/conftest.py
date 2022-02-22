@@ -10,30 +10,30 @@ from unihan_etl.util import merge_dict
 
 @pytest.fixture
 def test_options():
-    return merge_dict(DEFAULT_OPTIONS.copy(), {'input_files': ['Unihan_Readings.txt']})
+    return merge_dict(DEFAULT_OPTIONS.copy(), {"input_files": ["Unihan_Readings.txt"]})
 
 
 @pytest.fixture(scope="session")
 def mock_zip_filename():
-    return 'Unihan.zip'
+    return "Unihan.zip"
 
 
 @pytest.fixture(scope="session")
 def fixture_dir():
-    return str(os.path.join(os.path.dirname(__file__), 'fixtures'))
+    return str(os.path.join(os.path.dirname(__file__), "fixtures"))
 
 
 @pytest.fixture(scope="session")
 def fixture_files(fixture_dir):
     files = [
-        'Unihan_DictionaryIndices.txt',
-        'Unihan_DictionaryLikeData.txt',
-        'Unihan_IRGSources.txt',
-        'Unihan_NumericValues.txt',
-        'Unihan_OtherMappings.txt',
-        'Unihan_RadicalStrokeCounts.txt',
-        'Unihan_Readings.txt',
-        'Unihan_Variants.txt',
+        "Unihan_DictionaryIndices.txt",
+        "Unihan_DictionaryLikeData.txt",
+        "Unihan_IRGSources.txt",
+        "Unihan_NumericValues.txt",
+        "Unihan_OtherMappings.txt",
+        "Unihan_RadicalStrokeCounts.txt",
+        "Unihan_Readings.txt",
+        "Unihan_Variants.txt",
     ]
     return [os.path.join(fixture_dir, f) for f in files]
 
@@ -45,7 +45,7 @@ def sample_data2(fixture_files):
 
 @pytest.fixture(scope="session")
 def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp('unihan_etl')
+    fn = tmpdir_factory.mktemp("unihan_etl")
     return fn
 
 
@@ -56,8 +56,8 @@ def mock_zip_file(mock_test_dir, mock_zip_filename):
 
 @pytest.fixture(scope="session")
 def mock_zip(mock_zip_file, sample_data):
-    zf = zipfile.ZipFile(str(mock_zip_file), 'a')
-    zf.writestr("Unihan_Readings.txt", sample_data.encode('utf-8'))
+    zf = zipfile.ZipFile(str(mock_zip_file), "a")
+    zf.writestr("Unihan_Readings.txt", sample_data.encode("utf-8"))
     zf.close()
     return zf
 
@@ -66,9 +66,9 @@ def mock_zip(mock_zip_file, sample_data):
 def TestPackager(mock_test_dir, mock_zip_file):
     # monkey-patching builder
     options = {
-        'work_dir': str(mock_test_dir),
-        'zip_path': str(mock_zip_file),
-        'destination': str(mock_test_dir.join('unihan.csv')),
+        "work_dir": str(mock_test_dir),
+        "zip_path": str(mock_zip_file),
+        "destination": str(mock_test_dir.join("unihan.csv")),
     }
     return Packager(options)
 

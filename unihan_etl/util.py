@@ -18,8 +18,8 @@ def ucn_to_unicode(ucn):
     if isinstance(ucn, string_types):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
-            char = b'\U' + format(int(ucn, 16), '08x').encode('latin1')
-            char = char.decode('unicode_escape')
+            char = b"\U" + format(int(ucn, 16), "08x").encode("latin1")
+            char = char.decode("unicode_escape")
         else:
             char = unichr(int(ucn, 16))
     else:
@@ -38,7 +38,7 @@ def ucnstring_to_python(ucn_string):
     for r in res:
         ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
 
-    ucn_string = ucn_string.encode('utf-8')
+    ucn_string = ucn_string.encode("utf-8")
 
     assert isinstance(ucn_string, bytes)
     return ucn_string
@@ -46,7 +46,7 @@ def ucnstring_to_python(ucn_string):
 
 def ucnstring_to_unicode(ucn_string):
     """Return ucnstring as Unicode."""
-    ucn_string = ucnstring_to_python(ucn_string).decode('utf-8')
+    ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
     assert isinstance(ucn_string, text_type)
     return ucn_string
@@ -62,16 +62,16 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
 
     def format_size(bytes):
         if bytes > 1000 * 1000:
-            return '%.1fMb' % (bytes / 1000.0 / 1000)
+            return "%.1fMb" % (bytes / 1000.0 / 1000)
         elif bytes > 10 * 1000:
-            return '%iKb' % (bytes / 1000)
+            return "%iKb" % (bytes / 1000)
         elif bytes > 1000:
-            return '%.1fKb' % (bytes / 1000.0)
+            return "%.1fKb" % (bytes / 1000.0)
         else:
-            return '%ib' % bytes
+            return "%ib" % bytes
 
     if not count:
-        print('Total size: %s' % format_size(total_size))
+        print("Total size: %s" % format_size(total_size))
     last_percent = int((count - 1) * block_size * 100 / total_size)
     # may have downloaded less if count*block_size > total_size
     maxdownloaded = count * block_size
@@ -80,16 +80,16 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
     if percent > last_percent:
         # TODO: is this acceptable? Do we want to do something nicer?
         out.write(
-            '%3d%% [%s>%s]\r'
+            "%3d%% [%s>%s]\r"
             % (
                 percent,
-                int(round(percent / 2)) * '=',
-                int(round(50 - percent / 2)) * ' ',
+                int(round(percent / 2)) * "=",
+                int(round(50 - percent / 2)) * " ",
             )
         )
         out.flush()
     if maxdownloaded >= total_size:
-        print('\n')
+        print("\n")
 
 
 def merge_dict(base, additional):

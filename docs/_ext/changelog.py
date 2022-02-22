@@ -16,7 +16,7 @@ import re
 
 from docutils import nodes
 
-year_arg_re = re.compile(r'^(.+?)\s*(?<!\x00)<(.*?)>$', re.DOTALL)
+year_arg_re = re.compile(r"^(.+?)\s*(?<!\x00)<(.*?)>$", re.DOTALL)
 
 
 def release_nodes(text, slug, date, config):
@@ -32,12 +32,12 @@ def release_nodes(text, slug, date, config):
         link = '<a class="reference external" href="{}">{}</a>'.format(uri, text)
     else:
         link = text
-    datespan = ''
+    datespan = ""
     if date:
         datespan = ' <span style="font-size: 75%;">{}</span>'.format(date)
     header = '<h2 style="margin-bottom: 0.3em;">{}{}</h2>'.format(link, datespan)
     return nodes.section(
-        '', nodes.raw(rawtext='', text=header, format='html'), ids=[text]
+        "", nodes.raw(rawtext="", text=header, format="html"), ids=[text]
     )
 
 
@@ -85,17 +85,17 @@ def setup(app):
     for key, default in (
         # Issue base URI setting: releases_issue_uri
         # E.g. 'https://github.com/fabric/fabric/issues/'
-        ('issue_uri', None),
+        ("issue_uri", None),
         # Release-tag base URI setting: releases_release_uri
         # E.g. 'https://github.com/fabric/fabric/tree/'
-        ('release_uri', None),
+        ("release_uri", None),
         # Convenience Github version of above
-        ('github_path', None),
+        ("github_path", None),
         # Which document to use as the changelog
-        ('document_name', ['changelog']),
+        ("document_name", ["changelog"]),
     ):
         app.add_config_value(
-            name='releases_{}'.format(key), default=default, rebuild='html'
+            name="releases_{}".format(key), default=default, rebuild="html"
         )
 
-    app.connect('doctree-read', parse_changelog)
+    app.connect("doctree-read", parse_changelog)
