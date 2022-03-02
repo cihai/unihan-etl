@@ -4,7 +4,7 @@ _unihan-etl_
 [![Docs](https://github.com/cihai/unihan-etl/workflows/Publish%20Docs/badge.svg)](https://github.com/cihai/unihan-etl/actions?query=workflow%3A%22Publish+Docs%22)
 [![Build Status](https://github.com/cihai/unihan-etl/workflows/tests/badge.svg)](https://github.com/cihai/unihan-etl/actions?query=workflow%3A%22tests%22)
 [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
-![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)
+[![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE)
 
 [ETL](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) tool for
 Unicode's Han Unification
