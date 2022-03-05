@@ -1,4 +1,3 @@
-# -*- coding: utf8 -*-
 # flake8: noqa
 
 import collections

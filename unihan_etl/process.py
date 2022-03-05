@@ -70,7 +70,7 @@ def get_files(fields):
                 if any(file_ for h in fields if h in file_fields):
                     files.add(file_)
         else:
-            raise KeyError("Field {0} not found in file list.".format(field))
+            raise KeyError(f"Field {field} not found in file list.")
 
     return list(files)
 
@@ -126,7 +126,7 @@ def get_parser():
         "-v",
         "--version",
         action="version",
-        version="%(prog)s {version}".format(version=__version__),
+        version=f"%(prog)s {__version__}",
     )
     parser.add_argument(
         "-s",
@@ -283,7 +283,7 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     if no_unihan_files_exist():
         if not_downloaded():
             log.info("Downloading Unihan.zip...")
-            log.info("%s to %s" % (url, dest))
+            log.info(f"{url} to {dest}")
             if os.path.isfile(url):
                 shutil.copy(url, dest)
             elif reporthook:
@@ -447,7 +447,7 @@ def validate_options(options):
         try:
             options["fields"] = get_fields(filter_manifest(options["input_files"]))
         except KeyError as e:
-            raise KeyError("File {0} not found in file list.".format(e))
+            raise KeyError(f"File {e} not found in file list.")
     elif "fields" in options and "input_files" not in options:
         # Filter files when only field specified.
         options["input_files"] = get_files(options["fields"])
@@ -458,11 +458,11 @@ def validate_options(options):
         not_in_field = [h for h in options["fields"] if h not in fields_in_files]
         if not_in_field:
             raise KeyError(
-                "Field {0} not found in file list.".format(", ".join(not_in_field))
+                "Field {} not found in file list.".format(", ".join(not_in_field))
             )
 
 
-class Packager(object):
+class Packager:
     """Download and generate a tabular release of
     `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
 

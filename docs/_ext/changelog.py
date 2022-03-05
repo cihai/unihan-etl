@@ -25,17 +25,17 @@ def release_nodes(text, slug, date, config):
         # TODO: % vs .format()
         uri = config.releases_release_uri % slug
     elif config.releases_github_path:
-        uri = "https://github.com/{}/tree/{}".format(config.releases_github_path, slug)
+        uri = f"https://github.com/{config.releases_github_path}/tree/{slug}"
 
     # Only construct link tag if user actually configured release URIs somehow
     if uri:
-        link = '<a class="reference external" href="{}">{}</a>'.format(uri, text)
+        link = f'<a class="reference external" href="{uri}">{text}</a>'
     else:
         link = text
     datespan = ""
     if date:
-        datespan = ' <span style="font-size: 75%;">{}</span>'.format(date)
-    header = '<h2 style="margin-bottom: 0.3em;">{}{}</h2>'.format(link, datespan)
+        datespan = f' <span style="font-size: 75%;">{date}</span>'
+    header = f'<h2 style="margin-bottom: 0.3em;">{link}{datespan}</h2>'
     return nodes.section(
         "", nodes.raw(rawtext="", text=header, format="html"), ids=[text]
     )
@@ -94,8 +94,6 @@ def setup(app):
         # Which document to use as the changelog
         ("document_name", ["changelog"]),
     ):
-        app.add_config_value(
-            name="releases_{}".format(key), default=default, rebuild="html"
-        )
+        app.add_config_value(name=f"releases_{key}", default=default, rebuild="html")
 
     app.connect("doctree-read", parse_changelog)
