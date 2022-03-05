@@ -1,5 +1,3 @@
-# -*- coding: utf8 -*-
-
 #: Dictionary of tuples mapping locations of files to fields
 UNIHAN_MANIFEST = {
     "Unihan_DictionaryIndices.txt": (

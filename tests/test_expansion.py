@@ -15,7 +15,7 @@ def test_expand_kCantonese(expanded_data):
     # test kCantonese
     item = [i for i in expanded_data if i["ucn"] == "U+342B"][0]
     if item["ucn"] == "U+342B":
-        assert set(item["kCantonese"]) == set(["gun3", "hung1", "zung1"])
+        assert set(item["kCantonese"]) == {"gun3", "hung1", "zung1"}
     else:
         assert False, "Missing field U+342B kCantonese"
 
