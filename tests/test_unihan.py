@@ -1,6 +1,7 @@
 """Tests for unihan data download and processing."""
 import logging
 import os
+import pathlib
 import shutil
 
 import pytest
@@ -20,7 +21,7 @@ def test_zip_has_files(mock_zip):
     assert not zip_has_files(["Unihan_Cats.txt"], mock_zip)
 
 
-def test_has_valid_zip(tmpdir, mock_zip):
+def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip):
     if os.path.isfile(UNIHAN_ZIP_PATH):
         assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
@@ -28,8 +29,8 @@ def test_has_valid_zip(tmpdir, mock_zip):
 
     assert process.has_valid_zip(mock_zip.filename)
 
-    bad_zip = tmpdir.join("corrupt.zip")
-    bad_zip.write("moo")
+    bad_zip = tmp_path / "corrupt.zip"
+    bad_zip.write_text("moo", encoding="utf-8")
 
     assert not process.has_valid_zip(str(bad_zip))
 
@@ -66,21 +67,23 @@ def test_get_files():
     assert set(result) == set(expected)
 
 
-def test_download(tmpdir, mock_zip, mock_zip_file, mock_zip_filename):
-    dest_filepath = tmpdir.join("data", mock_zip_filename)
+def test_download(tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_zip_filename):
+    dest_filepath = tmp_path / "data" / mock_zip_filename
 
     process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
 
-    result = os.path.dirname(str(dest_filepath.join("data")))
+    result = os.path.dirname(dest_filepath / "data")
     assert result, "Creates data directory if doesn't exist."
 
 
-def test_download_mock(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options):
-    data_path = tmpdir.join("data")
-    dest_path = data_path.join("data", "hey.zip")
+def test_download_mock(
+    tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_test_dir, test_options
+):
+    data_path = tmp_path / "data"
+    dest_path = data_path / "data" / "hey.zip"
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
-        mock_zip_file.copy(dest_path)
+        shutil.copy(str(mock_zip_file), str(dest_path))
 
     p = Packager(
         merge_dict(
@@ -88,8 +91,8 @@ def test_download_mock(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_opti
             {
                 "fields": ["kDefinition"],
                 "zip_path": str(dest_path),
-                "work_dir": str(mock_test_dir.join("downloads")),
-                "destination": str(data_path.join("unihan.csv")),
+                "work_dir": str(mock_test_dir / "downloads"),
+                "destination": str(data_path / "unihan.csv"),
             },
         )
     )
@@ -98,12 +101,14 @@ def test_download_mock(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_opti
     p.export()
 
 
-def test_export_format(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_options):
-    data_path = tmpdir.join("data")
-    dest_path = data_path.join("data", "hey.zip")
+def test_export_format(
+    tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_test_dir, test_options
+):
+    data_path = tmp_path / "data"
+    dest_path = data_path / "data" / "hey.zip"
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
-        mock_zip_file.copy(dest_path)
+        shutil.copy(str(mock_zip_file), str(dest_path))
 
     p = Packager(
         merge_dict(
@@ -111,21 +116,21 @@ def test_export_format(tmpdir, mock_zip, mock_zip_file, mock_test_dir, test_opti
             {
                 "fields": ["kDefinition"],
                 "zip_path": str(dest_path),
-                "work_dir": str(mock_test_dir.join("downloads")),
-                "destination": str(data_path.join("unihan.{ext}")),
+                "work_dir": str(mock_test_dir / "downloads"),
+                "destination": str(data_path / "unihan.{ext}"),
                 "format": "json",
             },
         )
     )
     p.download(urlretrieve_fn=urlretrieve)
-    assert os.path.exists(str(dest_path))
+    assert dest_path.exists()
     p.export()
-    assert str(data_path.join("unihan.json")) == p.options["destination"]
+    assert str(data_path / "unihan.json") == p.options["destination"]
     assert os.path.exists(p.options["destination"])
 
 
-def test_extract_zip(mock_zip, mock_zip_file, tmpdir):
-    zf = process.extract_zip(str(mock_zip_file), str(tmpdir))
+def test_extract_zip(mock_zip, mock_zip_file, tmp_path: pathlib.Path):
+    zf = process.extract_zip(str(mock_zip_file), str(tmp_path))
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218

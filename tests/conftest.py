@@ -44,14 +44,14 @@ def sample_data2(fixture_files):
 
 
 @pytest.fixture(scope="session")
-def mock_test_dir(tmpdir_factory):
-    fn = tmpdir_factory.mktemp("unihan_etl")
-    return fn
+def mock_test_dir(tmp_path_factory: pytest.TempPathFactory):
+    unihan_etl_path = tmp_path_factory.mktemp("unihan_etl")
+    return unihan_etl_path
 
 
 @pytest.fixture(scope="session")
 def mock_zip_file(mock_test_dir, mock_zip_filename):
-    return mock_test_dir.join(mock_zip_filename)
+    return mock_test_dir / mock_zip_filename
 
 
 @pytest.fixture(scope="session")
@@ -68,7 +68,7 @@ def TestPackager(mock_test_dir, mock_zip_file):
     options = {
         "work_dir": str(mock_test_dir),
         "zip_path": str(mock_zip_file),
-        "destination": str(mock_test_dir.join("unihan.csv")),
+        "destination": str(mock_test_dir / "unihan.csv"),
     }
     return Packager(options)
 
