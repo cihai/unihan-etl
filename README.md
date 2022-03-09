@@ -6,28 +6,25 @@ _unihan-etl_
 [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 [![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE)
 
-[ETL](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) tool for
-Unicode's Han Unification
-([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases.
-unihan-etl retrieves (downloads), extracts (unzips), and transforms the
-database from Unicode's website to a flat, tabular or structured,
-tree-like format.
+[ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) tool for Unicode's Han Unification
+([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases. unihan-etl retrieves
+(downloads), extracts (unzips), and transforms the database from Unicode's website to a flat,
+tabular or structured, tree-like format.
 
 unihan-etl can be used as a python library through its
-[API](https://unihan-etl.git-pull.com/en/latest/api.html), to retrieve
-data as a python object, or through the
-[CLI](https://unihan-etl.git-pull.com/en/latest/cli.html) to retrieve a
-CSV, JSON, or YAML file.
+[API](https://unihan-etl.git-pull.com/en/latest/api.html), to retrieve data as a python object, or
+through the [CLI](https://unihan-etl.git-pull.com/en/latest/cli.html) to retrieve a CSV, JSON, or
+YAML file.
 
-Part of the [cihai](https://cihai.git-pull.com) project. Similar
-project: [libUnihan](http://libunihan.sourceforge.net/).
+Part of the [cihai](https://cihai.git-pull.com) project. Similar project:
+[libUnihan](http://libunihan.sourceforge.net/).
 
 UNIHAN Version compatibility (as of unihan-etl v0.10.0):
-[11.0.0](https://www.unicode.org/reports/tr38/tr38-25.html#History)
-(released 2018-05-08, revision 25).
+[11.0.0](https://www.unicode.org/reports/tr38/tr38-25.html#History) (released 2018-05-08, revision
+25).
 
-[UNIHAN](http://www.unicode.org/charts/unihan.html)'s data is dispersed
-across multiple files in the format of:
+[UNIHAN](http://www.unicode.org/charts/unihan.html)'s data is dispersed across multiple files in the
+format of:
 
     U+3400  kCantonese  jau1
     U+3400  kDefinition (same as U+4E18 丘) hillock or mound
@@ -38,19 +35,16 @@ across multiple files in the format of:
     U+3401  kMandarin   tiàn
 
 Values vary in shape and structure depending on their field type.
-[kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin) maps
-Unicode codepoints to [Hànyǔ Dà
-Zìdiǎn](https://en.wikipedia.org/wiki/Hanyu_Da_Zidian), where
-`10019.020:tiàn` represents an entry. Complicating it further, more
-variations:
+[kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin) maps Unicode codepoints to
+[Hànyǔ Dà Zìdiǎn](https://en.wikipedia.org/wiki/Hanyu_Da_Zidian), where `10019.020:tiàn` represents
+an entry. Complicating it further, more variations:
 
     U+5EFE  kHanyuPinyin    10513.110,10514.010,10514.020:gǒng
     U+5364  kHanyuPinyin    10093.130:xī,lǔ 74609.020:lǔ,xī
 
-_kHanyuPinyin_ supports multiple entries delimited by spaces. ":"
-(colon) separate locations in the work from pinyin readings. "," (comma)
-separate multiple entries/readings. This is just one of 90 fields
-contained in the database.
+_kHanyuPinyin_ supports multiple entries delimited by spaces. ":" (colon) separate locations in the
+work from pinyin readings. "," (comma) separate multiple entries/readings. This is just one of 90
+fields contained in the database.
 
 ## Tabular, "Flat" output
 
@@ -102,19 +96,17 @@ With `$ unihan-etl -F json --no-expand`:
 
 ## "Structured" output
 
-Codepoints can pack a lot more detail, unihan-etl carefully extracts
-these values in a uniform manner. Empty values are pruned.
+Codepoints can pack a lot more detail, unihan-etl carefully extracts these values in a uniform
+manner. Empty values are pruned.
 
-To make this possible, unihan-etl exports to JSON, YAML, and python
-list/dicts.
+To make this possible, unihan-etl exports to JSON, YAML, and python list/dicts.
 
 <div class="admonition">
 
 Why not CSV?
 
-Unfortunately, CSV is only suitable for storing table-like information.
-File formats such as JSON and YAML accept key-values and hierarchical
-entries.
+Unfortunately, CSV is only suitable for storing table-like information. File formats such as JSON
+and YAML accept key-values and hierarchical entries.
 
 </div>
 
@@ -193,42 +185,36 @@ YAML `$ unihan-etl -F yaml`:
 ## Features
 
 - automatically downloads UNIHAN from the internet
-- strives for accuracy with the specifications described in [UNIHAN's
-  database design](http://www.unicode.org/reports/tr38/)
-- export to JSON, CSV and YAML (requires [pyyaml](http://pyyaml.org/))
-  via `-F`
+- strives for accuracy with the specifications described in
+  [UNIHAN's database design](http://www.unicode.org/reports/tr38/)
+- export to JSON, CSV and YAML (requires [pyyaml](http://pyyaml.org/)) via `-F`
 - configurable to export specific fields via `-f`
 - accounts for encoding conflicts due to the Unicode-heavy content
-- designed as a technical proof for future CJK (Chinese, Japanese,
-  Korean) datasets
-- core component and dependency of
-  [cihai](https://cihai.git-pull.com), a CJK library
+- designed as a technical proof for future CJK (Chinese, Japanese, Korean) datasets
+- core component and dependency of [cihai](https://cihai.git-pull.com), a CJK library
 - [data package](http://frictionlessdata.io/data-packages/) support
-- expansion of multi-value delimited fields in YAML, JSON and python
-  dictionaries
+- expansion of multi-value delimited fields in YAML, JSON and python dictionaries
 - supports >= 3.6 and pypy
 
-If you encounter a problem or have a question, please [create an
-issue](https://github.com/cihai/unihan-etl/issues/new).
+If you encounter a problem or have a question, please
+[create an issue](https://github.com/cihai/unihan-etl/issues/new).
 
 ## Usage
 
 `unihan-etl` offers customizable builds via its command line arguments.
 
-See [unihan-etl CLI
-arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for
-information on how you can specify columns, files, download URL's, and
-output destination.
+See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for information
+on how you can specify columns, files, download URL's, and output destination.
 
 To download and build your own UNIHAN export:
 
-```bash
+```console
 $ pip install --user unihan-etl
 ```
 
 To output CSV, the default format:
 
-```bash
+```console
 $ unihan-etl
 ```
 
@@ -257,13 +243,12 @@ To output to a custom file (templated file extension):
 
     $ unihan-etl --destination ./exported.{ext}
 
-See [unihan-etl CLI
-arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for
-advanced usage examples.
+See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for advanced
+usage examples.
 
 ## Code layout
 
-```bash
+```console
 # cache dir (Unihan.zip is downloaded, contents extracted)
 {XDG cache dir}/unihan_etl/
 
@@ -301,8 +286,8 @@ Makefile commands prefixed with `watch_` will watch files and rerun.
 
 `poetry run py.test`
 
-Helpers: `make test` Rerun tests on file change: `make watch_test`
-(requires [entr(1)](http://eradman.com/entrproject/))
+Helpers: `make test` Rerun tests on file change: `make watch_test` (requires
+[entr(1)](http://eradman.com/entrproject/))
 
 ### Documentation
 
@@ -312,28 +297,24 @@ Default preview server: <http://localhost:8039>
 
 Helpers: `make build_docs`, `make serve_docs`
 
-Rebuild docs on file change: `make watch_docs` (requires
-[entr(1)](http://eradman.com/entrproject/))
+Rebuild docs on file change: `make watch_docs` (requires [entr(1)](http://eradman.com/entrproject/))
 
-Rebuild docs and run server via one terminal: `make dev_docs` (requires
-above, and a `make(1)` with `-J` support, e.g. GNU Make)
+Rebuild docs and run server via one terminal: `make dev_docs` (requires above, and a `make(1)` with
+`-J` support, e.g. GNU Make)
 
 ### Formatting / Linting
 
-The project uses [black](https://github.com/psf/black) and
-[isort](https://pypi.org/project/isort/) (one after the other) and runs
-[flake8](https://flake8.pycqa.org/) via CI. See the configuration in
+The project uses [black](https://github.com/psf/black) and [isort](https://pypi.org/project/isort/)
+(one after the other) and runs [flake8](https://flake8.pycqa.org/) via CI. See the configuration in
 <span class="title-ref">pyproject.toml</span> and \`setup.cfg\`:
 
-`make black isort`: Run `black` first, then `isort` to handle import
-nuances `make flake8`, to watch (requires `entr(1)`):
-`make watch_flake8`
+`make black isort`: Run `black` first, then `isort` to handle import nuances `make flake8`, to watch
+(requires `entr(1)`): `make watch_flake8`
 
 ### Releasing
 
-As of 0.11, [poetry](https://python-poetry.org/) handles virtualenv
-creation, package requirements, versioning, building, and publishing.
-Therefore there is no setup.py or requirements files.
+As of 0.11, [poetry](https://python-poetry.org/) handles virtualenv creation, package requirements,
+versioning, building, and publishing. Therefore there is no setup.py or requirements files.
 
 Update <span class="title-ref">\_\_version\_\_</span> in <span
 class="title-ref">\_\_about\_\_.py</span> and \`pyproject.toml\`:
