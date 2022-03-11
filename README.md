@@ -220,28 +220,40 @@ $ unihan-etl
 
 To output JSON:
 
-    $ unihan-etl -F json
+```console
+$ unihan-etl -F json
+```
 
 To output YAML:
 
-    $ pip install --user pyyaml
-    $ unihan-etl -F yaml
+```console
+$ pip install --user pyyaml
+$ unihan-etl -F yaml
+```
 
 To only output the kDefinition field in a csv:
 
-    $ unihan-etl -f kDefinition
+```console
+$ unihan-etl -f kDefinition
+```
 
 To output multiple fields, separate with spaces:
 
-    $ unihan-etl -f kCantonese kDefinition
+```console
+$ unihan-etl -f kCantonese kDefinition
+```
 
 To output to a custom file:
 
-    $ unihan-etl --destination ./exported.csv
+```console
+$ unihan-etl --destination ./exported.csv
+```
 
 To output to a custom file (templated file extension):
 
-    $ unihan-etl --destination ./exported.{ext}
+```console
+$ unihan-etl --destination ./exported.{ext}
+```
 
 See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for advanced
 usage examples.
@@ -306,7 +318,7 @@ Rebuild docs and run server via one terminal: `make dev_docs` (requires above, a
 
 The project uses [black](https://github.com/psf/black) and [isort](https://pypi.org/project/isort/)
 (one after the other) and runs [flake8](https://flake8.pycqa.org/) via CI. See the configuration in
-<span class="title-ref">pyproject.toml</span> and \`setup.cfg\`:
+<span class="title-ref">pyproject.toml</span> and `setup.cfg`:
 
 `make black isort`: Run `black` first, then `isort` to handle import nuances `make flake8`, to watch
 (requires `entr(1)`): `make watch_flake8`
@@ -317,11 +329,28 @@ As of 0.11, [poetry](https://python-poetry.org/) handles virtualenv creation, pa
 versioning, building, and publishing. Therefore there is no setup.py or requirements files.
 
 Update <span class="title-ref">\_\_version\_\_</span> in <span
-class="title-ref">\_\_about\_\_.py</span> and \`pyproject.toml\`:
+class="title-ref">\_\_about\_\_.py</span> and `pyproject.toml`:
 
-    git commit -m 'build(unihan-etl): Tag v0.1.1'
-    git tag v0.1.1
-    git push
-    git push --tags
-    poetry build
-    poetry deploy
+```console
+$ git commit -m 'build(unihan-etl): Tag v0.1.1'
+```
+
+```console
+$ git tag v0.1.1
+```
+
+```console
+$ git push
+```
+
+```console
+$ git push --tags
+```
+
+```console
+$ poetry build
+```
+
+```console
+$ poetry deploy
+```
