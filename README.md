@@ -1,4 +1,4 @@
-_unihan-etl_
+# unihan-etl
 
 [![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](http://badge.fury.io/py/unihan-etl)
 [![Docs](https://github.com/cihai/unihan-etl/workflows/Publish%20Docs/badge.svg)](https://github.com/cihai/unihan-etl/actions?query=workflow%3A%22Publish+Docs%22)
