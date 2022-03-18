@@ -1,7 +1,7 @@
 # unihan-etl
 
-[![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](http://badge.fury.io/py/unihan-etl)
-[![Docs](https://github.com/cihai/unihan-etl/workflows/Publish%20Docs/badge.svg)](https://github.com/cihai/unihan-etl/actions?query=workflow%3A%22Publish+Docs%22)
+[![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](https://pypi.org/project/unihan-etl/)
+[![Docs](https://github.com/cihai/unihan-etl/workflows/Publish%20Docs/badge.svg)](https://unihan-etl.git-pull.com/)
 [![Build Status](https://github.com/cihai/unihan-etl/workflows/tests/badge.svg)](https://github.com/cihai/unihan-etl/actions?query=workflow%3A%22tests%22)
 [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 [![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE)
