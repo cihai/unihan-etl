@@ -11,10 +11,17 @@
 :hidden:
 
 about
-unihan
 cli
 api
+
+```
+
+```{toctree}
+:caption: Project
+:hidden:
+
+unihan
 FAQ
 history
-
+GitHub <https://github.com/cihai/unihan-etl>
 ```
