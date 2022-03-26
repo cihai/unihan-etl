@@ -7,9 +7,11 @@ import glob
 import json
 import logging
 import os
+import pathlib
 import shutil
 import sys
 import zipfile
+from typing import List, Union
 
 from appdirs import AppDirs
 
@@ -294,7 +296,7 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     return dest
 
 
-def load_data(files):
+def load_data(files: List[Union[pathlib.Path, str]]):
     """
     Extract zip and process information into CSV's.
 
@@ -308,7 +310,7 @@ def load_data(files):
         combined data from files
     """
 
-    log.info("Loading data: %s." % ", ".join(files))
+    log.info("Loading data: %s." % ", ".join([str(s) for s in files]))
     raw_data = fileinput.FileInput(
         files=files, openhook=fileinput.hook_encoded("utf-8")
     )
