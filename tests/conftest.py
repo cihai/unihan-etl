@@ -14,7 +14,7 @@ def test_options():
 
 
 @pytest.fixture(scope="session")
-def mock_zip_filename():
+def mock_zip_pathname():
     return "Unihan.zip"
 
 
@@ -50,24 +50,24 @@ def mock_test_dir(tmp_path_factory: pytest.TempPathFactory):
 
 
 @pytest.fixture(scope="session")
-def mock_zip_file(mock_test_dir, mock_zip_filename):
-    return mock_test_dir / mock_zip_filename
+def mock_zip_path(mock_test_dir, mock_zip_pathname):
+    return mock_test_dir / mock_zip_pathname
 
 
 @pytest.fixture(scope="session")
-def mock_zip(mock_zip_file, sample_data):
-    zf = zipfile.ZipFile(str(mock_zip_file), "a")
+def mock_zip(mock_zip_path, sample_data):
+    zf = zipfile.ZipFile(str(mock_zip_path), "a")
     zf.writestr("Unihan_Readings.txt", sample_data.encode("utf-8"))
     zf.close()
     return zf
 
 
 @pytest.fixture(scope="session")
-def TestPackager(mock_test_dir, mock_zip_file):
+def TestPackager(mock_test_dir, mock_zip_path):
     # monkey-patching builder
     options = {
         "work_dir": str(mock_test_dir),
-        "zip_path": str(mock_zip_file),
+        "zip_path": str(mock_zip_path),
         "destination": str(mock_test_dir / "unihan.csv"),
     }
     return Packager(options)
