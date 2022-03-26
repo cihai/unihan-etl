@@ -13,6 +13,8 @@ from unihan_etl.process import DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager, zip_h
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import merge_dict
 
+from .constants import FIXTURE_PATH
+
 log = logging.getLogger(__name__)
 
 
@@ -172,11 +174,11 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
     ), "normalize returns correct columns specified + ucn and char."
 
 
-def test_normalize_simple_data_format(fixture_dir):
+def test_normalize_simple_data_format():
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
-        os.path.join(fixture_dir, "Unihan_DictionaryLikeData.txt"),
-        os.path.join(fixture_dir, "Unihan_Readings.txt"),
+        FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
+        FIXTURE_PATH / "Unihan_Readings.txt",
     ]
 
     columns = (
