@@ -1,4 +1,3 @@
-import os
 import zipfile
 
 import pytest
@@ -6,6 +5,8 @@ import pytest
 from unihan_etl import constants, process
 from unihan_etl.process import DEFAULT_OPTIONS, Packager
 from unihan_etl.util import merge_dict
+
+from .constants import FIXTURE_PATH
 
 
 @pytest.fixture
@@ -19,12 +20,7 @@ def mock_zip_pathname():
 
 
 @pytest.fixture(scope="session")
-def fixture_dir():
-    return str(os.path.join(os.path.dirname(__file__), "fixtures"))
-
-
-@pytest.fixture(scope="session")
-def fixture_files(fixture_dir):
+def fixture_files():
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -35,7 +31,7 @@ def fixture_files(fixture_dir):
         "Unihan_Readings.txt",
         "Unihan_Variants.txt",
     ]
-    return [os.path.join(fixture_dir, f) for f in files]
+    return [FIXTURE_PATH / f for f in files]
 
 
 @pytest.fixture(scope="session")
