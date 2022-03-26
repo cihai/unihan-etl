@@ -69,11 +69,11 @@ def test_get_files():
 
 
 def test_download(
-    tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile, mock_zip_file, mock_zip_filename
+    tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile, mock_zip_path, mock_zip_pathname
 ):
-    dest_filepath = tmp_path / "data" / mock_zip_filename
+    dest_filepath = tmp_path / "data" / mock_zip_pathname
 
-    process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
+    process.download(str(mock_zip_path), str(dest_filepath), shutil.copy)
 
     result = os.path.dirname(dest_filepath / "data")
     assert result, "Creates data directory if doesn't exist."
@@ -82,7 +82,7 @@ def test_download(
 def test_download_mock(
     tmp_path: pathlib.Path,
     mock_zip: zipfile.ZipFile,
-    mock_zip_file,
+    mock_zip_path,
     mock_test_dir,
     test_options,
 ):
@@ -90,7 +90,7 @@ def test_download_mock(
     dest_path = data_path / "data" / "hey.zip"
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
-        shutil.copy(str(mock_zip_file), str(dest_path))
+        shutil.copy(str(mock_zip_path), str(dest_path))
 
     p = Packager(
         merge_dict(
@@ -111,7 +111,7 @@ def test_download_mock(
 def test_export_format(
     tmp_path: pathlib.Path,
     mock_zip: zipfile.ZipFile,
-    mock_zip_file,
+    mock_zip_path,
     mock_test_dir,
     test_options,
 ):
@@ -119,7 +119,7 @@ def test_export_format(
     dest_path = data_path / "data" / "hey.zip"
 
     def urlretrieve(url, filename, url_retrieve, reporthook=None):
-        shutil.copy(str(mock_zip_file), str(dest_path))
+        shutil.copy(str(mock_zip_path), str(dest_path))
 
     p = Packager(
         merge_dict(
@@ -140,8 +140,8 @@ def test_export_format(
     assert os.path.exists(p.options["destination"])
 
 
-def test_extract_zip(mock_zip: zipfile.ZipFile, mock_zip_file, tmp_path: pathlib.Path):
-    zf = process.extract_zip(str(mock_zip_file), str(tmp_path))
+def test_extract_zip(mock_zip: zipfile.ZipFile, mock_zip_path, tmp_path: pathlib.Path):
+    zf = process.extract_zip(str(mock_zip_path), str(tmp_path))
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218
@@ -228,12 +228,12 @@ def test_flatten_fields():
     assert set(expected) == set(results)
 
 
-def test_pick_files(mock_zip_file):
+def test_pick_files(mock_zip_path):
     """Pick a white list of files to build from."""
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
-    options = {"input_files": files, "zip_path": str(mock_zip_file)}
+    options = {"input_files": files, "zip_path": str(mock_zip_path)}
 
     b = process.Packager(options)
 
@@ -314,11 +314,11 @@ def test_no_args():
     assert DEFAULT_OPTIONS == Packager.from_cli([]).options
 
 
-def test_cli_plus_defaults(mock_zip_file):
+def test_cli_plus_defaults(mock_zip_path):
     """Test CLI args + defaults."""
 
-    option_subset = {"zip_path": str(mock_zip_file)}
-    result = Packager.from_cli(["-z", str(mock_zip_file)]).options
+    option_subset = {"zip_path": str(mock_zip_path)}
+    result = Packager.from_cli(["-z", str(mock_zip_path)]).options
     assert_dict_contains_subset(option_subset, result)
 
     option_subset = {"fields": ["kDefinition"]}
