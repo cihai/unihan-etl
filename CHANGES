@@ -4,6 +4,10 @@
 
 - Updates go here
 
+#### Improvements
+
+- `load_data`: Accept list of `pathlib.Path` in addition to list of `str`
+
 #### Compatibility
 - Add Python 3.10 (#248)
 - Dropped Python 3.6 (#248)
