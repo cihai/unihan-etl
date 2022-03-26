@@ -3,6 +3,7 @@ import logging
 import os
 import pathlib
 import shutil
+import zipfile
 
 import pytest
 
@@ -15,13 +16,13 @@ from unihan_etl.util import merge_dict
 log = logging.getLogger(__name__)
 
 
-def test_zip_has_files(mock_zip):
+def test_zip_has_files(mock_zip: zipfile.ZipFile):
     assert zip_has_files(["Unihan_Readings.txt"], mock_zip)
 
     assert not zip_has_files(["Unihan_Cats.txt"], mock_zip)
 
 
-def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip):
+def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile):
     if os.path.isfile(UNIHAN_ZIP_PATH):
         assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
@@ -67,7 +68,9 @@ def test_get_files():
     assert set(result) == set(expected)
 
 
-def test_download(tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_zip_filename):
+def test_download(
+    tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile, mock_zip_file, mock_zip_filename
+):
     dest_filepath = tmp_path / "data" / mock_zip_filename
 
     process.download(str(mock_zip_file), str(dest_filepath), shutil.copy)
@@ -77,7 +80,11 @@ def test_download(tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_zip_file
 
 
 def test_download_mock(
-    tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_test_dir, test_options
+    tmp_path: pathlib.Path,
+    mock_zip: zipfile.ZipFile,
+    mock_zip_file,
+    mock_test_dir,
+    test_options,
 ):
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -102,7 +109,11 @@ def test_download_mock(
 
 
 def test_export_format(
-    tmp_path: pathlib.Path, mock_zip, mock_zip_file, mock_test_dir, test_options
+    tmp_path: pathlib.Path,
+    mock_zip: zipfile.ZipFile,
+    mock_zip_file,
+    mock_test_dir,
+    test_options,
 ):
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -129,7 +140,7 @@ def test_export_format(
     assert os.path.exists(p.options["destination"])
 
 
-def test_extract_zip(mock_zip, mock_zip_file, tmp_path: pathlib.Path):
+def test_extract_zip(mock_zip: zipfile.ZipFile, mock_zip_file, tmp_path: pathlib.Path):
     zf = process.extract_zip(str(mock_zip_file), str(tmp_path))
 
     assert len(zf.infolist()) == 1
@@ -187,7 +198,6 @@ def test_normalize_simple_data_format(fixture_dir):
 
 
 def test_flatten_fields():
-
     single_dataset = {"Unihan_Readings.txt": ["kCantonese", "kDefinition", "kHangul"]}
 
     expected = ["kCantonese", "kDefinition", "kHangul"]
