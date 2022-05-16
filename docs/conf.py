@@ -57,6 +57,7 @@ pygments_dark_style = "monokai"
 html_static_path = ["_static"]
 html_extra_path = ["manifest.json"]
 html_css_files = ["css/custom.css"]
+html_favicon = "_static/favicon.ico"
 html_theme = "furo"
 html_theme_options = {
     "light_logo": "img/cihai.svg",
