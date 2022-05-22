@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "unihan-etl"
 version = "0.13.0"
-description = "Export UNIHAN to Python, Data Package, CSV, JSON and YAML"
+description = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
 license = "MIT"
 authors = ["Tony Narlock <tony@git-pull.com>"]
 
@@ -20,7 +20,7 @@ classifiers = [
   "Topic :: Utilities",
   "Topic :: Software Development :: Internationalization"
 ]
-keywords = ["unihan", "sqlalchemy", "cjk", "yaml", "json"]
+keywords = ["unihan", "unicode", "cjk", "yaml", "json", "chinese", "japanese", "korean", "hanzi", "dictionary", "dataset"]
 homepage = "https://unihan-etl.git-pull.com"
 readme = 'README.md'
 
