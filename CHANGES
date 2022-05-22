@@ -1,18 +1,33 @@
 # Changelog
 
-## current
+To install the unreleased tmuxp version, see [developmental releases](https://unihan-etl.git-pull.com/quickstart.html#developmental-releases).
 
-- Updates go here
+[pip](https://pip.pypa.io/en/stable/):
 
-#### Improvements
+```console
+$ pip install --user --upgrade --pre unihan-etl
+```
+
+[pipx](https://pypa.github.io/pipx/docs/):
+
+```console
+$ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
+// Usage: unihan-etl@next load yoursession
+```
+
+## unihan-etl 0.14.x (unreleased)
+
+- _Insert changes/features/fixes for next release here_
+
+### Improvements
 
 - `load_data`: Accept list of `pathlib.Path` in addition to list of `str`
 
-#### Compatibility
+### Compatibility
 - Add Python 3.10 (#248)
 - Dropped Python 3.6 (#248)
 
-#### Development
+### Development
 - Update poetry to 1.1
   - CI: Use poetry 1.1.12 and `install-poetry.py` installer (#237 + #248)
   - Relock poetry.lock at 1.1 (w/ 1.1.7's fix)
@@ -20,8 +35,9 @@
 - Run pyupgrade for python 3.7
 - Tests: Move from `tmpdir` -> `tmp_path`
 
-#### Documentation
+### Documentation
 - Move to `furo` theme
+- Add :ref:`quickstart` page
 
 ## unihan-etl 0.13.0 (2021-06-16)
 
