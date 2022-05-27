@@ -19,17 +19,29 @@ classifiers = [
   'Programming Language :: Python :: Implementation :: PyPy',
   "Topic :: Software Development :: Internationalization",
   "Topic :: Software Development :: Localization",
-  "Topic :: Utilities"
+  "Topic :: Utilities",
 ]
-keywords = ["unihan", "unicode", "cjk", "yaml", "json", "chinese", "japanese", "korean", "hanzi", "dictionary", "dataset"]
+keywords = [
+  "unihan",
+  "unicode",
+  "cjk",
+  "yaml",
+  "json",
+  "chinese",
+  "japanese",
+  "korean",
+  "hanzi",
+  "dictionary",
+  "dataset",
+]
 homepage = "https://unihan-etl.git-pull.com"
 readme = 'README.md'
 
 packages = [
-    { include = "unihan_etl" }
+  { include = "unihan_etl" },
 ]
 include = [
-    { path = "tests", format = "sdist" }
+  { path = "tests", format = "sdist" },
 ]
 
 [tool.poetry.scripts]
@@ -79,7 +91,19 @@ isort = "*"
 flake8 = "*"
 
 [tool.poetry.extras]
-docs = ["sphinx", "sphinx-issues", "sphinx-argparse", "sphinx-autodoc-typehints", "sphinx-autobuild", "sphinx-copybutton", "sphinxext-opengraph", "sphinx-inline-tabs", "sphinxext-rediraffe", "myst_parser", "furo"]
+docs = [
+  "sphinx",
+  "sphinx-issues",
+  "sphinx-argparse",
+  "sphinx-autodoc-typehints",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinxext-opengraph",
+  "sphinx-inline-tabs",
+  "sphinxext-rediraffe",
+  "myst_parser",
+  "furo",
+]
 test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
 coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
