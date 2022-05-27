@@ -17,8 +17,9 @@ classifiers = [
   'Programming Language :: Python :: 3.9',
   'Programming Language :: Python :: 3.10',
   'Programming Language :: Python :: Implementation :: PyPy',
-  "Topic :: Utilities",
-  "Topic :: Software Development :: Internationalization"
+  "Topic :: Software Development :: Internationalization",
+  "Topic :: Software Development :: Localization",
+  "Topic :: Utilities"
 ]
 keywords = ["unihan", "unicode", "cjk", "yaml", "json", "chinese", "japanese", "korean", "hanzi", "dictionary", "dataset"]
 homepage = "https://unihan-etl.git-pull.com"
