@@ -51,6 +51,7 @@ data/
 .vscode/
 
 .cache/
+.mypy_cache/
 .pytest_cache/
 .eggs/
 .venv/
