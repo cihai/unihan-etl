@@ -357,7 +357,7 @@ def test_cli_exit_emessage_to_stderr():
 
 
 @pytest.mark.parametrize("flag", ["-v", "--version"])
-def test_cli_version(capsys, flag):
+def test_cli_version(capsys: pytest.CaptureFixture[str], flag):
     with pytest.raises(SystemExit):
         Packager.from_cli([flag])
     captured = capsys.readouterr()
