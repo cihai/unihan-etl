@@ -366,6 +366,12 @@ $ git push
 $ git push --tags
 ```
 
+#### Automated deployment
+
+CI will automatically push to the PyPI index when a tag is pushed.
+
+#### Manual deployment
+
 ```console
 $ poetry build
 ```
