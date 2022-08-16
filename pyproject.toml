@@ -117,7 +117,7 @@ lint = ["flake8", "mypy", "types-docutils", "types-PyYAML", "types-appdirs"]
 
 [[tool.mypy.overrides]]
 module = [
-  "zhon.*"
+  "zhon.*",
 ]
 ignore_missing_imports = true
 
