@@ -843,6 +843,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "types-appdirs"
+version = "1.4.3"
+description = "Typing stubs for appdirs"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "types-docutils"
 version = "0.19.0"
 description = "Typing stubs for docutils"
@@ -928,7 +936,7 @@ test = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b5de0455c8ab4bb367c91908ee0a84abec1f7aef2742f579f0e0c50fb26363ea"
+content-hash = "ac6650f29177dbb53e83c563c7f5cd88f65a1b88e4519afbeb64794428ba64a7"
 
 [metadata.files]
 alabaster = [
@@ -1255,6 +1263,10 @@ tornado = [
     {file = "tornado-6.2.tar.gz", hash = "sha256:9b630419bde84ec666bfd7ea0a4cb2a8a651c2d5cccdbdd1972a0c859dfc3c13"},
 ]
 typed-ast = []
+types-appdirs = [
+    {file = "types-appdirs-1.4.3.tar.gz", hash = "sha256:387bb4048b43c26ffdb9497f4629145c71fc309b12f040edd0bb95b603d95792"},
+    {file = "types_appdirs-1.4.3-py3-none-any.whl", hash = "sha256:5668e717e2278cce002139fa008d6f17ec4754b1430005185d1d7f30139bee39"},
+]
 types-docutils = [
     {file = "types-docutils-0.19.0.tar.gz", hash = "sha256:94936b1961aacda61ec6bb0acf1169cd7830b5230b645855c1d4789baf19685e"},
     {file = "types_docutils-0.19.0-py3-none-any.whl", hash = "sha256:198ed1c0ef6c1a79411da9e1745514eda433d37770e24f26b0e13a302904cc97"},
