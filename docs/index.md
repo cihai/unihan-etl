@@ -22,5 +22,6 @@ api
 unihan
 FAQ
 history
+Developer Guide <https://cihai.git-pull.com/contributing/>
 GitHub <https://github.com/cihai/unihan-etl>
 ```
