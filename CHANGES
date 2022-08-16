@@ -15,9 +15,11 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 // Usage: unihan-etl@next load yoursession
 ```
 
-## unihan-etl 0.14.x (unreleased)
+## unihan-etl 0.15.x (unreleased)
 
 - _Insert changes/features/fixes for next release here_
+
+## unihan-etl 0.14.0 (2022-08-16)
 
 ### Improvements
 
@@ -52,6 +54,8 @@ Infrastructure updates for static type checking and doctest examples.
 ### Documentation
 - Move to `furo` theme
 - Add :ref:`quickstart` page
+- Link to cihai's developer documention:
+  https://cihai.git-pull.com/contributing/
 
 ## unihan-etl 0.13.0 (2021-06-16)
 
