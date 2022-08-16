@@ -338,7 +338,7 @@ Rebuild docs and run server via one terminal: `make dev_docs` (requires above, a
 
 The project uses [black](https://github.com/psf/black) and [isort](https://pypi.org/project/isort/)
 (one after the other) and runs [flake8](https://flake8.pycqa.org/) via CI. See the configuration in
-<span class="title-ref">pyproject.toml</span> and `setup.cfg`:
+`pyproject.toml` and `setup.cfg`:
 
 `make black isort`: Run `black` first, then `isort` to handle import nuances `make flake8`, to watch
 (requires `entr(1)`): `make watch_flake8`
