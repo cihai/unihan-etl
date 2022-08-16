@@ -60,7 +60,8 @@ html_extra_path = ["manifest.json"]
 html_css_files = ["css/custom.css"]
 html_favicon = "_static/favicon.ico"
 html_theme = "furo"
-html_theme_options = {
+html_theme_path: t.List[str] = []
+html_theme_options: t.Dict[str, t.Union[str, t.List[t.Dict[str, str]]]] = {
     "light_logo": "img/cihai.svg",
     "dark_logo": "img/cihai.svg",
     "footer_icons": [
@@ -76,7 +77,6 @@ html_theme_options = {
         },
     ],
 }
-html_theme_path = []
 html_sidebars = {
     "**": [
         "sidebar/scroll-start.html",
