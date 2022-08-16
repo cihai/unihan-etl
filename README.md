@@ -194,7 +194,7 @@ YAML `$ unihan-etl -F yaml`:
 - core component and dependency of [cihai](https://cihai.git-pull.com), a CJK library
 - [data package](http://frictionlessdata.io/data-packages/) support
 - expansion of multi-value delimited fields in YAML, JSON and python dictionaries
-- supports >= 3.6 and pypy
+- supports >= 3.7 and pypy
 
 If you encounter a problem or have a question, please
 [create an issue](https://github.com/cihai/unihan-etl/issues/new).
