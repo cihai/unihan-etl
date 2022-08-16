@@ -348,8 +348,7 @@ The project uses [black](https://github.com/psf/black) and [isort](https://pypi.
 As of 0.11, [poetry](https://python-poetry.org/) handles virtualenv creation, package requirements,
 versioning, building, and publishing. Therefore there is no setup.py or requirements files.
 
-Update <span class="title-ref">\_\_version\_\_</span> in <span
-class="title-ref">\_\_about\_\_.py</span> and `pyproject.toml`:
+Update `__version__` in `__about__.py` and `pyproject.toml`:
 
 ```console
 $ git commit -m 'build(unihan-etl): Tag v0.1.1'
