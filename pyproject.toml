@@ -6,17 +6,17 @@ license = "MIT"
 authors = ["Tony Narlock <tony@git-pull.com>"]
 
 classifiers = [
-  'Development Status :: 4 - Beta',
+  "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
-  'Environment :: Web Environment',
-  'Intended Audience :: Developers',
-  'Programming Language :: Python',
-  'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.7',
-  'Programming Language :: Python :: 3.8',
-  'Programming Language :: Python :: 3.9',
-  'Programming Language :: Python :: 3.10',
-  'Programming Language :: Python :: Implementation :: PyPy',
+  "Environment :: Web Environment",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: PyPy",
   "Topic :: Software Development :: Internationalization",
   "Topic :: Software Development :: Localization",
   "Topic :: Utilities",
@@ -35,7 +35,7 @@ keywords = [
   "dataset",
 ]
 homepage = "https://unihan-etl.git-pull.com"
-readme = 'README.md'
+readme = "README.md"
 
 packages = [
   { include = "unihan_etl" },
@@ -45,7 +45,7 @@ include = [
 ]
 
 [tool.poetry.scripts]
-unihan-etl = 'unihan_etl.__main__:run'
+unihan-etl = "unihan_etl.__main__:run"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
