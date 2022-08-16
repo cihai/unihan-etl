@@ -199,6 +199,35 @@ YAML `$ unihan-etl -F yaml`:
 If you encounter a problem or have a question, please
 [create an issue](https://github.com/cihai/unihan-etl/issues/new).
 
+## Installation
+
+To download and build your own UNIHAN export:
+
+```console
+$ pip install --user unihan-etl
+```
+
+or by [pipx](https://pypa.github.io/pipx/docs/):
+
+```console
+$ pipx install unihan-etl
+```
+
+### Developmental releases
+
+[pip](https://pip.pypa.io/en/stable/):
+
+```console
+$ pip install --user --upgrade --pre unihan-etl
+```
+
+[pipx](https://pypa.github.io/pipx/docs/):
+
+```console
+$ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
+// Usage: unihan-etl@next load yoursession
+```
+
 ## Usage
 
 `unihan-etl` offers customizable builds via its command line arguments.
@@ -206,11 +235,8 @@ If you encounter a problem or have a question, please
 See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for information
 on how you can specify columns, files, download URL's, and output destination.
 
-To download and build your own UNIHAN export:
 
-```console
-$ pip install --user unihan-etl
-```
+
 
 To output CSV, the default format:
 
