@@ -11,6 +11,7 @@ Notes
 3. the last used compiled regexes are cached
 """
 import re
+from typing import Any, Dict, List, Optional, Union
 
 import zhon.hanzi
 import zhon.pinyin
@@ -21,11 +22,11 @@ from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 N_DIACRITICS = "ńňǹ"
 
 
-def expand_kDefinition(value):
+def expand_kDefinition(value: str) -> List[str]:
     return [c.strip() for c in value.split(";")]
 
 
-def expand_kMandarin(value):
+def expand_kMandarin(value: List[str]) -> Dict[str, str]:
     cn = value[0]
     if len(value) == 1:
         tw = value[0]
@@ -34,7 +35,7 @@ def expand_kMandarin(value):
     return {"zh-Hans": cn, "zh-Hant": tw}
 
 
-def expand_kTotalStrokes(value):
+def expand_kTotalStrokes(value: List[str]) -> Dict[str, int]:
     cn = value[0]
     if len(value) == 1:
         tw = value[0]
@@ -43,7 +44,7 @@ def expand_kTotalStrokes(value):
     return {"zh-Hans": int(cn), "zh-Hant": int(tw)}
 
 
-def expand_kHanYu(value):
+def expand_kHanYu(value: List[str]) -> List[Dict[str, int]]:
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -65,7 +66,7 @@ def expand_kHanYu(value):
     return value
 
 
-def expand_kIRGHanyuDaZidian(value):
+def expand_kIRGHanyuDaZidian(value: List[str]) -> List[Dict[str, int]]:
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -87,7 +88,9 @@ def expand_kIRGHanyuDaZidian(value):
     return value
 
 
-def expand_kHanyuPinyin(value):
+def expand_kHanyuPinyin(
+    value: List[str],
+) -> List[Dict[str, List[Union[Dict[str, int], str]]]]:
     location_pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -113,7 +116,9 @@ def expand_kHanyuPinyin(value):
     return value
 
 
-def expand_kXHC1983(value):
+def expand_kXHC1983(
+    value: List[str],
+) -> List[Dict[str, Union[List[Dict[str, Union[int, bool]]], str]]]:
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -139,7 +144,9 @@ def expand_kXHC1983(value):
     return value
 
 
-def expand_kCheungBauer(value):
+def expand_kCheungBauer(
+    value: List[str],
+) -> List[Dict[str, Optional[Union[int, str, List[str]]]]]:
     pattern = re.compile(
         r"""
         (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
@@ -159,7 +166,7 @@ def expand_kCheungBauer(value):
     return value
 
 
-def expand_kRSAdobe_Japan1_6(value):
+def expand_kRSAdobe_Japan1_6(value: List[str]) -> List[Dict[str, Union[str, int]]]:
     pattern = re.compile(
         r"""
         (?P<type>[CV])\+
@@ -184,7 +191,7 @@ def expand_kRSAdobe_Japan1_6(value):
     return value
 
 
-def expand_kCihaiT(value):
+def expand_kCihaiT(value: List[str]) -> List[Dict[str, int]]:
     pattern = re.compile(
         r"""
         (?P<page>[1-9][0-9]{0,3})\.
@@ -203,13 +210,13 @@ def expand_kCihaiT(value):
     return value
 
 
-def expand_kIICore(value):
+def expand_kIICore(value: List[str]) -> List[Dict[str, Union[str, List[str]]]]:
     for i, v in enumerate(value):
         value[i] = {"priority": v[0], "sources": list(v[1:])}
     return value
 
 
-def expand_kDaeJaweon(value):
+def expand_kDaeJaweon(value: str) -> Dict[str, int]:
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -228,19 +235,19 @@ def expand_kDaeJaweon(value):
     return value
 
 
-def expand_kIRGKangXi(value):
+def expand_kIRGKangXi(value: List[str]) -> List[Dict[str, int]]:
     for i, v in enumerate(value):
         value[i] = expand_kDaeJaweon(v)
     return value
 
 
-def expand_kIRGDaeJaweon(value):
+def expand_kIRGDaeJaweon(value: List[str]) -> List[Dict[str, int]]:
     for i, v in enumerate(value):
         value[i] = expand_kDaeJaweon(v)
     return value
 
 
-def expand_kFenn(value):
+def expand_kFenn(value: List[str]) -> List[Dict[str, str]]:
     pattern = re.compile(
         """
         (?P<phonetic>[0-9]+a?)
@@ -255,7 +262,7 @@ def expand_kFenn(value):
     return value
 
 
-def expand_kHanyuPinlu(value):
+def expand_kHanyuPinlu(value: List[str]) -> List[Dict[str, Union[str, int]]]:
     pattern = re.compile(
         r"""
         (?P<phonetic>[a-z({}{}]+)
@@ -272,7 +279,7 @@ def expand_kHanyuPinlu(value):
     return value
 
 
-def expand_kHDZRadBreak(value):
+def expand_kHDZRadBreak(value: str) -> Dict[str, Union[str, Dict[str, int]]]:
     rad, loc = value.split(":")
 
     location_pattern = re.compile(
@@ -307,14 +314,14 @@ def expand_kHDZRadBreak(value):
     return {"radical": m["radical"], "ucn": m["ucn"], "location": location}
 
 
-def expand_kSBGY(value):
+def expand_kSBGY(value: List[str]) -> List[Dict[str, int]]:
     for i, v in enumerate(value):
         vals = v.split(".")
         value[i] = {"page": int(vals[0]), "character": int(vals[1])}
     return value
 
 
-def _expand_kRSGeneric(value):
+def _expand_kRSGeneric(value: List[str]) -> List[Dict[str, Union[int, bool]]]:
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
@@ -341,7 +348,7 @@ expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
 
 
-def _expand_kIRG_GenericSource(value):
+def _expand_kIRG_GenericSource(value: str) -> Dict[str, Optional[str]]:
     v = value.split("-")
 
     return {"source": v[0], "location": v[1] if len(v) > 1 else None}
@@ -358,7 +365,7 @@ expand_kIRG_USource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
-def expand_kGSR(value):
+def expand_kGSR(value: List[str]) -> List[Dict[str, Union[int, str, bool]]]:
     pattern = re.compile(
         r"""
         (?P<set>[0-9]{4})
@@ -378,7 +385,7 @@ def expand_kGSR(value):
     return value
 
 
-def expand_kCheungBauerIndex(value):
+def expand_kCheungBauerIndex(value: List[str]) -> List[Dict[str, int]]:
     for i, v in enumerate(value):
         m = v.split(".")
         value[i] = {"page": int(m[0]), "character": int(m[1])}
@@ -388,7 +395,7 @@ def expand_kCheungBauerIndex(value):
 expand_kFennIndex = expand_kCheungBauerIndex
 
 
-def expand_field(field, fvalue):
+def expand_field(field: str, fvalue: str) -> Any:
     """
     Return structured value of information in UNIHAN field.
 
