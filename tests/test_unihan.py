@@ -309,13 +309,13 @@ def test_set_reduce_fields_automatically_when_only_files_specified():
     assert set(expected) == set(results), "Returns only the fields for files picked."
 
 
-def test_no_args():
+def test_no_args() -> None:
     """Works without arguments."""
 
     assert DEFAULT_OPTIONS == Packager.from_cli([]).options
 
 
-def test_cli_plus_defaults(mock_zip_path):
+def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
     """Test CLI args + defaults."""
 
     option_subset = {"zip_path": str(mock_zip_path)}
@@ -345,7 +345,7 @@ def test_cli_plus_defaults(mock_zip_path):
     assert_dict_contains_subset(option_subset, result, msg="format argument works")
 
 
-def test_cli_exit_emessage_to_stderr():
+def test_cli_exit_emessage_to_stderr() -> None:
     """Sends exception .message to stderr on exit."""
 
     # SystemExit print's to stdout by default
@@ -356,7 +356,7 @@ def test_cli_exit_emessage_to_stderr():
 
 
 @pytest.mark.parametrize("flag", ["-v", "--version"])
-def test_cli_version(capsys: pytest.CaptureFixture[str], flag):
+def test_cli_version(capsys: pytest.CaptureFixture[str], flag: str) -> None:
     with pytest.raises(SystemExit):
         Packager.from_cli([flag])
     captured = capsys.readouterr()
