@@ -55,3 +55,6 @@ data/
 .pytest_cache/
 .eggs/
 .venv/
+
+# Monkeytype
+monkeytype.sqlite3
