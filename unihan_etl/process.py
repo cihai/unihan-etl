@@ -531,15 +531,7 @@ class Packager:
 
     def __init__(
         self,
-        options: Dict[
-            str,
-            Union[
-                str,
-                List[str],
-                bool,
-                Tuple[str, ...],
-            ],
-        ],
+        options: Dict[str, Any],
     ) -> None:
         """
         Parameters
