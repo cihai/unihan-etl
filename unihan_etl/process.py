@@ -12,7 +12,7 @@ import pathlib
 import shutil
 import sys
 import zipfile
-from typing import List, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib.request import urlretrieve
 
 from appdirs import AppDirs
@@ -33,33 +33,154 @@ log = logging.getLogger(__name__)
 dirs = AppDirs(__package_name__, __author__)  # appname  # app author
 
 
-def not_junk(line):
+def not_junk(line: str) -> bool:
     """Return False on newlines and C-style comments."""
     return line[0] != "#" and line != "\n"
 
 
-def in_fields(c, fields):
+def in_fields(
+    c: str,
+    fields: Union[
+        Tuple[str, str, str, str, str, str],
+        Tuple[
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+        ],
+        List[str],
+    ],
+) -> bool:
     """Return True if string is in the default fields."""
     return c in tuple(fields) + INDEX_FIELDS
 
 
-def get_fields(d):
+def get_fields(d: Dict[str, Any]) -> List[str]:
     """Return list of fields from dict of {filename: ['field', 'field1']}."""
     return sorted({c for cs in d.values() for c in cs})
 
 
-def filter_manifest(files):
+def filter_manifest(
+    files: List[str],
+) -> Dict[
+    str,
+    Union[
+        Tuple[str, str, str, str, str, str, str, str, str, str, str, str],
+        Tuple[str, str, str, str, str],
+    ],
+]:
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-def files_exist(path, files):
+def files_exist(path: str, files: List[str]) -> bool:
     """Return True if all files exist in specified path."""
     return all(os.path.exists(os.path.join(path, f)) for f in files)
 
 
 #: Return list of files from list of fields.
-def get_files(fields):
+def get_files(
+    fields: Union[
+        Tuple[
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+        ],
+        List[str],
+    ]
+) -> List[str]:
     files = set()
 
     for field in fields:
@@ -110,7 +231,7 @@ DEFAULT_OPTIONS = {
 }
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """
     Return :py:class:`argparse.ArgumentParser` instance for CLI.
 
@@ -205,7 +326,7 @@ def get_parser():
     return parser
 
 
-def has_valid_zip(zip_path):
+def has_valid_zip(zip_path: str) -> bool:
     """
     Return True if valid zip exists.
 
@@ -232,7 +353,7 @@ def has_valid_zip(zip_path):
         return False
 
 
-def zip_has_files(files, zip_file):
+def zip_has_files(files: List[str], zip_file: zipfile.ZipFile) -> bool:
     """
     Return True if zip has the files inside.
 
@@ -253,7 +374,13 @@ def zip_has_files(files, zip_file):
         return False
 
 
-def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None, cache=True):
+def download(
+    url: str,
+    dest: str,
+    urlretrieve_fn: Callable = urlretrieve,
+    reporthook: Optional[Callable] = None,
+    cache: bool = True,
+) -> str:
     """
     Download file at URL to a destination.
 
@@ -297,7 +424,7 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None, cache=True)
     return dest
 
 
-def load_data(files: List[Union[pathlib.Path, str]]):
+def load_data(files: List[Union[pathlib.Path, str]]) -> fileinput.FileInput:
     """
     Extract zip and process information into CSV's.
 
@@ -319,7 +446,7 @@ def load_data(files: List[Union[pathlib.Path, str]]):
     return raw_data
 
 
-def extract_zip(zip_path, dest_dir):
+def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
     """
     Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
@@ -343,7 +470,97 @@ def extract_zip(zip_path, dest_dir):
     return z
 
 
-def normalize(raw_data, fields):
+def normalize(
+    raw_data: fileinput.FileInput,
+    fields: Union[
+        Tuple[str, str, str, str, str, str],
+        Tuple[
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+        ],
+        List[str],
+    ],
+) -> List[Dict[str, Optional[str]]]:
     """
     Return normalized data from a UNIHAN data files.
 
@@ -383,7 +600,9 @@ def normalize(raw_data, fields):
     return [i for i in items.values()]
 
 
-def expand_delimiters(normalized_data):
+def expand_delimiters(
+    normalized_data: List[Dict[str, Optional[str]]]
+) -> List[Dict[str, Any]]:
     """
     Return expanded multi-value fields in UNIHAN.
 
@@ -423,7 +642,7 @@ def listify(data, fields):
     return list_data
 
 
-def export_csv(data, destination, fields):
+def export_csv(data: List[Dict[str, str]], destination: str, fields: List[str]) -> None:
     data = listify(data, fields)
 
     with open(destination, "w") as f:
@@ -432,7 +651,7 @@ def export_csv(data, destination, fields):
         log.info("Saved output to: %s" % destination)
 
 
-def export_json(data, destination):
+def export_json(data: List[Dict[str, Union[str, List[str]]]], destination: str) -> None:
     with codecs.open(destination, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info("Saved output to: %s" % destination)
@@ -444,7 +663,35 @@ def export_yaml(data, destination):
         log.info("Saved output to: %s" % destination)
 
 
-def validate_options(options):
+def validate_options(
+    options: Dict[
+        str,
+        Union[
+            str,
+            List[str],
+            bool,
+            Tuple[
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+                str,
+            ],
+        ],
+    ]
+) -> None:
     if "input_files" in options and "fields" not in options:
         # Filter fields when only files specified.
         try:
@@ -473,7 +720,36 @@ class Packager:
     """Download and generate a tabular release of
     `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
 
-    def __init__(self, options):
+    def __init__(
+        self,
+        options: Dict[
+            str,
+            Union[
+                str,
+                List[str],
+                bool,
+                Tuple[
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                    str,
+                ],
+            ],
+        ],
+    ) -> None:
         """
         Parameters
         ----------
@@ -485,7 +761,7 @@ class Packager:
 
         self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
 
-    def download(self, urlretrieve_fn=urlretrieve):
+    def download(self, urlretrieve_fn: Callable = urlretrieve) -> None:
         """
         Download raw UNIHAN data if not exists.
 
@@ -510,7 +786,7 @@ class Packager:
         ):
             extract_zip(self.options["zip_path"], self.options["work_dir"])
 
-    def export(self):  # NOQA: C901
+    def export(self) -> None:  # NOQA: C901
         """Extract zip and process information into CSV's."""
 
         fields = self.options["fields"]
@@ -556,7 +832,7 @@ class Packager:
             log.info("Format %s does not exist" % self.options["format"])
 
     @classmethod
-    def from_cli(cls, argv):
+    def from_cli(cls, argv: List[Union[Any, str]]) -> "Packager":
         """
         Create Packager instance from CLI :mod:`argparse` arguments.
 
@@ -580,7 +856,7 @@ class Packager:
             sys.exit(e)
 
 
-def setup_logger(logger=None, level="DEBUG"):
+def setup_logger(logger: None = None, level: str = "DEBUG") -> None:
     """
     Setup logging for CLI use.
 

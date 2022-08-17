@@ -7,9 +7,10 @@ util
 import re
 import sys
 from collections.abc import Mapping
+from typing import Callable, Dict, List, Union
 
 
-def ucn_to_unicode(ucn):
+def ucn_to_unicode(ucn: str) -> str:
     """Return a python unicode value from a UCN.
 
     Converts a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to
@@ -29,7 +30,7 @@ def ucn_to_unicode(ucn):
     return char
 
 
-def ucnstring_to_python(ucn_string):
+def ucnstring_to_python(ucn_string: str) -> bytes:
     """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
     (u'\\u4e00').
     """
@@ -43,7 +44,7 @@ def ucnstring_to_python(ucn_string):
     return ucn_string
 
 
-def ucnstring_to_unicode(ucn_string):
+def ucnstring_to_unicode(ucn_string: str) -> str:
     """Return ucnstring as Unicode."""
     ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
@@ -91,7 +92,9 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
         print("\n")
 
 
-def merge_dict(base, additional):
+def merge_dict(
+    base: Callable, additional: Dict[str, Union[str, List[str]]]
+) -> Dict[str, Union[str, List[str]]]:
     if base is None:
         return additional
 

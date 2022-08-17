@@ -1,7 +1,12 @@
 """Test helpers functions for downloading and processing Unihan data."""
+from typing import Dict, List, Optional, Union
 
 
-def assert_dict_contains_subset(subset, dictionary, msg=None):
+def assert_dict_contains_subset(
+    subset: Dict[str, Union[str, List[str]]],
+    dictionary: Dict[str, Union[str, List[str], bool]],
+    msg: Optional[str] = None,
+) -> None:
     """
     Ported assertion for dict subsets in py.test.
 
