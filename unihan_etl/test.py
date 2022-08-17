@@ -1,10 +1,10 @@
 """Test helpers functions for downloading and processing Unihan data."""
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
 
 def assert_dict_contains_subset(
-    subset: Dict[str, Union[str, List[str]]],
-    dictionary: Dict[str, Union[str, List[str], bool]],
+    subset: Dict[str, Any],
+    dictionary: Dict[str, Any],
     msg: Optional[str] = None,
 ) -> None:
     """
