@@ -1,5 +1,5 @@
+import pathlib
 import zipfile
-from pathlib import PosixPath
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pytest
@@ -30,7 +30,7 @@ def mock_zip_pathname() -> str:
 
 
 @pytest.fixture(scope="session")
-def fixture_files() -> List[PosixPath]:
+def fixture_files() -> List[pathlib.Path]:
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -50,18 +50,18 @@ def sample_data2(fixture_files):
 
 
 @pytest.fixture(scope="session")
-def mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> PosixPath:
+def mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
     unihan_etl_path = tmp_path_factory.mktemp("unihan_etl")
     return unihan_etl_path
 
 
 @pytest.fixture(scope="session")
-def mock_zip_path(mock_test_dir: PosixPath, mock_zip_pathname: str) -> PosixPath:
+def mock_zip_path(mock_test_dir: pathlib.Path, mock_zip_pathname: str) -> pathlib.Path:
     return mock_test_dir / mock_zip_pathname
 
 
 @pytest.fixture(scope="session")
-def mock_zip(mock_zip_path: PosixPath, sample_data: str) -> zipfile.ZipFile:
+def mock_zip(mock_zip_path: pathlib.Path, sample_data: str) -> zipfile.ZipFile:
     zf = zipfile.ZipFile(str(mock_zip_path), "a")
     zf.writestr("Unihan_Readings.txt", sample_data.encode("utf-8"))
     zf.close()
@@ -91,7 +91,7 @@ def columns() -> Tuple[str, ...]:
 @pytest.fixture(scope="session")
 def normalized_data(
     columns: Tuple[str, ...],
-    fixture_files: List[PosixPath],
+    fixture_files: List[pathlib.Path],
 ) -> List[Dict[str, Optional[str]]]:
     data = process.load_data(files=fixture_files)
 
