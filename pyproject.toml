@@ -115,6 +115,9 @@ coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
 lint = ["flake8", "mypy", "types-docutils", "types-PyYAML", "types-appdirs"]
 
+[tool.mypy]
+strict = true
+
 [[tool.mypy.overrides]]
 module = [
   "zhon.*",
