@@ -17,13 +17,13 @@ from .constants import FIXTURE_PATH
 log = logging.getLogger(__name__)
 
 
-def test_zip_has_files(mock_zip: zipfile.ZipFile):
+def test_zip_has_files(mock_zip: zipfile.ZipFile) -> None:
     assert zip_has_files(["Unihan_Readings.txt"], mock_zip)
 
     assert not zip_has_files(["Unihan_Cats.txt"], mock_zip)
 
 
-def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile):
+def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> None:
     if os.path.isfile(UNIHAN_ZIP_PATH):
         assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
@@ -37,14 +37,14 @@ def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile):
     assert not process.has_valid_zip(str(bad_zip))
 
 
-def test_in_fields():
+def test_in_fields() -> None:
     columns = ["hey", "kDefinition", "kWhat"]
     result = process.in_fields("kDefinition", columns)
 
     assert result
 
 
-def test_filter_manifest():
+def test_filter_manifest() -> None:
     expected = {
         "Unihan_Variants.txt": [
             "kSemanticVariant",
@@ -60,7 +60,7 @@ def test_filter_manifest():
     assert set(result) == set(expected)
 
 
-def test_get_files():
+def test_get_files() -> None:
     fields = ["kKorean", "kRSUnicode"]
     expected = ["Unihan_Readings.txt", "Unihan_RadicalStrokeCounts.txt"]
 
@@ -71,7 +71,7 @@ def test_get_files():
 
 def test_download(
     tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile, mock_zip_path, mock_zip_pathname
-):
+) -> None:
     dest_filepath = tmp_path / "data" / mock_zip_pathname
 
     process.download(str(mock_zip_path), str(dest_filepath), shutil.copy)
@@ -86,7 +86,7 @@ def test_download_mock(
     mock_zip_path,
     mock_test_dir,
     test_options,
-):
+) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
@@ -115,7 +115,7 @@ def test_export_format(
     mock_zip_path,
     mock_test_dir,
     test_options,
-):
+) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
@@ -141,7 +141,9 @@ def test_export_format(
     assert os.path.exists(p.options["destination"])
 
 
-def test_extract_zip(mock_zip: zipfile.ZipFile, mock_zip_path, tmp_path: pathlib.Path):
+def test_extract_zip(
+    mock_zip: zipfile.ZipFile, mock_zip_path, tmp_path: pathlib.Path
+) -> None:
     zf = process.extract_zip(str(mock_zip_path), str(tmp_path))
 
     assert len(zf.infolist()) == 1
@@ -149,7 +151,7 @@ def test_extract_zip(mock_zip: zipfile.ZipFile, mock_zip_path, tmp_path: pathlib
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
-def test_normalize_only_output_requested_columns(normalized_data, columns):
+def test_normalize_only_output_requested_columns(normalized_data, columns) -> None:
     items = normalized_data
     in_columns = ["kDefinition", "kCantonese"]
 
@@ -173,7 +175,7 @@ def test_normalize_only_output_requested_columns(normalized_data, columns):
     ), "normalize returns correct columns specified + ucn and char."
 
 
-def test_normalize_simple_data_format():
+def test_normalize_simple_data_format() -> None:
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
         FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
@@ -198,7 +200,7 @@ def test_normalize_simple_data_format():
     rows = items[1:]  # NOQA
 
 
-def test_flatten_fields():
+def test_flatten_fields() -> None:
     single_dataset = {"Unihan_Readings.txt": ["kCantonese", "kDefinition", "kHangul"]}
 
     expected = ["kCantonese", "kDefinition", "kHangul"]
@@ -229,7 +231,7 @@ def test_flatten_fields():
     assert set(expected) == set(results)
 
 
-def test_pick_files(mock_zip_path):
+def test_pick_files(mock_zip_path) -> None:
     """Pick a white list of files to build from."""
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
@@ -244,7 +246,7 @@ def test_pick_files(mock_zip_path):
     assert result == expected, "Returns only the files picked."
 
 
-def test_raise_error_unknown_field():
+def test_raise_error_unknown_field() -> None:
     """Throw error if picking unknown field."""
 
     options = {"fields": ["kHello"]}
@@ -254,7 +256,7 @@ def test_raise_error_unknown_field():
     excinfo.match("Field ([a-zA-Z].*) not found in file list.")
 
 
-def test_raise_error_unknown_file():
+def test_raise_error_unknown_file() -> None:
     """Throw error if picking unknown file."""
 
     options = {"input_files": ["Sparta.lol"]}
@@ -264,7 +266,7 @@ def test_raise_error_unknown_file():
     excinfo.match(r"File ([a-zA-Z_\.\'].*) not found in file list.")
 
 
-def test_raise_error_unknown_field_filtered_files():
+def test_raise_error_unknown_field_filtered_files() -> None:
     """Throw error field not in file list, when files specified."""
 
     files = ["Unihan_Variants.txt"]
@@ -276,7 +278,7 @@ def test_raise_error_unknown_field_filtered_files():
     excinfo.match("Field ([a-zA-Z].*) not found in file list.")
 
 
-def test_set_reduce_files_automatically_when_only_field_specified():
+def test_set_reduce_files_automatically_when_only_field_specified() -> None:
     """Picks file automatically if none specified and fields are."""
 
     fields = (
@@ -294,7 +296,7 @@ def test_set_reduce_files_automatically_when_only_field_specified():
     assert set(expected) == set(results)
 
 
-def test_set_reduce_fields_automatically_when_only_files_specified():
+def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
     """Picks only necessary files when fields specified."""
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
@@ -322,22 +324,27 @@ def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
     result = Packager.from_cli(["-z", str(mock_zip_path)]).options
     assert_dict_contains_subset(option_subset, result)
 
-    option_subset = {"fields": ["kDefinition"]}
+    option_subset_one_field = {"fields": ["kDefinition"]}
     result = Packager.from_cli(["-f", "kDefinition"]).options
-    assert_dict_contains_subset(option_subset, result)
+    assert_dict_contains_subset(option_subset_one_field, result)
 
-    option_subset = {"fields": ["kDefinition", "kXerox"]}
+    option_subset_two_fields = {"fields": ["kDefinition", "kXerox"]}
     result = Packager.from_cli(["-f", "kDefinition", "kXerox"]).options
     assert_dict_contains_subset(
-        option_subset, result, msg="fields -f allows multiple fields."
+        option_subset_two_fields, result, msg="fields -f allows multiple fields."
     )
 
-    option_subset = {"fields": ["kDefinition", "kXerox"], "destination": "data/ha.csv"}
+    option_subset_with_destination = {
+        "fields": ["kDefinition", "kXerox"],
+        "destination": "data/ha.csv",
+    }
     result = Packager.from_cli(
         ["-f", "kDefinition", "kXerox", "-d", "data/ha.csv"]
     ).options
     assert_dict_contains_subset(
-        option_subset, result, msg="fields -f allows additional arguments."
+        option_subset_with_destination,
+        result,
+        msg="fields -f allows additional arguments.",
     )
 
     result = Packager.from_cli(["--format", "json"]).options
