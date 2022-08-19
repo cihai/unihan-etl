@@ -3,9 +3,15 @@
 
 import os
 import sys
+import typing as t
+
+if t.TYPE_CHECKING:
+    # see https://github.com/python/typeshed/issues/8513#issue-1333671093 for the
+    # rationale behind this alias
+    _ExitCode: t.TypeAlias = str | int | None
 
 
-def run():
+def run() -> "_ExitCode":
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(0, base)
     from .process import Packager
@@ -13,6 +19,8 @@ def run():
     p = Packager.from_cli(sys.argv[1:])
     p.download()
     p.export()
+
+    return 0
 
 
 if __name__ == "__main__":

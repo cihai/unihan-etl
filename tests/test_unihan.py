@@ -3,16 +3,25 @@ import logging
 import os
 import pathlib
 import shutil
+import typing as t
 import zipfile
+from http.client import HTTPMessage
 
 import pytest
 
-from unihan_etl import __version__, constants, process
+from unihan_etl import constants, process
+from unihan_etl.__about__ import __version__
 from unihan_etl.process import DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager, zip_has_files
 from unihan_etl.test import assert_dict_contains_subset
+from unihan_etl.types import ColumnData, OptionsDict, UntypedNormalizedData
 from unihan_etl.util import merge_dict
 
 from .constants import FIXTURE_PATH
+
+if t.TYPE_CHECKING:
+    from urllib.request import _DataType
+
+    from _typeshed import StrOrBytesPath
 
 log = logging.getLogger(__name__)
 
@@ -28,6 +37,8 @@ def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> Non
         assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
         assert not process.has_valid_zip(UNIHAN_ZIP_PATH)
+
+    assert mock_zip.filename is not None
 
     assert process.has_valid_zip(mock_zip.filename)
 
@@ -70,32 +81,56 @@ def test_get_files() -> None:
 
 
 def test_download(
-    tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile, mock_zip_path, mock_zip_pathname
+    tmp_path: pathlib.Path,
+    mock_zip: zipfile.ZipFile,
+    mock_zip_path: pathlib.Path,
+    mock_zip_pathname: pathlib.Path,
 ) -> None:
-    dest_filepath = tmp_path / "data" / mock_zip_pathname
+    dest_path = tmp_path / "data" / mock_zip_pathname
 
-    process.download(str(mock_zip_path), str(dest_filepath), shutil.copy)
+    def urlretrieve(
+        url: str,
+        filename: t.Optional["StrOrBytesPath"] = None,
+        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        data: "_DataType" = None,
+    ) -> t.Tuple[str, "HTTPMessage"]:
+        shutil.copy(str(mock_zip_path), str(dest_path))
+        return (
+            "",
+            HTTPMessage(),
+        )
 
-    result = os.path.dirname(dest_filepath / "data")
+    process.download(str(mock_zip_path), str(dest_path), urlretrieve)
+
+    result = os.path.dirname(dest_path / "data")
     assert result, "Creates data directory if doesn't exist."
 
 
 def test_download_mock(
     tmp_path: pathlib.Path,
     mock_zip: zipfile.ZipFile,
-    mock_zip_path,
-    mock_test_dir,
-    test_options,
+    mock_zip_path: pathlib.Path,
+    mock_test_dir: pathlib.Path,
+    test_options: OptionsDict,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
-    def urlretrieve(url, filename, url_retrieve, reporthook=None):
+    def urlretrieve(
+        url: str,
+        filename: t.Optional["StrOrBytesPath"] = None,
+        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        data: "_DataType" = None,
+    ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
+        return (
+            "",
+            HTTPMessage(),
+        )
 
     p = Packager(
         merge_dict(
-            test_options.copy,
+            test_options.copy(),
             {
                 "fields": ["kDefinition"],
                 "zip_path": str(dest_path),
@@ -112,19 +147,25 @@ def test_download_mock(
 def test_export_format(
     tmp_path: pathlib.Path,
     mock_zip: zipfile.ZipFile,
-    mock_zip_path,
-    mock_test_dir,
-    test_options,
+    mock_zip_path: pathlib.Path,
+    mock_test_dir: pathlib.Path,
+    test_options: OptionsDict,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
-    def urlretrieve(url, filename, url_retrieve, reporthook=None):
+    def urlretrieve(
+        url: str,
+        filename: t.Optional["StrOrBytesPath"] = None,
+        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        data: "_DataType" = None,
+    ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
+        return ("", HTTPMessage())
 
     p = Packager(
         merge_dict(
-            test_options.copy,
+            test_options.copy(),
             {
                 "fields": ["kDefinition"],
                 "zip_path": str(dest_path),
@@ -142,7 +183,7 @@ def test_export_format(
 
 
 def test_extract_zip(
-    mock_zip: zipfile.ZipFile, mock_zip_path, tmp_path: pathlib.Path
+    mock_zip: zipfile.ZipFile, mock_zip_path: pathlib.Path, tmp_path: pathlib.Path
 ) -> None:
     zf = process.extract_zip(str(mock_zip_path), str(tmp_path))
 
@@ -151,19 +192,21 @@ def test_extract_zip(
     assert zf.infolist()[0].filename == "Unihan_Readings.txt"
 
 
-def test_normalize_only_output_requested_columns(normalized_data, columns) -> None:
-    items = normalized_data
+def test_normalize_only_output_requested_columns(
+    normalized_data: UntypedNormalizedData, columns: ColumnData
+) -> None:
     in_columns = ["kDefinition", "kCantonese"]
 
-    for v in items:
-        assert set(columns) == set(v.keys())
+    for data_labels in normalized_data:
+        assert set(columns) == set(data_labels.keys())
 
-    items = process.listify(items, in_columns)
+    items = process.listify(normalized_data, in_columns)
+    example_result = items[0]
 
-    not_in_columns = []
+    not_in_columns: t.List[str] = []
 
     # columns not selected in normalize must not be in result.
-    for v in items[0]:
+    for v in example_result:
         if v not in columns:
             not_in_columns.append(v)
         else:
@@ -191,11 +234,11 @@ def test_normalize_simple_data_format() -> None:
 
     data = process.load_data(files=csv_files)
 
-    items = process.normalize(data, columns)
-    items = process.listify(items, columns)
+    normalized_items = process.normalize(data, columns)
+    items = process.listify(normalized_items, columns)
 
     header = items[0]
-    assert header == columns
+    assert set(header) == set(columns)
 
     rows = items[1:]  # NOQA
 
@@ -231,7 +274,7 @@ def test_flatten_fields() -> None:
     assert set(expected) == set(results)
 
 
-def test_pick_files(mock_zip_path) -> None:
+def test_pick_files(mock_zip_path: pathlib.Path) -> None:
     """Pick a white list of files to build from."""
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]

@@ -1,11 +1,12 @@
 """Test helpers functions for downloading and processing Unihan data."""
-from typing import Any, Dict, Optional
+import typing as t
+from collections.abc import Mapping
 
 
 def assert_dict_contains_subset(
-    subset: Dict[str, Any],
-    dictionary: Dict[str, Any],
-    msg: Optional[str] = None,
+    subset: t.Dict[str, t.Any],
+    dictionary: Mapping[str, t.Any],
+    msg: t.Optional[str] = None,
 ) -> None:
     """
     Ported assertion for dict subsets in py.test.
