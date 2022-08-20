@@ -11,6 +11,7 @@ import os
 import pathlib
 import shutil
 import sys
+import typing as t
 import zipfile
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib.request import urlretrieve
@@ -107,6 +108,22 @@ try:
     ALLOWED_EXPORT_TYPES += ["yaml"]
 except ImportError:
     pass
+
+
+class OptionsDict(t.TypedDict):
+    source: str
+    destination: str
+    zip_path: str
+    work_dir: str
+    fields: t.Tuple[str]
+    format: str
+    input_files: t.List[str]
+    download: bool
+    expand: bool
+    prune_empty: bool
+    cache: bool
+    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
 
 DEFAULT_OPTIONS = {
     "source": UNIHAN_URL,
