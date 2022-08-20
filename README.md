@@ -57,27 +57,6 @@ char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
 To preview in the CLI, try [tabview](https://github.com/TabViewer/tabview) or
 [csvlens](https://github.com/YS-L/csvlens).
 
-### YAML
-
-```console
-$ unihan-etl -F yaml --no-expand
-```
-
-```yaml
-- char: 㐀
-  kCantonese: jau1
-  kDefinition: (same as U+4E18 丘) hillock or mound
-  kHanyuPinyin: null
-  kMandarin: qiū
-  ucn: U+3400
-- char: 㐁
-  kCantonese: tim2
-  kDefinition: to lick; to taste, a mat, bamboo bark
-  kHanyuPinyin: 10019.020:tiàn
-  kMandarin: tiàn
-  ucn: U+3401
-```
-
 ### JSON
 
 ```console
@@ -108,6 +87,27 @@ $ unihan-etl -F json --no-expand
 Consider viewing the output in [jq](https://github.com/stedolan/jq),
 [gojq](https://github.com/itchyny/gojq),
 [jql](https://github.com/yamafaktory/jql)
+
+### YAML
+
+```console
+$ unihan-etl -F yaml --no-expand
+```
+
+```yaml
+- char: 㐀
+  kCantonese: jau1
+  kDefinition: (same as U+4E18 丘) hillock or mound
+  kHanyuPinyin: null
+  kMandarin: qiū
+  ucn: U+3400
+- char: 㐁
+  kCantonese: tim2
+  kDefinition: to lick; to taste, a mat, bamboo bark
+  kHanyuPinyin: 10019.020:tiàn
+  kMandarin: tiàn
+  ucn: U+3401
+```
 
 ## "Structured" output
 
