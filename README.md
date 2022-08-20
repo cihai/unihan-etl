@@ -42,13 +42,26 @@ fields contained in the database.
 
 ## Tabular, "Flat" output
 
-CSV (default), `$ unihan-etl`:
+### CSV (default)
 
-    char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
-    㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
-    㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
+```console
+$ unihan-etl
+```
 
-With `$ unihan-etl -F yaml --no-expand`:
+```csv
+char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
+㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
+㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
+```
+
+To preview in the CLI, try [tabview](https://github.com/TabViewer/tabview) or
+[csvlens](https://github.com/YS-L/csvlens).
+
+### YAML
+
+```console
+$ unihan-etl -F yaml --no-expand
+```
 
 ```yaml
 - char: 㐀
@@ -65,7 +78,11 @@ With `$ unihan-etl -F yaml --no-expand`:
   ucn: U+3401
 ```
 
-With `$ unihan-etl -F json --no-expand`:
+### JSON
+
+```console
+$ unihan-etl -F json --no-expand
+```
 
 ```json
 [
@@ -87,6 +104,10 @@ With `$ unihan-etl -F json --no-expand`:
   }
 ]
 ```
+
+Consider viewing the output in [jq](https://github.com/stedolan/jq),
+[gojq](https://github.com/itchyny/gojq),
+[jql](https://github.com/yamafaktory/jql)
 
 ## "Structured" output
 
