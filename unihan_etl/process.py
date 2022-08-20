@@ -105,6 +105,7 @@ DEFAULT_OPTIONS = {
     "download": False,
     "expand": True,
     "prune_empty": True,
+    "cache": True,
     "log_level": "INFO",
 }
 
@@ -169,7 +170,12 @@ def get_parser():
         action="store_false",
         help=("Don't prune fields with empty keys" + "Doesn't apply to CSVs."),
     )
-
+    parser.add_argument(
+        "--no-cache",
+        dest="cache",
+        action="store_false",
+        help=("Don't cache the UNIHAN zip file or CSV outputs."),
+    )
     parser.add_argument(
         "-f",
         "--fields",
@@ -247,7 +253,7 @@ def zip_has_files(files, zip_file):
         return False
 
 
-def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
+def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None, cache=True):
     """
     Download file at URL to a destination.
 
@@ -278,16 +284,15 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None):
     def not_downloaded():
         return not os.path.exists(os.path.join(datadir, "Unihan.zip"))
 
-    if no_unihan_files_exist():
-        if not_downloaded():
-            log.info("Downloading Unihan.zip...")
-            log.info(f"{url} to {dest}")
-            if os.path.isfile(url):
-                shutil.copy(url, dest)
-            elif reporthook:
-                urlretrieve_fn(url, dest, reporthook)
-            else:
-                urlretrieve_fn(url, dest)
+    if (no_unihan_files_exist() and not_downloaded()) or not cache:
+        log.info("Downloading Unihan.zip...")
+        log.info(f"{url} to {dest}")
+        if os.path.isfile(url):
+            shutil.copy(url, dest)
+        elif reporthook:
+            urlretrieve_fn(url, dest, reporthook)
+        else:
+            urlretrieve_fn(url, dest)
 
     return dest
 
@@ -486,15 +491,19 @@ class Packager:
         urlretrieve_fn : function
             function to download file
         """
-        while not has_valid_zip(self.options["zip_path"]):
+        if not has_valid_zip(self.options["zip_path"]) or not self.options["cache"]:
             download(
                 self.options["source"],
                 self.options["zip_path"],
                 urlretrieve_fn=urlretrieve_fn,
                 reporthook=_dl_progress,
+                cache=self.options["cache"],
             )
 
-        if not files_exist(self.options["work_dir"], self.options["input_files"]):
+        if (
+            not files_exist(self.options["work_dir"], self.options["input_files"])
+            or not self.options["cache"]
+        ):
             extract_zip(self.options["zip_path"], self.options["work_dir"])
 
     def export(self):  # NOQA: C901
