@@ -125,7 +125,7 @@ class OptionsDict(t.TypedDict):
     log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
-DEFAULT_OPTIONS = {
+DEFAULT_OPTIONS: OptionsDict = {
     "source": UNIHAN_URL,
     "destination": "%s/unihan.{ext}" % DESTINATION_DIR,
     "zip_path": UNIHAN_ZIP_PATH,
