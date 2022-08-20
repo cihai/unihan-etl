@@ -26,6 +26,7 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 - `load_data`: Accept list of `pathlib.Path` in addition to list of `str`
 
 ### Compatibility
+
 - Add Python 3.10 (#248)
 - Dropped Python 3.6 (#248)
 
@@ -38,7 +39,7 @@ Infrastructure updates for static type checking and doctest examples.
   - Relock poetry.lock at 1.1 (w/ 1.1.7's fix)
 - Run pyupgrade for python 3.7
 - Tests: Move from `tmpdir` -> `tmp_path`
-- Initial [doctests] support added, via #255 
+- Initial [doctests] support added, via #255
 
   [doctests]: https://docs.python.org/3/library/doctest.html
 
@@ -52,6 +53,7 @@ Infrastructure updates for static type checking and doctest examples.
 - CI (docs): Skip if no `PUBLISH` condition triggered, via #255
 
 ### Documentation
+
 - Move to `furo` theme
 - Add :ref:`quickstart` page
 - Link to cihai's developer documention:
