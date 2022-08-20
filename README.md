@@ -125,7 +125,11 @@ and YAML accept key-values and hierarchical entries.
 
 </div>
 
-JSON, `$ unihan-etl -F json`:
+### JSON
+
+```console
+$ unihan-etl -F json
+```
 
 ```json
 [
@@ -165,7 +169,11 @@ JSON, `$ unihan-etl -F json`:
 ]
 ```
 
-YAML `$ unihan-etl -F yaml`:
+### YAML
+
+```console
+$ unihan-etl -F yaml
+```
 
 ```yaml
 - char: 㐀
