@@ -458,7 +458,11 @@ def validate_options(options):
         # Filter fields when only files specified.
         fields_in_files = get_fields(filter_manifest(options["input_files"]))
 
-        not_in_field = [h for h in options["fields"] if h not in fields_in_files]
+        not_in_field = [
+            h
+            for h in options["fields"]
+            if h not in fields_in_files + list(INDEX_FIELDS)
+        ]
         if not_in_field:
             raise KeyError(
                 "Field {} not found in file list.".format(", ".join(not_in_field))
