@@ -86,9 +86,14 @@ $ unihan-etl -F json --no-expand
 ]
 ```
 
-Consider viewing the output in [jq](https://github.com/stedolan/jq),
-[gojq](https://github.com/itchyny/gojq),
-[jql](https://github.com/yamafaktory/jql)
+Consider viewing the output in
+[python-fx](https://github.com/cielong/pyfx),
+[jless](https://github.com/PaulJuliusMartinez/jless) or
+[fx](https://github.com/antonmedv/fx).
+
+Consider filtering the output [jq](https://github.com/stedolan/jq),
+[jql](https://github.com/yamafaktory/jql),
+[gojq](https://github.com/itchyny/gojq).
 
 ### YAML
 
@@ -110,6 +115,8 @@ $ unihan-etl -F yaml --no-expand
   kMandarin: tiàn
   ucn: U+3401
 ```
+
+Consider filtering the output in [yq](https://github.com/mikefarah/yq)
 
 ## "Structured" output
 
