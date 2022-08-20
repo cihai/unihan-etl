@@ -6,8 +6,7 @@ util
 """
 import re
 import sys
-
-from ._compat import Mapping, string_types, text_type, unichr
+from collections.abc import Mapping
 
 
 def ucn_to_unicode(ucn):
@@ -15,17 +14,17 @@ def ucn_to_unicode(ucn):
 
     Converts a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to
     Python unicode (u'\\u4e00')"""
-    if isinstance(ucn, string_types):
+    if isinstance(ucn, str):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
             char = rb"\U" + format(int(ucn, 16), "08x").encode("latin1")
             char = char.decode("unicode_escape")
         else:
-            char = unichr(int(ucn, 16))
+            char = chr(int(ucn, 16))
     else:
-        char = unichr(ucn)
+        char = chr(ucn)
 
-    assert isinstance(char, text_type)
+    assert isinstance(char, str)
 
     return char
 
@@ -36,7 +35,7 @@ def ucnstring_to_python(ucn_string):
     """
     res = re.findall(r"U\+[0-9a-fA-F]*", ucn_string)
     for r in res:
-        ucn_string = ucn_string.replace(text_type(r), text_type(ucn_to_unicode(r)))
+        ucn_string = ucn_string.replace(str(r), str(ucn_to_unicode(r)))
 
     ucn_string = ucn_string.encode("utf-8")
 
@@ -48,7 +47,7 @@ def ucnstring_to_unicode(ucn_string):
     """Return ucnstring as Unicode."""
     ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
-    assert isinstance(ucn_string, text_type)
+    assert isinstance(ucn_string, str)
     return ucn_string
 
 
