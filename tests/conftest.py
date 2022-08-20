@@ -2,7 +2,7 @@ import fileinput
 import pathlib
 import typing as t
 import zipfile
-from collections.abc import Mapping
+from typing import Mapping
 
 import pytest
 
@@ -45,7 +45,7 @@ def fixture_files() -> t.List[pathlib.Path]:
 
 
 @pytest.fixture(scope="session")
-def sample_data2(fixture_files: t.List[pathlib.Path]) -> fileinput.FileInput[t.Any]:
+def sample_data2(fixture_files: t.List[pathlib.Path]) -> "fileinput.FileInput[t.Any]":
     return process.load_data(files=fixture_files)
 
 

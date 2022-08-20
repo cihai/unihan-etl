@@ -1,6 +1,6 @@
 """Test helpers functions for downloading and processing Unihan data."""
 import typing as t
-from collections.abc import Mapping
+from typing import Mapping
 
 
 def assert_dict_contains_subset(
