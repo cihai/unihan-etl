@@ -19,6 +19,10 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+### Features
+
+- mypy `--strict` annotations, via #257
+
 ## unihan-etl 0.16.0 (2022-08-20)
 
 ### Features
