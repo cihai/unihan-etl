@@ -295,7 +295,6 @@ unihan_etl/
   process.py    # argparse, download, extract, transform UNIHAN's data
   constants.py  # immutable data vars (field to filename mappings, etc)
   expansion.py  # extracting details baked inside of fields
-  _compat.py    # python 2/3 compatibility module
   util.py       # utility / helper functions
 
 # test suite
