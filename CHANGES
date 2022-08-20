@@ -19,13 +19,18 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+### Features
+
+- New option: `--no-cache`
+
+  Disregard cached .zip / extracted files, via #259.
+
 ### Development
 
 - Add python 3.8 and 3.9 to CI
 
   This is to make way for strict type annotations, as the typings and generic
   behavior vary dramatically between 3.7 - 3.11.
-
 
 ## unihan-etl 0.15.0 (2022-08-29)
 
