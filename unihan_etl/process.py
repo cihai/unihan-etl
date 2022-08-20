@@ -91,7 +91,7 @@ def get_files(
 #: Directory to use for processing intermittent files.
 WORK_DIR = os.path.join(dirs.user_cache_dir, "downloads")
 #: Default Unihan Files
-UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
 #: URI of Unihan.zip data.
 UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
 #: Filepath to output built CSV file to.
