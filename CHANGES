@@ -19,6 +19,11 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+### Breaking changes
+
+- Python 2 compatibility module and imports removed. Python 2.x was officially
+  dropped in 0.12.0 (2021-06-15) via #258
+
 ## unihan-etl 0.14.0 (2022-08-16)
 
 ### Improvements
