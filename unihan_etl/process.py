@@ -2,6 +2,7 @@
 """Build Unihan into tabular / structured format and export it."""
 import argparse
 import codecs
+import csv
 import fileinput
 import glob
 import json
@@ -12,6 +13,7 @@ import shutil
 import sys
 import zipfile
 from typing import List, Union
+from urllib.request import urlretrieve
 
 from appdirs import AppDirs
 
@@ -23,14 +25,8 @@ from unihan_etl.__about__ import (
     __title__,
     __version__,
 )
-from unihan_etl._compat import PY2, text_type, urlretrieve
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
-
-if PY2:
-    import unicodecsv as csv
-else:
-    import csv
 
 log = logging.getLogger(__name__)
 
@@ -370,7 +366,7 @@ def normalize(raw_data, fields):
                     items[char] = dict().fromkeys(fields)
                     items[char]["ucn"] = item["ucn"]
                     items[char]["char"] = char
-                items[char][item["field"]] = text_type(item["value"])
+                items[char][item["field"]] = str(item["value"])
         if log.isEnabledFor(logging.DEBUG):
             sys.stdout.write("\rProcessing line %i" % (idx))
             sys.stdout.flush()
