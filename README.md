@@ -229,9 +229,6 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for information
 on how you can specify columns, files, download URL's, and output destination.
 
-
-
-
 To output CSV, the default format:
 
 ```console
