@@ -1,6 +1,6 @@
 # unihan-etl &middot; [![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](https://pypi.org/project/unihan-etl/) [![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE) [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 
-[ETL](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) tool for Unicode's Han Unification
+[ETL] tool for Unicode's Han Unification
 ([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases. unihan-etl retrieves
 (downloads), extracts (unzips), and transforms the database from Unicode's website to a flat,
 tabular or structured, tree-like format.
@@ -39,6 +39,8 @@ an entry. Complicating it further, more variations:
 _kHanyuPinyin_ supports multiple entries delimited by spaces. ":" (colon) separate locations in the
 work from pinyin readings. "," (comma) separate multiple entries/readings. This is just one of 90
 fields contained in the database.
+
+[etl]: https://en.wikipedia.org/wiki/Extract,_transform,_load
 
 ## Tabular, "Flat" output
 
