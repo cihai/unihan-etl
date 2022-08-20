@@ -1,5 +1,7 @@
 import typing as t
-from collections.abc import Mapping, Sequence
+from typing import Mapping, Sequence
+
+from typing_extensions import Literal, TypedDict
 
 # Column data
 ColumnData = Sequence[str]
@@ -9,7 +11,7 @@ ColumnDataTuple = t.Tuple[str, ...]
 UntypedUnihanData = Mapping[str, t.Any]
 
 # Export (standard)
-UntypedNormalizedData = t.Sequence[UntypedUnihanData]
+UntypedNormalizedData = Sequence[UntypedUnihanData]
 
 # Export w/ listify()
 ListifiedExport = t.List[t.List[str]]
@@ -18,7 +20,7 @@ ListifiedExport = t.List[t.List[str]]
 ExpandedExport = Sequence[Mapping[str, t.Any]]
 
 
-class OptionsDict(t.TypedDict):
+class OptionsDict(TypedDict):
     source: str
     destination: str
     zip_path: str
@@ -30,7 +32,7 @@ class OptionsDict(t.TypedDict):
     expand: bool
     prune_empty: bool
     cache: bool
-    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    log_level: Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
 ReportHookFn = t.Callable[[int, int, int], object]

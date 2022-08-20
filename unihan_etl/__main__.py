@@ -6,9 +6,11 @@ import sys
 import typing as t
 
 if t.TYPE_CHECKING:
+    from typing_extensions import TypeAlias
+
     # see https://github.com/python/typeshed/issues/8513#issue-1333671093 for the
     # rationale behind this alias
-    _ExitCode: t.TypeAlias = str | int | None
+    _ExitCode: TypeAlias = t.Optional[t.Union[str, int]]
 
 
 def run() -> "_ExitCode":

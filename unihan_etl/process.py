@@ -13,8 +13,7 @@ import shutil
 import sys
 import typing as t
 import zipfile
-from collections.abc import Mapping, Sequence
-from typing import List, Union
+from typing import List, Mapping, Sequence, Union
 from urllib.request import urlretrieve
 
 from appdirs import AppDirs
@@ -331,7 +330,9 @@ def download(
     return dest
 
 
-def load_data(files: Sequence[Union[pathlib.Path, str]]) -> fileinput.FileInput[t.Any]:
+def load_data(
+    files: Sequence[Union[pathlib.Path, str]]
+) -> "fileinput.FileInput[t.Any]":
     """
     Extract zip and process information into CSV's.
 
@@ -378,7 +379,7 @@ def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
 
 
 def normalize(
-    raw_data: fileinput.FileInput[t.Any],
+    raw_data: "fileinput.FileInput[t.Any]",
     fields: Sequence[str],
 ) -> UntypedNormalizedData:
     """

@@ -12,7 +12,7 @@ Notes
 """
 import re
 import typing as t
-from collections.abc import Sequence
+from typing import Sequence
 
 import zhon.hanzi
 import zhon.pinyin
