@@ -25,6 +25,7 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 
 - Add vendorized, updated fork of
   [sphinxcontrib-issuetracker](https://github.com/ignatenkobrain/sphinxcontrib-issuetracker), via #261.
+- Remove sphinx-issues package
 
 ## unihan-etl 0.17.1 (2022-08-21)
 
