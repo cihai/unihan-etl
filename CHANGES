@@ -98,28 +98,28 @@ Infrastructure updates for static type checking and doctest examples.
 
 ## unihan-etl 0.13.0 (2021-06-16)
 
-- {issue}`236`: Convert to markdown
+- #236: Convert to markdown
 
 ## unihan-etl 0.12.0 (2021-06-15)
 
 - Update {}`black` to 21.6b0
 - Update trove classifiers to 3.9
-- {issue}`235`: Drop python 2.7, 3.5. Remove python 2 modesets and
+- #235: Drop python 2.7, 3.5. Remove python 2 modesets and
   `__future__`
 
 ## unihan-etl 0.11.0 (2020-08-09)
 
-- {issue}`230` Move packaging / publishing to poetry
-- {issue}`229` Self host docs
-- {issue}`229` Add metadata / icons / etc. for doc site
-- {issue}`229` Move travis -> github actions
-- {issue}`229` Overhaul Makefiles
+- #230 Move packaging / publishing to poetry
+- #229 Self host docs
+- #229 Add metadata / icons / etc. for doc site
+- #229 Move travis -> github actions
+- #229 Overhaul Makefiles
 
 ## unihan-etl 0.10.4 (2020-08-05)
 
 - Update CHANGES headings to produce working links
 - Relax `appdirs` version constraint
-- {issue}`228` Move from Pipfile to poetry
+- #228 Move from Pipfile to poetry
 
 ## unihan-etl 0.10.3 (2019-08-18)
 
@@ -139,7 +139,7 @@ Infrastructure updates for static type checking and doctest examples.
 
 ## unihan-etl 0.10.0 (2017-08-29)
 
-- {issue}`91` New fields from UNIHAN
+- #91 New fields from UNIHAN
   [Revision 25](https://www.unicode.org/reports/tr38/tr38-25.html).
 
   - kJinmeiyoKanji
