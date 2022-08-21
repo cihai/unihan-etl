@@ -11,8 +11,9 @@ import os
 import pathlib
 import shutil
 import sys
+import typing as t
 import zipfile
-from typing import List, Union
+from typing import List, Mapping, Sequence, Union
 from urllib.request import urlretrieve
 
 from appdirs import AppDirs
@@ -26,40 +27,63 @@ from unihan_etl.__about__ import (
     __version__,
 )
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
+from unihan_etl.types import (
+    ColumnData,
+    ColumnDataTuple,
+    ExpandedExport,
+    ListifiedExport,
+    OptionsDict,
+    ReportHookFn,
+    UntypedNormalizedData,
+    UntypedUnihanData,
+)
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
+
+if t.TYPE_CHECKING:
+    # try:
+    #     from typing import TypeGuard
+    # except ImportError:
+    #     from typing_extensions import TypeGuard
+    from typing_extensions import TypeGuard
+
 
 log = logging.getLogger(__name__)
 
 dirs = AppDirs(__package_name__, __author__)  # appname  # app author
 
 
-def not_junk(line):
+def not_junk(line: str) -> bool:
     """Return False on newlines and C-style comments."""
     return line[0] != "#" and line != "\n"
 
 
-def in_fields(c, fields):
+def in_fields(
+    c: str,
+    fields: t.Sequence[str],
+) -> bool:
     """Return True if string is in the default fields."""
     return c in tuple(fields) + INDEX_FIELDS
 
 
-def get_fields(d):
+def get_fields(d: UntypedUnihanData) -> t.List[str]:
     """Return list of fields from dict of {filename: ['field', 'field1']}."""
     return sorted({c for cs in d.values() for c in cs})
 
 
-def filter_manifest(files):
+def filter_manifest(
+    files: t.List[str],
+) -> UntypedUnihanData:
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-def files_exist(path, files):
+def files_exist(path: str, files: List[str]) -> bool:
     """Return True if all files exist in specified path."""
     return all(os.path.exists(os.path.join(path, f)) for f in files)
 
 
 #: Return list of files from list of fields.
-def get_files(fields):
+def get_files(fields: t.Sequence[str]) -> List[str]:
     files = set()
 
     for field in fields:
@@ -76,7 +100,7 @@ def get_files(fields):
 #: Directory to use for processing intermittent files.
 WORK_DIR = os.path.join(dirs.user_cache_dir, "downloads")
 #: Default Unihan Files
-UNIHAN_FILES = UNIHAN_MANIFEST.keys()
+UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
 #: URI of Unihan.zip data.
 UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
 #: Filepath to output built CSV file to.
@@ -84,7 +108,7 @@ DESTINATION_DIR = dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, "Unihan.zip")
 #: Default Unihan fields
-UNIHAN_FIELDS = tuple(get_fields(UNIHAN_MANIFEST))
+UNIHAN_FIELDS: ColumnDataTuple = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
 ALLOWED_EXPORT_TYPES = ["json", "csv"]
 try:
@@ -94,12 +118,13 @@ try:
 except ImportError:
     pass
 
-DEFAULT_OPTIONS = {
+
+DEFAULT_OPTIONS: OptionsDict = {
     "source": UNIHAN_URL,
     "destination": "%s/unihan.{ext}" % DESTINATION_DIR,
     "zip_path": UNIHAN_ZIP_PATH,
     "work_dir": WORK_DIR,
-    "fields": (INDEX_FIELDS + UNIHAN_FIELDS),
+    "fields": INDEX_FIELDS + UNIHAN_FIELDS,
     "format": "csv",
     "input_files": UNIHAN_FILES,
     "download": False,
@@ -110,7 +135,7 @@ DEFAULT_OPTIONS = {
 }
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """
     Return :py:class:`argparse.ArgumentParser` instance for CLI.
 
@@ -205,7 +230,7 @@ def get_parser():
     return parser
 
 
-def has_valid_zip(zip_path):
+def has_valid_zip(zip_path: str) -> bool:
     """
     Return True if valid zip exists.
 
@@ -232,7 +257,7 @@ def has_valid_zip(zip_path):
         return False
 
 
-def zip_has_files(files, zip_file):
+def zip_has_files(files: List[str], zip_file: zipfile.ZipFile) -> bool:
     """
     Return True if zip has the files inside.
 
@@ -253,7 +278,13 @@ def zip_has_files(files, zip_file):
         return False
 
 
-def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None, cache=True):
+def download(
+    url: str,
+    dest: str,
+    urlretrieve_fn: t.Any = urlretrieve,
+    reporthook: t.Optional[ReportHookFn] = None,
+    cache: bool = True,
+) -> str:
     """
     Download file at URL to a destination.
 
@@ -278,26 +309,30 @@ def download(url, dest, urlretrieve_fn=urlretrieve, reporthook=None, cache=True)
     if not os.path.exists(datadir):
         os.makedirs(datadir)
 
-    def no_unihan_files_exist():
+    def no_unihan_files_exist() -> bool:
         return not glob.glob(os.path.join(datadir, "Unihan*.txt"))
 
-    def not_downloaded():
+    def not_downloaded() -> bool:
         return not os.path.exists(os.path.join(datadir, "Unihan.zip"))
 
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
+
         log.info("Downloading Unihan.zip...")
         log.info(f"{url} to {dest}")
         if os.path.isfile(url):
             shutil.copy(url, dest)
-        elif reporthook:
+
+        if reporthook is not None:
             urlretrieve_fn(url, dest, reporthook)
         else:
-            urlretrieve_fn(url, dest)
+            urlretrieve_fn(url, dest, reporthook)
 
     return dest
 
 
-def load_data(files: List[Union[pathlib.Path, str]]):
+def load_data(
+    files: Sequence[Union[pathlib.Path, str]]
+) -> "fileinput.FileInput[t.Any]":
     """
     Extract zip and process information into CSV's.
 
@@ -319,7 +354,7 @@ def load_data(files: List[Union[pathlib.Path, str]]):
     return raw_data
 
 
-def extract_zip(zip_path, dest_dir):
+def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
     """
     Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
@@ -343,7 +378,10 @@ def extract_zip(zip_path, dest_dir):
     return z
 
 
-def normalize(raw_data, fields):
+def normalize(
+    raw_data: "fileinput.FileInput[t.Any]",
+    fields: Sequence[str],
+) -> UntypedNormalizedData:
     """
     Return normalized data from a UNIHAN data files.
 
@@ -383,7 +421,7 @@ def normalize(raw_data, fields):
     return [i for i in items.values()]
 
 
-def expand_delimiters(normalized_data):
+def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
     """
     Return expanded multi-value fields in UNIHAN.
 
@@ -401,6 +439,7 @@ def expand_delimiters(normalized_data):
     """
     for char in normalized_data:
         for field in char.keys():
+            assert isinstance(char, dict)
             if not char[field]:
                 continue
             char[field] = expansion.expand_field(field, char[field])
@@ -408,7 +447,7 @@ def expand_delimiters(normalized_data):
     return normalized_data
 
 
-def listify(data, fields):
+def listify(data: UntypedNormalizedData, fields: Sequence[str]) -> ListifiedExport:
     """
     Convert tabularized data to a CSV-friendly list.
 
@@ -418,33 +457,41 @@ def listify(data, fields):
     params : list of str
         keys/columns, e.g. ['kDictionary']
     """
-    list_data = [fields[:]]  # Add fields to first row
-    list_data += [r.values() for r in [v for v in data]]  # Data
+    list_data = [list(fields)]  # Add fields to first row
+    # list_data = [fields[:]]  # Add fields to first row
+    list_data += [list(r.values()) for r in [v for v in data]]
     return list_data
 
 
-def export_csv(data, destination, fields):
-    data = listify(data, fields)
+def export_csv(
+    data: UntypedNormalizedData,
+    destination: str,
+    fields: ColumnData,
+) -> None:
+    listified_data = listify(data, fields)
 
     with open(destination, "w") as f:
         csvwriter = csv.writer(f)
-        csvwriter.writerows(data)
+        csvwriter.writerows(listified_data)
         log.info("Saved output to: %s" % destination)
 
 
-def export_json(data, destination):
+def export_json(data: UntypedNormalizedData, destination: str) -> None:
     with codecs.open(destination, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info("Saved output to: %s" % destination)
 
 
-def export_yaml(data, destination):
+def export_yaml(data: UntypedNormalizedData, destination: str) -> None:
     with codecs.open(destination, "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
         log.info("Saved output to: %s" % destination)
 
 
-def validate_options(options):
+def validate_options(
+    options: Mapping[str, t.Any],
+) -> "TypeGuard[OptionsDict]":
+    assert isinstance(options, dict)
     if "input_files" in options and "fields" not in options:
         # Filter fields when only files specified.
         try:
@@ -458,18 +505,26 @@ def validate_options(options):
         # Filter fields when only files specified.
         fields_in_files = get_fields(filter_manifest(options["input_files"]))
 
-        not_in_field = [h for h in options["fields"] if h not in fields_in_files]
+        not_in_field = [
+            h
+            for h in options["fields"]
+            if h not in fields_in_files + list(INDEX_FIELDS)
+        ]
         if not_in_field:
             raise KeyError(
                 "Field {} not found in file list.".format(", ".join(not_in_field))
             )
+    return True
 
 
 class Packager:
     """Download and generate a tabular release of
     `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
 
-    def __init__(self, options):
+    def __init__(
+        self,
+        options: Mapping[str, t.Any],
+    ) -> None:
         """
         Parameters
         ----------
@@ -477,11 +532,13 @@ class Packager:
             options values to override defaults.
         """
         setup_logger(None, options.get("log_level", DEFAULT_OPTIONS["log_level"]))
+
         validate_options(options)
+        merged_options = merge_dict(DEFAULT_OPTIONS.copy(), options)
+        if validate_options(merged_options):
+            self.options: OptionsDict = merged_options
 
-        self.options = merge_dict(DEFAULT_OPTIONS.copy(), options)
-
-    def download(self, urlretrieve_fn=urlretrieve):
+    def download(self, urlretrieve_fn: t.Any = urlretrieve) -> None:
         """
         Download raw UNIHAN data if not exists.
 
@@ -506,13 +563,14 @@ class Packager:
         ):
             extract_zip(self.options["zip_path"], self.options["work_dir"])
 
-    def export(self):  # NOQA: C901
+    def export(self) -> t.Union[None, UntypedNormalizedData]:  # NOQA: C901
         """Extract zip and process information into CSV's."""
 
-        fields = self.options["fields"]
+        fields = list(self.options["fields"])
         for k in INDEX_FIELDS:
             if k not in fields:
-                fields = [k] + fields
+                # fields = [k] + fields
+                fields.insert(0, k)
 
         files = [
             os.path.join(self.options["work_dir"], f)
@@ -527,8 +585,8 @@ class Packager:
         if not os.path.exists(os.path.dirname(self.options["destination"])):
             os.makedirs(os.path.dirname(self.options["destination"]))
 
-        data = load_data(files=files)
-        data = normalize(data, fields)
+        raw_data = load_data(files=files)
+        data = normalize(raw_data, fields)
 
         # expand data hierarchically
         if self.options["expand"] and self.options["format"] != "csv":
@@ -536,9 +594,10 @@ class Packager:
 
             if self.options["prune_empty"]:
                 for char in data:
-                    for field in list(char.keys()):
-                        if not char[field]:
-                            char.pop(field, None)
+                    if isinstance(char, dict):
+                        for field in list(char.keys()):
+                            if not char[field]:
+                                char.pop(field, None)
 
         if self.options["format"] == "json":
             export_json(data, self.options["destination"])
@@ -550,9 +609,10 @@ class Packager:
             return data
         else:
             log.info("Format %s does not exist" % self.options["format"])
+        return None
 
     @classmethod
-    def from_cli(cls, argv):
+    def from_cli(cls, argv: Sequence[str]) -> "Packager":
         """
         Create Packager instance from CLI :mod:`argparse` arguments.
 
@@ -576,7 +636,9 @@ class Packager:
             sys.exit(e)
 
 
-def setup_logger(logger=None, level="DEBUG"):
+def setup_logger(
+    logger: t.Optional[logging.Logger] = None, level: str = "DEBUG"
+) -> None:
     """
     Setup logging for CLI use.
 

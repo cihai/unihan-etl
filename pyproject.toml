@@ -20,6 +20,7 @@ classifiers = [
   "Topic :: Software Development :: Internationalization",
   "Topic :: Software Development :: Localization",
   "Topic :: Utilities",
+  "Typing :: Typed",
 ]
 keywords = [
   "unihan",
@@ -114,6 +115,9 @@ test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
 coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
 lint = ["flake8", "mypy", "types-docutils", "types-PyYAML", "types-appdirs"]
+
+[tool.mypy]
+strict = true
 
 [[tool.mypy.overrides]]
 module = [
