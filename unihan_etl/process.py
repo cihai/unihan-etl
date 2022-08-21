@@ -321,9 +321,6 @@ def download(
         log.info(f"{url} to {dest}")
         if os.path.isfile(url):
             shutil.copy(url, dest)
-
-        if reporthook is not None:
-            urlretrieve_fn(url, dest, reporthook)
         else:
             urlretrieve_fn(url, dest, reporthook)
 

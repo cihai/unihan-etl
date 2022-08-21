@@ -19,6 +19,15 @@ $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+## unihan-etl 0.17.1 (unreleased)
+
+Follow ups to #257.
+
+### Fixes
+
+- `merged_dict()`: Fix merging edgecase where destination key was missing
+- `download()`: Fix edgecase when "downloading" file from local path
+
 ## unihan-etl 0.17.0 (2022-08-21)
 
 ### Features
