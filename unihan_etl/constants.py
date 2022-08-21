@@ -1,4 +1,6 @@
 #: Dictionary of tuples mapping locations of files to fields
+from unihan_etl.types import ColumnDataTuple
+
 UNIHAN_MANIFEST = {
     "Unihan_DictionaryIndices.txt": (
         "kCheungBauerIndex",
@@ -205,4 +207,4 @@ SPACE_DELIMITED_LIST_FIELDS = (
 SPACE_DELIMITED_FIELDS = SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIELDS
 
 #: Default index fields for unihan csv's. You probably want these.
-INDEX_FIELDS = ("ucn", "char")
+INDEX_FIELDS: ColumnDataTuple = ("ucn", "char")

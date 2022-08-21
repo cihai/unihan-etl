@@ -6,10 +6,10 @@ util
 """
 import re
 import sys
-from collections.abc import Mapping
+import typing as t
 
 
-def ucn_to_unicode(ucn):
+def ucn_to_unicode(ucn: str) -> str:
     """Return a python unicode value from a UCN.
 
     Converts a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to
@@ -17,8 +17,8 @@ def ucn_to_unicode(ucn):
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
-            char = rb"\U" + format(int(ucn, 16), "08x").encode("latin1")
-            char = char.decode("unicode_escape")
+            bytechar = rb"\U" + format(int(ucn, 16), "08x").encode("latin1")
+            char = bytechar.decode("unicode_escape")
         else:
             char = chr(int(ucn, 16))
     else:
@@ -29,7 +29,7 @@ def ucn_to_unicode(ucn):
     return char
 
 
-def ucnstring_to_python(ucn_string):
+def ucnstring_to_python(ucn_string: str) -> bytes:
     """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
     (u'\\u4e00').
     """
@@ -37,13 +37,13 @@ def ucnstring_to_python(ucn_string):
     for r in res:
         ucn_string = ucn_string.replace(str(r), str(ucn_to_unicode(r)))
 
-    ucn_string = ucn_string.encode("utf-8")
+    ucn = ucn_string.encode("utf-8")
 
-    assert isinstance(ucn_string, bytes)
-    return ucn_string
+    assert isinstance(ucn, bytes)
+    return ucn
 
 
-def ucnstring_to_unicode(ucn_string):
+def ucnstring_to_unicode(ucn_string: str) -> str:
     """Return ucnstring as Unicode."""
     ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
@@ -51,7 +51,9 @@ def ucnstring_to_unicode(ucn_string):
     return ucn_string
 
 
-def _dl_progress(count, block_size, total_size, out=sys.stdout):
+def _dl_progress(
+    count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout
+) -> None:
     """
     MIT License: https://github.com/okfn/dpm-old/blob/master/dpm/util.py
 
@@ -59,15 +61,15 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
 
     """
 
-    def format_size(bytes):
-        if bytes > 1000 * 1000:
-            return "%.1fMb" % (bytes / 1000.0 / 1000)
-        elif bytes > 10 * 1000:
-            return "%iKb" % (bytes / 1000)
-        elif bytes > 1000:
-            return "%.1fKb" % (bytes / 1000.0)
+    def format_size(_bytes: int) -> str:
+        if _bytes > 1000 * 1000:
+            return "%.1fMb" % (_bytes / 1000.0 / 1000)
+        elif _bytes > 10 * 1000:
+            return "%iKb" % (_bytes / 1000)
+        elif _bytes > 1000:
+            return "%.1fKb" % (_bytes / 1000.0)
         else:
-            return "%ib" % bytes
+            return "%ib" % _bytes
 
     if not count:
         print("Total size: %s" % format_size(total_size))
@@ -91,20 +93,29 @@ def _dl_progress(count, block_size, total_size, out=sys.stdout):
         print("\n")
 
 
-def merge_dict(base, additional):
+_T = t.TypeVar("_T")
+
+
+def merge_dict(
+    base: t.Mapping[str, _T], additional: t.Mapping[str, _T]
+) -> t.Dict[str, _T]:
     if base is None:
         return additional
 
     if additional is None:
         return base
 
-    if not (isinstance(base, Mapping) and isinstance(additional, Mapping)):
+    if not (isinstance(base, t.Mapping) and isinstance(additional, t.Mapping)):
         return additional
 
     merged = base
+    assert isinstance(merged, dict)
+
     for key, value in additional.items():
-        if isinstance(value, Mapping):
-            merged[key] = merge_dict(merged.get(key), value)
+        if isinstance(value, t.Mapping):
+            assert isinstance(key, str)
+            assert isinstance(value, dict)
+            merged[key] = merge_dict(merged[key], value)
         else:
             merged[key] = value
 

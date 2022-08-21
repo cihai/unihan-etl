@@ -11,9 +11,12 @@ Notes
 3. the last used compiled regexes are cached
 """
 import re
+import typing as t
+from typing import Sequence
 
 import zhon.hanzi
 import zhon.pinyin
+from typing_extensions import TypedDict
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
@@ -21,29 +24,48 @@ from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 N_DIACRITICS = "ńňǹ"
 
 
-def expand_kDefinition(value):
+def expand_kDefinition(value: str) -> t.List[str]:
     return [c.strip() for c in value.split(";")]
 
 
-def expand_kMandarin(value):
+kMandarinDict = TypedDict(
+    "kMandarinDict",
+    {"zh-Hans": str, "zh-Hant": str},
+)
+
+
+def expand_kMandarin(value: t.List[str]) -> kMandarinDict:
     cn = value[0]
     if len(value) == 1:
         tw = value[0]
     else:
         tw = value[1]
-    return {"zh-Hans": cn, "zh-Hant": tw}
+    return kMandarinDict({"zh-Hans": cn, "zh-Hant": tw})
 
 
-def expand_kTotalStrokes(value):
+kTotalStrokesDict = TypedDict(
+    "kTotalStrokesDict",
+    {"zh-Hans": int, "zh-Hant": int},
+)
+
+
+def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     cn = value[0]
     if len(value) == 1:
         tw = value[0]
     else:
         tw = value[1]
-    return {"zh-Hans": int(cn), "zh-Hant": int(tw)}
+    return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
-def expand_kHanYu(value):
+class kLocationDict(TypedDict):
+    volume: int
+    page: int
+    character: int
+    virtual: int
+
+
+def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -53,19 +75,26 @@ def expand_kHanYu(value):
     """,
         re.X,
     )
+    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
+    assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "volume": int(m["volume"]),
-            "page": int(m["page"]),
-            "character": int(m["character"]),
-            "virtual": int(m["virtual"]),
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kLocationDict(
+            volume=int(m["volume"]),
+            page=int(m["page"]),
+            character=int(m["character"]),
+            virtual=int(m["virtual"]),
+        )
+    return expanded
 
 
-def expand_kIRGHanyuDaZidian(value):
+def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -76,18 +105,38 @@ def expand_kIRGHanyuDaZidian(value):
         re.X,
     )
 
+    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "volume": int(m["volume"]),
-            "page": int(m["page"]),
-            "character": int(m["character"]),
-            "virtual": int(m["virtual"]),
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kLocationDict(
+            volume=int(m["volume"]),
+            page=int(m["page"]),
+            character=int(m["character"]),
+            virtual=int(m["virtual"]),
+        )
+    return expanded
 
 
-def expand_kHanyuPinyin(value):
+class kHanyuPinyinPreDict(TypedDict):
+    locations: Sequence[t.Union[str, kLocationDict]]
+    readings: t.List[str]
+
+
+class kHanyuPinyinDict(TypedDict):
+    locations: kLocationDict
+    readings: t.List[str]
+
+
+def expand_kHanyuPinyin(
+    value: t.List[str],
+) -> t.List[kHanyuPinyinDict]:
     location_pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -98,22 +147,51 @@ def expand_kHanyuPinyin(value):
         re.X,
     )
 
-    for i, v in enumerate(value):
-        v = [s.split(",") for s in v.split(":")]
-        value[i] = {"locations": v[0], "readings": v[1]}
+    expanded: Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
+    assert isinstance(expanded, list)
 
-        for n, loc in enumerate(value[i]["locations"]):
-            m = location_pattern.match(loc).groupdict()
-            value[i]["locations"][n] = {
-                "volume": int(m["volume"]),
-                "page": int(m["page"]),
-                "character": int(m["character"]),
-                "virtual": int(m["virtual"]),
-            }
-    return value
+    for i, val in enumerate(value):
+        v = [s.split(",") for s in val.split(":")]
+        expanded[i] = kHanyuPinyinPreDict(locations=v[0], readings=v[1])
+
+        for n, loc in enumerate(expanded[i]["locations"]):
+            m = location_pattern.match(loc)
+            assert m is not None
+            g = m.groupdict()
+            assert g is not None
+
+            expanded[i]["locations"][n] = kLocationDict(
+                volume=int(g["volume"]),
+                page=int(g["page"]),
+                character=int(g["character"]),
+                virtual=int(g["virtual"]),
+            )
+        expanded[i] = kHanyuPinyinDict(
+            locations=expanded[i]["locations"], readings=expanded[i]["readings"]
+        )
+    return expanded
 
 
-def expand_kXHC1983(value):
+class kXHC1983LocationDict(TypedDict):
+    page: int
+    character: int
+    entry: t.Optional[int]
+    substituted: bool
+
+
+class kXHC1983Dict(TypedDict):
+    locations: kXHC1983LocationDict
+    reading: str
+
+
+class kXHC1983PreDict(TypedDict):
+    locations: t.Union[t.List[str], kXHC1983LocationDict]
+    reading: str
+
+
+def expand_kXHC1983(
+    value: t.List[str],
+) -> t.List[kXHC1983Dict]:
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -124,22 +202,42 @@ def expand_kXHC1983(value):
         re.X,
     )
 
+    expanded: Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
         vals = v.split(":")
-        value[i] = {"locations": vals[0].split(","), "reading": vals[1]}
+        expanded[i] = kXHC1983PreDict(locations=vals[0].split(","), reading=vals[1])
 
-        for n, loc in enumerate(value[i]["locations"]):
-            m = pattern.match(loc).groupdict()
-            value[i]["locations"][n] = {
-                "page": int(m["page"]),
-                "character": int(m["character"]),
-                "entry": int(m["entry"]),
-                "substituted": m["substituted"] == "*",
-            }
-    return value
+        for n, loc in enumerate(expanded[i]["locations"]):
+            m = pattern.match(loc)
+            assert m is not None
+
+            g = m.groupdict()
+            assert g is not None
+
+            expanded[i]["locations"][n] = kXHC1983LocationDict(
+                page=int(g["page"]),
+                character=int(g["character"]),
+                entry=int(g["entry"]),
+                substituted=g["substituted"] == "*",
+            )
+        expanded[i] = kXHC1983Dict(
+            locations=expanded[i]["locations"], reading=expanded[i]["reading"]
+        )
+    return expanded
 
 
-def expand_kCheungBauer(value):
+class kCheungBauerDict(TypedDict):
+    radical: int
+    strokes: int
+    cangjie: t.Optional[str]
+    readings: t.List[str]
+
+
+def expand_kCheungBauer(
+    value: t.List[str],
+) -> t.List[kCheungBauerDict]:
     pattern = re.compile(
         r"""
         (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
@@ -148,18 +246,33 @@ def expand_kCheungBauer(value):
     """,
         re.X,
     )
+
+    expanded: Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "radical": int(m["radical"]),
-            "strokes": int(m["strokes"]),
-            "cangjie": m["cangjie"] or None,
-            "readings": m["readings"].split(","),
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kCheungBauerDict(
+            radical=int(m["radical"]),
+            strokes=int(m["strokes"]),
+            cangjie=m["cangjie"] or None,
+            readings=m["readings"].split(","),
+        )
+    return expanded
 
 
-def expand_kRSAdobe_Japan1_6(value):
+kRSAdobe_Japan1_6Dict = TypedDict(
+    "kRSAdobe_Japan1_6Dict",
+    {"type": str, "cid": int, "radical": int, "strokes": int, "strokes-residue": int},
+)
+
+
+def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict]:
     pattern = re.compile(
         r"""
         (?P<type>[CV])\+
@@ -170,21 +283,35 @@ def expand_kRSAdobe_Japan1_6(value):
     """,
         re.X,
     )
+    expanded: Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
+    assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
+        m = pattern.match(v)
+        assert m is not None
 
-        value[i] = {
-            "type": m["type"],
-            "cid": int(m["cid"]),
-            "radical": int(m["radical"]),
-            "strokes": int(m["strokes"]),
-            "strokes-residue": int(m["strokes_residue"]),
-        }
-    return value
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kRSAdobe_Japan1_6Dict(
+            {
+                "type": g["type"],
+                "cid": int(g["cid"]),
+                "radical": int(g["radical"]),
+                "strokes": int(g["strokes"]),
+                "strokes-residue": int(g["strokes_residue"]),
+            }
+        )
+    return expanded
 
 
-def expand_kCihaiT(value):
+class kCihaiTDict(TypedDict):
+    page: int
+    row: int
+    character: int
+
+
+def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
     pattern = re.compile(
         r"""
         (?P<page>[1-9][0-9]{0,3})\.
@@ -193,23 +320,49 @@ def expand_kCihaiT(value):
     """,
         re.X,
     )
+    expanded: Sequence[t.Union[str, kCihaiTDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "page": int(m["page"]),
-            "row": int(m["row"]),
-            "character": int(m["character"]),
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kCihaiTDict(
+            {
+                "page": int(m["page"]),
+                "row": int(m["row"]),
+                "character": int(m["character"]),
+            }
+        )
+    return expanded
 
 
-def expand_kIICore(value):
+class kIICoreDict(TypedDict):
+    priority: str
+    sources: t.List[str]
+
+
+def expand_kIICore(
+    value: t.List[str],
+) -> t.List[kIICoreDict]:
+    expanded: Sequence[t.Union[str, kIICoreDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        value[i] = {"priority": v[0], "sources": list(v[1:])}
-    return value
+        expanded[i] = kIICoreDict(priority=v[0], sources=list(v[1:]))
+    return expanded
 
 
-def expand_kDaeJaweon(value):
+class kDaeJaweonDict(TypedDict):
+    page: int
+    character: int
+    virtual: int
+
+
+def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -218,29 +371,43 @@ def expand_kDaeJaweon(value):
     """,
         re.X,
     )
-    m = pattern.match(value).groupdict()
+    m = pattern.match(value)
+    assert m is not None
 
-    value = {
-        "page": int(m["page"]),
-        "character": int(m["character"]),
-        "virtual": int(m["virtual"]),
-    }
-    return value
+    g = m.groupdict()
+    assert g is not None
+
+    return kDaeJaweonDict(
+        page=int(g["page"]),
+        character=int(g["character"]),
+        virtual=int(g["virtual"]),
+    )
 
 
-def expand_kIRGKangXi(value):
+def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        value[i] = expand_kDaeJaweon(v)
-    return value
+        expanded[i] = expand_kDaeJaweon(v)
+    return expanded
 
 
-def expand_kIRGDaeJaweon(value):
+def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        value[i] = expand_kDaeJaweon(v)
-    return value
+        expanded[i] = expand_kDaeJaweon(v)
+    return expanded
 
 
-def expand_kFenn(value):
+class kFennDict(TypedDict):
+    phonetic: str
+    frequency: str
+
+
+def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
     pattern = re.compile(
         """
         (?P<phonetic>[0-9]+a?)
@@ -248,14 +415,27 @@ def expand_kFenn(value):
     """,
         re.X,
     )
+    expanded: Sequence[t.Union[str, kFennDict]] = value.copy()
+    assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict(v)
-        value[i] = {"phonetic": m["phonetic"], "frequency": m["frequency"]}
-    return value
+        m = pattern.match(v)
+        assert m is not None
+        g = m.groupdict(v)
+        assert g is not None
+
+        expanded[i] = kFennDict(
+            {"phonetic": g["phonetic"], "frequency": g["frequency"]}
+        )
+    return expanded
 
 
-def expand_kHanyuPinlu(value):
+class kHanyuPinluDict(TypedDict):
+    phonetic: str
+    frequency: int
+
+
+def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
     pattern = re.compile(
         r"""
         (?P<phonetic>[a-z({}{}]+)
@@ -265,17 +445,38 @@ def expand_kHanyuPinlu(value):
         ),
         re.X,
     )
+    expanded: Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
+    assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {"phonetic": m["phonetic"], "frequency": int(m["frequency"])}
-    return value
+        m = pattern.match(v)
+        assert m is not None
+        g = m.groupdict()
+        assert g is not None
+
+        expanded[i] = kHanyuPinluDict(
+            {"phonetic": g["phonetic"], "frequency": int(g["frequency"])}
+        )
+    return expanded
 
 
-def expand_kHDZRadBreak(value):
+class LocationDict(TypedDict):
+    volume: int
+    page: int
+    character: int
+    virtual: int
+
+
+class kHDZRadBreakDict(TypedDict):
+    radical: str
+    ucn: str
+    location: LocationDict
+
+
+def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
     rad, loc = value.split(":")
 
-    location_pattern = re.compile(
+    loc_pattern = re.compile(
         r"""
         (?P<volume>[1-8])
         (?P<page>[0-9]{4})\.
@@ -285,13 +486,17 @@ def expand_kHDZRadBreak(value):
         re.X,
     )
 
-    lmatches = location_pattern.match(loc).groupdict()
-    location = {
-        "volume": int(lmatches["volume"]),
-        "page": int(lmatches["page"]),
-        "character": int(lmatches["character"]),
-        "virtual": int(lmatches["virtual"]),
-    }
+    loc_m = loc_pattern.match(loc)
+    assert loc_m is not None
+    loc_g = loc_m.groupdict()
+    assert loc_g is not None
+
+    location = LocationDict(
+        volume=int(loc_g["volume"]),
+        page=int(loc_g["page"]),
+        character=int(loc_g["character"]),
+        virtual=int(loc_g["virtual"]),
+    )
 
     pattern = re.compile(
         r"""
@@ -302,19 +507,36 @@ def expand_kHDZRadBreak(value):
         ),
         re.X,
     )
-    m = pattern.match(rad).groupdict()
+    m = pattern.match(rad)
+    assert m is not None
+    g = m.groupdict()
+    assert g is not None
 
-    return {"radical": m["radical"], "ucn": m["ucn"], "location": location}
+    return kHDZRadBreakDict(radical=g["radical"], ucn=g["ucn"], location=location)
 
 
-def expand_kSBGY(value):
+class kSBGYDict(TypedDict):
+    page: int
+    character: int
+
+
+def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
+    expanded: Sequence[t.Union[str, kSBGYDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
         vals = v.split(".")
-        value[i] = {"page": int(vals[0]), "character": int(vals[1])}
-    return value
+        expanded[i] = kSBGYDict(page=int(vals[0]), character=int(vals[1]))
+    return expanded
 
 
-def _expand_kRSGeneric(value):
+class kRSGenericDict(TypedDict):
+    radical: int
+    strokes: int
+    simplified: bool
+
+
+def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
@@ -323,15 +545,20 @@ def _expand_kRSGeneric(value):
     """,
         re.X,
     )
+    expanded: t.Sequence[t.Union[str, kRSGenericDict]] = value.copy()
+    assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "radical": int(m["radical"]),
-            "strokes": int(m["strokes"]),
-            "simplified": m["simplified"] == "'",
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+        g = m.groupdict()
+        assert g is not None
+        expanded[i] = kRSGenericDict(
+            radical=int(g["radical"]),
+            strokes=int(g["strokes"]),
+            simplified=g["simplified"] == "'",
+        )
+    return expanded
 
 
 expand_kRSUnicode = _expand_kRSGeneric
@@ -341,10 +568,14 @@ expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
 
 
-def _expand_kIRG_GenericSource(value):
-    v = value.split("-")
+class SourceLocationDict(TypedDict):
+    source: str
+    location: t.Optional[str]
 
-    return {"source": v[0], "location": v[1] if len(v) > 1 else None}
+
+def _expand_kIRG_GenericSource(value: str) -> SourceLocationDict:
+    v = value.split("-")
+    return SourceLocationDict(source=v[0], location=v[1] if len(v) > 1 else None)
 
 
 expand_kIRG_GSource = _expand_kIRG_GenericSource
@@ -358,7 +589,13 @@ expand_kIRG_USource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
-def expand_kGSR(value):
+class kGSRDict(TypedDict):
+    set: int
+    letter: str
+    apostrophe: bool
+
+
+def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
     pattern = re.compile(
         r"""
         (?P<set>[0-9]{4})
@@ -368,27 +605,47 @@ def expand_kGSR(value):
         re.X,
     )
 
+    expanded: Sequence[t.Union[str, kGSRDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
-        m = pattern.match(v).groupdict()
-        value[i] = {
-            "set": int(m["set"]),
-            "letter": m["letter"],
-            "apostrophe": m["apostrophe"] == "'",
-        }
-    return value
+        m = pattern.match(v)
+        assert m is not None
+
+        g = m.groupdict()
+        assert g is not None
+        expanded[i] = kGSRDict(
+            {
+                "set": int(g["set"]),
+                "letter": g["letter"],
+                "apostrophe": g["apostrophe"] == "'",
+            }
+        )
+    return expanded
 
 
-def expand_kCheungBauerIndex(value):
+class kCheungBauerIndexDict(TypedDict):
+    page: int
+    character: int
+
+
+def expand_kCheungBauerIndex(
+    value: t.List[str],
+) -> t.List[t.Union[str, kCheungBauerIndexDict]]:
+    expanded: Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
+    assert isinstance(expanded, list)
+
     for i, v in enumerate(value):
         m = v.split(".")
-        value[i] = {"page": int(m[0]), "character": int(m[1])}
-    return value
+        assert len(m) == 2
+        expanded[i] = kCheungBauerIndexDict({"page": int(m[0]), "character": int(m[1])})
+    return expanded
 
 
 expand_kFennIndex = expand_kCheungBauerIndex
 
 
-def expand_field(field, fvalue):
+def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
     """
     Return structured value of information in UNIHAN field.
 
@@ -405,6 +662,7 @@ def expand_field(field, fvalue):
         expanded field information per UNIHAN's documentation
     """
     if field in SPACE_DELIMITED_FIELDS and fvalue:
+        assert isinstance(fvalue, str)
         fvalue = fvalue.split(" ")
 
     try:

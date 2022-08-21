@@ -1,7 +1,13 @@
 """Test helpers functions for downloading and processing Unihan data."""
+import typing as t
+from typing import Mapping
 
 
-def assert_dict_contains_subset(subset, dictionary, msg=None):
+def assert_dict_contains_subset(
+    subset: t.Dict[str, t.Any],
+    dictionary: Mapping[str, t.Any],
+    msg: t.Optional[str] = None,
+) -> None:
     """
     Ported assertion for dict subsets in py.test.
 
