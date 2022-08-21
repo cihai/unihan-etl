@@ -115,6 +115,7 @@ def merge_dict(
         if isinstance(value, t.Mapping):
             assert isinstance(key, str)
             assert isinstance(value, dict)
+            merged.setdefault(key, {})
             merged[key] = merge_dict(merged[key], value)
         else:
             merged[key] = value
