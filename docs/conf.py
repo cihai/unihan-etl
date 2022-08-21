@@ -34,6 +34,7 @@ extensions = [
     "sphinxext.opengraph",
     "sphinxext.rediraffe",
     "myst_parser",
+    "link_issues",
 ]
 
 templates_path = ["_templates"]
@@ -103,6 +104,10 @@ copybutton_remove_prompts = True
 
 # sphinx-issues
 issues_github_path = "cihai/unihan-etl"
+
+# issuetracker
+issuetracker = "github"
+issuetracker_project = "cihai/unihan-etl"
 
 # sphinxext-rediraffe
 rediraffe_redirects = "redirects.txt"
