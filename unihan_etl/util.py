@@ -100,12 +100,15 @@ def merge_dict(
     base: t.Mapping[str, _T], additional: t.Mapping[str, _T]
 ) -> t.Dict[str, _T]:
     if base is None:
+        assert isinstance(additional, dict)
         return additional
 
     if additional is None:
+        assert isinstance(base, dict)
         return base
 
     if not (isinstance(base, t.Mapping) and isinstance(additional, t.Mapping)):
+        assert isinstance(additional, dict)
         return additional
 
     merged = base
@@ -116,7 +119,9 @@ def merge_dict(
             assert isinstance(key, str)
             assert isinstance(value, dict)
             merged.setdefault(key, {})
-            merged[key] = merge_dict(merged[key], value)
+            sub_dict = merged[key]
+            assert isinstance(sub_dict, dict)
+            merged[key] = merge_dict(sub_dict, value)
         else:
             merged[key] = value
 
