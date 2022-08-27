@@ -101,7 +101,7 @@ copybutton_prompt_text = (
 copybutton_prompt_is_regexp = True
 copybutton_remove_prompts = True
 
-# issuetracker
+# sphinx-autoissues
 issuetracker = "github"
 issuetracker_project = "cihai/unihan-etl"
 
