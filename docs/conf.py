@@ -33,7 +33,7 @@ extensions = [
     "sphinxext.opengraph",
     "sphinxext.rediraffe",
     "myst_parser",
-    "link_issues",
+    "sphinx_autoissues",
 ]
 
 templates_path = ["_templates"]
