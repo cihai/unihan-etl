@@ -116,7 +116,15 @@ docs = [
 test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
 coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
-lint = ["flake8", "flake8-bugbear", "mypy", "types-docutils", "types-PyYAML", "types-appdirs", "types-requests"]
+lint = [
+  "flake8",
+  "flake8-bugbear",
+  "mypy",
+  "types-docutils",
+  "types-PyYAML",
+  "types-appdirs",
+  "types-requests",
+]
 
 [tool.mypy]
 strict = true
