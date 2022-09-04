@@ -91,6 +91,7 @@ isort = "*"
 
 ### Lint ###
 flake8 = "*"
+flake8-bugbear = "^22.8.23"
 mypy = "*"
 types-docutils = "^0.19.0"
 types-PyYAML = "^6.0.11"
@@ -115,7 +116,15 @@ docs = [
 test = ["pytest", "pytest-rerunfailures", "pytest-watcher"]
 coverage = ["codecov", "coverage", "pytest-cov"]
 format = ["black", "isort"]
-lint = ["flake8", "mypy", "types-docutils", "types-PyYAML", "types-appdirs", "types-requests"]
+lint = [
+  "flake8",
+  "flake8-bugbear",
+  "mypy",
+  "types-docutils",
+  "types-PyYAML",
+  "types-appdirs",
+  "types-requests",
+]
 
 [tool.mypy]
 strict = true
