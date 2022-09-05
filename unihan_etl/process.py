@@ -415,7 +415,7 @@ def normalize(
         sys.stdout.write("\n")
         sys.stdout.flush()
 
-    return [i for i in items.values()]
+    return list(items.values())
 
 
 def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
@@ -456,7 +456,7 @@ def listify(data: UntypedNormalizedData, fields: Sequence[str]) -> ListifiedExpo
     """
     list_data = [list(fields)]  # Add fields to first row
     # list_data = [fields[:]]  # Add fields to first row
-    list_data += [list(r.values()) for r in [v for v in data]]
+    list_data += [list(r.values()) for r in list(data)]
     return list_data
 
 
