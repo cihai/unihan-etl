@@ -395,7 +395,7 @@ def normalize(
         list of unihan character information
     """
     log.info("Collecting field data...")
-    items = dict()
+    items = {}
     for idx, line in enumerate(raw_data):
         if not_junk(line):
             line = line.strip().split("\t")
@@ -403,7 +403,7 @@ def normalize(
                 item = dict(zip(["ucn", "field", "value"], line))
                 char = ucn_to_unicode(item["ucn"])
                 if char not in items:
-                    items[char] = dict().fromkeys(fields)
+                    items[char] = {}.fromkeys(fields)
                     items[char]["ucn"] = item["ucn"]
                     items[char]["char"] = char
                 items[char][item["field"]] = str(item["value"])
