@@ -395,7 +395,7 @@ def normalize(
         list of unihan character information
     """
     log.info("Collecting field data...")
-    items = dict()
+    items = {}
     for idx, line in enumerate(raw_data):
         if not_junk(line):
             line = line.strip().split("\t")
@@ -403,7 +403,7 @@ def normalize(
                 item = dict(zip(["ucn", "field", "value"], line))
                 char = ucn_to_unicode(item["ucn"])
                 if char not in items:
-                    items[char] = dict().fromkeys(fields)
+                    items[char] = {}.fromkeys(fields)
                     items[char]["ucn"] = item["ucn"]
                     items[char]["char"] = char
                 items[char][item["field"]] = str(item["value"])
@@ -415,7 +415,7 @@ def normalize(
         sys.stdout.write("\n")
         sys.stdout.flush()
 
-    return [i for i in items.values()]
+    return list(items.values())
 
 
 def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
@@ -456,7 +456,7 @@ def listify(data: UntypedNormalizedData, fields: Sequence[str]) -> ListifiedExpo
     """
     list_data = [list(fields)]  # Add fields to first row
     # list_data = [fields[:]]  # Add fields to first row
-    list_data += [list(r.values()) for r in [v for v in data]]
+    list_data += [list(r.values()) for r in list(data)]
     return list_data
 
 
