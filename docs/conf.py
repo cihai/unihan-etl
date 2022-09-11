@@ -11,13 +11,14 @@ import unihan_etl
 # Get the project root dir, which is the parent dir of this
 cwd = Path(__file__).parent
 project_root = cwd.parent
+src_root = project_root / "src"
 
-sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(src_root))
 sys.path.insert(0, str(cwd / "_ext"))
 
 # package data
 about: t.Dict[str, str] = {}
-with open(project_root / "unihan_etl" / "__about__.py") as fp:
+with open(src_root / "unihan_etl" / "__about__.py") as fp:
     exec(fp.read(), about)
 
 extensions = [
@@ -211,16 +212,18 @@ def linkcode_resolve(
     fn = relpath(fn, start=dirname(unihan_etl.__file__))
 
     if "dev" in about["__version__"]:
-        return "{}/blob/master/{}/{}{}".format(
+        return "{}/blob/master/{}/{}/{}{}".format(
             about["__github__"],
+            "src",
             about["__package_name__"],
             fn,
             linespec,
         )
     else:
-        return "{}/blob/v{}/{}/{}{}".format(
+        return "{}/blob/v{}/{}/{}/{}{}".format(
             about["__github__"],
             about["__version__"],
+            "src",
             about["__package_name__"],
             fn,
             linespec,

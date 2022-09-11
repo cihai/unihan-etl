@@ -39,7 +39,7 @@ homepage = "https://unihan-etl.git-pull.com"
 readme = "README.md"
 
 packages = [
-  { include = "unihan_etl" },
+  { include = "*", from = "src" },
 ]
 include = [
   { path = "tests", format = "sdist" },
