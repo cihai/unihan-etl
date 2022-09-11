@@ -33,14 +33,19 @@ extensions = [
     "sphinxext.opengraph",
     "sphinxext.rediraffe",
     "myst_parser",
-    "sphinx_autoissues",
+    "sphinx_toctree_autodoc_fix",
+    "linkify_issues",
+]
+myst_enable_extensions = [
+    "colon_fence",
+    "substitution",
+    "replacements",
+    "strikethrough",
 ]
 
 templates_path = ["_templates"]
 
 source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
-
-myst_enable_extensions = ["colon_fence", "substitution", "replacements"]
 
 master_doc = "index"
 
@@ -88,6 +93,9 @@ html_sidebars = {
     ]
 }
 
+# linkify_issues
+issue_url_tpl = "https://github.com/cihai/unihan-etl/issues/{issue_id}"
+
 # sphinxext.opengraph
 ogp_site_url = about["__docs__"]
 ogp_image = "_static/img/icons/icon-192x192.png"
@@ -100,10 +108,6 @@ copybutton_prompt_text = (
 )
 copybutton_prompt_is_regexp = True
 copybutton_remove_prompts = True
-
-# sphinx-autoissues
-issuetracker = "github"
-issuetracker_project = "cihai/unihan-etl"
 
 # sphinxext-rediraffe
 rediraffe_redirects = "redirects.txt"
