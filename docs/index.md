@@ -9,7 +9,6 @@
 :hidden:
 
 quickstart
-about
 cli
 api
 
