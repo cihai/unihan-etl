@@ -21,6 +21,7 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 ### Development
 
+- Move to `src/`-layout structure (#266)
 - Add [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear) (#263)
 - Add [flake8-comprehensions](https://github.com/adamchainz/flake8-comprehensions) (#264)
 
