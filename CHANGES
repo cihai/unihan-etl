@@ -24,12 +24,22 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 - Add [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear) (#263)
 - Add [flake8-comprehensions](https://github.com/adamchainz/flake8-comprehensions) (#264)
 
+### Documentation
+
+- Render changelog in [`linkify_issues`] (~~#261~~, #265)
+- Fix Table of contents rendering with sphinx autodoc with [`sphinx_toctree_autodoc_fix`] (#265)
+- Test doctests in our docs via [`pytest_doctest_docutils`] (built on [`doctest_docutils`]) (#265)
+
+[`linkify_issues`]: https://gp-libs.git-pull.com/linkify_issues/
+[`sphinx_toctree_autodoc_fix`]: https://gp-libs.git-pull.com/sphinx_toctree_autodoc_fix/
+[`pytest_doctest_docutils`]: https://gp-libs.git-pull.com/doctest/pytest.html
+[`doctest_docutils`]: https://gp-libs.git-pull.com/doctest
+
 ## unihan-etl 0.17.2 (2022-08-21)
 
 ### Documentation
 
-- Add vendorized, updated fork of
-  [sphinxcontrib-issuetracker](https://github.com/ignatenkobrain/sphinxcontrib-issuetracker), via #261.
+- Add vendorized, updated fork of `sphinxcontrib-issuetracker`, via #261.
 - Remove sphinx-issues package
 
 ## unihan-etl 0.17.1 (2022-08-21)
