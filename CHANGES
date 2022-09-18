@@ -19,6 +19,15 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+## unihan-etl 0.18.1 (unreleased)
+
+### Infrastructure
+
+- CI speedups (#267)
+
+  - Split out release to separate job so the PyPI Upload docker image isn't pulled on normal runs
+  - Clean up CodeQL
+
 ## unihan-etl 0.18.0 (2022-09-11)
 
 ### Development
