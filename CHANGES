@@ -30,6 +30,10 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 - Bump poetry 1.1.x to 1.2.x
 
+### Packaging
+
+- Move `.coveragerc` -> `pyproject.toml` (#268)
+
 ## unihan-etl 0.18.0 (2022-09-11)
 
 ### Development
