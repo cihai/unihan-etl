@@ -137,6 +137,28 @@ module = [
 ]
 ignore_missing_imports = true
 
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "*/_compat.py",
+  "docs/conf.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "def __repr__",
+  "raise NotImplementedError",
+  "return NotImplemented",
+  "if TYPE_CHECKING:",
+  "if t.TYPE_CHECKING:",
+  "@overload( |$)",
+]
+
 [build-system]
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
