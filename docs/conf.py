@@ -81,6 +81,9 @@ html_theme_options: t.Dict[str, t.Union[str, t.List[t.Dict[str, str]]]] = {
             "class": "",
         },
     ],
+    "source_repository": f"{about['__github__']}/",
+    "source_branch": "master",
+    "source_directory": "docs/",
 }
 html_sidebars = {
     "**": [
@@ -91,9 +94,6 @@ html_sidebars = {
         "sidebar/projects.html",
         "sidebar/scroll-end.html",
     ],
-    "source_repository": f"{about['__github__']}/",
-    "source_branch": "master",
-    "source_directory": "docs/",
 }
 
 # linkify_issues
