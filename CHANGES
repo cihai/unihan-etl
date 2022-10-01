@@ -21,6 +21,10 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 ## unihan-etl 0.18.1 (unreleased)
 
+### Packaging
+
+- Add PyYAML dependency
+
 ### Infrastructure
 
 - CI speedups (#267)
