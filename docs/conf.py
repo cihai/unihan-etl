@@ -90,7 +90,10 @@ html_sidebars = {
         "sidebar/navigation.html",
         "sidebar/projects.html",
         "sidebar/scroll-end.html",
-    ]
+    ],
+    "source_repository": f"{about['__github__']}/",
+    "source_branch": "master",
+    "source_directory": "docs/",
 }
 
 # linkify_issues
