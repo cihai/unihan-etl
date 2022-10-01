@@ -59,6 +59,7 @@ python = "^3.7"
 unicodecsv = "*"
 appdirs = "*"
 zhon = "*"
+PyYAML = "*"
 
 [tool.poetry.dev-dependencies]
 ### Docs ###
