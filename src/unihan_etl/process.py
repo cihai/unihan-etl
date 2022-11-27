@@ -630,7 +630,7 @@ class Packager:
         try:
             return cls({k: v for k, v in vars(args).items() if v is not None})
         except Exception as e:
-            sys.exit(e)
+            sys.exit(str(e))
 
 
 def setup_logger(
