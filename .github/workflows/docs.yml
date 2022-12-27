@@ -26,7 +26,7 @@ jobs:
               - 'docs/**'
               - 'examples/**'
             python_files:
-              - 'unihan_etl/**'
+              - 'src/unihan_etl/**'
               - pyproject.toml
               - poetry.lock
 
