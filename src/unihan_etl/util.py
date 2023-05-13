@@ -7,6 +7,7 @@ util
 import re
 import sys
 import typing as t
+from collections.abc import Mapping
 
 
 def ucn_to_unicode(ucn: str) -> str:
@@ -93,31 +94,34 @@ def _dl_progress(
         print("\n")
 
 
-_T = t.TypeVar("_T")
+T = t.TypeVar("T", bound="Mapping[str, t.Any]")
 
 
 def merge_dict(
-    base: t.Mapping[str, _T], additional: t.Mapping[str, _T]
-) -> t.Dict[str, _T]:
-    if base is None:
-        return additional
+    d: T,
+    u: T,
+) -> T:
+    """Return updated dict.
 
-    if additional is None:
-        return base
+    Parameters
+    ----------
+    d : dict
+    u : dict
 
-    if not (isinstance(base, t.Mapping) and isinstance(additional, t.Mapping)):
-        return additional
+    Returns
+    -------
+    dict :
+        Updated dictionary
 
-    merged = base
-    assert isinstance(merged, dict)
-
-    for key, value in additional.items():
-        if isinstance(value, t.Mapping):
-            assert isinstance(key, str)
-            assert isinstance(value, dict)
-            merged.setdefault(key, {})
-            merged[key] = merge_dict(merged[key], value)
+    Notes
+    -----
+    Thanks: http://stackoverflow.com/a/3233356
+    """
+    for k, v in u.items():
+        assert isinstance(d, dict)
+        if isinstance(v, dict):
+            r = merge_dict(d.get(k, {}), v)
+            d[k] = r
         else:
-            merged[key] = value
-
-    return merged
+            d[k] = u[k]
+    return d
