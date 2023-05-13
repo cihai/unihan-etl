@@ -19,6 +19,10 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 - _Insert changes/features/fixes for next release here_
 
+### Development
+
+- `merge_dict`: Improve typing of generic params (#271)
+
 ## unihan-etl 0.18.1 (2022-10-01)
 
 ### Packaging
