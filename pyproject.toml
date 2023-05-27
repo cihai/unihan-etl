@@ -134,6 +134,10 @@ lint = [
 
 [tool.mypy]
 strict = true
+files = [
+  "src/",
+  "tests/",
+]
 
 [[tool.mypy.overrides]]
 module = [
