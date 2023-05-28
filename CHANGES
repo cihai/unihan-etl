@@ -19,6 +19,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+_Maintenance only, no bug fixes or features_
+
+### Development
+
+- Add back `black` for formatting
+
+  This is still necessary to accompany `ruff`, until it replaces black.
+
 ## unihan-etl 0.19.0 (2023-05-27)
 
 _Maintenance only, no bug fixes or features_
