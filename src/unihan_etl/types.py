@@ -37,7 +37,7 @@ class OptionsDict(t.TypedDict):
     work_dir: pathlib.Path
     fields: t.Tuple[str, ...]
     format: str
-    input_files: t.List[pathlib.Path]
+    input_files: t.List[str]
     download: bool
     expand: bool
     prune_empty: bool
