@@ -300,15 +300,15 @@ def download(
         destination where file downloaded to.
     """
 
-    datadir = os.path.dirname(dest)
-    if not os.path.exists(datadir):
-        os.makedirs(datadir)
+    data_dir = os.path.dirname(dest)
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
 
     def no_unihan_files_exist() -> bool:
-        return not glob.glob(os.path.join(datadir, "Unihan*.txt"))
+        return not glob.glob(os.path.join(data_dir, "Unihan*.txt"))
 
     def not_downloaded() -> bool:
-        return not os.path.exists(os.path.join(datadir, "Unihan.zip"))
+        return not os.path.exists(os.path.join(data_dir, "Unihan.zip"))
 
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
         log.info("Downloading Unihan.zip...")
