@@ -122,6 +122,9 @@ lint = [
   "types-requests",
 ]
 
+[tool.poetry.plugins.pytest11]
+unihan_etl = "unihan_etl.pytest_plugin"
+
 [tool.mypy]
 strict = true
 files = [
