@@ -628,10 +628,10 @@ class Packager:
 
 
 def setup_logger(
-    logger: t.Optional[logging.Logger] = None, level: str = "DEBUG"
+    logger: t.Optional[logging.Logger] = None,
+    level: t.Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG",
 ) -> None:
-    """
-    Setup logging for CLI use.
+    """Setup logging for CLI use.
 
     Parameters
     ----------
