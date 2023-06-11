@@ -1,11 +1,10 @@
 """Test helpers functions for downloading and processing Unihan data."""
 import typing as t
-from typing import Mapping
 
 
 def assert_dict_contains_subset(
     subset: t.Dict[str, t.Any],
-    dictionary: Mapping[str, t.Any],
+    dictionary: t.Mapping[str, t.Any],
     msg: t.Optional[str] = None,
 ) -> None:
     """
