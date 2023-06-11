@@ -19,13 +19,23 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking changes
+
 - **Python 3.7 Dropped**
 
   Python 3.7 support has been dropped (#272)
 
   Its end-of-life is June 27th, 2023 and Python 3.8 will add support for
-  `typing.TypedDict` and `typing.Protocol` out of the box without needing
-  `typing_extensions`.
+  {mod}`typing`'s {class}`typing.TypedDict` and {class}`typing.Protocol` out of the box without needing
+  {mod}`typing_extensions`'s.
+
+### Internal improvement
+
+- Typings:
+
+  - Import {mod}`typing` as a namespace, e.g. `import typing as t` (#276)
+  - Use `typing` for {class}`typing.TypedDict` and {class}`typing.Literal` (#276)
+  - Use typing_extensions' {py:data}`TypeAlias` for repeated types, such in test_expansions (#276)
 
 ## unihan-etl 0.19.1 (2023-05-28)
 
@@ -49,9 +59,11 @@ _Maintenance only, no bug fixes or features_
   formatting can be done almost instantly.
 
   This change replaces black, isort, flake8 and flake8 plugins.
+
 - poetry: 1.4.0 -> 1.5.0
 
   See also: https://github.com/python-poetry/poetry/releases/tag/1.5.0
+
 - pytest: Fix invalid escape sequence warning from `zhon`
 
 [ruff]: https://ruff.rs

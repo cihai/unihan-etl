@@ -1,19 +1,24 @@
 """Test expansion of multi-value fields in UNIHAN."""
-from typing import Any, Dict, List, Optional, Union
+import typing as t
 
 import pytest
 
 from unihan_etl import constants, expansion
 
+if t.TYPE_CHECKING:
+    from typing_extensions import TypeAlias
 
-def test_expands_spaces(expanded_data: List[Dict[str, Any]]) -> None:
+ExpandedData: "TypeAlias" = t.List[t.Dict[str, t.Any]]
+
+
+def test_expands_spaces(expanded_data: ExpandedData) -> None:
     for item in expanded_data:
         for field in item.keys():
             if field in constants.SPACE_DELIMITED_LIST_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
 
-def test_expand_kCantonese(expanded_data: List[Dict[str, Any]]) -> None:
+def test_expand_kCantonese(expanded_data: ExpandedData) -> None:
     # test kCantonese
     item = [i for i in expanded_data if i["ucn"] == "U+342B"][0]
     if item["ucn"] == "U+342B":
@@ -35,7 +40,7 @@ def test_expand_kCantonese(expanded_data: List[Dict[str, Any]]) -> None:
     ],
 )
 def test_expand(
-    expanded_data: List[Dict[str, Any]], ucn: str, field: str, expected: List[str]
+    expanded_data: ExpandedData, ucn: str, field: str, expected: t.List[str]
 ) -> None:
     # test kDefinition (split on ;), kJapanese, kJapaneseKun
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
@@ -50,7 +55,7 @@ def test_expand(
     ],
 )
 def test_expand_kMandarin(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: Dict[str, str]
+    expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str]
 ) -> None:
     """
     The most customary pinyin reading for this character. When there are two
@@ -70,7 +75,7 @@ def test_expand_kMandarin(
     ],
 )
 def test_expand_kTotalStrokes(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: Dict[str, int]
+    expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int]
 ) -> None:
     """
     The total number of strokes in the character (including the radical). When
@@ -92,7 +97,7 @@ def test_expand_kTotalStrokes(
     ],
 )
 def test_expand_kIRGHanyuDaZidian(
-    ucn: str, expected: List[Dict[str, int]], expanded_data: List[Dict[str, Any]]
+    ucn: str, expected: ExpandedData, expanded_data: ExpandedData
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGHanyuDaZidian"] == expected
@@ -157,9 +162,9 @@ def test_expand_kIRGHanyuDaZidian(
     ],
 )
 def test_expand_kHanyuPinyin(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, List[Union[Dict[str, int], str]]]],
+    expected: ExpandedData,
 ) -> None:
     """
     Each location has the form “ABCDE.XYZ” (as in “kHanYu”); multiple
@@ -225,7 +230,7 @@ def test_expand_kHanyuPinyin(
     ],
 )
 def test_expand_HanYu(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: List[Dict[str, int]]
+    expanded_data: ExpandedData, ucn: str, expected: ExpandedData
 ) -> None:
     """
     The character references are given in the form “ABCDE.XYZ”, in which: “A”
@@ -306,9 +311,9 @@ def test_expand_HanYu(
     ],
 )
 def test_expand_kRSAdobe_Japan1_6(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, Union[str, int]]],
+    expected: ExpandedData,
 ) -> None:
     """
     The value consists of a number of space-separated entries. Each entry
@@ -350,10 +355,10 @@ def test_expand_kRSAdobe_Japan1_6(
     ],
 )
 def test_expand_radical_stroke_counts(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     field: str,
     ucn: str,
-    expected: List[Dict[str, Union[int, bool]]],
+    expected: ExpandedData,
 ) -> None:
     """kRSJapanese"""
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
@@ -370,9 +375,9 @@ def test_expand_radical_stroke_counts(
     ],
 )
 def test_expand_kRSUnihan(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, Union[int, bool]]],
+    expected: ExpandedData,
 ) -> None:
     """
     The standard radical/stroke count for this character in the form
@@ -414,9 +419,9 @@ def test_expand_kRSUnihan(
     ],
 )
 def test_expand_kCheungBauer(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, Optional[Union[int, str, List[str]]]]],
+    expected: ExpandedData,
 ) -> None:
     """
     Each data value consists of three pieces, separated by semicolons:
@@ -439,7 +444,9 @@ def test_expand_kCheungBauer(
     ],
 )
 def test_expand_kCihaiT(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: List[Dict[str, int]]
+    expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
 ) -> None:
     """
     The position is indicated by a decimal number. The digits to the left of
@@ -461,7 +468,7 @@ def test_expand_kCihaiT(
     ],
 )
 def test_expand_kDaeJaweon(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: Dict[str, int]
+    expanded_data: t.List[t.Dict[str, t.Any]], ucn: str, expected: t.Dict[str, int]
 ) -> None:
     """
     The position is in the form “page.position” with the final digit in the
@@ -485,9 +492,9 @@ def test_expand_kDaeJaweon(
     ],
 )
 def test_expand_kIICore(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, Union[str, List[str]]]],
+    expected: ExpandedData,
 ) -> None:
     """
     Each value consists of a letter (A, B, or C), indicating priority value,
@@ -509,7 +516,7 @@ def test_expand_kIICore(
     ],
 )
 def test_expand_kIRGDaeJaweon(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: List[Dict[str, int]]
+    expanded_data: ExpandedData, ucn: str, expected: t.List[t.Dict[str, int]]
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGDaeJaweon"] == expected
@@ -529,7 +536,9 @@ def test_expand_kIRGDaeJaweon(
     ],
 )
 def test_expand_kFenn(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: List[Dict[str, str]]
+    expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kFenn"] == expected
@@ -563,9 +572,9 @@ def test_expand_kFenn(
     ],
 )
 def test_expand_kHanyuPinlu(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: List[Dict[str, Union[str, int]]],
+    expected: ExpandedData,
 ) -> None:
     """
     Immediately following the pronunciation, a numeric string appears in
@@ -601,9 +610,9 @@ def test_expand_kHanyuPinlu(
     ],
 )
 def test_expand_kHDZRadBreak(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
-    expected: Dict[str, Union[str, Dict[str, Union[int, bool]]]],
+    expected: ExpandedData,
 ) -> None:
     """
     Hanyu Da Zidian has a radical break beginning at this character’s position.
@@ -624,7 +633,9 @@ def test_expand_kHDZRadBreak(
     ],
 )
 def test_expand_kSBGY(
-    expanded_data: List[Dict[str, Any]], ucn: str, expected: List[Dict[str, int]]
+    expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
 ) -> None:
     """
     The 25334 character references are given in the form “ABC.XY”, in which:
@@ -705,10 +716,12 @@ def test_expand_kSBGY(
     ],
 )
 def test_expand_kXHC1983(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: List[Dict[str, Union[List[Dict[str, Union[int, bool]]], str]]],
+    expected: t.List[
+        t.Dict[str, t.Union[t.List[t.Dict[str, t.Union[int, bool]]], str]]
+    ],
 ) -> None:
     r"""
     Each pīnyīn reading is preceded by the character’s location(s) in the
@@ -750,10 +763,10 @@ def test_expand_kXHC1983(
     ],
 )
 def test_expand_kIRG_GSource(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: Dict[str, Optional[str]],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_GSource"] == expected
@@ -773,10 +786,10 @@ def test_expand_kIRG_GSource(
     ],
 )
 def test_expand_kIRG_HSource(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: Dict[str, str],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_HSource"] == expected
@@ -794,10 +807,10 @@ def test_expand_kIRG_HSource(
     ],
 )
 def test_expand_kIRG_JSource(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: Dict[str, str],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_JSource"] == expected
@@ -848,11 +861,11 @@ def test_expand_kIRG_JSource(
     ],
 )
 def test_expand_kIRG_KPSource(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     field: str,
     ucn: str,
     fieldval: str,
-    expected: Dict[str, str],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item[field] == expected
@@ -879,10 +892,10 @@ def test_expand_kIRG_KPSource(
     ],
 )
 def test_expand_kGSR(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: List[Dict[str, Union[int, str, bool]]],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kGSR"] == expected
@@ -904,10 +917,10 @@ def test_expand_kGSR(
     ],
 )
 def test_expand_kCheungBauerIndex(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: List[Dict[str, int]],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kCheungBauerIndex"] == expected
@@ -925,10 +938,10 @@ def test_expand_kCheungBauerIndex(
     ],
 )
 def test_expand_kFennIndex(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: List[Dict[str, int]],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kFennIndex"] == expected
@@ -946,10 +959,10 @@ def test_expand_kFennIndex(
     ],
 )
 def test_expand_kIRGKangXi(
-    expanded_data: List[Dict[str, Any]],
+    expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: List[Dict[str, int]],
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGKangXi"] == expected
@@ -967,7 +980,10 @@ def test_expand_kIRGKangXi(
     ],
 )
 def test_expand_kCCCII(
-    expanded_data: List[Dict[str, Any]], ucn: str, fieldval: str, expected: List[str]
+    expanded_data: ExpandedData,
+    ucn: str,
+    fieldval: str,
+    expected: ExpandedData,
 ) -> None:
     item = [i for i in expanded_data if i["ucn"] == ucn][0]
     assert item["kCCCII"] == expected

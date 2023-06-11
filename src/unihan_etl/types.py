@@ -1,26 +1,23 @@
 import typing as t
-from typing import Mapping, Sequence
-
-from typing_extensions import Literal, TypedDict
 
 # Column data
-ColumnData = Sequence[str]
+ColumnData = t.Sequence[str]
 ColumnDataTuple = t.Tuple[str, ...]
 
 # In situ
-UntypedUnihanData = Mapping[str, t.Any]
+UntypedUnihanData = t.Mapping[str, t.Any]
 
 # Export (standard)
-UntypedNormalizedData = Sequence[UntypedUnihanData]
+UntypedNormalizedData = t.Sequence[UntypedUnihanData]
 
 # Export w/ listify()
 ListifiedExport = t.List[t.List[str]]
 
 # Export w/ listify() -> expand_delimiters()
-ExpandedExport = Sequence[Mapping[str, t.Any]]
+ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
 
 
-class OptionsDict(TypedDict):
+class OptionsDict(t.TypedDict):
     source: str
     destination: str
     zip_path: str
@@ -32,7 +29,7 @@ class OptionsDict(TypedDict):
     expand: bool
     prune_empty: bool
     cache: bool
-    log_level: Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
 ReportHookFn = t.Callable[[int, int, int], object]
