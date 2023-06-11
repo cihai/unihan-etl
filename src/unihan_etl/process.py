@@ -15,7 +15,7 @@ import typing as t
 import zipfile
 from urllib.request import urlretrieve
 
-from appdirs import AppDirs
+from appdirs import AppDirs as BaseAppDirs
 
 from unihan_etl import expansion
 from unihan_etl.__about__ import (
@@ -25,6 +25,7 @@ from unihan_etl.__about__ import (
     __title__,
     __version__,
 )
+from unihan_etl.app_dirs import AppDirs
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
 from unihan_etl.types import (
     ColumnData,
@@ -33,6 +34,7 @@ from unihan_etl.types import (
     ListifiedExport,
     OptionsDict,
     ReportHookFn,
+    StrPath,
     UntypedNormalizedData,
     UntypedUnihanData,
 )
@@ -44,7 +46,7 @@ if t.TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-app_dirs = AppDirs(__package_name__, __author__)  # appname  # app author
+app_dirs = AppDirs(_app_dirs=BaseAppDirs(__package_name__, __author__))
 
 
 def not_junk(line: str) -> bool:
@@ -72,7 +74,7 @@ def filter_manifest(
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-def files_exist(path: str, files: t.List[str]) -> bool:
+def files_exist(path: pathlib.Path, files: t.List[str]) -> bool:
     """Return True if all files exist in specified path."""
     return all(os.path.exists(os.path.join(path, f)) for f in files)
 
@@ -93,7 +95,7 @@ def get_files(fields: t.Sequence[str]) -> t.List[str]:
 
 
 #: Directory to use for processing intermittent files.
-WORK_DIR = os.path.join(app_dirs.user_cache_dir, "downloads")
+WORK_DIR = app_dirs.user_cache_dir / "downloads"
 #: Default Unihan Files
 UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
 #: URI of Unihan.zip data.
@@ -101,7 +103,7 @@ UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
 #: Filepath to output built CSV file to.
 DESTINATION_DIR = app_dirs.user_data_dir
 #: Filepath to download Zip file.
-UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, "Unihan.zip")
+UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
 #: Default Unihan fields
 UNIHAN_FIELDS: ColumnDataTuple = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
@@ -116,7 +118,7 @@ except ImportError:
 
 DEFAULT_OPTIONS: OptionsDict = {
     "source": UNIHAN_URL,
-    "destination": "%s/unihan.{ext}" % DESTINATION_DIR,
+    "destination": DESTINATION_DIR / f"unihan.{zip}",
     "zip_path": UNIHAN_ZIP_PATH,
     "work_dir": WORK_DIR,
     "fields": INDEX_FIELDS + UNIHAN_FIELDS,
@@ -151,29 +153,29 @@ def get_parser() -> argparse.ArgumentParser:
         "-s",
         "--source",
         dest="source",
-        help="URL or path of zipfile. Default: %s" % UNIHAN_URL,
+        help=f"URL or path of zipfile. Default: {UNIHAN_URL}",
     )
     parser.add_argument(
         "-z",
         "--zip-path",
         dest="zip_path",
-        help="Path the zipfile is downloaded to. Default: %s" % UNIHAN_ZIP_PATH,
+        help=f"Path the zipfile is downloaded to. Default: {UNIHAN_ZIP_PATH}",
     )
     parser.add_argument(
         "-d",
         "--destination",
         dest="destination",
-        help="Output of .csv. Default: %s/unihan.{json,csv,yaml}" % DESTINATION_DIR,
+        help=f"Output of .csv. Default: {DESTINATION_DIR}/unihan.{{json,csv,yaml}}",
     )
     parser.add_argument(
-        "-w", "--work-dir", dest="work_dir", help="Default: %s" % WORK_DIR
+        "-w", "--work-dir", dest="work_dir", help=f"Default: {WORK_DIR}"
     )
     parser.add_argument(
         "-F",
         "--format",
         dest="format",
         choices=ALLOWED_EXPORT_TYPES,
-        help="Default: %s" % DEFAULT_OPTIONS["format"],
+        help=f"Default: {DEFAULT_OPTIONS['format']}",
     )
     parser.add_argument(
         "--no-expand",
@@ -203,7 +205,7 @@ def get_parser() -> argparse.ArgumentParser:
         nargs="*",
         help=(
             "Fields to use in export. Separated by spaces. "
-            "All fields used by default. Fields: %s" % ", ".join(UNIHAN_FIELDS)
+            f"All fields used by default. Fields: {', '.join(UNIHAN_FIELDS)}"
         ),
     )
     parser.add_argument(
@@ -213,7 +215,7 @@ def get_parser() -> argparse.ArgumentParser:
         nargs="*",
         help=(
             "Files inside zip to pull data from. Separated by spaces. "
-            "All files used by default. Files: %s" % ", ".join(UNIHAN_FILES)
+            f"All files used by default. Files: {', '.join(UNIHAN_FILES)}"
         ),
     )
     parser.add_argument(
@@ -225,13 +227,12 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def has_valid_zip(zip_path: str) -> bool:
-    """
-    Return True if valid zip exists.
+def has_valid_zip(zip_path: StrPath) -> bool:
+    """Return True if valid zip exists.
 
     Parameters
     ----------
-    zip_path : str
+    zip_path : str or pathlib.Path
         absolute path to zip
 
     Returns
@@ -239,22 +240,23 @@ def has_valid_zip(zip_path: str) -> bool:
     bool :
         True if valid zip exists at path
     """
+    if not isinstance(zip_path, pathlib.Path):
+        zip_path = pathlib.Path(zip_path)
 
-    if os.path.isfile(zip_path):
-        if zipfile.is_zipfile(zip_path):
-            log.info("Exists, is valid zip. %s" % zip_path)
-            return True
-        else:
-            log.info("Not a valid zip. %s" % zip_path)
-            return False
+    if not zip_path.is_file():
+        log.info(f"Exists, but is not a file: {zip_path}")
+        return False
+
+    if zipfile.is_zipfile(zip_path):
+        log.info(f"Exists, is valid zip: {zip_path}")
+        return True
     else:
-        log.info("File doesn't exist. %s" % zip_path)
+        log.info(f"Not a valid zip: {zip_path}")
         return False
 
 
 def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
-    """
-    Return True if zip has the files inside.
+    """Return True if zip has the files inside.
 
     Parameters
     ----------
@@ -274,20 +276,19 @@ def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
 
 
 def download(
-    url: str,
-    dest: str,
+    url: StrPath,
+    dest: pathlib.Path,
     urlretrieve_fn: t.Any = urlretrieve,
     reporthook: t.Optional[ReportHookFn] = None,
     cache: bool = True,
-) -> str:
-    """
-    Download file at URL to a destination.
+) -> pathlib.Path:
+    """Download file at URL to a destination.
 
     Parameters
     ----------
-    url : str
+    url : str or pathlib.Path
         URL to download from.
-    dest : str
+    dest : pathlib.Path
         file path where download is to be saved.
     urlretrieve_fn: callable
         function to download file
@@ -318,14 +319,13 @@ def download(
         else:
             urlretrieve_fn(url, dest, reporthook)
 
-    return dest
+    return pathlib.Path(dest)
 
 
 def load_data(
     files: t.Sequence[t.Union[pathlib.Path, str]]
 ) -> "fileinput.FileInput[t.Any]":
-    """
-    Extract zip and process information into CSV's.
+    """Extract zip and process information into CSV's.
 
     Parameters
     ----------
@@ -336,24 +336,23 @@ def load_data(
     str :
         combined data from files
     """
-
-    log.info("Loading data: %s." % ", ".join([str(s) for s in files]))
+    log.info(f"Loading data: {', '.join([str(s) for s in files])}")
     raw_data = fileinput.FileInput(
         files=files, openhook=fileinput.hook_encoded("utf-8")
     )
     log.info("Done loading data.")
+
     return raw_data
 
 
-def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
-    """
-    Extract zip file. Return :class:`zipfile.ZipFile` instance.
+def extract_zip(zip_path: pathlib.Path, dest_dir: pathlib.Path) -> zipfile.ZipFile:
+    """Extract zip file. Return :class:`zipfile.ZipFile` instance.
 
     Parameters
     ----------
-    zip_file : str
+    zip_file : pathlib.Path
         filepath to extract.
-    dest_dir : str
+    dest_dir : pathlib.Path
         directory to extract to.
 
     Returns
@@ -361,9 +360,8 @@ def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
     :class:`zipfile.ZipFile` :
         The extracted zip.
     """
-
     z = zipfile.ZipFile(zip_path)
-    log.info("extract_zip dest dir: %s" % dest_dir)
+    log.info(f"extract_zip dest dir: {dest_dir}")
     z.extractall(dest_dir)
 
     return z
@@ -373,8 +371,7 @@ def normalize(
     raw_data: "fileinput.FileInput[t.Any]",
     fields: t.Sequence[str],
 ) -> UntypedNormalizedData:
-    """
-    Return normalized data from a UNIHAN data files.
+    """Return normalized data from a UNIHAN data files.
 
     Parameters
     ----------
@@ -402,7 +399,7 @@ def normalize(
                     items[char]["char"] = char
                 items[char][item["field"]] = str(item["value"])
         if log.isEnabledFor(logging.DEBUG):
-            sys.stdout.write("\rProcessing line %i" % (idx))
+            sys.stdout.write(f"\rProcessing line {id}")
             sys.stdout.flush()
 
     if log.isEnabledFor(logging.DEBUG):
@@ -413,8 +410,7 @@ def normalize(
 
 
 def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
-    """
-    Return expanded multi-value fields in UNIHAN.
+    """Return expanded multi-value fields in UNIHAN.
 
     Parameters
     ----------
@@ -439,8 +435,7 @@ def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
 
 
 def listify(data: UntypedNormalizedData, fields: t.Sequence[str]) -> ListifiedExport:
-    """
-    Convert tabularized data to a CSV-friendly list.
+    """Convert tabularized data to a CSV-friendly list.
 
     Parameters
     ----------
@@ -456,7 +451,7 @@ def listify(data: UntypedNormalizedData, fields: t.Sequence[str]) -> ListifiedEx
 
 def export_csv(
     data: UntypedNormalizedData,
-    destination: str,
+    destination: StrPath,
     fields: ColumnData,
 ) -> None:
     listified_data = listify(data, fields)
@@ -464,19 +459,19 @@ def export_csv(
     with open(destination, "w") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(listified_data)
-        log.info("Saved output to: %s" % destination)
+        log.info(f"Saved output to: {destination}")
 
 
-def export_json(data: UntypedNormalizedData, destination: str) -> None:
-    with codecs.open(destination, "w", encoding="utf-8") as f:
+def export_json(data: UntypedNormalizedData, destination: StrPath) -> None:
+    with codecs.open(str(destination), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-        log.info("Saved output to: %s" % destination)
+        log.info(f"Saved output to: {destination}")
 
 
-def export_yaml(data: UntypedNormalizedData, destination: str) -> None:
-    with codecs.open(destination, "w", encoding="utf-8") as f:
+def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
+    with codecs.open(str(destination), "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
-        log.info("Saved output to: %s" % destination)
+        log.info(f"Saved output to: {destination}")
 
 
 def validate_options(
@@ -530,19 +525,17 @@ class Packager:
             self.options: OptionsDict = merged_options
 
     def download(self, urlretrieve_fn: t.Any = urlretrieve) -> None:
-        """
-        Download raw UNIHAN data if not exists.
+        """Download raw UNIHAN data if not exists.
 
         Parameters
         ----------
-
         urlretrieve_fn : function
             function to download file
         """
         if not has_valid_zip(self.options["zip_path"]) or not self.options["cache"]:
             download(
-                self.options["source"],
-                self.options["zip_path"],
+                url=self.options["source"],
+                dest=self.options["zip_path"],
                 urlretrieve_fn=urlretrieve_fn,
                 reporthook=_dl_progress,
                 cache=self.options["cache"],
@@ -556,7 +549,6 @@ class Packager:
 
     def export(self) -> t.Union[None, UntypedNormalizedData]:  # NOQA: C901
         """Extract zip and process information into CSV's."""
-
         fields = list(self.options["fields"])
         for k in INDEX_FIELDS:
             if k not in fields:
@@ -569,12 +561,12 @@ class Packager:
         ]
 
         # Replace {ext} with extension to use.
-        self.options["destination"] = self.options["destination"].format(
-            ext=self.options["format"]
+        self.options["destination"] = pathlib.Path(
+            str(self.options["destination"]).format(ext=self.options["format"])
         )
 
-        if not os.path.exists(os.path.dirname(self.options["destination"])):
-            os.makedirs(os.path.dirname(self.options["destination"]))
+        if not self.options["destination"].parent.exists():
+            self.options["destination"].parent.mkdir(parents=True, exist_ok=True)
 
         raw_data = load_data(files=files)
         data = normalize(raw_data, fields)
@@ -599,13 +591,12 @@ class Packager:
         elif self.options["format"] == "python":
             return data
         else:
-            log.info("Format %s does not exist" % self.options["format"])
+            log.info(f"Format {self.options['format']} does not exist")
         return None
 
     @classmethod
     def from_cli(cls, argv: t.Sequence[str]) -> "Packager":
-        """
-        Create Packager instance from CLI :mod:`argparse` arguments.
+        """Create Packager instance from CLI :mod:`argparse` arguments.
 
         Parameters
         ----------
