@@ -44,7 +44,7 @@ if t.TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-dirs = AppDirs(__package_name__, __author__)  # appname  # app author
+app_dirs = AppDirs(__package_name__, __author__)  # appname  # app author
 
 
 def not_junk(line: str) -> bool:
@@ -93,13 +93,13 @@ def get_files(fields: t.Sequence[str]) -> t.List[str]:
 
 
 #: Directory to use for processing intermittent files.
-WORK_DIR = os.path.join(dirs.user_cache_dir, "downloads")
+WORK_DIR = os.path.join(app_dirs.user_cache_dir, "downloads")
 #: Default Unihan Files
 UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
 #: URI of Unihan.zip data.
 UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
 #: Filepath to output built CSV file to.
-DESTINATION_DIR = dirs.user_data_dir
+DESTINATION_DIR = app_dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = os.path.join(WORK_DIR, "Unihan.zip")
 #: Default Unihan fields
