@@ -19,6 +19,8 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking changes
+
 - **Python 3.7 Dropped**
 
   Python 3.7 support has been dropped (#272)
@@ -26,6 +28,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
   Its end-of-life is June 27th, 2023 and Python 3.8 will add support for
   `typing.TypedDict` and `typing.Protocol` out of the box without needing
   `typing_extensions`.
+
+### Internal improvement
+
+- Typings:
+
+  - Import `typing` as a namespace, e.g. `import typing as t` (#276)
+  - Use `typing` for `TypedDict` and `Literal` (#276)
+  - Use `typing_extensions.TypeAlias` for repeated types, such in test_expansions (#276)
 
 ## unihan-etl 0.19.1 (2023-05-28)
 
