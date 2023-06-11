@@ -1,10 +1,13 @@
-import fileinput
+import getpass
+import logging
+import os
 import pathlib
 import typing as t
-import zipfile
-from typing import Mapping
 
 import pytest
+
+import fileinput
+import zipfile
 
 from unihan_etl import constants, process
 from unihan_etl.process import DEFAULT_OPTIONS, Packager
@@ -16,11 +19,52 @@ from unihan_etl.types import (
 )
 from unihan_etl.util import merge_dict
 
-from .constants import FIXTURE_PATH
+logger = logging.getLogger(__name__)
+USING_ZSH = "zsh" in os.getenv("SHELL", "")
+
+TESTS_PATH = pathlib.Path(__file__).parent.parent.parent / "tests"
+FIXTURE_PATH = TESTS_PATH / "fixtures"
+
+
+@pytest.fixture(scope="session")
+def home_path(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+    """Temporary `/home/` path."""
+    return tmp_path_factory.mktemp("home")
+
+
+@pytest.fixture(scope="session")
+def home_user_name() -> str:
+    """Default username to set for :func:`user_path` fixture."""
+    return getpass.getuser()
+
+
+@pytest.fixture(scope="session")
+def user_path(home_path: pathlib.Path, home_user_name: str) -> pathlib.Path:
+    """Default temporary user directory.
+
+    Used by: :func:`zshrc`
+
+    Note: You will need to set the home directory, see :ref:`set_home`.
+    """
+    p = home_path / home_user_name
+    p.mkdir()
+    return p
+
+
+@pytest.mark.skipif(USING_ZSH, reason="Using ZSH")
+@pytest.fixture(scope="session")
+def zshrc(user_path: pathlib.Path) -> pathlib.Path:
+    """This quiets ZSH default message.
+
+    Needs a startup file .zshenv, .zprofile, .zshrc, .zlogin.
+    """
+    p = user_path / ".zshrc"
+    p.touch()
+    return p
 
 
 @pytest.fixture
-def test_options() -> t.Union[OptionsDict, Mapping[str, t.Any]]:
+def test_options() -> t.Union[OptionsDict, t.Mapping[str, t.Any]]:
     return merge_dict(DEFAULT_OPTIONS.copy(), {"input_files": ["Unihan_Readings.txt"]})
 
 
