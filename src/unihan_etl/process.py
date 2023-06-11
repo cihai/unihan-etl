@@ -13,7 +13,6 @@ import shutil
 import sys
 import typing as t
 import zipfile
-from typing import List, Mapping, Sequence, Union
 from urllib.request import urlretrieve
 
 from appdirs import AppDirs
@@ -40,10 +39,6 @@ from unihan_etl.types import (
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if t.TYPE_CHECKING:
-    # try:
-    #     from typing import TypeGuard
-    # except ImportError:
-    #     from typing_extensions import TypeGuard
     from typing_extensions import TypeGuard
 
 
@@ -77,13 +72,13 @@ def filter_manifest(
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-def files_exist(path: str, files: List[str]) -> bool:
+def files_exist(path: str, files: t.List[str]) -> bool:
     """Return True if all files exist in specified path."""
     return all(os.path.exists(os.path.join(path, f)) for f in files)
 
 
 #: Return list of files from list of fields.
-def get_files(fields: t.Sequence[str]) -> List[str]:
+def get_files(fields: t.Sequence[str]) -> t.List[str]:
     files = set()
 
     for field in fields:
@@ -257,7 +252,7 @@ def has_valid_zip(zip_path: str) -> bool:
         return False
 
 
-def zip_has_files(files: List[str], zip_file: zipfile.ZipFile) -> bool:
+def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
     """
     Return True if zip has the files inside.
 
@@ -316,7 +311,6 @@ def download(
         return not os.path.exists(os.path.join(datadir, "Unihan.zip"))
 
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
-
         log.info("Downloading Unihan.zip...")
         log.info(f"{url} to {dest}")
         if os.path.isfile(url):
@@ -328,7 +322,7 @@ def download(
 
 
 def load_data(
-    files: Sequence[Union[pathlib.Path, str]]
+    files: t.Sequence[t.Union[pathlib.Path, str]]
 ) -> "fileinput.FileInput[t.Any]":
     """
     Extract zip and process information into CSV's.
@@ -377,7 +371,7 @@ def extract_zip(zip_path: str, dest_dir: str) -> zipfile.ZipFile:
 
 def normalize(
     raw_data: "fileinput.FileInput[t.Any]",
-    fields: Sequence[str],
+    fields: t.Sequence[str],
 ) -> UntypedNormalizedData:
     """
     Return normalized data from a UNIHAN data files.
@@ -444,7 +438,7 @@ def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
     return normalized_data
 
 
-def listify(data: UntypedNormalizedData, fields: Sequence[str]) -> ListifiedExport:
+def listify(data: UntypedNormalizedData, fields: t.Sequence[str]) -> ListifiedExport:
     """
     Convert tabularized data to a CSV-friendly list.
 
@@ -486,7 +480,7 @@ def export_yaml(data: UntypedNormalizedData, destination: str) -> None:
 
 
 def validate_options(
-    options: Mapping[str, t.Any],
+    options: t.Mapping[str, t.Any],
 ) -> "TypeGuard[OptionsDict]":
     assert isinstance(options, dict)
     if "input_files" in options and "fields" not in options:
@@ -520,7 +514,7 @@ class Packager:
 
     def __init__(
         self,
-        options: Mapping[str, t.Any],
+        options: t.Mapping[str, t.Any],
     ) -> None:
         """
         Parameters
@@ -609,7 +603,7 @@ class Packager:
         return None
 
     @classmethod
-    def from_cli(cls, argv: Sequence[str]) -> "Packager":
+    def from_cli(cls, argv: t.Sequence[str]) -> "Packager":
         """
         Create Packager instance from CLI :mod:`argparse` arguments.
 

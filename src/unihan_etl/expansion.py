@@ -12,11 +12,9 @@ Notes
 """
 import re
 import typing as t
-from typing import Sequence
 
 import zhon.hanzi
 import zhon.pinyin
-from typing_extensions import TypedDict
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
@@ -28,7 +26,7 @@ def expand_kDefinition(value: str) -> t.List[str]:
     return [c.strip() for c in value.split(";")]
 
 
-kMandarinDict = TypedDict(
+kMandarinDict = t.TypedDict(
     "kMandarinDict",
     {"zh-Hans": str, "zh-Hant": str},
 )
@@ -43,7 +41,7 @@ def expand_kMandarin(value: t.List[str]) -> kMandarinDict:
     return kMandarinDict({"zh-Hans": cn, "zh-Hant": tw})
 
 
-kTotalStrokesDict = TypedDict(
+kTotalStrokesDict = t.TypedDict(
     "kTotalStrokesDict",
     {"zh-Hans": int, "zh-Hant": int},
 )
@@ -58,7 +56,7 @@ def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
-class kLocationDict(TypedDict):
+class kLocationDict(t.TypedDict):
     volume: int
     page: int
     character: int
@@ -75,7 +73,7 @@ def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
     """,
         re.X,
     )
-    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -105,7 +103,7 @@ def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
         re.X,
     )
 
-    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -124,12 +122,12 @@ def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
     return expanded
 
 
-class kHanyuPinyinPreDict(TypedDict):
-    locations: Sequence[t.Union[str, kLocationDict]]
+class kHanyuPinyinPreDict(t.TypedDict):
+    locations: t.Sequence[t.Union[str, kLocationDict]]
     readings: t.List[str]
 
 
-class kHanyuPinyinDict(TypedDict):
+class kHanyuPinyinDict(t.TypedDict):
     locations: kLocationDict
     readings: t.List[str]
 
@@ -147,7 +145,7 @@ def expand_kHanyuPinyin(
         re.X,
     )
 
-    expanded: Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, val in enumerate(value):
@@ -172,19 +170,19 @@ def expand_kHanyuPinyin(
     return expanded
 
 
-class kXHC1983LocationDict(TypedDict):
+class kXHC1983LocationDict(t.TypedDict):
     page: int
     character: int
     entry: t.Optional[int]
     substituted: bool
 
 
-class kXHC1983Dict(TypedDict):
+class kXHC1983Dict(t.TypedDict):
     locations: kXHC1983LocationDict
     reading: str
 
 
-class kXHC1983PreDict(TypedDict):
+class kXHC1983PreDict(t.TypedDict):
     locations: t.Union[t.List[str], kXHC1983LocationDict]
     reading: str
 
@@ -202,7 +200,7 @@ def expand_kXHC1983(
         re.X,
     )
 
-    expanded: Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -228,7 +226,7 @@ def expand_kXHC1983(
     return expanded
 
 
-class kCheungBauerDict(TypedDict):
+class kCheungBauerDict(t.TypedDict):
     radical: int
     strokes: int
     cangjie: t.Optional[str]
@@ -247,7 +245,7 @@ def expand_kCheungBauer(
         re.X,
     )
 
-    expanded: Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -266,7 +264,7 @@ def expand_kCheungBauer(
     return expanded
 
 
-kRSAdobe_Japan1_6Dict = TypedDict(
+kRSAdobe_Japan1_6Dict = t.TypedDict(
     "kRSAdobe_Japan1_6Dict",
     {"type": str, "cid": int, "radical": int, "strokes": int, "strokes-residue": int},
 )
@@ -283,7 +281,7 @@ def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict
     """,
         re.X,
     )
-    expanded: Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -305,7 +303,7 @@ def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict
     return expanded
 
 
-class kCihaiTDict(TypedDict):
+class kCihaiTDict(t.TypedDict):
     page: int
     row: int
     character: int
@@ -320,7 +318,7 @@ def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
     """,
         re.X,
     )
-    expanded: Sequence[t.Union[str, kCihaiTDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kCihaiTDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -340,7 +338,7 @@ def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
     return expanded
 
 
-class kIICoreDict(TypedDict):
+class kIICoreDict(t.TypedDict):
     priority: str
     sources: t.List[str]
 
@@ -348,7 +346,7 @@ class kIICoreDict(TypedDict):
 def expand_kIICore(
     value: t.List[str],
 ) -> t.List[kIICoreDict]:
-    expanded: Sequence[t.Union[str, kIICoreDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kIICoreDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -356,7 +354,7 @@ def expand_kIICore(
     return expanded
 
 
-class kDaeJaweonDict(TypedDict):
+class kDaeJaweonDict(t.TypedDict):
     page: int
     character: int
     virtual: int
@@ -385,7 +383,7 @@ def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
 
 
 def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
-    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -394,7 +392,7 @@ def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
 
 
 def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
-    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -402,7 +400,7 @@ def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
     return expanded
 
 
-class kFennDict(TypedDict):
+class kFennDict(t.TypedDict):
     phonetic: str
     frequency: str
 
@@ -415,7 +413,7 @@ def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
     """,
         re.X,
     )
-    expanded: Sequence[t.Union[str, kFennDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kFennDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -430,7 +428,7 @@ def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
     return expanded
 
 
-class kHanyuPinluDict(TypedDict):
+class kHanyuPinluDict(t.TypedDict):
     phonetic: str
     frequency: int
 
@@ -445,7 +443,7 @@ def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
         ),
         re.X,
     )
-    expanded: Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -460,14 +458,14 @@ def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
     return expanded
 
 
-class LocationDict(TypedDict):
+class LocationDict(t.TypedDict):
     volume: int
     page: int
     character: int
     virtual: int
 
 
-class kHDZRadBreakDict(TypedDict):
+class kHDZRadBreakDict(t.TypedDict):
     radical: str
     ucn: str
     location: LocationDict
@@ -515,13 +513,13 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
     return kHDZRadBreakDict(radical=g["radical"], ucn=g["ucn"], location=location)
 
 
-class kSBGYDict(TypedDict):
+class kSBGYDict(t.TypedDict):
     page: int
     character: int
 
 
 def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
-    expanded: Sequence[t.Union[str, kSBGYDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kSBGYDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -530,7 +528,7 @@ def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
     return expanded
 
 
-class kRSGenericDict(TypedDict):
+class kRSGenericDict(t.TypedDict):
     radical: int
     strokes: int
     simplified: bool
@@ -568,7 +566,7 @@ expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
 
 
-class SourceLocationDict(TypedDict):
+class SourceLocationDict(t.TypedDict):
     source: str
     location: t.Optional[str]
 
@@ -589,7 +587,7 @@ expand_kIRG_USource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
-class kGSRDict(TypedDict):
+class kGSRDict(t.TypedDict):
     set: int
     letter: str
     apostrophe: bool
@@ -605,7 +603,7 @@ def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
         re.X,
     )
 
-    expanded: Sequence[t.Union[str, kGSRDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kGSRDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -624,7 +622,7 @@ def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
     return expanded
 
 
-class kCheungBauerIndexDict(TypedDict):
+class kCheungBauerIndexDict(t.TypedDict):
     page: int
     character: int
 
@@ -632,7 +630,7 @@ class kCheungBauerIndexDict(TypedDict):
 def expand_kCheungBauerIndex(
     value: t.List[str],
 ) -> t.List[t.Union[str, kCheungBauerIndexDict]]:
-    expanded: Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
+    expanded: t.Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
