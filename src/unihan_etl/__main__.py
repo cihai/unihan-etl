@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """For accessing cihai as a package."""
-
-import os
 import sys
+import pathlib
 import typing as t
 
 if t.TYPE_CHECKING:
@@ -14,8 +13,8 @@ if t.TYPE_CHECKING:
 
 
 def run() -> "_ExitCode":
-    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.insert(0, base)
+    base = pathlib.Path(__file__).parent.parent
+    sys.path.insert(0, str(base))
     from .process import Packager
 
     p = Packager.from_cli(sys.argv[1:])
