@@ -14,18 +14,13 @@ import typing as t
 import zipfile
 from urllib.request import urlretrieve
 
-from appdirs import AppDirs as BaseAppDirs
-
 from unihan_etl import expansion
 from unihan_etl.__about__ import (
-    __author__,
     __description__,
-    __package_name__,
     __title__,
     __version__,
 )
-from unihan_etl.app_dirs import AppDirs
-from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
+from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST, app_dirs
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if t.TYPE_CHECKING:
@@ -45,8 +40,6 @@ if t.TYPE_CHECKING:
 
 
 log = logging.getLogger(__name__)
-
-app_dirs = AppDirs(_app_dirs=BaseAppDirs(__package_name__, __author__))
 
 
 def not_junk(line: str) -> bool:
