@@ -343,8 +343,8 @@ Example:
 
 ```python
 >>> from unihan_etl.process import Packager
->>> pkgr = Packager({})
->>> 'destination' in pkgr.options
+>>> pkgr = Packager()
+>>> hasattr(pkgr.options, 'destination')
 True
 ```
 

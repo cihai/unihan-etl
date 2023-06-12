@@ -3,6 +3,7 @@
 import argparse
 import codecs
 import csv
+import dataclasses
 import fileinput
 import json
 import logging
@@ -20,17 +21,27 @@ from unihan_etl.__about__ import (
     __title__,
     __version__,
 )
-from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST, app_dirs
-from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
+from unihan_etl.constants import (
+    ALLOWED_EXPORT_TYPES,
+    INDEX_FIELDS,
+    UNIHAN_MANIFEST,
+    UNIHAN_URL,
+    DESTINATION_DIR,
+    UNIHAN_ZIP_PATH,
+    WORK_DIR,
+    UNIHAN_FIELDS,
+    UNIHAN_FILES,
+)
+from unihan_etl.options import Options
+from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeGuard
     from unihan_etl.types import (
         ColumnData,
-        ColumnDataTuple,
         ExpandedExport,
         ListifiedExport,
-        OptionsDict,
+        LogLevel,
         ReportHookFn,
         StrPath,
         UrlRetrieveFn,
@@ -53,11 +64,6 @@ def in_fields(
 ) -> bool:
     """Return True if string is in the default fields."""
     return c in tuple(fields) + INDEX_FIELDS
-
-
-def get_fields(d: "UntypedUnihanData") -> t.List[str]:
-    """Return list of fields from dict of {filename: ['field', 'field1']}."""
-    return sorted({c for cs in d.values() for c in cs})
 
 
 def filter_manifest(
@@ -87,42 +93,7 @@ def get_files(fields: t.Sequence[str]) -> t.List[str]:
     return list(files)
 
 
-#: Directory to use for processing intermittent files.
-WORK_DIR = app_dirs.user_cache_dir / "downloads"
-#: Default Unihan Files
-UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
-#: URI of Unihan.zip data.
-UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
-#: Filepath to output built CSV file to.
-DESTINATION_DIR = app_dirs.user_data_dir
-#: Filepath to download Zip file.
-UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
-#: Default Unihan fields
-UNIHAN_FIELDS: "ColumnDataTuple" = tuple(get_fields(UNIHAN_MANIFEST))
-#: Allowed export types
-ALLOWED_EXPORT_TYPES = ["json", "csv"]
-try:
-    import yaml
-
-    ALLOWED_EXPORT_TYPES += ["yaml"]
-except ImportError:
-    pass
-
-
-DEFAULT_OPTIONS: "OptionsDict" = {
-    "source": UNIHAN_URL,
-    "destination": DESTINATION_DIR / f"unihan.{zip}",
-    "zip_path": UNIHAN_ZIP_PATH,
-    "work_dir": WORK_DIR,
-    "fields": INDEX_FIELDS + UNIHAN_FIELDS,
-    "format": "csv",
-    "input_files": UNIHAN_FILES,
-    "download": False,
-    "expand": True,
-    "prune_empty": True,
-    "cache": True,
-    "log_level": "INFO",
-}
+DEFAULT_OPTIONS = Options()
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -168,7 +139,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--format",
         dest="format",
         choices=ALLOWED_EXPORT_TYPES,
-        help=f"Default: {DEFAULT_OPTIONS['format']}",
+        help=f"Default: {DEFAULT_OPTIONS.format}",
     )
     parser.add_argument(
         "--no-expand",
@@ -466,32 +437,41 @@ def export_json(data: "UntypedNormalizedData", destination: "StrPath") -> None:
 
 
 def export_yaml(data: "UntypedNormalizedData", destination: "StrPath") -> None:
+    import yaml
+
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
         log.info(f"Saved output to: {destination}")
 
 
+def is_default_option(field_name: str, val: t.Any) -> bool:
+    return bool(val == getattr(DEFAULT_OPTIONS, field_name, ""))
+
+
 def validate_options(
-    options: t.Mapping[str, t.Any],
-) -> "TypeGuard[OptionsDict]":
-    assert isinstance(options, dict)
-    if "input_files" in options and "fields" not in options:
+    options: Options,
+) -> "TypeGuard[Options]":
+    if not is_default_option("input_files", options.input_files) and is_default_option(
+        "fields", options.fields
+    ):
         # Filter fields when only files specified.
         try:
-            options["fields"] = get_fields(filter_manifest(options["input_files"]))
+            options.fields = get_fields(filter_manifest(options.input_files))
         except KeyError as e:
             raise KeyError(f"File {e} not found in file list.")
-    elif "fields" in options and "input_files" not in options:
+    elif not is_default_option("fields", options.fields) and is_default_option(
+        "input_files", options.input_files
+    ):
         # Filter files when only field specified.
-        options["input_files"] = get_files(options["fields"])
-    elif "fields" in options and "input_files" in options:
+        options.input_files = get_files(options.fields)
+    elif not is_default_option("fields", options.fields) and not is_default_option(
+        "input_files", options.input_files
+    ):
         # Filter fields when only files specified.
-        fields_in_files = get_fields(filter_manifest(options["input_files"]))
+        fields_in_files = get_fields(filter_manifest(options.input_files))
 
         not_in_field = [
-            h
-            for h in options["fields"]
-            if h not in fields_in_files + list(INDEX_FIELDS)
+            h for h in options.fields if h not in fields_in_files + list(INDEX_FIELDS)
         ]
         if not_in_field:
             raise KeyError(
@@ -504,22 +484,30 @@ class Packager:
     """Download and generate a tabular release of
     `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
 
+    options: Options
+
     def __init__(
         self,
-        options: t.Mapping[str, t.Any],
+        options: t.Union[Options, "t.Mapping[str, t.Any]"] = DEFAULT_OPTIONS,
     ) -> None:
         """
         Parameters
         ----------
-        options : dict
+        options : dict or Options
             options values to override defaults.
         """
-        setup_logger(None, options.get("log_level", DEFAULT_OPTIONS["log_level"]))
+        if not isinstance(options, Options):
+            options = Options(**options)
 
         validate_options(options)
-        merged_options = merge_dict(DEFAULT_OPTIONS.copy(), options)
-        if validate_options(merged_options):
-            self.options: "OptionsDict" = merged_options
+
+        setup_logger(logger=None, level=options.log_level or DEFAULT_OPTIONS.log_level)
+
+        merged_options = dataclasses.replace(
+            DEFAULT_OPTIONS, **dataclasses.asdict(options)
+        )
+
+        self.options = merged_options
 
     def download(self, urlretrieve_fn: t.Any = urlretrieve) -> None:
         """Download raw UNIHAN data if not exists.
@@ -529,66 +517,65 @@ class Packager:
         urlretrieve_fn : function
             function to download file
         """
-        if not has_valid_zip(self.options["zip_path"]) or not self.options["cache"]:
+        if not has_valid_zip(self.options.zip_path) or not self.options.cache:
             download(
-                url=self.options["source"],
-                dest=self.options["zip_path"],
+                url=self.options.source,
+                dest=self.options.zip_path,
                 urlretrieve_fn=urlretrieve_fn,
                 reporthook=_dl_progress,
-                cache=self.options["cache"],
+                cache=self.options.cache,
             )
 
         if (
-            not files_exist(self.options["work_dir"], self.options["input_files"])
-            or not self.options["cache"]
+            not files_exist(self.options.work_dir, self.options.input_files)
+            or not self.options.cache
         ):
-            extract_zip(self.options["zip_path"], self.options["work_dir"])
+            extract_zip(self.options.zip_path, self.options.work_dir)
 
     def export(self) -> t.Union[None, "UntypedNormalizedData"]:  # NOQA: C901
         """Extract zip and process information into CSV's."""
-        fields = list(self.options["fields"])
+        fields = list(self.options.fields)
         for k in INDEX_FIELDS:
             if k not in fields:
                 # fields = [k] + fields
                 fields.insert(0, k)
 
         files = [
-            os.path.join(self.options["work_dir"], f)
-            for f in self.options["input_files"]
+            os.path.join(self.options.work_dir, f) for f in self.options.input_files
         ]
 
         # Replace {ext} with extension to use.
-        self.options["destination"] = pathlib.Path(
-            str(self.options["destination"]).format(ext=self.options["format"])
+        self.options.destination = pathlib.Path(
+            str(self.options.destination).format(ext=self.options.format)
         )
 
-        if not self.options["destination"].parent.exists():
-            self.options["destination"].parent.mkdir(parents=True, exist_ok=True)
+        if not self.options.destination.parent.exists():
+            self.options.destination.parent.mkdir(parents=True, exist_ok=True)
 
         raw_data = load_data(files=files)
         data = normalize(raw_data, fields)
 
         # expand data hierarchically
-        if self.options["expand"] and self.options["format"] != "csv":
+        if self.options.expand and self.options.format != "csv":
             data = expand_delimiters(data)
 
-            if self.options["prune_empty"]:
+            if self.options.prune_empty:
                 for char in data:
                     if isinstance(char, dict):
                         for field in list(char.keys()):
                             if not char[field]:
                                 char.pop(field, None)
 
-        if self.options["format"] == "json":
-            export_json(data, self.options["destination"])
-        elif self.options["format"] == "csv":
-            export_csv(data, self.options["destination"], fields)
-        elif self.options["format"] == "yaml":
-            export_yaml(data, self.options["destination"])
-        elif self.options["format"] == "python":
+        if self.options.format == "json":
+            export_json(data, self.options.destination)
+        elif self.options.format == "csv":
+            export_csv(data, self.options.destination, fields)
+        elif self.options.format == "yaml":
+            export_yaml(data, self.options.destination)
+        elif self.options.format == "python":
             return data
         else:
-            log.info(f"Format {self.options['format']} does not exist")
+            log.info(f"Format {self.options.format} does not exist")
         return None
 
     @classmethod
@@ -610,14 +597,16 @@ class Packager:
         args = parser.parse_args(argv)
 
         try:
-            return cls({k: v for k, v in vars(args).items() if v is not None})
+            return cls(
+                Options(**{k: v for k, v in vars(args).items() if v is not None})
+            )
         except Exception as e:
             sys.exit(str(e))
 
 
 def setup_logger(
     logger: t.Optional[logging.Logger] = None,
-    level: t.Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG",
+    level: "LogLevel" = "DEBUG",
 ) -> None:
     """Setup logging for CLI use.
 
