@@ -39,7 +39,7 @@ class OptionsDict(t.TypedDict):
     zip_path: pathlib.Path
     work_dir: pathlib.Path
     fields: t.Tuple[str, ...]
-    format: str
+    format: t.Literal["json", "csv", "yaml", "python"]
     input_files: t.List[str]
     download: bool
     expand: bool
