@@ -1,5 +1,12 @@
 #: Dictionary of tuples mapping locations of files to fields
 from unihan_etl.types import ColumnDataTuple
+from appdirs import AppDirs as BaseAppDirs
+from unihan_etl.__about__ import (
+    __author__,
+    __package_name__,
+)
+from unihan_etl.app_dirs import AppDirs
+
 
 UNIHAN_MANIFEST = {
     "Unihan_DictionaryIndices.txt": (
@@ -208,3 +215,5 @@ SPACE_DELIMITED_FIELDS = SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIEL
 
 #: Default index fields for unihan csv's. You probably want these.
 INDEX_FIELDS: ColumnDataTuple = ("ucn", "char")
+
+app_dirs = AppDirs(_app_dirs=BaseAppDirs(__package_name__, __author__))
