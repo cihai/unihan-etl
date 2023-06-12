@@ -26,22 +26,22 @@ from unihan_etl.__about__ import (
 )
 from unihan_etl.app_dirs import AppDirs
 from unihan_etl.constants import INDEX_FIELDS, UNIHAN_MANIFEST
-from unihan_etl.types import (
-    ColumnData,
-    ColumnDataTuple,
-    ExpandedExport,
-    ListifiedExport,
-    OptionsDict,
-    ReportHookFn,
-    StrPath,
-    UntypedNormalizedData,
-    UntypedUnihanData,
-)
 from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeGuard
-    from unihan_etl.types import UrlRetrieveFn
+    from unihan_etl.types import (
+        ColumnData,
+        ColumnDataTuple,
+        ExpandedExport,
+        ListifiedExport,
+        OptionsDict,
+        ReportHookFn,
+        StrPath,
+        UrlRetrieveFn,
+        UntypedUnihanData,
+        UntypedNormalizedData,
+    )
 
 
 log = logging.getLogger(__name__)
@@ -62,14 +62,14 @@ def in_fields(
     return c in tuple(fields) + INDEX_FIELDS
 
 
-def get_fields(d: UntypedUnihanData) -> t.List[str]:
+def get_fields(d: "UntypedUnihanData") -> t.List[str]:
     """Return list of fields from dict of {filename: ['field', 'field1']}."""
     return sorted({c for cs in d.values() for c in cs})
 
 
 def filter_manifest(
     files: t.List[str],
-) -> UntypedUnihanData:
+) -> "UntypedUnihanData":
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
@@ -105,7 +105,7 @@ DESTINATION_DIR = app_dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
 #: Default Unihan fields
-UNIHAN_FIELDS: ColumnDataTuple = tuple(get_fields(UNIHAN_MANIFEST))
+UNIHAN_FIELDS: "ColumnDataTuple" = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
 ALLOWED_EXPORT_TYPES = ["json", "csv"]
 try:
@@ -116,7 +116,7 @@ except ImportError:
     pass
 
 
-DEFAULT_OPTIONS: OptionsDict = {
+DEFAULT_OPTIONS: "OptionsDict" = {
     "source": UNIHAN_URL,
     "destination": DESTINATION_DIR / f"unihan.{zip}",
     "zip_path": UNIHAN_ZIP_PATH,
@@ -227,7 +227,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def has_valid_zip(zip_path: StrPath) -> bool:
+def has_valid_zip(zip_path: "StrPath") -> bool:
     """Return True if valid zip exists.
 
     Parameters
@@ -276,7 +276,7 @@ def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
 
 
 def download(
-    url: StrPath,
+    url: "StrPath",
     dest: pathlib.Path,
     urlretrieve_fn: "UrlRetrieveFn" = urlretrieve,
     reporthook: t.Optional["ReportHookFn"] = None,
@@ -372,7 +372,7 @@ def extract_zip(zip_path: pathlib.Path, dest_dir: pathlib.Path) -> zipfile.ZipFi
 def normalize(
     raw_data: "fileinput.FileInput[t.Any]",
     fields: t.Sequence[str],
-) -> UntypedNormalizedData:
+) -> "UntypedNormalizedData":
     """Return normalized data from a UNIHAN data files.
 
     Parameters
@@ -411,7 +411,7 @@ def normalize(
     return list(items.values())
 
 
-def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
+def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExport":
     """Return expanded multi-value fields in UNIHAN.
 
     Parameters
@@ -436,7 +436,9 @@ def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
     return normalized_data
 
 
-def listify(data: UntypedNormalizedData, fields: t.Sequence[str]) -> ListifiedExport:
+def listify(
+    data: "UntypedNormalizedData", fields: t.Sequence[str]
+) -> "ListifiedExport":
     """Convert tabularized data to a CSV-friendly list.
 
     Parameters
@@ -452,9 +454,9 @@ def listify(data: UntypedNormalizedData, fields: t.Sequence[str]) -> ListifiedEx
 
 
 def export_csv(
-    data: UntypedNormalizedData,
-    destination: StrPath,
-    fields: ColumnData,
+    data: "UntypedNormalizedData",
+    destination: "StrPath",
+    fields: "ColumnData",
 ) -> None:
     listified_data = listify(data, fields)
 
@@ -464,13 +466,13 @@ def export_csv(
         log.info(f"Saved output to: {destination}")
 
 
-def export_json(data: UntypedNormalizedData, destination: StrPath) -> None:
+def export_json(data: "UntypedNormalizedData", destination: "StrPath") -> None:
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info(f"Saved output to: {destination}")
 
 
-def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
+def export_yaml(data: "UntypedNormalizedData", destination: "StrPath") -> None:
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
         log.info(f"Saved output to: {destination}")
@@ -524,7 +526,7 @@ class Packager:
         validate_options(options)
         merged_options = merge_dict(DEFAULT_OPTIONS.copy(), options)
         if validate_options(merged_options):
-            self.options: OptionsDict = merged_options
+            self.options: "OptionsDict" = merged_options
 
     def download(self, urlretrieve_fn: t.Any = urlretrieve) -> None:
         """Download raw UNIHAN data if not exists.
@@ -549,7 +551,7 @@ class Packager:
         ):
             extract_zip(self.options["zip_path"], self.options["work_dir"])
 
-    def export(self) -> t.Union[None, UntypedNormalizedData]:  # NOQA: C901
+    def export(self) -> t.Union[None, "UntypedNormalizedData"]:  # NOQA: C901
         """Extract zip and process information into CSV's."""
         fields = list(self.options["fields"])
         for k in INDEX_FIELDS:
