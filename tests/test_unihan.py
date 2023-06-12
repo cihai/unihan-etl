@@ -1,6 +1,5 @@
 """Tests for unihan data download and processing."""
 import logging
-import os
 import pathlib
 import shutil
 import typing as t
@@ -20,8 +19,8 @@ from .constants import FIXTURE_PATH
 
 if t.TYPE_CHECKING:
     from urllib.request import _DataType
+    from unihan_etl.types import StrPath
 
-    from _typeshed import StrOrBytesPath
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ def test_zip_has_files(mock_zip: zipfile.ZipFile) -> None:
 
 
 def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> None:
-    if os.path.isfile(UNIHAN_ZIP_PATH):
+    if UNIHAN_ZIP_PATH.is_file():
         assert process.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
         assert not process.has_valid_zip(UNIHAN_ZIP_PATH)
@@ -45,7 +44,7 @@ def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> Non
     bad_zip = tmp_path / "corrupt.zip"
     bad_zip.write_text("moo", encoding="utf-8")
 
-    assert not process.has_valid_zip(str(bad_zip))
+    assert not process.has_valid_zip(bad_zip)
 
 
 def test_in_fields() -> None:
@@ -87,10 +86,13 @@ def test_download(
     mock_zip_pathname: pathlib.Path,
 ) -> None:
     dest_path = tmp_path / "data" / mock_zip_pathname
+    assert (
+        not dest_path.parent.exists() and not dest_path.parent.is_dir()
+    ), "Test setup: Should not exist yet, process.download() should create them!"
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrOrBytesPath"] = None,
+        filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "_DataType" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
@@ -100,10 +102,11 @@ def test_download(
             HTTPMessage(),
         )
 
-    process.download(str(mock_zip_path), str(dest_path), urlretrieve)
+    process.download(url=mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
 
-    result = os.path.dirname(dest_path / "data")
-    assert result, "Creates data directory if doesn't exist."
+    assert (
+        dest_path.parent.exists() and dest_path.parent.is_dir()
+    ), "Creates data's parent directory if doesn't exist."
 
 
 def test_download_mock(
@@ -118,11 +121,11 @@ def test_download_mock(
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrOrBytesPath"] = None,
+        filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "_DataType" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
-        shutil.copy(str(mock_zip_path), str(dest_path))
+        shutil.copy(mock_zip_path, dest_path)
         return (
             "",
             HTTPMessage(),
@@ -133,14 +136,14 @@ def test_download_mock(
             test_options.copy(),
             {
                 "fields": ["kDefinition"],
-                "zip_path": str(dest_path),
-                "work_dir": str(mock_test_dir / "downloads"),
-                "destination": str(data_path / "unihan.csv"),
+                "zip_path": dest_path,
+                "work_dir": mock_test_dir / "downloads",
+                "destination": data_path / "unihan.csv",
             },
         )
     )
     p.download(urlretrieve_fn=urlretrieve)
-    assert os.path.exists(str(dest_path))
+    assert dest_path.exists()
     p.export()
 
 
@@ -156,7 +159,7 @@ def test_export_format(
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrOrBytesPath"] = None,
+        filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "_DataType" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
@@ -178,14 +181,14 @@ def test_export_format(
     p.download(urlretrieve_fn=urlretrieve)
     assert dest_path.exists()
     p.export()
-    assert str(data_path / "unihan.json") == p.options["destination"]
-    assert os.path.exists(p.options["destination"])
+    assert data_path / "unihan.json" == p.options["destination"]
+    assert p.options["destination"].exists()
 
 
 def test_extract_zip(
     mock_zip: zipfile.ZipFile, mock_zip_path: pathlib.Path, tmp_path: pathlib.Path
 ) -> None:
-    zf = process.extract_zip(str(mock_zip_path), str(tmp_path))
+    zf = process.extract_zip(zip_path=mock_zip_path, dest_dir=tmp_path)
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218
