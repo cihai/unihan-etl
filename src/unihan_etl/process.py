@@ -42,6 +42,7 @@ from unihan_etl.util import _dl_progress, merge_dict, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeGuard
+    from unihan_etl.types import UrlRetrieveFn
 
 
 log = logging.getLogger(__name__)
@@ -278,8 +279,8 @@ def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
 def download(
     url: StrPath,
     dest: pathlib.Path,
-    urlretrieve_fn: t.Any = urlretrieve,
-    reporthook: t.Optional[ReportHookFn] = None,
+    urlretrieve_fn: "UrlRetrieveFn" = urlretrieve,
+    reporthook: t.Optional["ReportHookFn"] = None,
     cache: bool = True,
 ) -> pathlib.Path:
     """Download file at URL to a destination.
@@ -290,9 +291,9 @@ def download(
         URL to download from.
     dest : pathlib.Path
         file path where download is to be saved.
-    urlretrieve_fn: callable
+    urlretrieve_fn: UrlRetrieveFn
         function to download file
-    reporthook : function
+    reporthook : ReportHookFn, Optional
         Function to write progress bar to stdout buffer.
 
     Returns
@@ -317,7 +318,7 @@ def download(
         if os.path.isfile(url):
             shutil.copy(url, dest)
         else:
-            urlretrieve_fn(url, dest, reporthook)
+            urlretrieve_fn(str(url), dest, reporthook)
 
     return pathlib.Path(dest)
 
