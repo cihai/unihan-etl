@@ -298,7 +298,7 @@ def download(
 
     Returns
     -------
-    str :
+    pathlib.Path :
         destination where file downloaded to.
     """
 
