@@ -15,11 +15,15 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 // Usage: unihan-etl@next
 ```
 
-## unihan-etl 0.21.x (unreleased)
+## unihan-etl 0.22.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
-### Development
+## unihan-etl 0.21.0 (2023-06-12)
+
+_Maintenance only, no bug fixes or features_
+
+### Internal improvements
 
 - Move file locations to {mod}`pathlib` internally (#277)
 - Improved typing download `urlretrive_fn` and `reporthook` via {class}`typing.Protocol` (#277)
@@ -38,7 +42,7 @@ _Maintenance only, no bug fixes or features_
   {mod}`typing`'s {class}`typing.TypedDict` and {class}`typing.Protocol` out of the box without needing
   {mod}`typing_extensions`'s.
 
-### Internal improvement
+### Internal improvements
 
 - Typings:
 
