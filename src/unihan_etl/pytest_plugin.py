@@ -10,14 +10,8 @@ import fileinput
 import zipfile
 
 from unihan_etl import constants, process
-from unihan_etl.process import DEFAULT_OPTIONS, Packager
-from unihan_etl.types import (
-    ColumnData,
-    ExpandedExport,
-    OptionsDict,
-    UntypedNormalizedData,
-)
-from unihan_etl.util import merge_dict
+from unihan_etl.process import Packager
+from unihan_etl.options import Options
 
 logger = logging.getLogger(__name__)
 USING_ZSH = "zsh" in os.getenv("SHELL", "")
@@ -63,9 +57,17 @@ def zshrc(user_path: pathlib.Path) -> pathlib.Path:
     return p
 
 
+if t.TYPE_CHECKING:
+    from unihan_etl.types import (
+        ColumnData,
+        ExpandedExport,
+        UntypedNormalizedData,
+    )
+
+
 @pytest.fixture
-def test_options() -> t.Union[OptionsDict, t.Mapping[str, t.Any]]:
-    return merge_dict(DEFAULT_OPTIONS.copy(), {"input_files": ["Unihan_Readings.txt"]})
+def test_options() -> t.Union[Options, t.Mapping[str, t.Any]]:
+    return Options(input_files=["Unihan_Readings.txt"])
 
 
 @pytest.fixture(scope="session")
@@ -115,16 +117,17 @@ def mock_zip(mock_zip_path: pathlib.Path, sample_data: str) -> zipfile.ZipFile:
 @pytest.fixture(scope="session")
 def TestPackager(mock_test_dir: pathlib.Path, mock_zip_path: pathlib.Path) -> Packager:
     # monkey-patching builder
-    options = {
-        "work_dir": str(mock_test_dir),
-        "zip_path": str(mock_zip_path),
-        "destination": str(mock_test_dir / "unihan.csv"),
-    }
-    return Packager(options)
+    return Packager(
+        Options(
+            work_dir=mock_test_dir,
+            zip_path=mock_zip_path,
+            destination=mock_test_dir / "unihan.csv",
+        )
+    )
 
 
 @pytest.fixture(scope="session")
-def columns() -> ColumnData:
+def columns() -> "ColumnData":
     return (
         constants.CUSTOM_DELIMITED_FIELDS
         + constants.INDEX_FIELDS
@@ -134,16 +137,16 @@ def columns() -> ColumnData:
 
 @pytest.fixture(scope="session")
 def normalized_data(
-    columns: ColumnData,
+    columns: "ColumnData",
     fixture_files: t.List[pathlib.Path],
-) -> UntypedNormalizedData:
+) -> "UntypedNormalizedData":
     data = process.load_data(files=fixture_files)
 
     return process.normalize(data, columns)
 
 
 @pytest.fixture(scope="session")
-def expanded_data(normalized_data: t.List[t.Dict[str, t.Any]]) -> ExpandedExport:
+def expanded_data(normalized_data: t.List[t.Dict[str, t.Any]]) -> "ExpandedExport":
     return process.expand_delimiters(normalized_data)
 
 

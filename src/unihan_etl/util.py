@@ -5,6 +5,10 @@ import typing as t
 from collections.abc import Mapping
 
 
+if t.TYPE_CHECKING:
+    from unihan_etl.types import UntypedUnihanData
+
+
 def ucn_to_unicode(ucn: str) -> str:
     """Return a python unicode value from a UCN.
 
@@ -148,3 +152,8 @@ def merge_dict(
         else:
             d[k] = u[k]
     return d
+
+
+def get_fields(d: "UntypedUnihanData") -> t.List[str]:
+    """Return list of fields from dict of {filename: ['field', 'field1']}."""
+    return sorted({c for cs in d.values() for c in cs})

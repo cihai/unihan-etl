@@ -1,4 +1,5 @@
 """Tests for unihan data download and processing."""
+import dataclasses
 import logging
 import pathlib
 import shutil
@@ -10,11 +11,12 @@ import pytest
 
 from unihan_etl import constants, process
 from unihan_etl.__about__ import __version__
-from unihan_etl.process import DEFAULT_OPTIONS, UNIHAN_ZIP_PATH, Packager, zip_has_files
+from unihan_etl.constants import UNIHAN_ZIP_PATH
+from unihan_etl.process import DEFAULT_OPTIONS, Packager, zip_has_files
 from unihan_etl.test import assert_dict_contains_subset
-from unihan_etl.types import ColumnData, OptionsDict, UntypedNormalizedData
-from unihan_etl.util import merge_dict
-
+from unihan_etl.types import ColumnData, UntypedNormalizedData
+from unihan_etl.options import Options
+from unihan_etl.util import get_fields
 from .constants import FIXTURE_PATH
 
 if t.TYPE_CHECKING:
@@ -114,7 +116,7 @@ def test_download_mock(
     mock_zip: zipfile.ZipFile,
     mock_zip_path: pathlib.Path,
     mock_test_dir: pathlib.Path,
-    test_options: OptionsDict,
+    test_options: Options,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -132,9 +134,9 @@ def test_download_mock(
         )
 
     p = Packager(
-        merge_dict(
-            test_options.copy(),
-            {
+        dataclasses.replace(
+            test_options,
+            **{
                 "fields": ["kDefinition"],
                 "zip_path": dest_path,
                 "work_dir": mock_test_dir / "downloads",
@@ -152,7 +154,7 @@ def test_export_format(
     mock_zip: zipfile.ZipFile,
     mock_zip_path: pathlib.Path,
     mock_test_dir: pathlib.Path,
-    test_options: OptionsDict,
+    test_options: Options,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -167,22 +169,22 @@ def test_export_format(
         return ("", HTTPMessage())
 
     p = Packager(
-        merge_dict(
-            test_options.copy(),
-            {
+        dataclasses.replace(
+            test_options,
+            **{
                 "fields": ["kDefinition"],
-                "zip_path": str(dest_path),
+                "zip_path": dest_path,
                 "work_dir": str(mock_test_dir / "downloads"),
                 "destination": str(data_path / "unihan.{ext}"),
                 "format": "json",
             },
-        )
+        ),
     )
     p.download(urlretrieve_fn=urlretrieve)
     assert dest_path.exists()
     p.export()
-    assert data_path / "unihan.json" == p.options["destination"]
-    assert p.options["destination"].exists()
+    assert data_path / "unihan.json" == p.options.destination
+    assert p.options.destination.exists()
 
 
 def test_extract_zip(
@@ -250,7 +252,7 @@ def test_flatten_fields() -> None:
     single_dataset = {"Unihan_Readings.txt": ["kCantonese", "kDefinition", "kHangul"]}
 
     expected = ["kCantonese", "kDefinition", "kHangul"]
-    results = process.get_fields(single_dataset)
+    results = get_fields(single_dataset)
 
     assert expected == results
 
@@ -272,7 +274,7 @@ def test_flatten_fields() -> None:
         "kCNS1986",
     ]
 
-    results = process.get_fields(datasets)
+    results = get_fields(datasets)
 
     assert set(expected) == set(results)
 
@@ -282,11 +284,11 @@ def test_pick_files(mock_zip_path: pathlib.Path) -> None:
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
-    options = {"input_files": files, "zip_path": str(mock_zip_path)}
+    options = Options(input_files=files, zip_path=mock_zip_path)
 
     b = process.Packager(options)
 
-    result = b.options["input_files"]
+    result = b.options.input_files
     expected = files
 
     assert result == expected, "Returns only the files picked."
@@ -295,7 +297,7 @@ def test_pick_files(mock_zip_path: pathlib.Path) -> None:
 def test_raise_error_unknown_field() -> None:
     """Throw error if picking unknown field."""
 
-    options = {"fields": ["kHello"]}
+    options = Options(fields=["kHello"])
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -305,7 +307,7 @@ def test_raise_error_unknown_field() -> None:
 def test_raise_error_unknown_file() -> None:
     """Throw error if picking unknown file."""
 
-    options = {"input_files": ["Sparta.lol"]}
+    options = Options(input_files=["Sparta.lol"])
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -317,7 +319,7 @@ def test_raise_error_unknown_field_filtered_files() -> None:
 
     files = ["Unihan_Variants.txt"]
 
-    options = {"input_files": files, "fields": ["kDefinition"]}
+    options = Options(input_files=files, fields=["kDefinition"])
 
     with pytest.raises(KeyError) as excinfo:
         process.Packager(options)
@@ -332,12 +334,12 @@ def test_set_reduce_files_automatically_when_only_field_specified() -> None:
         + constants.UNIHAN_MANIFEST["Unihan_Variants.txt"]
     )
 
-    options = {"fields": fields}
+    options = Options(fields=fields)
 
     b = process.Packager(options)
 
     expected = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
-    results = b.options["input_files"]
+    results = b.options.input_files
 
     assert set(expected) == set(results)
 
@@ -347,12 +349,12 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
-    options = {"input_files": files}
+    options = Options(input_files=files)
 
     b = process.Packager(options)
 
-    results = process.get_fields(process.filter_manifest(files))
-    expected = b.options["fields"]
+    results = get_fields(process.filter_manifest(files))
+    expected = b.options.fields
 
     assert set(expected) == set(results), "Returns only the fields for files picked."
 
@@ -367,35 +369,39 @@ def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
     """Test CLI args + defaults."""
 
     option_subset = {"zip_path": str(mock_zip_path)}
-    result = Packager.from_cli(["-z", str(mock_zip_path)]).options
-    assert_dict_contains_subset(option_subset, result)
+    pkgr = Packager.from_cli(["-z", str(mock_zip_path)])
+    assert_dict_contains_subset(option_subset, dataclasses.asdict(pkgr.options))
 
     option_subset_one_field = {"fields": ["kDefinition"]}
-    result = Packager.from_cli(["-f", "kDefinition"]).options
-    assert_dict_contains_subset(option_subset_one_field, result)
+    pkgr = Packager.from_cli(["-f", "kDefinition"])
+    assert_dict_contains_subset(
+        option_subset_one_field, dataclasses.asdict(pkgr.options)
+    )
 
     option_subset_two_fields = {"fields": ["kDefinition", "kXerox"]}
-    result = Packager.from_cli(["-f", "kDefinition", "kXerox"]).options
+    pkgr = Packager.from_cli(["-f", "kDefinition", "kXerox"])
     assert_dict_contains_subset(
-        option_subset_two_fields, result, msg="fields -f allows multiple fields."
+        option_subset_two_fields,
+        dataclasses.asdict(pkgr.options),
+        msg="fields -f allows multiple fields.",
     )
 
     option_subset_with_destination = {
         "fields": ["kDefinition", "kXerox"],
         "destination": "data/ha.csv",
     }
-    result = Packager.from_cli(
-        ["-f", "kDefinition", "kXerox", "-d", "data/ha.csv"]
-    ).options
+    pkgr = Packager.from_cli(["-f", "kDefinition", "kXerox", "-d", "data/ha.csv"])
     assert_dict_contains_subset(
         option_subset_with_destination,
-        result,
+        dataclasses.asdict(pkgr.options),
         msg="fields -f allows additional arguments.",
     )
 
-    result = Packager.from_cli(["--format", "json"]).options
+    pkgr = Packager.from_cli(["--format", "json"])
     option_subset = {"format": "json"}
-    assert_dict_contains_subset(option_subset, result, msg="format argument works")
+    assert_dict_contains_subset(
+        option_subset, dataclasses.asdict(pkgr.options), msg="format argument works"
+    )
 
 
 def test_cli_exit_emessage_to_stderr() -> None:
