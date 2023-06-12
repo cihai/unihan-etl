@@ -1,9 +1,12 @@
 import pathlib
 import typing as t
 from os import PathLike
+import sys
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeAlias
+    from urllib.request import _DataType
+    from http.client import HTTPMessage
 
 StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]  # stable
 """:class:`os.PathLike` or :class:`str`
@@ -45,4 +48,19 @@ class OptionsDict(t.TypedDict):
     log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
-ReportHookFn = t.Callable[[int, int, int], object]
+class ReportHookFn(t.Protocol):
+    def __call__(
+        self, count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout
+    ) -> object:
+        ...
+
+
+class UrlRetrieveFn(t.Protocol):
+    def __call__(
+        self,
+        url: str,
+        filename: t.Optional["StrPath"] = None,
+        reporthook: t.Optional["ReportHookFn"] = None,
+        data: "_DataType" = None,
+    ) -> t.Tuple[str, "HTTPMessage"]:
+        ...
