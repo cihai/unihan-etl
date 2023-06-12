@@ -4,7 +4,6 @@ import argparse
 import codecs
 import csv
 import fileinput
-import glob
 import json
 import logging
 import os
@@ -301,16 +300,18 @@ def download(
     pathlib.Path :
         destination where file downloaded to.
     """
+    if not isinstance(dest, pathlib.Path):
+        dest = pathlib.Path(dest)
 
-    data_dir = os.path.dirname(dest)
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
+    data_dir = dest.parent
+    if not data_dir.exists():
+        data_dir.mkdir(parents=True, exist_ok=True)
 
     def no_unihan_files_exist() -> bool:
-        return not glob.glob(os.path.join(data_dir, "Unihan*.txt"))
+        return not data_dir.match("Unihan*.txt")
 
     def not_downloaded() -> bool:
-        return not os.path.exists(os.path.join(data_dir, "Unihan.zip"))
+        return not (data_dir / "Unihan.zip").exists()
 
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
         log.info("Downloading Unihan.zip...")
