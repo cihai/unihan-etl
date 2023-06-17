@@ -24,9 +24,9 @@ _Notes on the upcoming release will be added here_
 
 <!-- Maintainers, insert migration notes for the next release here -->
 
-## unihan-etl 0.21.0 (unreleased)
+## unihan-etl 0.22.0 (unreleased)
 
-### Options are now dataclasses
+### Options are now dataclasses (#280)
 
 :mod:`dataclasses` are now used for the unihan_etl options object.
 
