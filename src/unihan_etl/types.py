@@ -8,7 +8,7 @@ if t.TYPE_CHECKING:
     from urllib.request import _DataType
     from http.client import HTTPMessage
 
-StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]  # stable
+StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 """:class:`os.PathLike` or :class:`str`
 
 :class:`StrPath` is based on `typeshed`__'s.
