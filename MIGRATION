@@ -26,11 +26,25 @@ _Notes on the upcoming release will be added here_
 
 ## unihan-etl 0.22.0 (unreleased)
 
-### Options are now dataclasses (#280)
+### Move `unihan_etl.process` to `unihan_etl.core` (#284)
 
-:mod:`dataclasses` are now used for the unihan_etl options object.
+Before 0.22.0:
 
-Before:
+```python
+from unihan_etl.process import Packager
+```
+
+From 0.22.0+:
+
+```python
+>>> from unihan_etl.core import Packager
+```
+
+### Options is now a dataclass object (#280)
+
+A typed, autocomplete-friendly :obj:`dataclasses.dataclass` object is now used for the unihan_etl options object.
+
+Before 0.22.0:
 
 ```python
 from unihan_etl.process import Packager
@@ -40,7 +54,7 @@ packager = Packager({
 })
 ```
 
-After release:
+From 0.22.0+ (also note above):
 
 ```python
 >>> from unihan_etl.core import Packager
