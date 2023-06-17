@@ -10,7 +10,7 @@
 
 quickstart
 cli
-api
+api/index
 
 ```
 
