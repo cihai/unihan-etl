@@ -114,6 +114,14 @@ autodoc_default_options = {
     "member-order": "bysource",
 }
 
+# sphinx-autodoc-typehints
+autodoc_typehints = "description"  # show type hints in doc body instead of signature
+simplify_optional_unions = True
+
+# sphinx.ext.napoleon
+napoleon_google_docstring = True
+napoleon_include_init_with_doc = True
+
 # sphinxext.opengraph
 ogp_site_url = about["__docs__"]
 ogp_image = "_static/img/icons/icon-192x192.png"
