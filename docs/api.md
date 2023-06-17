@@ -6,6 +6,8 @@
 
 ```
 
+## Packager
+
 ```{eval-rst}
 .. automodule:: unihan_etl.process
     :members:
@@ -16,10 +18,24 @@
        :private-members:
 ```
 
+## Options / configuration
+
+```{eval-rst}
+.. automodule:: unihan_etl.options
+    :members:
+```
+
 ## Constants
 
 ```{eval-rst}
 .. automodule:: unihan_etl.constants
+    :members:
+```
+
+## Typings
+
+```{eval-rst}
+.. automodule:: unihan_etl.typings
     :members:
 ```
 
