@@ -11,6 +11,7 @@
 quickstart
 cli
 api/index
+pytest-plugin
 
 ```
 
