@@ -22,6 +22,9 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 ### Documentation
 
+- Add {mod}`doctests` support (#274)
+
+  - Initial doctest example added to README.md, test.py, and util.py.
 - Split _API_ docs into multiple files (#283)
 - Fix `make start` in `docs/Makefile` by fixing argument positions (#283)
 
