@@ -6,7 +6,7 @@
 tabular or structured, tree-like format.
 
 unihan-etl can be used as a python library through its
-[API](https://unihan-etl.git-pull.com/en/latest/api.html), to retrieve data as a python object, or
+[API], to retrieve data as a python object, or
 through the [CLI](https://unihan-etl.git-pull.com/en/latest/cli.html) to retrieve a CSV, JSON, or
 YAML file.
 
@@ -349,6 +349,8 @@ Example:
 >>> hasattr(pkgr.options, 'destination')
 True
 ```
+
+[API]: https://unihan-etl.git-pull.com/en/latest/api.html
 
 ## Developing
 
