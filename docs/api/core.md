@@ -6,10 +6,10 @@ myst:
     "property=og:locale": "en_US"
 ---
 
-# Core - `unihan_etl.process`
+# Core - `unihan_etl.core`
 
 ```{eval-rst}
-.. automodule:: unihan_etl.process
+.. automodule:: unihan_etl.core
    :members:
    :undoc-members:
    :show-inheritance:

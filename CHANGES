@@ -21,6 +21,10 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 ### Breaking changes
 
+#### `unihan_etl.process` -> `unihan_etl.core` (#284)
+
+This module has been renamed.
+
 #### Configuration (#280)
 
 Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` object.
