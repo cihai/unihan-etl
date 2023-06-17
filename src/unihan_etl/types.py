@@ -2,6 +2,7 @@ import pathlib
 import typing as t
 from os import PathLike
 import sys
+import dataclasses
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeAlias
@@ -15,6 +16,8 @@ StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 
 .. __: https://github.com/python/typeshed/blob/5df8de7/stdlib/_typeshed/__init__.pyi#L115-L118
 """  # NOQA E501
+
+LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Column data
 ColumnData = t.Sequence[str]
@@ -33,7 +36,8 @@ ListifiedExport = t.List[t.List[str]]
 ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
 
 
-class OptionsDict(t.TypedDict):
+@dataclasses.dataclass()
+class Options:
     source: str
     destination: pathlib.Path
     zip_path: pathlib.Path

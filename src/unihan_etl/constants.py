@@ -1,5 +1,13 @@
 #: Dictionary of tuples mapping locations of files to fields
 from unihan_etl.types import ColumnDataTuple
+from appdirs import AppDirs as BaseAppDirs
+from unihan_etl.__about__ import (
+    __author__,
+    __package_name__,
+)
+from unihan_etl.app_dirs import AppDirs
+
+from unihan_etl.util import get_fields
 
 UNIHAN_MANIFEST = {
     "Unihan_DictionaryIndices.txt": (
@@ -208,3 +216,27 @@ SPACE_DELIMITED_FIELDS = SPACE_DELIMITED_LIST_FIELDS + SPACE_DELIMITED_DICT_FIEL
 
 #: Default index fields for unihan csv's. You probably want these.
 INDEX_FIELDS: ColumnDataTuple = ("ucn", "char")
+
+app_dirs = AppDirs(_app_dirs=BaseAppDirs(__package_name__, __author__))
+
+
+#: Directory to use for processing intermittent files.
+WORK_DIR = app_dirs.user_cache_dir / "downloads"
+#: Default Unihan Files
+UNIHAN_FILES = list(UNIHAN_MANIFEST.keys())
+#: URI of Unihan.zip data.
+UNIHAN_URL = "http://www.unicode.org/Public/UNIDATA/Unihan.zip"
+#: Filepath to output built CSV file to.
+DESTINATION_DIR = app_dirs.user_data_dir
+#: Filepath to download Zip file.
+UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
+#: Default Unihan fields
+UNIHAN_FIELDS: "ColumnDataTuple" = tuple(get_fields(UNIHAN_MANIFEST))
+#: Allowed export types
+ALLOWED_EXPORT_TYPES = ["json", "csv"]
+try:
+    import yaml  # flake8: NOQA F401
+
+    ALLOWED_EXPORT_TYPES += ["yaml"]
+except ImportError:
+    pass
