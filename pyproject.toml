@@ -142,7 +142,6 @@ ignore_missing_imports = true
 branch = true
 parallel = true
 omit = [
-  "*/_compat.py",
   "docs/conf.py",
   "conftest.py",
   "tests/conftest.py"
