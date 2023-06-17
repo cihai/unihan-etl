@@ -19,6 +19,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking changes
+
+#### Configuration (#280)
+
+Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` object.
+
+0.22.0 and after  settings are configurable via a {obj}`dataclasses.dataclass` object:
+{class}`unihan_etl.options.Options`
 
 ### Documentation
 
