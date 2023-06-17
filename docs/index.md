@@ -10,7 +10,7 @@
 
 quickstart
 cli
-api
+api/index
 
 ```
 
@@ -21,6 +21,7 @@ api
 unihan
 FAQ
 history
+migration
 Developer Guide <https://cihai.git-pull.com/contributing/>
 GitHub <https://github.com/cihai/unihan-etl>
 ```

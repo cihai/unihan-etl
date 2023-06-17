@@ -1,9 +1,4 @@
-"""Utility and helper methods for script.
-
-util
-~~~~
-
-"""
+"""Utilities for parsing UNIHAN's data and structures."""
 import re
 import sys
 import typing as t
@@ -13,8 +8,8 @@ from collections.abc import Mapping
 def ucn_to_unicode(ucn: str) -> str:
     """Return a python unicode value from a UCN.
 
-    Converts a Unicode Universal Character Number (e.g. "U+4E00" or "4E00") to
-    Python unicode (u'\\u4e00')"""
+    Converts a Unicode Universal Character Number (e.g. ``"U+4E00"`` or ``"4E00"``) to
+    Python unicode ``(u'\\u4e00')``"""
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
