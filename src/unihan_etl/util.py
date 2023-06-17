@@ -50,7 +50,20 @@ def ucnstring_to_python(ucn_string: str) -> bytes:
 
 
 def ucnstring_to_unicode(ucn_string: str) -> str:
-    """Return ucnstring as Unicode."""
+    """Return ucnstring as Unicode.
+
+    >>> ucnstring_to_unicode('U+4E00')
+    '一'
+
+    >>> ucnstring_to_unicode('U+4E01')
+    '丁'
+
+    >>> ucnstring_to_unicode('U+0030')
+    '0'
+
+    >>> ucnstring_to_unicode('U+0031')
+    '1'
+    """
     ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
     assert isinstance(ucn_string, str)
