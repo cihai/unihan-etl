@@ -9,8 +9,8 @@ import pytest
 import fileinput
 import zipfile
 
-from unihan_etl import constants, process
-from unihan_etl.process import Packager
+from unihan_etl import constants, core
+from unihan_etl.core import Packager
 from unihan_etl.options import Options
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ def fixture_files() -> t.List[pathlib.Path]:
 
 @pytest.fixture(scope="session")
 def sample_data2(fixture_files: t.List[pathlib.Path]) -> "fileinput.FileInput[t.Any]":
-    return process.load_data(files=fixture_files)
+    return core.load_data(files=fixture_files)
 
 
 @pytest.fixture(scope="session")
@@ -140,14 +140,14 @@ def normalized_data(
     columns: "ColumnData",
     fixture_files: t.List[pathlib.Path],
 ) -> "UntypedNormalizedData":
-    data = process.load_data(files=fixture_files)
+    data = core.load_data(files=fixture_files)
 
-    return process.normalize(data, columns)
+    return core.normalize(data, columns)
 
 
 @pytest.fixture(scope="session")
 def expanded_data(normalized_data: t.List[t.Dict[str, t.Any]]) -> "ExpandedExport":
-    return process.expand_delimiters(normalized_data)
+    return core.expand_delimiters(normalized_data)
 
 
 @pytest.fixture(scope="session")
