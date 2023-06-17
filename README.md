@@ -328,8 +328,10 @@ usage examples.
 # package dir
 unihan_etl/
   process.py    # argparse, download, extract, transform UNIHAN's data
+  options.py    # configuration object
   constants.py  # immutable data vars (field to filename mappings, etc)
   expansion.py  # extracting details baked inside of fields
+  types.py      # type annotations
   util.py       # utility / helper functions
 
 # test suite
