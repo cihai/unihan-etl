@@ -336,6 +336,18 @@ unihan_etl/
 tests/*
 ```
 
+## API
+
+The package is python underneath the hood, you can utilize its full [API].
+Example:
+
+```python
+>>> from unihan_etl.process import Packager
+>>> pkgr = Packager({})
+>>> 'destination' in pkgr.options
+True
+```
+
 ## Developing
 
 ```console

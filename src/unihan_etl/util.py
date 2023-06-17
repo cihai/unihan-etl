@@ -9,7 +9,14 @@ def ucn_to_unicode(ucn: str) -> str:
     """Return a python unicode value from a UCN.
 
     Converts a Unicode Universal Character Number (e.g. ``"U+4E00"`` or ``"4E00"``) to
-    Python unicode ``(u'\\u4e00')``"""
+    Python unicode ``(u'\\u4e00')``
+
+    >>> ucn_to_unicode("U+4E00")
+    '\\u4e00'
+
+    >>> ucn_to_unicode("4E00")
+    '\\u4e00'
+    """
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
         if len(ucn) > int(4):
@@ -28,6 +35,9 @@ def ucn_to_unicode(ucn: str) -> str:
 def ucnstring_to_python(ucn_string: str) -> bytes:
     """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
     (u'\\u4e00').
+
+    >>> ucnstring_to_python("U+4E00")
+    b'\xe4\xb8\x80'
     """
     res = re.findall(r"U\+[0-9a-fA-F]*", ucn_string)
     for r in res:
@@ -40,7 +50,20 @@ def ucnstring_to_python(ucn_string: str) -> bytes:
 
 
 def ucnstring_to_unicode(ucn_string: str) -> str:
-    """Return ucnstring as Unicode."""
+    """Return ucnstring as Unicode.
+
+    >>> ucnstring_to_unicode('U+4E00')
+    '一'
+
+    >>> ucnstring_to_unicode('U+4E01')
+    '丁'
+
+    >>> ucnstring_to_unicode('U+0030')
+    '0'
+
+    >>> ucnstring_to_unicode('U+0031')
+    '1'
+    """
     ucn_string = ucnstring_to_python(ucn_string).decode("utf-8")
 
     assert isinstance(ucn_string, str)
@@ -55,6 +78,11 @@ def _dl_progress(
 
     Modification for testing: http://stackoverflow.com/a/4220278
 
+    >>> _dl_progress(0, 1, 10)
+    Total size: 10b
+
+    >>> _dl_progress(0, 100, 942_200)
+    Total size: 942Kb
     """
 
     def format_size(_bytes: int) -> str:

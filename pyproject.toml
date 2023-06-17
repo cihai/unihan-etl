@@ -122,6 +122,9 @@ lint = [
   "types-requests",
 ]
 
+[tool.poetry.plugins.pytest11]
+unihan_etl = "unihan_etl.pytest_plugin"
+
 [tool.mypy]
 strict = true
 files = [
@@ -139,8 +142,9 @@ ignore_missing_imports = true
 branch = true
 parallel = true
 omit = [
-  "*/_compat.py",
   "docs/conf.py",
+  "conftest.py",
+  "tests/conftest.py"
 ]
 
 [tool.coverage.report]

@@ -18,6 +18,13 @@ def assert_dict_contains_subset(
         haystack
     msg : str, optional
         message display if assertion fails
+
+    >>> assert_dict_contains_subset({ 'test': 3 }, { 'more_data': '_', 'test': 3 })
+
+    >>> not assert_dict_contains_subset({ 'test': 3 }, { 'more_data': '_', 'test': 4 })
+    Traceback (most recent call last):
+        ...
+    AssertionError: None
     """
     for key, value in subset.items():
         assert key in dictionary, msg
