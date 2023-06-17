@@ -381,7 +381,7 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
     Parameters
     ----------
     normalized_data : list of dict
-        Expects data in list of hashes, per :meth:`process.normalize`
+        Expects data in list of hashes, per :meth:`core.normalize`
 
     Returns
     -------

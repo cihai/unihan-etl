@@ -327,7 +327,7 @@ usage examples.
 
 # package dir
 unihan_etl/
-  process.py    # argparse, download, extract, transform UNIHAN's data
+  core.py    # argparse, download, extract, transform UNIHAN's data
   options.py    # configuration object
   constants.py  # immutable data vars (field to filename mappings, etc)
   expansion.py  # extracting details baked inside of fields
@@ -344,7 +344,7 @@ The package is python underneath the hood, you can utilize its full [API].
 Example:
 
 ```python
->>> from unihan_etl.process import Packager
+>>> from unihan_etl.core import Packager
 >>> pkgr = Packager()
 >>> hasattr(pkgr.options, 'destination')
 True

@@ -9,10 +9,10 @@ from http.client import HTTPMessage
 
 import pytest
 
-from unihan_etl import constants, process
+from unihan_etl import constants, core
 from unihan_etl.__about__ import __version__
 from unihan_etl.constants import UNIHAN_ZIP_PATH
-from unihan_etl.process import DEFAULT_OPTIONS, Packager, zip_has_files
+from unihan_etl.core import DEFAULT_OPTIONS, Packager, zip_has_files
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.types import ColumnData, UntypedNormalizedData
 from unihan_etl.options import Options
@@ -35,23 +35,23 @@ def test_zip_has_files(mock_zip: zipfile.ZipFile) -> None:
 
 def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> None:
     if UNIHAN_ZIP_PATH.is_file():
-        assert process.has_valid_zip(UNIHAN_ZIP_PATH)
+        assert core.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
-        assert not process.has_valid_zip(UNIHAN_ZIP_PATH)
+        assert not core.has_valid_zip(UNIHAN_ZIP_PATH)
 
     assert mock_zip.filename is not None
 
-    assert process.has_valid_zip(mock_zip.filename)
+    assert core.has_valid_zip(mock_zip.filename)
 
     bad_zip = tmp_path / "corrupt.zip"
     bad_zip.write_text("moo", encoding="utf-8")
 
-    assert not process.has_valid_zip(bad_zip)
+    assert not core.has_valid_zip(bad_zip)
 
 
 def test_in_fields() -> None:
     columns = ["hey", "kDefinition", "kWhat"]
-    result = process.in_fields("kDefinition", columns)
+    result = core.in_fields("kDefinition", columns)
 
     assert result
 
@@ -67,7 +67,7 @@ def test_filter_manifest() -> None:
         ]
     }
 
-    result = process.filter_manifest(["Unihan_Variants.txt"])
+    result = core.filter_manifest(["Unihan_Variants.txt"])
 
     assert set(result) == set(expected)
 
@@ -76,7 +76,7 @@ def test_get_files() -> None:
     fields = ["kKorean", "kRSUnicode"]
     expected = ["Unihan_Readings.txt", "Unihan_RadicalStrokeCounts.txt"]
 
-    result = process.get_files(fields)
+    result = core.get_files(fields)
 
     assert set(result) == set(expected)
 
@@ -90,7 +90,7 @@ def test_download(
     dest_path = tmp_path / "data" / mock_zip_pathname
     assert (
         not dest_path.parent.exists() and not dest_path.parent.is_dir()
-    ), "Test setup: Should not exist yet, process.download() should create them!"
+    ), "Test setup: Should not exist yet, core.download() should create them!"
 
     def urlretrieve(
         url: str,
@@ -104,7 +104,7 @@ def test_download(
             HTTPMessage(),
         )
 
-    process.download(url=mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
+    core.download(url=mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
 
     assert (
         dest_path.parent.exists() and dest_path.parent.is_dir()
@@ -190,7 +190,7 @@ def test_export_format(
 def test_extract_zip(
     mock_zip: zipfile.ZipFile, mock_zip_path: pathlib.Path, tmp_path: pathlib.Path
 ) -> None:
-    zf = process.extract_zip(zip_path=mock_zip_path, dest_dir=tmp_path)
+    zf = core.extract_zip(zip_path=mock_zip_path, dest_dir=tmp_path)
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218
@@ -205,7 +205,7 @@ def test_normalize_only_output_requested_columns(
     for data_labels in normalized_data:
         assert set(columns) == set(data_labels.keys())
 
-    items = process.listify(normalized_data, in_columns)
+    items = core.listify(normalized_data, in_columns)
     example_result = items[0]
 
     not_in_columns: t.List[str] = []
@@ -237,10 +237,10 @@ def test_normalize_simple_data_format() -> None:
         "kDefinition",
     ) + constants.INDEX_FIELDS
 
-    data = process.load_data(files=csv_files)
+    data = core.load_data(files=csv_files)
 
-    normalized_items = process.normalize(data, columns)
-    items = process.listify(normalized_items, columns)
+    normalized_items = core.normalize(data, columns)
+    items = core.listify(normalized_items, columns)
 
     header = items[0]
     assert set(header) == set(columns)
@@ -286,7 +286,7 @@ def test_pick_files(mock_zip_path: pathlib.Path) -> None:
 
     options = Options(input_files=files, zip_path=mock_zip_path)
 
-    b = process.Packager(options)
+    b = core.Packager(options)
 
     result = b.options.input_files
     expected = files
@@ -300,7 +300,7 @@ def test_raise_error_unknown_field() -> None:
     options = Options(fields=["kHello"])
 
     with pytest.raises(KeyError) as excinfo:
-        process.Packager(options)
+        core.Packager(options)
     excinfo.match("Field ([a-zA-Z].*) not found in file list.")
 
 
@@ -310,7 +310,7 @@ def test_raise_error_unknown_file() -> None:
     options = Options(input_files=["Sparta.lol"])
 
     with pytest.raises(KeyError) as excinfo:
-        process.Packager(options)
+        core.Packager(options)
     excinfo.match(r"File ([a-zA-Z_\.\'].*) not found in file list.")
 
 
@@ -322,7 +322,7 @@ def test_raise_error_unknown_field_filtered_files() -> None:
     options = Options(input_files=files, fields=["kDefinition"])
 
     with pytest.raises(KeyError) as excinfo:
-        process.Packager(options)
+        core.Packager(options)
     excinfo.match("Field ([a-zA-Z].*) not found in file list.")
 
 
@@ -336,7 +336,7 @@ def test_set_reduce_files_automatically_when_only_field_specified() -> None:
 
     options = Options(fields=fields)
 
-    b = process.Packager(options)
+    b = core.Packager(options)
 
     expected = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
     results = b.options.input_files
@@ -351,9 +351,9 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 
     options = Options(input_files=files)
 
-    b = process.Packager(options)
+    b = core.Packager(options)
 
-    results = get_fields(process.filter_manifest(files))
+    results = get_fields(core.filter_manifest(files))
     expected = b.options.fields
 
     assert set(expected) == set(results), "Returns only the fields for files picked."

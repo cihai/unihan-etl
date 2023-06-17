@@ -36,17 +36,20 @@ Before:
 from unihan_etl.process import Packager
 
 packager = Packager({
-    'input_fields': ['fields']
+    'fields': ['kDefinition']
 })
 ```
 
 After release:
 
 ```python
->>> import dataclasses
->>> from unihan_etl.process import Packager
+>>> from unihan_etl.core import Packager
+>>> from unihan_etl.options import Options
+>>> packager = Packager(Options(
+...     fields=['kDefinition']
+... ))
 ```
 
-<!---
+<!--
 # vim: set filetype=markdown:
 -->
