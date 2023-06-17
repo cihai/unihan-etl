@@ -24,7 +24,7 @@ _Notes on the upcoming release will be added here_
 
 <!-- Maintainers, insert migration notes for the next release here -->
 
-## unihan-etl 0.22.0 (unreleased)
+## unihan-etl 0.22.0 (2023-06-17)
 
 ### Move `unihan_etl.process` to `unihan_etl.core` (#284)
 
