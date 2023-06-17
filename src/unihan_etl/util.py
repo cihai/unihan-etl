@@ -78,6 +78,11 @@ def _dl_progress(
 
     Modification for testing: http://stackoverflow.com/a/4220278
 
+    >>> _dl_progress(0, 1, 10)
+    Total size: 10b
+
+    >>> _dl_progress(0, 100, 942_200)
+    Total size: 942Kb
     """
 
     def format_size(_bytes: int) -> str:
