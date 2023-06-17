@@ -35,6 +35,9 @@ def ucn_to_unicode(ucn: str) -> str:
 def ucnstring_to_python(ucn_string: str) -> bytes:
     """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
     (u'\\u4e00').
+
+    >>> ucnstring_to_python("U+4E00")
+    b'\xe4\xb8\x80'
     """
     res = re.findall(r"U\+[0-9a-fA-F]*", ucn_string)
     for r in res:
