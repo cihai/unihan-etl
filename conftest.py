@@ -27,7 +27,6 @@ def add_doctest_fixtures(
 ) -> None:
     if isinstance(request._pyfuncitem, DoctestItem) and shutil.which("tmux"):
         request.getfixturevalue("set_home")
-        doctest_namespace["server"] = request.getfixturevalue("server")
         doctest_namespace["request"] = request
 
 
