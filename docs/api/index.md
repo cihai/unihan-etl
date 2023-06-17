@@ -12,6 +12,7 @@
 :caption: API
 
 core
+options
 expansion
 types
 constants
