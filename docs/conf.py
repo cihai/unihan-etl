@@ -169,7 +169,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "typing_extensions": ("https://typing-extensions.readthedocs.io/en/latest/", None),
     "mypy": ("https://mypy.readthedocs.io/en/stable/", None),
-    "sqlalchemy": ("https://sqlalchemy.readthedocs.org/en/latest/", None),
+    "sqlalchemy": ("https://docs.sqlalchemy.org/en/20/", None),
 }
 
 
