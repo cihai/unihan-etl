@@ -43,6 +43,12 @@ Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` objec
 - Split _API_ docs into multiple files (#283)
 - Fix `make start` in `docs/Makefile` by fixing argument positions (#283)
 
+## unihan-etl 0.21.1 (2023-06-18)
+
+### Bug fixes
+
+- Fix for `destination` of files not replacing file extension correctly (#286)
+
 ## unihan-etl 0.21.0 (2023-06-12)
 
 _Maintenance only, no bug fixes or features_
