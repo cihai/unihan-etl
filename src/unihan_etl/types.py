@@ -34,7 +34,7 @@ ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
 
 
 class OptionsDict(t.TypedDict):
-    source: str
+    source: t.Union[str, pathlib.Path]
     destination: pathlib.Path
     zip_path: pathlib.Path
     work_dir: pathlib.Path
