@@ -36,7 +36,7 @@ Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` objec
 
 ### Documentation
 
-- Add {mod}`doctests` support (#274)
+- Add {mod}`doctest` support (#274)
 
   - Initial doctest example added to README.md, test.py, and util.py.
 - Stub out initial pytest plugin (#274)
