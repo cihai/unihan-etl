@@ -18,7 +18,7 @@ if t.TYPE_CHECKING:
 
 @dataclasses.dataclass()
 class Options:
-    source: str = UNIHAN_URL
+    source: t.Union[str, pathlib.Path] = UNIHAN_URL
     destination: pathlib.Path = DESTINATION_DIR / "unihan.{ext}"
     zip_path: pathlib.Path = UNIHAN_ZIP_PATH
     work_dir: pathlib.Path = WORK_DIR
