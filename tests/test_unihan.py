@@ -360,7 +360,12 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 def test_no_args() -> None:
     """Works without arguments."""
 
-    assert DEFAULT_OPTIONS == Packager.from_cli([]).options
+    default_options = DEFAULT_OPTIONS.copy()
+    default_options["destination"] = pathlib.Path(
+        str(default_options["destination"]).format(ext=default_options["format"])
+    )
+
+    assert default_options == Packager.from_cli([]).options
 
 
 def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
