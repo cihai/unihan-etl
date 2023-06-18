@@ -118,7 +118,7 @@ except ImportError:
 
 DEFAULT_OPTIONS: "OptionsDict" = {
     "source": UNIHAN_URL,
-    "destination": DESTINATION_DIR / f"unihan.{zip}",
+    "destination": DESTINATION_DIR / "unihan.{ext}",
     "zip_path": UNIHAN_ZIP_PATH,
     "work_dir": WORK_DIR,
     "fields": INDEX_FIELDS + UNIHAN_FIELDS,
@@ -525,6 +525,14 @@ class Packager:
 
         validate_options(options)
         merged_options = merge_dict(DEFAULT_OPTIONS.copy(), options)
+
+        assert isinstance(merged_options, dict)
+
+        # Replace {ext} with extension to use.
+        merged_options["destination"] = pathlib.Path(
+            str(merged_options["destination"]).format(ext=merged_options["format"])
+        )
+
         if validate_options(merged_options):
             self.options: "OptionsDict" = merged_options
 
@@ -563,11 +571,6 @@ class Packager:
             os.path.join(self.options["work_dir"], f)
             for f in self.options["input_files"]
         ]
-
-        # Replace {ext} with extension to use.
-        self.options["destination"] = pathlib.Path(
-            str(self.options["destination"]).format(ext=self.options["format"])
-        )
 
         if not self.options["destination"].parent.exists():
             self.options["destination"].parent.mkdir(parents=True, exist_ok=True)
