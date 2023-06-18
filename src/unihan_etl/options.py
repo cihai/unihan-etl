@@ -18,8 +18,8 @@ if t.TYPE_CHECKING:
 
 @dataclasses.dataclass()
 class Options:
-    source: str = UNIHAN_URL
-    destination: pathlib.Path = DESTINATION_DIR / f"unihan.{zip}"
+    source: t.Union[str, pathlib.Path] = UNIHAN_URL
+    destination: pathlib.Path = DESTINATION_DIR / "unihan.{ext}"
     zip_path: pathlib.Path = UNIHAN_ZIP_PATH
     work_dir: pathlib.Path = WORK_DIR
     fields: t.Sequence[str] = dataclasses.field(
@@ -32,3 +32,6 @@ class Options:
     prune_empty: bool = True
     cache: bool = True
     log_level: "LogLevel" = "INFO"
+
+    def __post_init__(self) -> None:
+        self.destination = pathlib.Path(str(self.destination).format(ext=self.format))
