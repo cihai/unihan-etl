@@ -19,6 +19,12 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+## unihan-etl 0.22.1 (2023-06-18)
+
+### Bug fixes
+
+- Fix for `destination` of files not replacing file extension correctly (#285)
+
 ## unihan-etl 0.22.0 (2023-06-17)
 
 ### Breaking changes
