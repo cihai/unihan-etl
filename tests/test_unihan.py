@@ -382,7 +382,7 @@ def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
 
     option_subset_with_destination = {
         "fields": ["kDefinition", "kXerox"],
-        "destination": "data/ha.csv",
+        "destination": pathlib.Path("data/ha.csv"),
     }
     result = Packager.from_cli(
         ["-f", "kDefinition", "kXerox", "-d", "data/ha.csv"]
