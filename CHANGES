@@ -19,6 +19,13 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Documentation
+
+- API docs (#288):
+  - Limit depth of table of contents to one
+  - Fix section heading
+  - Fix comment in `AppDirs`
+
 ## unihan-etl 0.22.1 (2023-06-18)
 
 ### Bug fixes
