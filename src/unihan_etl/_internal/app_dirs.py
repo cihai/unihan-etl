@@ -1,4 +1,5 @@
 import dataclasses
+import os
 
 import pathlib
 
@@ -8,13 +9,48 @@ if t.TYPE_CHECKING:
     from appdirs import AppDirs as BaseAppDirs
 
 
-# A sentinel object to detect if a path is supplied or not.
 MISSING_DIR = pathlib.Path(str(dataclasses.MISSING.__hash__()))
+"""A sentinel object to detect if a path is supplied or not.
+
+:meta hide-value:
+"""
 
 
 @dataclasses.dataclass(frozen=True)
 class AppDirs:
-    """Wrap :class:`appdirs.AppDirs`'s paths in typed :class:`pathlib.Path`'s."""
+    """Wrap :class:`appdirs.AppDirs`'s paths in typed :class:`pathlib.Path`'s.
+
+    Retrieve directories as dataclass in :class:`pathlib.Path` format:
+
+    >>> from appdirs import AppDirs as BaseAppDirs
+    >>> app_dirs = AppDirs(_app_dirs=BaseAppDirs())
+    >>> app_dirs.user_log_dir
+    PosixPath('.../log')
+
+    Override directories:
+
+    >>> app_dirs = AppDirs(_app_dirs=BaseAppDirs(), user_log_dir='/var/log/myapp')
+    >>> app_dirs.user_log_dir
+    PosixPath('/var/log/myapp')
+
+    Replace environment variables via :class:`os.expandfars`:
+
+    >>> import os
+    >>> os.environ['my_cache_var'] = '/var/cache/'
+    >>> app_dirs = AppDirs(
+    ...     _app_dirs=BaseAppDirs(), user_cache_dir='${my_cache_var}/myapp'
+    ... )
+    >>> app_dirs.user_cache_dir
+    PosixPath('/var/cache/myapp')
+
+    Support for XDG environmental variables:
+
+    >>> import os
+    >>> os.environ['XDG_CACHE_HOME'] = '/var/cache/'
+    >>> app_dirs = AppDirs(_app_dirs=BaseAppDirs())
+    >>> app_dirs.user_cache_dir
+    PosixPath('/var/cache')
+    """
 
     _app_dirs: dataclasses.InitVar["BaseAppDirs"]
     user_data_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
@@ -34,7 +70,11 @@ class AppDirs:
                 object.__setattr__(
                     self,
                     attr,
-                    pathlib.Path(str(val).format(**dir_mapping)),
+                    pathlib.Path(
+                        os.path.expanduser(os.path.expandvars(str(val))).format(
+                            **dir_mapping
+                        )
+                    ),
                 )
 
         for attr, val in dir_mapping.items():
@@ -47,4 +87,12 @@ class AppDirs:
                     MISSING_DIR,
                 ]
             except (AttributeError, AssertionError):
-                object.__setattr__(self, attr, pathlib.Path(val))
+                object.__setattr__(
+                    self,
+                    attr,
+                    pathlib.Path(
+                        os.path.expanduser(os.path.expandvars(str(val))).format(
+                            **dir_mapping
+                        )
+                    ),
+                )
