@@ -10,7 +10,7 @@ if t.TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class AppDirs:
-    """Wrap :class:{appdirs.AppDirs}'s paths in typed :class:`pathlib.Path`'s."""
+    """Wrap :class:`appdirs.AppDirs`'s paths in typed :class:`pathlib.Path`'s."""
 
     user_data_dir: pathlib.Path = dataclasses.field(init=False)
     site_data_dir: pathlib.Path = dataclasses.field(init=False)
