@@ -6,7 +6,11 @@
 
 ```
 
-## Packager
+:::{warning}
+Be careful with these! APIs are **not** covered considered stable pre-1.0. They can break or be removed between minor versions!
+
+If you need an internal API stabilized please [file an issue](https://github.com/cihai/unihan-etl/issues).
+:::
 
 ```{toctree}
 :caption: API
