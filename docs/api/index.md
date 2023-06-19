@@ -10,6 +10,7 @@
 
 ```{toctree}
 :caption: API
+:maxdepth: 1
 
 core
 options
