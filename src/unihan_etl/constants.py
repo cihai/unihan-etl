@@ -5,7 +5,7 @@ from unihan_etl.__about__ import (
     __author__,
     __package_name__,
 )
-from unihan_etl.app_dirs import AppDirs
+from unihan_etl._internal.app_dirs import AppDirs
 
 from unihan_etl.util import get_fields
 
