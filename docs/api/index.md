@@ -23,4 +23,6 @@ types
 constants
 test
 utils
+
+internals/index
 ```
