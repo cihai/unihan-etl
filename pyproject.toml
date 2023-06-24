@@ -58,7 +58,7 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 python = "^3.8"
 unicodecsv = "*"
 appdirs = "*"
-zhon = "*"
+zhon = "~2.0"
 PyYAML = "*"
 
 [tool.poetry.group.dev.dependencies]
