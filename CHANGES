@@ -15,9 +15,13 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 // Usage: unihan-etl@next
 ```
 
-## unihan-etl 0.23.x (unreleased)
+## unihan-etl 0.24.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
+
+## unihan-etl 0.23.0 (2023-06-24)
+
+_Internal API changes only_
 
 ### Internal changes
 
