@@ -19,6 +19,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Internal changes
+
+- zhon: 1.1.5 -> 2.0.0 (#289, fixes #282)
+
+  [Release notes](https://github.com/tsroten/zhon/blob/v2.0.0/CHANGES.rst#v200-2023-06-24)
+
+  Fixes pytest warning related to regular expressions.
+
 ## unihan-etl 0.23.0 (2023-06-24)
 
 _Internal API changes only_
