@@ -1355,13 +1355,17 @@ watchmedo = ["PyYAML (>=3.10)"]
 
 [[package]]
 name = "zhon"
-version = "1.1.5"
+version = "2.0.0"
 description = "Zhon provides constants used in Chinese text processing."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "zhon-1.1.5.tar.gz", hash = "sha256:793723575c46f10ace8846c579ce740b04c73e2aa583e04e000aedbd4a47f87f"},
+    {file = "zhon-2.0.0-py3-none-any.whl", hash = "sha256:a3e12593ebeab2f77b9f4bbe32f920bc684dafa840bccbf47fe95bb7059b6b44"},
+    {file = "zhon-2.0.0.tar.gz", hash = "sha256:766cf66d1e6a3b6efe43790fada0cc0c428e6d4bc0e3b28b66a07fe8175050a6"},
 ]
+
+[package.dependencies]
+appdirs = "*"
 
 [[package]]
 name = "zipp"
@@ -1387,4 +1391,4 @@ test = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "e92e06f6bd0e2c6ba14003999c63308c15f9ace182de272b9a4a8bb73141773c"
+content-hash = "7c8953542a030c09b11f28487027025bd8f4e0e67dcace2a66d9e909648859b1"
