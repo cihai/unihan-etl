@@ -19,6 +19,11 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Internal changes
+
+- ruff: Add additional linters, apply code fixes automatically and by hand
+  (#290)
+
 ## unihan-etl 0.24.0 (2023-06-24)
 
 _Internal API changes only_
