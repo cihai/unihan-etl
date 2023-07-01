@@ -13,7 +13,7 @@ ExpandedData: "TypeAlias" = t.List[t.Dict[str, t.Any]]
 
 def test_expands_spaces(expanded_data: ExpandedData) -> None:
     for item in expanded_data:
-        for field in item.keys():
+        for field in item:
             if field in constants.SPACE_DELIMITED_LIST_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
@@ -426,9 +426,9 @@ def test_expand_kCheungBauer(
     """
     Each data value consists of three pieces, separated by semicolons:
 
-    (1) the character’s radical-stroke index as a three-digit radical, slash,
+    (1) the character`s radical-stroke index as a three-digit radical, slash,
     two-digit stroke count;
-    (2) the character’s cangjie input code (if any); and
+    (2) the character`s cangjie input code (if any); and
     (3) a comma-separated list of Cantonese readings using the jyutping
     romanization in alphabetical order.
     """
@@ -615,7 +615,7 @@ def test_expand_kHDZRadBreak(
     expected: ExpandedData,
 ) -> None:
     """
-    Hanyu Da Zidian has a radical break beginning at this character’s position.
+    Hanyu Da Zidian has a radical break beginning at this character`s position.
     The field consists of the radical (with its Unicode code point), a colon,
     and then the Hanyu Da Zidian position as in the kHanyu field.
     """
@@ -724,13 +724,13 @@ def test_expand_kXHC1983(
     ],
 ) -> None:
     r"""
-    Each pīnyīn reading is preceded by the character’s location(s) in the
+    Each pīnyīn reading is preceded by the character`s location(s) in the
     dictionary, separated from the reading by “:” (colon); multiple locations
     for a given reading are separated by “,” (comma); multiple “location:
     reading” values are separated by “ ” (space). Each location reference is of
     the form /[0-9]{4}\.[0-9]{3}\*?/ . The number preceding the period is the
     page number, zero-padded to four digits. The first two digits of the number
-    following the period are the entry’s position on the page, zero-padded. The
+    following the period are the entry`s position on the page, zero-padded. The
     third digit is 0 for a main entry and greater than 0 for a parenthesized
     variant of the main entry. A trailing “*” (asterisk) on the location
     indicates an encoded variant substituted for an unencoded character (see

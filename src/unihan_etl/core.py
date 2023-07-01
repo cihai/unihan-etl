@@ -23,20 +23,21 @@ from unihan_etl.__about__ import (
 )
 from unihan_etl.constants import (
     ALLOWED_EXPORT_TYPES,
-    INDEX_FIELDS,
-    UNIHAN_MANIFEST,
-    UNIHAN_URL,
     DESTINATION_DIR,
-    UNIHAN_ZIP_PATH,
-    WORK_DIR,
+    INDEX_FIELDS,
     UNIHAN_FIELDS,
     UNIHAN_FILES,
+    UNIHAN_MANIFEST,
+    UNIHAN_URL,
+    UNIHAN_ZIP_PATH,
+    WORK_DIR,
 )
 from unihan_etl.options import Options
 from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeGuard
+
     from unihan_etl.types import (
         ColumnData,
         ExpandedExport,
@@ -44,9 +45,9 @@ if t.TYPE_CHECKING:
         LogLevel,
         ReportHookFn,
         StrPath,
-        UrlRetrieveFn,
-        UntypedUnihanData,
         UntypedNormalizedData,
+        UntypedUnihanData,
+        UrlRetrieveFn,
     )
 
 
@@ -233,10 +234,7 @@ def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
     bool :
         True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`
     """
-    if set(files).issubset(set(zip_file.namelist())):
-        return True
-    else:
-        return False
+    return bool(set(files).issubset(set(zip_file.namelist())))
 
 
 def download(
@@ -353,7 +351,7 @@ def normalize(
     """
     log.info("Collecting field data...")
     items = {}
-    for idx, line in enumerate(raw_data):
+    for _idx, line in enumerate(raw_data):
         if not_junk(line):
             line = line.strip().split("\t")
             if in_fields(line[1], fields):
@@ -391,7 +389,7 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
         (so all fields stay consistent).
     """
     for char in normalized_data:
-        for field in char.keys():
+        for field in char:
             assert isinstance(char, dict)
             if not char[field]:
                 continue
@@ -412,7 +410,6 @@ def listify(
         keys/columns, e.g. ['kDictionary']
     """
     list_data = [list(fields)]  # Add fields to first row
-    # list_data = [fields[:]]  # Add fields to first row
     list_data += [list(r.values()) for r in list(data)]
     return list_data
 
@@ -532,12 +529,11 @@ class Packager:
         ):
             extract_zip(self.options.zip_path, self.options.work_dir)
 
-    def export(self) -> t.Union[None, "UntypedNormalizedData"]:  # NOQA: C901
+    def export(self) -> t.Union[None, "UntypedNormalizedData"]:
         """Extract zip and process information into CSV's."""
         fields = list(self.options.fields)
         for k in INDEX_FIELDS:
             if k not in fields:
-                # fields = [k] + fields
                 fields.insert(0, k)
 
         files = [

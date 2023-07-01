@@ -13,14 +13,16 @@ from unihan_etl import constants, core
 from unihan_etl.__about__ import __version__
 from unihan_etl.constants import UNIHAN_ZIP_PATH
 from unihan_etl.core import DEFAULT_OPTIONS, Packager, zip_has_files
+from unihan_etl.options import Options
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.types import ColumnData, UntypedNormalizedData
-from unihan_etl.options import Options
 from unihan_etl.util import get_fields
+
 from .constants import FIXTURE_PATH
 
 if t.TYPE_CHECKING:
     from urllib.request import _DataType
+
     from unihan_etl.types import StrPath
 
 
@@ -96,7 +98,7 @@ def test_download(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
         return (
@@ -125,7 +127,7 @@ def test_download_mock(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(mock_zip_path, dest_path)
         return (
@@ -163,7 +165,7 @@ def test_export_format(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
         return ("", HTTPMessage())
@@ -230,12 +232,7 @@ def test_normalize_simple_data_format() -> None:
         FIXTURE_PATH / "Unihan_Readings.txt",
     ]
 
-    columns = (
-        "kTotalStrokes",
-        "kPhonetic",
-        "kCantonese",
-        "kDefinition",
-    ) + constants.INDEX_FIELDS
+    columns = ("kTotalStrokes", "kPhonetic", "kCantonese", "kDefinition", *constants.INDEX_FIELDS)
 
     data = core.load_data(files=csv_files)
 
@@ -362,7 +359,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 def test_no_args() -> None:
     """Works without arguments."""
 
-    assert DEFAULT_OPTIONS == Packager.from_cli([]).options
+    assert Packager.from_cli([]).options == DEFAULT_OPTIONS
 
 
 def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:

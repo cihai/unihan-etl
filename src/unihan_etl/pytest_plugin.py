@@ -1,13 +1,12 @@
+import fileinput
 import getpass
 import logging
 import os
 import pathlib
 import typing as t
+import zipfile
 
 import pytest
-
-import fileinput
-import zipfile
 
 from unihan_etl import constants, core
 from unihan_etl.core import Packager

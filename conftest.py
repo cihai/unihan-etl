@@ -12,7 +12,6 @@ import shutil
 import typing as t
 
 import pytest
-
 from _pytest.doctest import DoctestItem
 
 from unihan_etl.pytest_plugin import USING_ZSH
