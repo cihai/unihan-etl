@@ -24,7 +24,7 @@ def test_expand_kCantonese(expanded_data: ExpandedData) -> None:
     if item["ucn"] == "U+342B":
         assert set(item["kCantonese"]) == {"gun3", "hung1", "zung1"}
     else:
-        raise AssertionError("Missing field U+342B kCantonese")
+        assert AssertionError("Missing U+342B kCantonese")
 
 
 @pytest.mark.parametrize(
