@@ -1,13 +1,14 @@
+import dataclasses
 import pathlib
+import sys
 import typing as t
 from os import PathLike
-import sys
-import dataclasses
 
 if t.TYPE_CHECKING:
-    from typing_extensions import TypeAlias
-    from urllib.request import _DataType
     from http.client import HTTPMessage
+    from urllib.request import _DataType
+
+    from typing_extensions import TypeAlias
 
 StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 """:class:`os.PathLike` or :class:`str`
@@ -15,7 +16,7 @@ StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 :class:`StrPath` is based on `typeshed`__'s.
 
 .. __: https://github.com/python/typeshed/blob/5df8de7/stdlib/_typeshed/__init__.pyi#L115-L118
-"""  # NOQA E501
+"""  # E501
 
 LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
@@ -26,7 +27,6 @@ ColumnDataTuple = t.Tuple[str, ...]
 # In situ
 UntypedUnihanData = t.Mapping[str, t.Any]
 
-# Export (standard)
 UntypedNormalizedData = t.Sequence[UntypedUnihanData]
 
 # Export w/ listify()
@@ -65,6 +65,6 @@ class UrlRetrieveFn(t.Protocol):
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional["ReportHookFn"] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         ...

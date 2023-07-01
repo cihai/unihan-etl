@@ -12,15 +12,23 @@ import pytest
 from unihan_etl import constants, core
 from unihan_etl.__about__ import __version__
 from unihan_etl.constants import UNIHAN_ZIP_PATH
-from unihan_etl.core import DEFAULT_OPTIONS, Packager, zip_has_files
+from unihan_etl.core import (
+    DEFAULT_OPTIONS,
+    FieldNotFound,
+    FileNotSupported,
+    Packager,
+    zip_has_files,
+)
+from unihan_etl.options import Options
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.types import ColumnData, UntypedNormalizedData
-from unihan_etl.options import Options
 from unihan_etl.util import get_fields
+
 from .constants import FIXTURE_PATH
 
 if t.TYPE_CHECKING:
     from urllib.request import _DataType
+
     from unihan_etl.types import StrPath
 
 
@@ -96,7 +104,7 @@ def test_download(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
         return (
@@ -125,7 +133,7 @@ def test_download_mock(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(mock_zip_path, dest_path)
         return (
@@ -163,7 +171,7 @@ def test_export_format(
         url: str,
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
-        data: "_DataType" = None,
+        data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
         shutil.copy(str(mock_zip_path), str(dest_path))
         return ("", HTTPMessage())
@@ -235,7 +243,8 @@ def test_normalize_simple_data_format() -> None:
         "kPhonetic",
         "kCantonese",
         "kDefinition",
-    ) + constants.INDEX_FIELDS
+        *constants.INDEX_FIELDS,
+    )
 
     data = core.load_data(files=csv_files)
 
@@ -299,9 +308,9 @@ def test_raise_error_unknown_field() -> None:
 
     options = Options(fields=["kHello"])
 
-    with pytest.raises(KeyError) as excinfo:
+    with pytest.raises(FieldNotFound) as excinfo:
         core.Packager(options)
-    excinfo.match("Field ([a-zA-Z].*) not found in file list.")
+    excinfo.match(r"Field not found in file list: '([a-zA-Z].*)'")
 
 
 def test_raise_error_unknown_file() -> None:
@@ -309,9 +318,9 @@ def test_raise_error_unknown_file() -> None:
 
     options = Options(input_files=["Sparta.lol"])
 
-    with pytest.raises(KeyError) as excinfo:
+    with pytest.raises(FileNotSupported) as excinfo:
         core.Packager(options)
-    excinfo.match(r"File ([a-zA-Z_\.\'].*) not found in file list.")
+    excinfo.match("Sparta.lol")
 
 
 def test_raise_error_unknown_field_filtered_files() -> None:
@@ -321,9 +330,9 @@ def test_raise_error_unknown_field_filtered_files() -> None:
 
     options = Options(input_files=files, fields=["kDefinition"])
 
-    with pytest.raises(KeyError) as excinfo:
+    with pytest.raises(FieldNotFound) as excinfo:
         core.Packager(options)
-    excinfo.match("Field ([a-zA-Z].*) not found in file list.")
+    excinfo.match("Field not found in file list: '([a-zA-Z].*)'")
 
 
 def test_set_reduce_files_automatically_when_only_field_specified() -> None:
@@ -362,7 +371,7 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 def test_no_args() -> None:
     """Works without arguments."""
 
-    assert DEFAULT_OPTIONS == Packager.from_cli([]).options
+    assert Packager.from_cli([]).options == DEFAULT_OPTIONS
 
 
 def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
@@ -411,7 +420,7 @@ def test_cli_exit_emessage_to_stderr() -> None:
     with pytest.raises(SystemExit) as excinfo:
         Packager.from_cli(["-d", "data/output.csv", "-f", "sdfa"])
 
-    excinfo.match("Field sdfa not found in file list.")
+    excinfo.match("Field not found in file list: 'sdfa'")
 
 
 @pytest.mark.parametrize("flag", ["-v", "--version"])
