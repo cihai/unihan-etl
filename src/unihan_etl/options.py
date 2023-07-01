@@ -3,13 +3,13 @@ import pathlib
 import typing as t
 
 from .constants import (
-    UNIHAN_URL,
     DESTINATION_DIR,
     INDEX_FIELDS,
     UNIHAN_FIELDS,
-    WORK_DIR,
     UNIHAN_FILES,
+    UNIHAN_URL,
     UNIHAN_ZIP_PATH,
+    WORK_DIR,
 )
 
 if t.TYPE_CHECKING:

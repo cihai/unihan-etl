@@ -1,8 +1,6 @@
 import dataclasses
 import os
-
 import pathlib
-
 import typing as t
 
 if t.TYPE_CHECKING:
@@ -71,9 +69,9 @@ class AppDirs:
                     self,
                     attr,
                     pathlib.Path(
-                        os.path.expanduser(os.path.expandvars(str(val))).format(
-                            **dir_mapping
-                        )
+                        os.path.expanduser(  # noqa: PTH111
+                            os.path.expandvars(str(val)),
+                        ).format(**dir_mapping)
                     ),
                 )
 
@@ -91,8 +89,8 @@ class AppDirs:
                     self,
                     attr,
                     pathlib.Path(
-                        os.path.expanduser(os.path.expandvars(str(val))).format(
-                            **dir_mapping
-                        )
+                        os.path.expanduser(  # noqa: PTH111
+                            os.path.expandvars(str(val)),
+                        ).format(**dir_mapping)
                     ),
                 )

@@ -7,7 +7,6 @@ import dataclasses
 import fileinput
 import json
 import logging
-import os
 import pathlib
 import shutil
 import sys
@@ -23,20 +22,21 @@ from unihan_etl.__about__ import (
 )
 from unihan_etl.constants import (
     ALLOWED_EXPORT_TYPES,
-    INDEX_FIELDS,
-    UNIHAN_MANIFEST,
-    UNIHAN_URL,
     DESTINATION_DIR,
-    UNIHAN_ZIP_PATH,
-    WORK_DIR,
+    INDEX_FIELDS,
     UNIHAN_FIELDS,
     UNIHAN_FILES,
+    UNIHAN_MANIFEST,
+    UNIHAN_URL,
+    UNIHAN_ZIP_PATH,
+    WORK_DIR,
 )
 from unihan_etl.options import Options
 from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from typing_extensions import TypeGuard
+
     from unihan_etl.types import (
         ColumnData,
         ExpandedExport,
@@ -44,9 +44,9 @@ if t.TYPE_CHECKING:
         LogLevel,
         ReportHookFn,
         StrPath,
-        UrlRetrieveFn,
-        UntypedUnihanData,
         UntypedNormalizedData,
+        UntypedUnihanData,
+        UrlRetrieveFn,
     )
 
 
@@ -75,7 +75,17 @@ def filter_manifest(
 
 def files_exist(path: pathlib.Path, files: t.List[str]) -> bool:
     """Return True if all files exist in specified path."""
-    return all(os.path.exists(os.path.join(path, f)) for f in files)
+    return all((pathlib.Path(path) / f).exists() for f in files)
+
+
+class FieldNotFound(Exception):
+    def __init__(self, field: str) -> None:
+        return super().__init__(f"Field not found in file list: '{field}'")
+
+
+class FileNotSupported(Exception):
+    def __init__(self, field: str) -> None:
+        return super().__init__(f"File not supported: '{field}'")
 
 
 #: Return list of files from list of fields.
@@ -88,7 +98,7 @@ def get_files(fields: t.Sequence[str]) -> t.List[str]:
                 if any(file_ for h in fields if h in file_fields):
                     files.add(file_)
         else:
-            raise KeyError(f"Field {field} not found in file list.")
+            raise FieldNotFound(str(field))
 
     return list(files)
 
@@ -233,10 +243,7 @@ def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
     bool :
         True if files inside of `:py:meth:`zipfile.ZipFile.namelist()`
     """
-    if set(files).issubset(set(zip_file.namelist())):
-        return True
-    else:
-        return False
+    return bool(set(files).issubset(set(zip_file.namelist())))
 
 
 def download(
@@ -280,7 +287,7 @@ def download(
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
         log.info("Downloading Unihan.zip...")
         log.info(f"{url} to {dest}")
-        if os.path.isfile(url):
+        if pathlib.Path(url).is_file():
             shutil.copy(url, dest)
         else:
             urlretrieve_fn(str(url), dest, reporthook)
@@ -353,7 +360,7 @@ def normalize(
     """
     log.info("Collecting field data...")
     items = {}
-    for idx, line in enumerate(raw_data):
+    for _idx, line in enumerate(raw_data):
         if not_junk(line):
             line = line.strip().split("\t")
             if in_fields(line[1], fields):
@@ -391,7 +398,7 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
         (so all fields stay consistent).
     """
     for char in normalized_data:
-        for field in char.keys():
+        for field in char:
             assert isinstance(char, dict)
             if not char[field]:
                 continue
@@ -412,7 +419,6 @@ def listify(
         keys/columns, e.g. ['kDictionary']
     """
     list_data = [list(fields)]  # Add fields to first row
-    # list_data = [fields[:]]  # Add fields to first row
     list_data += [list(r.values()) for r in list(data)]
     return list_data
 
@@ -424,7 +430,7 @@ def export_csv(
 ) -> None:
     listified_data = listify(data, fields)
 
-    with open(destination, "w") as f:
+    with pathlib.Path(destination).open("w") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(listified_data)
         log.info(f"Saved output to: {destination}")
@@ -457,8 +463,8 @@ def validate_options(
         # Filter fields when only files specified.
         try:
             options.fields = get_fields(filter_manifest(options.input_files))
-        except KeyError as e:
-            raise KeyError(f"File {e} not found in file list.")
+        except (KeyError, FieldNotFound) as e:
+            raise FileNotSupported(str(e)) from e
     elif not is_default_option("fields", options.fields) and is_default_option(
         "input_files", options.input_files
     ):
@@ -474,9 +480,7 @@ def validate_options(
             h for h in options.fields if h not in fields_in_files + list(INDEX_FIELDS)
         ]
         if not_in_field:
-            raise KeyError(
-                "Field {} not found in file list.".format(", ".join(not_in_field))
-            )
+            raise FieldNotFound(", ".join(not_in_field))
     return True
 
 
@@ -532,16 +536,15 @@ class Packager:
         ):
             extract_zip(self.options.zip_path, self.options.work_dir)
 
-    def export(self) -> t.Union[None, "UntypedNormalizedData"]:  # NOQA: C901
+    def export(self) -> t.Union[None, "UntypedNormalizedData"]:
         """Extract zip and process information into CSV's."""
         fields = list(self.options.fields)
         for k in INDEX_FIELDS:
             if k not in fields:
-                # fields = [k] + fields
                 fields.insert(0, k)
 
         files = [
-            os.path.join(self.options.work_dir, f) for f in self.options.input_files
+            pathlib.Path(self.options.work_dir) / f for f in self.options.input_files
         ]
 
         # Replace {ext} with extension to use.

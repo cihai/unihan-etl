@@ -34,10 +34,7 @@ kMandarinDict = t.TypedDict(
 
 def expand_kMandarin(value: t.List[str]) -> kMandarinDict:
     cn = value[0]
-    if len(value) == 1:
-        tw = value[0]
-    else:
-        tw = value[1]
+    tw = value[0] if len(value) == 1 else value[1]
     return kMandarinDict({"zh-Hans": cn, "zh-Hant": tw})
 
 
@@ -49,10 +46,7 @@ kTotalStrokesDict = t.TypedDict(
 
 def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     cn = value[0]
-    if len(value) == 1:
-        tw = value[0]
-    else:
-        tw = value[1]
+    tw = value[0] if len(value) == 1 else value[1]
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
