@@ -18,6 +18,7 @@ StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 .. __: https://github.com/python/typeshed/blob/5df8de7/stdlib/_typeshed/__init__.pyi#L115-L118
 """  # E501
 
+# Log levels
 LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Column data
@@ -35,6 +36,9 @@ ListifiedExport = t.List[t.List[str]]
 # Export w/ listify() -> expand_delimiters()
 ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
 
+# Valid output formats
+UnihanFormats = t.Literal["json", "csv", "yaml", "python"]
+
 
 @dataclasses.dataclass()
 class Options:
@@ -43,13 +47,13 @@ class Options:
     zip_path: pathlib.Path
     work_dir: pathlib.Path
     fields: t.Tuple[str, ...]
-    format: t.Literal["json", "csv", "yaml", "python"]
+    format: UnihanFormats
     input_files: t.List[str]
     download: bool
     expand: bool
     prune_empty: bool
     cache: bool
-    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    log_level: LogLevel
 
 
 class ReportHookFn(t.Protocol):
