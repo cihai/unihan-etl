@@ -1,10 +1,11 @@
 import dataclasses
 import pathlib
 import typing as t
-from unihan_etl._internal.app_dirs import AppDirs
-from appdirs import AppDirs as BaseAppDirs
-import pytest
 
+import pytest
+from appdirs import AppDirs as BaseAppDirs
+
+from unihan_etl._internal.app_dirs import AppDirs
 
 AppDirsInitParams = t.Dict[str, t.Any]
 ExpectedAppDirsParam = t.Mapping[str, t.Union[str, pathlib.Path]]

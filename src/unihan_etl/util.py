@@ -4,7 +4,6 @@ import sys
 import typing as t
 from collections.abc import Mapping
 
-
 if t.TYPE_CHECKING:
     from unihan_etl.types import UntypedUnihanData
 

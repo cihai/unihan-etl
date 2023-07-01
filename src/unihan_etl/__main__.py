@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """For accessing cihai as a package."""
-import sys
 import pathlib
+import sys
 import typing as t
 
 if t.TYPE_CHECKING:
