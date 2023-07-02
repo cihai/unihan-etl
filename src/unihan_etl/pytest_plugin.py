@@ -1,4 +1,3 @@
-import fileinput
 import getpass
 import logging
 import os
@@ -87,11 +86,6 @@ def fixture_files() -> t.List[pathlib.Path]:
         "Unihan_Variants.txt",
     ]
     return [SAMPLE_FIXTURE_PATH / f for f in files]
-
-
-@pytest.fixture(scope="session")
-def sample_data2(fixture_files: t.List[pathlib.Path]) -> "fileinput.FileInput[t.Any]":
-    return core.load_data(files=fixture_files)
 
 
 @pytest.fixture(scope="session")
