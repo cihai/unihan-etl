@@ -11,16 +11,16 @@ if t.TYPE_CHECKING:
 ExpandedData: "TypeAlias" = t.List[t.Dict[str, t.Any]]
 
 
-def test_expands_spaces(expanded_data: ExpandedData) -> None:
-    for item in expanded_data:
+def test_expands_spaces(sample_expanded_data: ExpandedData) -> None:
+    for item in sample_expanded_data:
         for field in item:
             if field in constants.SPACE_DELIMITED_LIST_FIELDS and item[field]:
                 assert isinstance(item[field], list)
 
 
-def test_expand_kCantonese(expanded_data: ExpandedData) -> None:
+def test_expand_kCantonese(sample_expanded_data: ExpandedData) -> None:
     # test kCantonese
-    item = [i for i in expanded_data if i["ucn"] == "U+342B"][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == "U+342B"][0]
     if item["ucn"] == "U+342B":
         assert set(item["kCantonese"]) == {"gun3", "hung1", "zung1"}
     else:
@@ -40,10 +40,10 @@ def test_expand_kCantonese(expanded_data: ExpandedData) -> None:
     ],
 )
 def test_expand(
-    expanded_data: ExpandedData, ucn: str, field: str, expected: t.List[str]
+    sample_expanded_data: ExpandedData, ucn: str, field: str, expected: t.List[str]
 ) -> None:
     # test kDefinition (split on ;), kJapanese, kJapaneseKun
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert set(item[field]) == set(expected)
 
 
@@ -55,7 +55,7 @@ def test_expand(
     ],
 )
 def test_expand_kMandarin(
-    expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str]
+    sample_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str]
 ) -> None:
     """
     The most customary pinyin reading for this character. When there are two
@@ -63,7 +63,7 @@ def test_expand_kMandarin(
     preferred for zh-Hant (TW). When there is only one value, it is appropriate
     for both.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kMandarin"] == expected
 
 
@@ -75,7 +75,7 @@ def test_expand_kMandarin(
     ],
 )
 def test_expand_kTotalStrokes(
-    expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int]
+    sample_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int]
 ) -> None:
     """
     The total number of strokes in the character (including the radical). When
@@ -83,7 +83,7 @@ def test_expand_kTotalStrokes(
     second is preferred for zh-Hant (TW). When there is only one value, it is
     appropriate for both.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kTotalStrokes"] == expected
 
 
@@ -97,9 +97,9 @@ def test_expand_kTotalStrokes(
     ],
 )
 def test_expand_kIRGHanyuDaZidian(
-    ucn: str, expected: ExpandedData, expanded_data: ExpandedData
+    ucn: str, expected: ExpandedData, sample_expanded_data: ExpandedData
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGHanyuDaZidian"] == expected
 
 
@@ -162,7 +162,7 @@ def test_expand_kIRGHanyuDaZidian(
     ],
 )
 def test_expand_kHanyuPinyin(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -186,7 +186,7 @@ def test_expand_kHanyuPinyin(
     pīnyīn readings xī and lǔ (in that order), whereas the latter entry has
     the readings lǔ and xī (reversing the order).
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kHanyuPinyin"] == expected
 
 
@@ -230,7 +230,7 @@ def test_expand_kHanyuPinyin(
     ],
 )
 def test_expand_HanYu(
-    expanded_data: ExpandedData, ucn: str, expected: ExpandedData
+    sample_expanded_data: ExpandedData, ucn: str, expected: ExpandedData
 ) -> None:
     """
     The character references are given in the form “ABCDE.XYZ”, in which: “A”
@@ -248,7 +248,7 @@ def test_expand_HanYu(
     in 1; the second assigned the same virtual position has an index ending in
     2; and so on.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kHanYu"] == expected
 
 
@@ -311,7 +311,7 @@ def test_expand_HanYu(
     ],
 )
 def test_expand_kRSAdobe_Japan1_6(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -333,7 +333,7 @@ def test_expand_kRSAdobe_Japan1_6(
     and the total strokes in the glyph from adding the second and third
     values.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kRSAdobe_Japan1_6"] == expected
 
 
@@ -355,13 +355,13 @@ def test_expand_kRSAdobe_Japan1_6(
     ],
 )
 def test_expand_radical_stroke_counts(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     field: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
     """kRSJapanese"""
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item[field] == expected
 
 
@@ -375,7 +375,7 @@ def test_expand_radical_stroke_counts(
     ],
 )
 def test_expand_kRSUnihan(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -387,7 +387,7 @@ def test_expand_kRSUnihan(
     the residual stroke-count, the count of all strokes remaining after
     eliminating all strokes associated with the radical.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kRSUnicode"] == expected
 
 
@@ -419,7 +419,7 @@ def test_expand_kRSUnihan(
     ],
 )
 def test_expand_kCheungBauer(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -432,7 +432,7 @@ def test_expand_kCheungBauer(
     (3) a comma-separated list of Cantonese readings using the jyutping
     romanization in alphabetical order.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kCheungBauer"] == expected
 
 
@@ -444,7 +444,7 @@ def test_expand_kCheungBauer(
     ],
 )
 def test_expand_kCihaiT(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -454,7 +454,7 @@ def test_expand_kCihaiT(
     row on the page, and the remaining two digits after the decimal are the
     position on the row.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kCihaiT"] == expected
 
 
@@ -468,7 +468,8 @@ def test_expand_kCihaiT(
     ],
 )
 def test_expand_kDaeJaweon(
-    expanded_data: t.List[t.Dict[str, t.Any]], ucn: str, expected: t.Dict[str, int]
+    sample_expanded_data: t.List[t.Dict[str, t.Any]], ucn: str, expected: t.Dict[str,
+                                                                                 int],
 ) -> None:
     """
     The position is in the form “page.position” with the final digit in the
@@ -476,7 +477,7 @@ def test_expand_kDaeJaweon(
     characters not found in the dictionary and assigned a “virtual” position in
     the dictionary.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kDaeJaweon"] == expected
 
 
@@ -492,7 +493,7 @@ def test_expand_kDaeJaweon(
     ],
 )
 def test_expand_kIICore(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -502,7 +503,7 @@ def test_expand_kIICore(
     source letters are the same as used for IRG sources, except that "P" is
     used instead of "KP".
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIICore"] == expected
 
 
@@ -516,9 +517,9 @@ def test_expand_kIICore(
     ],
 )
 def test_expand_kIRGDaeJaweon(
-    expanded_data: ExpandedData, ucn: str, expected: t.List[t.Dict[str, int]]
+    sample_expanded_data: ExpandedData, ucn: str, expected: t.List[t.Dict[str, int]]
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGDaeJaweon"] == expected
 
 
@@ -536,11 +537,11 @@ def test_expand_kIRGDaeJaweon(
     ],
 )
 def test_expand_kFenn(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kFenn"] == expected
 
 
@@ -572,7 +573,7 @@ def test_expand_kFenn(
     ],
 )
 def test_expand_kHanyuPinlu(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -582,7 +583,7 @@ def test_expand_kHanyuPinlu(
     total of the frequencies of the pronunciations of the character as given in
     HYPLCD.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kHanyuPinlu"] == expected
 
 
@@ -610,7 +611,7 @@ def test_expand_kHanyuPinlu(
     ],
 )
 def test_expand_kHDZRadBreak(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -619,7 +620,7 @@ def test_expand_kHDZRadBreak(
     The field consists of the radical (with its Unicode code point), a colon,
     and then the Hanyu Da Zidian position as in the kHanyu field.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kHDZRadBreak"] == expected
 
 
@@ -633,7 +634,7 @@ def test_expand_kHDZRadBreak(
     ],
 )
 def test_expand_kSBGY(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -644,7 +645,7 @@ def test_expand_kSBGY(
     indicates the 38th character on Page 364 (i.e. 澍). Where a given Unicode
     Scalar Value (USV) has more than one reference, these are space-delimited.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kSBGY"] == expected
 
 
@@ -716,7 +717,7 @@ def test_expand_kSBGY(
     ],
 )
 def test_expand_kXHC1983(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: t.List[
@@ -745,7 +746,7 @@ def test_expand_kXHC1983(
     are already in the pipeline for future encoding, and future revisions of
     this data will eliminate trailing asterisks from mappings.
     """
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kXHC1983"] == expected
 
     assert expansion.expand_field("kXHC1983", fieldval) == expected
@@ -763,12 +764,12 @@ def test_expand_kXHC1983(
     ],
 )
 def test_expand_kIRG_GSource(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_GSource"] == expected
 
     assert expansion.expand_field("kIRG_GSource", fieldval) == expected
@@ -786,12 +787,12 @@ def test_expand_kIRG_GSource(
     ],
 )
 def test_expand_kIRG_HSource(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_HSource"] == expected
 
     assert expansion.expand_field("kIRG_HSource", fieldval) == expected
@@ -807,12 +808,12 @@ def test_expand_kIRG_HSource(
     ],
 )
 def test_expand_kIRG_JSource(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRG_JSource"] == expected
 
     assert expansion.expand_field("kIRG_JSource", fieldval) == expected
@@ -861,13 +862,13 @@ def test_expand_kIRG_JSource(
     ],
 )
 def test_expand_kIRG_KPSource(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     field: str,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item[field] == expected
 
     assert expansion.expand_field(field, fieldval) == expected
@@ -892,12 +893,12 @@ def test_expand_kIRG_KPSource(
     ],
 )
 def test_expand_kGSR(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kGSR"] == expected
 
     assert expansion.expand_field("kGSR", fieldval) == expected
@@ -917,12 +918,12 @@ def test_expand_kGSR(
     ],
 )
 def test_expand_kCheungBauerIndex(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kCheungBauerIndex"] == expected
 
     assert expansion.expand_field("kCheungBauerIndex", fieldval) == expected
@@ -938,12 +939,12 @@ def test_expand_kCheungBauerIndex(
     ],
 )
 def test_expand_kFennIndex(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kFennIndex"] == expected
 
     assert expansion.expand_field("kFennIndex", fieldval) == expected
@@ -959,12 +960,12 @@ def test_expand_kFennIndex(
     ],
 )
 def test_expand_kIRGKangXi(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kIRGKangXi"] == expected
 
     assert expansion.expand_field("kIRGKangXi", fieldval) == expected
@@ -980,12 +981,12 @@ def test_expand_kIRGKangXi(
     ],
 )
 def test_expand_kCCCII(
-    expanded_data: ExpandedData,
+    sample_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
-    item = [i for i in expanded_data if i["ucn"] == ucn][0]
+    item = [i for i in sample_expanded_data if i["ucn"] == ucn][0]
     assert item["kCCCII"] == expected
 
     assert expansion.expand_field("kCCCII", fieldval) == expected

@@ -206,14 +206,14 @@ def test_extract_zip(
 
 
 def test_normalize_only_output_requested_columns(
-    normalized_data: UntypedNormalizedData, columns: ColumnData
+    sample_normalized_data: UntypedNormalizedData, columns: ColumnData
 ) -> None:
     in_columns = ["kDefinition", "kCantonese"]
 
-    for data_labels in normalized_data:
+    for data_labels in sample_normalized_data:
         assert set(columns) == set(data_labels.keys())
 
-    items = core.listify(normalized_data, in_columns)
+    items = core.listify(sample_normalized_data, in_columns)
     example_result = items[0]
 
     not_in_columns: t.List[str] = []
