@@ -74,7 +74,7 @@ def mock_zip_pathname() -> str:
 
 
 @pytest.fixture(scope="session")
-def fixture_files() -> t.List[pathlib.Path]:
+def sample_fixture_files() -> t.List[pathlib.Path]:
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -128,18 +128,20 @@ def columns() -> "ColumnData":
 
 
 @pytest.fixture(scope="session")
-def normalized_data(
+def sample_normalized_data(
     columns: "ColumnData",
-    fixture_files: t.List[pathlib.Path],
+    sample_fixture_files: t.List[pathlib.Path],
 ) -> "UntypedNormalizedData":
-    data = core.load_data(files=fixture_files)
+    data = core.load_data(files=sample_fixture_files)
 
     return core.normalize(data, columns)
 
 
 @pytest.fixture(scope="session")
-def expanded_data(normalized_data: t.List[t.Dict[str, t.Any]]) -> "ExpandedExport":
-    return core.expand_delimiters(normalized_data)
+def sample_expanded_data(
+    sample_normalized_data: t.List[t.Dict[str, t.Any]]
+) -> "ExpandedExport":
+    return core.expand_delimiters(sample_normalized_data)
 
 
 @pytest.fixture(scope="session")
