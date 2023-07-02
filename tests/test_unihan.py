@@ -24,7 +24,7 @@ from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.types import ColumnData, UntypedNormalizedData
 from unihan_etl.util import get_fields
 
-from .constants import FIXTURE_PATH
+from .constants import SAMPLE_FIXTURE_PATH
 
 if t.TYPE_CHECKING:
     from urllib.request import _DataType
@@ -234,8 +234,8 @@ def test_normalize_only_output_requested_columns(
 def test_normalize_simple_data_format() -> None:
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
-        FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
-        FIXTURE_PATH / "Unihan_Readings.txt",
+        SAMPLE_FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
+        SAMPLE_FIXTURE_PATH / "Unihan_Readings.txt",
     ]
 
     columns = (
