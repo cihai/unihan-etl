@@ -38,8 +38,6 @@ nosetests.xml
 .env
 .env3
 
-cihaidata/data/*
-
 docs/_build
 
 .ropeproject
