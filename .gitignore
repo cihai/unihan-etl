@@ -48,11 +48,15 @@ data/
 # visual studio code
 .vscode/
 
+# Cache
 .cache/
 .mypy_cache/
 .pytest_cache/
 .eggs/
 .venv/
+
+# pytest plugin's cache
+.unihan_cache/
 
 # Monkeytype
 monkeytype.sqlite3
