@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 USING_ZSH = "zsh" in os.getenv("SHELL", "")
 
 TESTS_PATH = pathlib.Path(__file__).parent.parent.parent / "tests"
-FIXTURE_PATH = TESTS_PATH / "fixtures"
+SAMPLE_FIXTURE_PATH = TESTS_PATH / "fixtures"
 
 
 @pytest.fixture(scope="session")
@@ -86,7 +86,7 @@ def fixture_files() -> t.List[pathlib.Path]:
         "Unihan_Readings.txt",
         "Unihan_Variants.txt",
     ]
-    return [FIXTURE_PATH / f for f in files]
+    return [SAMPLE_FIXTURE_PATH / f for f in files]
 
 
 @pytest.fixture(scope="session")
