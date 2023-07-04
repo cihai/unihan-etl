@@ -84,7 +84,7 @@ class AppDirs:
                     None,
                     MISSING_DIR,
                 ]
-            except (AttributeError, AssertionError):
+            except (AttributeError, AssertionError):  # ruff: noqa: PERF203
                 object.__setattr__(
                     self,
                     attr,
