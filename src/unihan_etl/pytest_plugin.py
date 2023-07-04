@@ -96,8 +96,7 @@ def sample_data2(fixture_files: t.List[pathlib.Path]) -> "fileinput.FileInput[t.
 
 @pytest.fixture(scope="session")
 def mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
-    unihan_etl_path = tmp_path_factory.mktemp("unihan_etl")
-    return unihan_etl_path
+    return tmp_path_factory.mktemp("unihan_etl")
 
 
 @pytest.fixture(scope="session")
