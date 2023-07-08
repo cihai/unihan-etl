@@ -19,7 +19,17 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+## unihan-etl 0.25.2 (2023-07-08)
+
+### Bug Fixes
+
+- pytest plugin: Revert fix of `zshrc` fixture's `skipif` condition (#293)
+
+  It was fine as-is.
+
 ## unihan-etl 0.25.1 (2023-07-08)
+
+*Rolled back*
 
 ### Bug Fixes
 
