@@ -1,3 +1,4 @@
+import contextlib
 import getpass
 import logging
 import os
@@ -6,16 +7,166 @@ import typing as t
 import zipfile
 
 import pytest
+from appdirs import AppDirs as BaseAppDirs
 
 from unihan_etl import constants, core
+from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.core import Packager
-from unihan_etl.options import Options
+from unihan_etl.options import Options as UnihanOptions
 
 logger = logging.getLogger(__name__)
 USING_ZSH = "zsh" in os.getenv("SHELL", "")
 
-TESTS_PATH = pathlib.Path(__file__).parent.parent.parent / "tests"
+PROJECT_PATH = pathlib.Path(__file__).parent.parent.parent
+TESTS_PATH = PROJECT_PATH / "tests"
 SAMPLE_FIXTURE_PATH = TESTS_PATH / "fixtures"
+
+app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
+
+
+@pytest.fixture(scope="session")
+def user_cache_path() -> pathlib.Path:
+    """Override this to destination of your choice."""
+    return app_dirs.user_cache_dir
+
+
+@pytest.fixture(scope="session")
+def project_cache_path() -> pathlib.Path:
+    """Override this to destination of your choice."""
+    return PROJECT_PATH / ".unihan_cache"
+
+
+@pytest.fixture(scope="session")
+def cache_path(project_cache_path: pathlib.Path) -> pathlib.Path:
+    """Override this to destination of your choice."""
+    return project_cache_path
+
+
+@pytest.fixture(scope="session")
+def fixture_root(cache_path: pathlib.Path) -> pathlib.Path:
+    return cache_path / "f"
+
+
+@pytest.fixture(scope="session")
+def full_unihan_path(fixture_root: pathlib.Path) -> pathlib.Path:
+    return fixture_root / "full"
+
+
+@pytest.fixture(scope="session")
+def full_unihan_options(full_unihan_path: pathlib.Path) -> UnihanOptions:
+    return UnihanOptions(
+        work_dir=full_unihan_path / "work",
+        zip_path=full_unihan_path / "downloads" / "Unihan.zip",
+        destination=full_unihan_path / "out" / "unihan.csv",
+    )
+
+
+@pytest.fixture(scope="session")
+def full_unihan_packager(
+    full_unihan_path: pathlib.Path, full_unihan_options: "UnihanOptions"
+) -> "Packager":
+    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    return Packager(full_unihan_options)
+
+
+@pytest.fixture(scope="session")
+def ensure_full_unihan(
+    full_unihan_path: pathlib.Path,
+    full_unihan_options: "UnihanOptions",
+    full_unihan_packager: "Packager",
+) -> None:
+    """Downloads and extracts a full UNIHAN, return a UnihanOptions.
+
+    TODO: Allow setting up various scenarios, e.g. download only, broken download, etc.
+    """
+    pkgr = Packager(full_unihan_options)
+    pkgr.download()
+
+    if not pkgr.options.destination.exists():
+        pkgr.export()
+
+    return None
+
+
+@pytest.fixture(scope="session")
+def quick_unihan_path(fixture_root: pathlib.Path) -> pathlib.Path:
+    return fixture_root / "quick"
+
+
+@pytest.fixture(scope="session")
+def quick_unihan_zip_path(quick_unihan_path: pathlib.Path) -> pathlib.Path:
+    return quick_unihan_path / "downloads" / "Unihan.zip"
+
+
+@pytest.fixture(scope="session")
+def quick_unihan_zip(
+    quick_unihan_path: pathlib.Path,
+    quick_unihan_zip_path: pathlib.Path,
+    sample_fixture_files: t.List[pathlib.Path],
+) -> zipfile.ZipFile:
+    _files = []
+    for f in sample_fixture_files:
+        _files += [f]
+
+    with contextlib.suppress(FileExistsError):
+        quick_unihan_zip_path.parent.mkdir(parents=True)
+
+    zf = zipfile.ZipFile(quick_unihan_zip_path, "a")
+    for _f in sample_fixture_files:
+        if _f.name not in zf.namelist():
+            zf.write(_f, _f.name)
+    zf.close()
+
+    return zf
+
+
+@pytest.fixture(scope="session")
+def quick_unihan_options(
+    quick_unihan_path: pathlib.Path,
+    quick_unihan_zip: zipfile.ZipFile,
+    quick_unihan_zip_path: pathlib.Path,
+) -> UnihanOptions:
+    return UnihanOptions(
+        work_dir=quick_unihan_path / "work",
+        zip_path=quick_unihan_zip_path,
+        destination=quick_unihan_path / "out" / "unihan.csv",
+    )
+
+
+@pytest.fixture(scope="session")
+def quick_unihan_packager(
+    quick_unihan_path: pathlib.Path, quick_unihan_options: "UnihanOptions"
+) -> "Packager":
+    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    return Packager(quick_unihan_options)
+
+
+@pytest.fixture(scope="session")
+def ensure_quick_unihan(
+    quick_unihan_path: pathlib.Path,
+    quick_unihan_options: "UnihanOptions",
+    quick_unihan_packager: "Packager",
+) -> None:
+    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    pkgr = Packager(quick_unihan_options)
+    pkgr.download()
+
+    if not pkgr.options.destination.exists():
+        pkgr.export()
+
+    return None
+
+
+@pytest.fixture(scope="session")
+def bootstrap_all(ensure_full_unihan: None, ensure_quick_unihan: None) -> None:
+    """This should be used like so in your project's conftest.py:
+
+    >>> import pytest
+    >>> @pytest.fixture(scope="session", autouse=True)
+    ... def bootstrap(bootstrap_all) -> None:
+    ...     return None
+    """
+    return None
 
 
 @pytest.fixture(scope="session")
@@ -64,8 +215,8 @@ if t.TYPE_CHECKING:
 
 
 @pytest.fixture
-def test_options() -> t.Union[Options, t.Mapping[str, t.Any]]:
-    return Options(input_files=["Unihan_Readings.txt"])
+def test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
+    return UnihanOptions(input_files=["Unihan_Readings.txt"])
 
 
 @pytest.fixture(scope="session")
@@ -110,7 +261,7 @@ def mock_zip(mock_zip_path: pathlib.Path, sample_data: str) -> zipfile.ZipFile:
 def TestPackager(mock_test_dir: pathlib.Path, mock_zip_path: pathlib.Path) -> Packager:
     # monkey-patching builder
     return Packager(
-        Options(
+        UnihanOptions(
             work_dir=mock_test_dir,
             zip_path=mock_zip_path,
             destination=mock_test_dir / "unihan.csv",
