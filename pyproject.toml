@@ -101,6 +101,7 @@ types-docutils = "*"
 types-PyYAML = "*"
 types-appdirs = "*"
 types-requests = "*"
+types-pygments = "*"
 
 [tool.poetry.plugins.pytest11]
 unihan_etl = "unihan_etl.pytest_plugin"
