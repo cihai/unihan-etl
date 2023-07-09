@@ -77,7 +77,84 @@ def ensure_full_unihan(
 ) -> None:
     """Downloads and extracts a full UNIHAN, return a UnihanOptions.
 
-    TODO: Allow setting up various scenarios, e.g. download only, broken download, etc.
+    >>> import pathlib
+
+    >>> from unihan_etl.core import Packager
+    >>> from unihan_etl.options import Options as UnihanOptions
+
+    >>> def test_ensure_full_unihan(
+    ...     full_unihan_path: pathlib.Path,
+    ...     full_unihan_options: "UnihanOptions",
+    ...     full_unihan_packager: "Packager",
+    ... ) -> None:
+    ...     full_unihan_destination = full_unihan_options.destination
+    ...     assert full_unihan_destination.exists()
+    ...     assert full_unihan_destination.stat().st_size > 20_000_000
+    ...
+    ...     assert full_unihan_options.work_dir.exists()
+    ...     unihan_readings = full_unihan_options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_readings.stat().st_size > 6200000
+
+    .. ::
+        >>> locals().keys()
+        dict_keys(...)
+
+        >>> source = ''.join([e.source for e in request._pyfuncitem.dtest.examples][:4])
+        >>> pytester = request.getfixturevalue('pytester')
+
+        >>> pytester.makepyfile(**{'whatever.py': source})
+        PosixPath(...)
+
+        >>> result = pytester.runpytest('whatever.py', '--disable-warnings')
+        ===...
+
+        >>> result.assert_outcomes(passed=1)
+
+    Extending fixtures:
+
+    >>> import pathlib
+
+    >>> import pytest
+
+    >>> from unihan_etl.core import Packager
+    >>> from unihan_etl.options import Options as UnihanOptions
+
+    >>> @pytest.fixture
+    ... def my_unihan(
+    ...     full_unihan_path: pathlib.Path,
+    ...     full_unihan_options: "UnihanOptions",
+    ...     full_unihan_packager: "Packager",
+    ... ) -> "Packager":
+    ...     return full_unihan_packager
+
+    >>> def test_my_extended_unihan_Fixture(my_unihan: "Packager") -> None:
+    ...     my_unihan.download()
+    ...     my_unihan_destination = my_unihan.options.destination
+    ...     if not my_unihan_destination.exists():
+    ...         my_unihan.export()
+    ...     assert my_unihan_destination.exists()
+    ...     assert my_unihan_destination.stat().st_size > 20_000_000
+    ...
+    ...     assert my_unihan.options.work_dir.exists()
+    ...     unihan_readings = my_unihan.options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_readings.stat().st_size > 6200000
+
+    .. ::
+        >>> locals().keys()
+        dict_keys(...)
+
+        >>> source = ''.join([
+        ...     e.source for e in request._pyfuncitem.dtest.examples][10:16]
+        ... )
+        >>> pytester = request.getfixturevalue('pytester')
+
+        >>> pytester.makepyfile(**{'example_2.py': source})
+        PosixPath(...)
+
+        >>> result = pytester.runpytest('example_2.py', '--disable-warnings')
+        ===...
+
+        >>> result.assert_outcomes(passed=1)
     """
     pkgr = Packager(full_unihan_options)
     pkgr.download()
@@ -147,7 +224,87 @@ def ensure_quick_unihan(
     quick_unihan_options: "UnihanOptions",
     quick_unihan_packager: "Packager",
 ) -> None:
-    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    """Setup a tiny portion of UNIHAN, return a UnihanOptions.
+
+    >>> import pathlib
+
+    >>> from unihan_etl.core import Packager
+    >>> from unihan_etl.options import Options as UnihanOptions
+
+    >>> def test_ensure_quick_unihan(
+    ...     quick_unihan_path: pathlib.Path,
+    ...     quick_unihan_options: "UnihanOptions",
+    ...     quick_unihan_packager: "Packager",
+    ... ) -> None:
+    ...     quick_unihan_destination = quick_unihan_options.destination
+    ...     assert quick_unihan_destination.exists()
+    ...     assert quick_unihan_destination.stat().st_size == 171_968
+    ...
+    ...     assert quick_unihan_options.work_dir.exists()
+    ...     unihan_readings = quick_unihan_options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_readings.stat().st_size == 21_631
+
+    .. ::
+        >>> locals().keys()
+        dict_keys(...)
+
+        >>> source = ''.join([e.source for e in request._pyfuncitem.dtest.examples][:4])
+        >>> pytester = request.getfixturevalue('pytester')
+
+        >>> pytester.makepyfile(**{'whatever.py': source})
+        PosixPath(...)
+
+        >>> result = pytester.runpytest('whatever.py', '--disable-warnings')
+        ===...
+
+        >>> result.assert_outcomes(passed=1)
+
+    Extending fixtures:
+
+    >>> import pathlib
+
+    >>> import pytest
+
+    >>> from unihan_etl.core import Packager
+    >>> from unihan_etl.options import Options as UnihanOptions
+
+    >>> @pytest.fixture
+    ... def my_unihan(
+    ...     quick_unihan_path: pathlib.Path,
+    ...     quick_unihan_options: "UnihanOptions",
+    ...     quick_unihan_packager: "Packager",
+    ... ) -> "Packager":
+    ...     return quick_unihan_packager
+
+    >>> def test_my_extended_unihan_Fixture(my_unihan: "Packager") -> None:
+    ...     my_unihan.download()
+    ...     my_unihan_destination = my_unihan.options.destination
+    ...     if not my_unihan_destination.exists():
+    ...         my_unihan.export()
+    ...     assert my_unihan_destination.exists()
+    ...     assert my_unihan_destination.stat().st_size == 171_968
+    ...
+    ...     assert my_unihan.options.work_dir.exists()
+    ...     unihan_readings = my_unihan.options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_readings.stat().st_size == 21631
+
+    .. ::
+        >>> locals().keys()
+        dict_keys(...)
+
+        >>> source = ''.join(
+        ...     [e.source for e in request._pyfuncitem.dtest.examples][10:16]
+        ... )
+        >>> pytester = request.getfixturevalue('pytester')
+
+        >>> pytester.makepyfile(**{'example_2.py': source})
+        PosixPath(...)
+
+        >>> result = pytester.runpytest('example_2.py', '--disable-warnings')
+        ===...
+
+        >>> result.assert_outcomes(passed=1)
+    """
     pkgr = Packager(quick_unihan_options)
     pkgr.download()
 
@@ -297,6 +454,35 @@ def sample_expanded_data(
 
 @pytest.fixture(scope="session")
 def sample_data() -> str:
+    r"""Raw snippet excerpted from UNIHAN corpus.
+
+    >>> def test_sample_data(
+    ...     sample_data: str,
+    ... ) -> None:
+    ...     assert isinstance(sample_data, str)
+    ...
+    ...     assert isinstance(sample_data.splitlines()[1], str)
+    ...
+
+    .. ::
+        >>> locals().keys()
+        dict_keys(...)
+
+        >>> source = ''.join([e.source for e in request._pyfuncitem.dtest.examples][:1])
+        >>> pytester = request.getfixturevalue('pytester')
+
+        >>> pytester.makepyfile(
+        ...     **{'test_pytest_plugin__sample_data.py': source}
+        ... )
+        PosixPath(...)
+
+        >>> result = pytester.runpytest(
+        ...     'test_pytest_plugin__sample_data.py', '--disable-warnings'
+        ... )
+        ===...
+
+        >>> result.assert_outcomes(passed=1)
+    """
     return """\
 U+3400	kCantonese	jau1
 U+3400	kDefinition	(same as U+4E18 丘) hillock or mound
