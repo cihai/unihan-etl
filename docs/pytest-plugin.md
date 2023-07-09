@@ -22,7 +22,7 @@ The pytest plugin will automatically be detected via pytest, and the fixtures wi
 
 ## Fixtures
 
-`pytest-unihan-etl` works through providing {ref}`pytest fixtures <pytest:fixtures-api>` - so read up on
+`pytest-unihan` works through providing {ref}`pytest fixtures <pytest:fixtures-api>` - so read up on
 those!
 
 The plugin's fixtures guarantee downloading, and then reusing UNIHAN.zip every
