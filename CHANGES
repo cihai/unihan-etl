@@ -19,6 +19,13 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Features
+
+- pytest plugin: Add cached fixtures for `UNIHAN` (#291)
+
+  After initial download of UNIHAN.zip, an 11 second testrun on unihan-etl's
+  test can go down to 1.5 seconds - eliminating redownloading and extraction.
+
 ## unihan-etl 0.25.2 (2023-07-08)
 
 ### Bug Fixes
