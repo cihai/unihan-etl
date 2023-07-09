@@ -41,6 +41,8 @@ def set_home(
 @pytest.mark.usefixtures("clear_env")
 def setup(
     request: pytest.FixtureRequest,
+    ensure_quick_unihan: None,
+    ensure_full_unihan: None,
 ) -> None:
     if USING_ZSH:
         request.getfixturevalue("zshrc")
