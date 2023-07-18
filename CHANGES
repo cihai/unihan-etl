@@ -19,6 +19,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking: pytest fixtures renamed, data moved (#294)
+
+- "quick" fixtures:
+
+  - Data has been moved from `tests/fixtures` to
+    `src/unihan_etl/data_files/quick`
+  - Fixtures prefixed by `sample_` in the name have been renamed to `quick_`
+
 ### Internal
 
 - ruff: Code quality tweaks (#295)
