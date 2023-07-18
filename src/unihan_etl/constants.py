@@ -1,12 +1,14 @@
 #: Dictionary of tuples mapping locations of files to fields
-from unihan_etl.types import ColumnDataTuple
+import importlib.util
+
 from appdirs import AppDirs as BaseAppDirs
+
 from unihan_etl.__about__ import (
     __author__,
     __package_name__,
 )
 from unihan_etl._internal.app_dirs import AppDirs
-
+from unihan_etl.types import ColumnDataTuple
 from unihan_etl.util import get_fields
 
 UNIHAN_MANIFEST = {
@@ -234,9 +236,6 @@ UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
 UNIHAN_FIELDS: "ColumnDataTuple" = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
 ALLOWED_EXPORT_TYPES = ["json", "csv"]
-try:
-    import yaml  # flake8: NOQA F401
 
+if importlib.util.find_spec("yaml"):
     ALLOWED_EXPORT_TYPES += ["yaml"]
-except ImportError:
-    pass
