@@ -9,6 +9,7 @@ import zipfile
 import pytest
 from appdirs import AppDirs as BaseAppDirs
 
+import unihan_etl
 from unihan_etl import constants, core
 from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.core import Packager
@@ -18,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 USING_ZSH = "zsh" in os.getenv("SHELL", "")
 
-PROJECT_PATH = pathlib.Path(__file__).parent.parent.parent
-UNIHAN_ETL_PATH = PROJECT_PATH / "src" / "unihan_etl"
+UNIHAN_ETL_PATH = pathlib.Path(unihan_etl.__file__).parent
+PROJECT_PATH = UNIHAN_ETL_PATH.parent.parent
 TESTS_PATH = PROJECT_PATH / "tests"
 DATA_FIXTURE_PATH = UNIHAN_ETL_PATH / "data_files"
 QUICK_FIXTURE_PATH = DATA_FIXTURE_PATH / "quick"
