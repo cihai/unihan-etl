@@ -1,9 +1,9 @@
-# flake8: NOQA E501
+# flake8: NOQA: E501
 import inspect
-import os
+import pathlib
 import sys
 import typing as t
-from os.path import dirname, relpath
+from os.path import relpath
 from pathlib import Path
 
 import unihan_etl
@@ -21,7 +21,7 @@ sys.path.insert(0, str(cwd / "_ext"))
 
 # package data
 about: t.Dict[str, str] = {}
-with open(src_root / "unihan_etl" / "__about__.py") as fp:
+with (src_root / "unihan_etl" / "__about__.py").open() as fp:
     exec(fp.read(), about)
 
 extensions = [
@@ -181,9 +181,7 @@ intersphinx_mapping = {
 }
 
 
-def linkcode_resolve(
-    domain: str, info: t.Dict[str, str]
-) -> t.Union[None, str]:
+def linkcode_resolve(domain: str, info: t.Dict[str, str]) -> t.Union[None, str]:
     """
     Determine the URL corresponding to Python object
 
@@ -206,7 +204,7 @@ def linkcode_resolve(
     for part in fullname.split("."):
         try:
             obj = getattr(obj, part)
-        except Exception:
+        except Exception:  # ruff: noqa: PERF203
             return None
 
     # strip decorators, which would resolve to the source of the decorator
@@ -231,12 +229,9 @@ def linkcode_resolve(
     except Exception:
         lineno = None
 
-    if lineno:
-        linespec = "#L%d-L%d" % (lineno, lineno + len(source) - 1)
-    else:
-        linespec = ""
+    linespec = "#L%d-L%d" % (lineno, lineno + len(source) - 1) if lineno else ""
 
-    fn = relpath(fn, start=dirname(unihan_etl.__file__))
+    fn = relpath(fn, start=pathlib.Path(unihan_etl.__file__).parent)
 
     if "dev" in about["__version__"]:
         return "{}/blob/master/{}/{}/{}{}".format(
