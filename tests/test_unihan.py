@@ -20,11 +20,10 @@ from unihan_etl.core import (
     zip_has_files,
 )
 from unihan_etl.options import Options
+from unihan_etl.pytest_plugin import QUICK_FIXTURE_PATH
 from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.types import ColumnData, UntypedNormalizedData
 from unihan_etl.util import get_fields
-
-from .constants import SAMPLE_FIXTURE_PATH
 
 if t.TYPE_CHECKING:
     from urllib.request import _DataType
@@ -206,14 +205,14 @@ def test_extract_zip(
 
 
 def test_normalize_only_output_requested_columns(
-    sample_normalized_data: UntypedNormalizedData, columns: ColumnData
+    quick_normalized_data: UntypedNormalizedData, columns: ColumnData
 ) -> None:
     in_columns = ["kDefinition", "kCantonese"]
 
-    for data_labels in sample_normalized_data:
+    for data_labels in quick_normalized_data:
         assert set(columns) == set(data_labels.keys())
 
-    items = core.listify(sample_normalized_data, in_columns)
+    items = core.listify(quick_normalized_data, in_columns)
     example_result = items[0]
 
     not_in_columns: t.List[str] = []
@@ -234,8 +233,8 @@ def test_normalize_only_output_requested_columns(
 def test_normalize_simple_data_format() -> None:
     """normalize turns data into simple data format (SDF)."""
     csv_files = [
-        SAMPLE_FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
-        SAMPLE_FIXTURE_PATH / "Unihan_Readings.txt",
+        QUICK_FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
+        QUICK_FIXTURE_PATH / "Unihan_Readings.txt",
     ]
 
     columns = (

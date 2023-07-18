@@ -9,17 +9,21 @@ import zipfile
 import pytest
 from appdirs import AppDirs as BaseAppDirs
 
+import unihan_etl
 from unihan_etl import constants, core
 from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.core import Packager
 from unihan_etl.options import Options as UnihanOptions
 
 logger = logging.getLogger(__name__)
+
 USING_ZSH = "zsh" in os.getenv("SHELL", "")
 
-PROJECT_PATH = pathlib.Path(__file__).parent.parent.parent
+UNIHAN_ETL_PATH = pathlib.Path(unihan_etl.__file__).parent
+PROJECT_PATH = UNIHAN_ETL_PATH.parent.parent
 TESTS_PATH = PROJECT_PATH / "tests"
-SAMPLE_FIXTURE_PATH = TESTS_PATH / "fixtures"
+DATA_FIXTURE_PATH = UNIHAN_ETL_PATH / "data_files"
+QUICK_FIXTURE_PATH = DATA_FIXTURE_PATH / "quick"
 
 app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
 
@@ -179,17 +183,17 @@ def quick_unihan_zip_path(quick_unihan_path: pathlib.Path) -> pathlib.Path:
 def quick_unihan_zip(
     quick_unihan_path: pathlib.Path,
     quick_unihan_zip_path: pathlib.Path,
-    sample_fixture_files: t.List[pathlib.Path],
+    quick_fixture_files: t.List[pathlib.Path],
 ) -> zipfile.ZipFile:
     _files = []
-    for f in sample_fixture_files:
+    for f in quick_fixture_files:
         _files += [f]
 
     with contextlib.suppress(FileExistsError):
         quick_unihan_zip_path.parent.mkdir(parents=True)
 
     zf = zipfile.ZipFile(quick_unihan_zip_path, "a")
-    for _f in sample_fixture_files:
+    for _f in quick_fixture_files:
         if _f.name not in zf.namelist():
             zf.write(_f, _f.name)
     zf.close()
@@ -382,7 +386,7 @@ def mock_zip_pathname() -> str:
 
 
 @pytest.fixture(scope="session")
-def sample_fixture_files() -> t.List[pathlib.Path]:
+def quick_fixture_files() -> t.List[pathlib.Path]:
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -393,7 +397,7 @@ def sample_fixture_files() -> t.List[pathlib.Path]:
         "Unihan_Readings.txt",
         "Unihan_Variants.txt",
     ]
-    return [SAMPLE_FIXTURE_PATH / f for f in files]
+    return [QUICK_FIXTURE_PATH / f for f in files]
 
 
 @pytest.fixture(scope="session")
@@ -407,9 +411,9 @@ def mock_zip_path(mock_test_dir: pathlib.Path, mock_zip_pathname: str) -> pathli
 
 
 @pytest.fixture(scope="session")
-def mock_zip(mock_zip_path: pathlib.Path, sample_data: str) -> zipfile.ZipFile:
+def mock_zip(mock_zip_path: pathlib.Path, quick_data: str) -> zipfile.ZipFile:
     zf = zipfile.ZipFile(str(mock_zip_path), "a")
-    zf.writestr("Unihan_Readings.txt", sample_data.encode("utf-8"))
+    zf.writestr("Unihan_Readings.txt", quick_data.encode("utf-8"))
     zf.close()
     return zf
 
@@ -436,32 +440,32 @@ def columns() -> "ColumnData":
 
 
 @pytest.fixture(scope="session")
-def sample_normalized_data(
+def quick_normalized_data(
     columns: "ColumnData",
-    sample_fixture_files: t.List[pathlib.Path],
+    quick_fixture_files: t.List[pathlib.Path],
 ) -> "UntypedNormalizedData":
-    data = core.load_data(files=sample_fixture_files)
+    data = core.load_data(files=quick_fixture_files)
 
     return core.normalize(data, columns)
 
 
 @pytest.fixture(scope="session")
-def sample_expanded_data(
-    sample_normalized_data: t.List[t.Dict[str, t.Any]]
+def quick_expanded_data(
+    quick_normalized_data: t.List[t.Dict[str, t.Any]]
 ) -> "ExpandedExport":
-    return core.expand_delimiters(sample_normalized_data)
+    return core.expand_delimiters(quick_normalized_data)
 
 
 @pytest.fixture(scope="session")
-def sample_data() -> str:
+def quick_data() -> str:
     r"""Raw snippet excerpted from UNIHAN corpus.
 
-    >>> def test_sample_data(
-    ...     sample_data: str,
+    >>> def test_quick_data(
+    ...     quick_data: str,
     ... ) -> None:
-    ...     assert isinstance(sample_data, str)
+    ...     assert isinstance(quick_data, str)
     ...
-    ...     assert isinstance(sample_data.splitlines()[1], str)
+    ...     assert isinstance(quick_data.splitlines()[1], str)
     ...
 
     .. ::
@@ -472,12 +476,12 @@ def sample_data() -> str:
         >>> pytester = request.getfixturevalue('pytester')
 
         >>> pytester.makepyfile(
-        ...     **{'test_pytest_plugin__sample_data.py': source}
+        ...     **{'test_pytest_plugin__quick_data.py': source}
         ... )
         PosixPath(...)
 
         >>> result = pytester.runpytest(
-        ...     'test_pytest_plugin__sample_data.py', '--disable-warnings'
+        ...     'test_pytest_plugin__quick_data.py', '--disable-warnings'
         ... )
         ===...
 
