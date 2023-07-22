@@ -19,6 +19,26 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking: pytest fixtures now prefixed with `unihan_` (#296)
+
+- All pytest plugin fixtures are now prefixed `unihan_`, e.g.:
+
+  - `quick_unihan_path` -> `unihan_quick_path`
+  - `quick_unihan_options` -> `unihan_quick_options`
+  - `quick_unihan_packager` -> `unihan_quick_packager`
+  - `ensure_quick_unihan` -> `unihan_ensure_quick`
+  - `mock_zip` -> `unihan_mock_zip`
+  - `columns` -> `unihan_quick_columns`
+
+- `TestPackager` fixture has been removed
+
+  This fixture was made redundant by `unihan_quick_*` and `unihan_full_*`
+  fixtures
+
+### Bug fixes (#296)
+
+- pytest plugin (`unihan_zshrc`): Fix `skipif` condition to run if shell uses `zsh(1)`
+
 ## unihan-etl 0.27.0 (2023-07-18)
 
 ### Breaking: pytest fixtures renamed, data moved (#294)
@@ -28,6 +48,7 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
   - Data has been moved from `tests/fixtures` to
     `src/unihan_etl/data_files/quick`
   - Fixtures prefixed by `sample_` in the name have been renamed to `quick_`
+
 - "quick" and "full" fixtures: Fixed ability to access data files from outside
   `unihan_etl` package
 
@@ -54,7 +75,7 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 ## unihan-etl 0.25.1 (2023-07-08)
 
-*Rolled back*
+_Rolled back_
 
 ### Bug Fixes
 
@@ -94,9 +115,10 @@ _Maintenance only, no bug fixes, or new features_
 
     - Before 0.23.x: `unihan_etl.app_dirs`
     - After 0.23.x: `unihan_etl._internal.app_dirs`
+
   - New feature: Override directories on a one-off basis
-  - New feature: Template replacement of variables replacing  environmental variables 
-    via {func}`os.path.expandvars` + {func}`os.path.expanduser` 
+  - New feature: Template replacement of variables replacing environmental variables
+    via {func}`os.path.expandvars` + {func}`os.path.expanduser`
   - {mod}`doctests`: See the above in action thanks to doctests
   - Dedicated tests via pytest
 
@@ -125,7 +147,7 @@ This module has been renamed.
 
 Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` object.
 
-0.22.0 and after  settings are configurable via a {obj}`dataclasses.dataclass` object:
+0.22.0 and after settings are configurable via a {obj}`dataclasses.dataclass` object:
 {class}`unihan_etl.options.Options`
 
 ### Documentation
@@ -133,6 +155,7 @@ Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` objec
 - Add {mod}`doctest` support (#274)
 
   - Initial doctest example added to README.md, test.py, and util.py.
+
 - Stub out initial pytest plugin (#274)
 - Split _API_ docs into multiple files (#283)
 - Fix `make start` in `docs/Makefile` by fixing argument positions (#283)

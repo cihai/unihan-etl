@@ -34,21 +34,23 @@ if t.TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-def test_zip_has_files(mock_zip: zipfile.ZipFile) -> None:
-    assert zip_has_files(["Unihan_Readings.txt"], mock_zip)
+def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
+    assert zip_has_files(["Unihan_Readings.txt"], unihan_mock_zip)
 
-    assert not zip_has_files(["Unihan_Cats.txt"], mock_zip)
+    assert not zip_has_files(["Unihan_Cats.txt"], unihan_mock_zip)
 
 
-def test_has_valid_zip(tmp_path: pathlib.Path, mock_zip: zipfile.ZipFile) -> None:
+def test_has_valid_zip(
+    tmp_path: pathlib.Path, unihan_mock_zip: zipfile.ZipFile
+) -> None:
     if UNIHAN_ZIP_PATH.is_file():
         assert core.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
         assert not core.has_valid_zip(UNIHAN_ZIP_PATH)
 
-    assert mock_zip.filename is not None
+    assert unihan_mock_zip.filename is not None
 
-    assert core.has_valid_zip(mock_zip.filename)
+    assert core.has_valid_zip(unihan_mock_zip.filename)
 
     bad_zip = tmp_path / "corrupt.zip"
     bad_zip.write_text("moo", encoding="utf-8")
@@ -90,11 +92,11 @@ def test_get_files() -> None:
 
 def test_download(
     tmp_path: pathlib.Path,
-    mock_zip: zipfile.ZipFile,
-    mock_zip_path: pathlib.Path,
-    mock_zip_pathname: pathlib.Path,
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+    unihan_mock_zip_pathname: pathlib.Path,
 ) -> None:
-    dest_path = tmp_path / "data" / mock_zip_pathname
+    dest_path = tmp_path / "data" / unihan_mock_zip_pathname
     assert (
         not dest_path.parent.exists() and not dest_path.parent.is_dir()
     ), "Test setup: Should not exist yet, core.download() should create them!"
@@ -105,13 +107,13 @@ def test_download(
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
-        shutil.copy(str(mock_zip_path), str(dest_path))
+        shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return (
             "",
             HTTPMessage(),
         )
 
-    core.download(url=mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
+    core.download(url=unihan_mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
 
     assert (
         dest_path.parent.exists() and dest_path.parent.is_dir()
@@ -120,10 +122,10 @@ def test_download(
 
 def test_download_mock(
     tmp_path: pathlib.Path,
-    mock_zip: zipfile.ZipFile,
-    mock_zip_path: pathlib.Path,
-    mock_test_dir: pathlib.Path,
-    test_options: Options,
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+    unihan_mock_test_dir: pathlib.Path,
+    unihan_test_options: Options,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -134,7 +136,7 @@ def test_download_mock(
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
-        shutil.copy(mock_zip_path, dest_path)
+        shutil.copy(unihan_mock_zip_path, dest_path)
         return (
             "",
             HTTPMessage(),
@@ -142,11 +144,11 @@ def test_download_mock(
 
     p = Packager(
         dataclasses.replace(
-            test_options,
+            unihan_test_options,
             **{
                 "fields": ["kDefinition"],
                 "zip_path": dest_path,
-                "work_dir": mock_test_dir / "downloads",
+                "work_dir": unihan_mock_test_dir / "downloads",
                 "destination": data_path / "unihan.csv",
             },
         )
@@ -158,10 +160,10 @@ def test_download_mock(
 
 def test_export_format(
     tmp_path: pathlib.Path,
-    mock_zip: zipfile.ZipFile,
-    mock_zip_path: pathlib.Path,
-    mock_test_dir: pathlib.Path,
-    test_options: Options,
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+    unihan_mock_test_dir: pathlib.Path,
+    unihan_test_options: Options,
 ) -> None:
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
@@ -172,16 +174,16 @@ def test_export_format(
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
-        shutil.copy(str(mock_zip_path), str(dest_path))
+        shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return ("", HTTPMessage())
 
     p = Packager(
         dataclasses.replace(
-            test_options,
+            unihan_test_options,
             **{
                 "fields": ["kDefinition"],
                 "zip_path": dest_path,
-                "work_dir": str(mock_test_dir / "downloads"),
+                "work_dir": str(unihan_mock_test_dir / "downloads"),
                 "destination": str(data_path / "unihan.{ext}"),
                 "format": "json",
             },
@@ -195,9 +197,11 @@ def test_export_format(
 
 
 def test_extract_zip(
-    mock_zip: zipfile.ZipFile, mock_zip_path: pathlib.Path, tmp_path: pathlib.Path
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+    tmp_path: pathlib.Path,
 ) -> None:
-    zf = core.extract_zip(zip_path=mock_zip_path, dest_dir=tmp_path)
+    zf = core.extract_zip(zip_path=unihan_mock_zip_path, dest_dir=tmp_path)
 
     assert len(zf.infolist()) == 1
     assert zf.infolist()[0].file_size == 218
@@ -205,28 +209,29 @@ def test_extract_zip(
 
 
 def test_normalize_only_output_requested_columns(
-    quick_normalized_data: UntypedNormalizedData, columns: ColumnData
+    unihan_quick_normalized_data: UntypedNormalizedData,
+    unihan_quick_columns: ColumnData,
 ) -> None:
     in_columns = ["kDefinition", "kCantonese"]
 
-    for data_labels in quick_normalized_data:
-        assert set(columns) == set(data_labels.keys())
+    for data_labels in unihan_quick_normalized_data:
+        assert set(unihan_quick_columns) == set(data_labels.keys())
 
-    items = core.listify(quick_normalized_data, in_columns)
+    items = core.listify(unihan_quick_normalized_data, in_columns)
     example_result = items[0]
 
     not_in_columns: t.List[str] = []
 
     # columns not selected in normalize must not be in result.
     for v in example_result:
-        if v not in columns:
+        if v not in unihan_quick_columns:
             not_in_columns.append(v)
         else:
             in_columns.append(v)
 
     assert [] == not_in_columns, "normalize filters columns not specified."
     assert set(in_columns).issubset(
-        set(columns)
+        set(unihan_quick_columns)
     ), "normalize returns correct columns specified + ucn and char."
 
 
@@ -287,12 +292,12 @@ def test_flatten_fields() -> None:
     assert set(expected) == set(results)
 
 
-def test_pick_files(mock_zip_path: pathlib.Path) -> None:
+def test_pick_files(unihan_mock_zip_path: pathlib.Path) -> None:
     """Pick a white list of files to build from."""
 
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
-    options = Options(input_files=files, zip_path=mock_zip_path)
+    options = Options(input_files=files, zip_path=unihan_mock_zip_path)
 
     b = core.Packager(options)
 
@@ -373,11 +378,11 @@ def test_no_args() -> None:
     assert Packager.from_cli([]).options == DEFAULT_OPTIONS
 
 
-def test_cli_plus_defaults(mock_zip_path: pathlib.Path) -> None:
+def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     """Test CLI args + defaults."""
 
-    option_subset = {"zip_path": str(mock_zip_path)}
-    pkgr = Packager.from_cli(["-z", str(mock_zip_path)])
+    option_subset = {"zip_path": str(unihan_mock_zip_path)}
+    pkgr = Packager.from_cli(["-z", str(unihan_mock_zip_path)])
     assert_dict_contains_subset(option_subset, dataclasses.asdict(pkgr.options))
 
     option_subset_one_field = {"fields": ["kDefinition"]}
