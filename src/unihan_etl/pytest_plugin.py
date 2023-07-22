@@ -425,20 +425,6 @@ def unihan_mock_zip(
 
 
 @pytest.fixture(scope="session")
-def TestPackager(
-    unihan_mock_test_dir: pathlib.Path, unihan_mock_zip_path: pathlib.Path
-) -> Packager:
-    # monkey-patching builder
-    return Packager(
-        UnihanOptions(
-            work_dir=unihan_mock_test_dir,
-            zip_path=unihan_mock_zip_path,
-            destination=unihan_mock_test_dir / "unihan.csv",
-        )
-    )
-
-
-@pytest.fixture(scope="session")
 def unihan_quick_columns() -> "ColumnData":
     return (
         constants.CUSTOM_DELIMITED_FIELDS
