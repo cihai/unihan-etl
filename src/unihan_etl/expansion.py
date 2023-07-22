@@ -429,12 +429,10 @@ class kHanyuPinluDict(t.TypedDict):
 
 def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
     pattern = re.compile(
-        r"""
-        (?P<phonetic>[a-z({}{}]+)
+        fr"""
+        (?P<phonetic>[a-z({zhon.pinyin.lowercase}{N_DIACRITICS}]+)
         \((?P<frequency>[0-9]+)\)
-    """.format(
-            zhon.pinyin.lowercase, N_DIACRITICS
-        ),
+    """,
         re.X,
     )
     expanded: t.Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
@@ -491,12 +489,10 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
     )
 
     pattern = re.compile(
-        r"""
-        (?P<radical>[{}]+)
+        fr"""
+        (?P<radical>[{zhon.hanzi.radicals}]+)
         \[(?P<ucn>U\+2F[0-9A-D][0-9A-F])\]
-    """.format(
-            zhon.hanzi.radicals
-        ),
+    """,
         re.X,
     )
     m = pattern.match(rad)
