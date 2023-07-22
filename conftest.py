@@ -32,17 +32,17 @@ def add_doctest_fixtures(
 @pytest.fixture(autouse=True, scope="function")
 def set_home(
     monkeypatch: pytest.MonkeyPatch,
-    user_path: pathlib.Path,
+    unihan_user_path: pathlib.Path,
 ) -> None:
-    monkeypatch.setenv("HOME", str(user_path))
+    monkeypatch.setenv("HOME", str(unihan_user_path))
 
 
 @pytest.fixture(autouse=True, scope="session")
 @pytest.mark.usefixtures("clear_env")
 def setup(
     request: pytest.FixtureRequest,
-    ensure_quick_unihan: None,
-    ensure_full_unihan: None,
+    unihan_ensure_quick: None,
+    unihan_ensure_full: None,
 ) -> None:
     if USING_ZSH:
-        request.getfixturevalue("zshrc")
+        request.getfixturevalue("unihan_zshrc")
