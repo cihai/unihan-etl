@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "unihan-etl"
-version = "0.27.0"
+version = "0.28.0"
 description = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
 license = "MIT"
 authors = ["Tony Narlock <tony@git-pull.com>"]

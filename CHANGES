@@ -15,9 +15,11 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 // Usage: unihan-etl@next
 ```
 
-## unihan-etl 0.28.x (unreleased)
+## unihan-etl 0.29.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
+
+## unihan-etl 0.28.0 (2023-07-22)
 
 ### Breaking: pytest fixtures now prefixed with `unihan_` (#296)
 
