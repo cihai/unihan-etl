@@ -29,55 +29,55 @@ app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
 
 
 @pytest.fixture(scope="session")
-def user_cache_path() -> pathlib.Path:
+def unihan_user_cache_path() -> pathlib.Path:
     """Override this to destination of your choice."""
     return app_dirs.user_cache_dir
 
 
 @pytest.fixture(scope="session")
-def project_cache_path() -> pathlib.Path:
+def unihan_project_cache_path() -> pathlib.Path:
     """Override this to destination of your choice."""
     return PROJECT_PATH / ".unihan_cache"
 
 
 @pytest.fixture(scope="session")
-def cache_path(project_cache_path: pathlib.Path) -> pathlib.Path:
+def unihan_cache_path(unihan_project_cache_path: pathlib.Path) -> pathlib.Path:
     """Override this to destination of your choice."""
-    return project_cache_path
+    return unihan_project_cache_path
 
 
 @pytest.fixture(scope="session")
-def fixture_root(cache_path: pathlib.Path) -> pathlib.Path:
-    return cache_path / "f"
+def unihan_fixture_root(unihan_cache_path: pathlib.Path) -> pathlib.Path:
+    return unihan_cache_path / "f"
 
 
 @pytest.fixture(scope="session")
-def full_unihan_path(fixture_root: pathlib.Path) -> pathlib.Path:
-    return fixture_root / "full"
+def unihan_full_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
+    return unihan_fixture_root / "full"
 
 
 @pytest.fixture(scope="session")
-def full_unihan_options(full_unihan_path: pathlib.Path) -> UnihanOptions:
+def unihan_full_options(unihan_full_path: pathlib.Path) -> UnihanOptions:
     return UnihanOptions(
-        work_dir=full_unihan_path / "work",
-        zip_path=full_unihan_path / "downloads" / "Unihan.zip",
-        destination=full_unihan_path / "out" / "unihan.csv",
+        work_dir=unihan_full_path / "work",
+        zip_path=unihan_full_path / "downloads" / "Unihan.zip",
+        destination=unihan_full_path / "out" / "unihan.csv",
     )
 
 
 @pytest.fixture(scope="session")
-def full_unihan_packager(
-    full_unihan_path: pathlib.Path, full_unihan_options: "UnihanOptions"
+def unihan_full_packager(
+    unihan_full_path: pathlib.Path, unihan_full_options: "UnihanOptions"
 ) -> "Packager":
     """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
-    return Packager(full_unihan_options)
+    return Packager(unihan_full_options)
 
 
 @pytest.fixture(scope="session")
-def ensure_full_unihan(
-    full_unihan_path: pathlib.Path,
-    full_unihan_options: "UnihanOptions",
-    full_unihan_packager: "Packager",
+def unihan_ensure_full(
+    unihan_full_path: pathlib.Path,
+    unihan_full_options: "UnihanOptions",
+    unihan_full_packager: "Packager",
 ) -> None:
     """Downloads and extracts a full UNIHAN, return a UnihanOptions.
 
@@ -86,17 +86,17 @@ def ensure_full_unihan(
     >>> from unihan_etl.core import Packager
     >>> from unihan_etl.options import Options as UnihanOptions
 
-    >>> def test_ensure_full_unihan(
-    ...     full_unihan_path: pathlib.Path,
-    ...     full_unihan_options: "UnihanOptions",
-    ...     full_unihan_packager: "Packager",
+    >>> def test_unihan_ensure_full(
+    ...     unihan_full_path: pathlib.Path,
+    ...     unihan_full_options: "UnihanOptions",
+    ...     unihan_full_packager: "Packager",
     ... ) -> None:
-    ...     full_unihan_destination = full_unihan_options.destination
-    ...     assert full_unihan_destination.exists()
-    ...     assert full_unihan_destination.stat().st_size > 20_000_000
+    ...     unihan_full_destination = unihan_full_options.destination
+    ...     assert unihan_full_destination.exists()
+    ...     assert unihan_full_destination.stat().st_size > 20_000_000
     ...
-    ...     assert full_unihan_options.work_dir.exists()
-    ...     unihan_readings = full_unihan_options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_full_options.work_dir.exists()
+    ...     unihan_readings = unihan_full_options.work_dir / 'Unihan_Readings.txt'
     ...     assert unihan_readings.stat().st_size > 6200000
 
     .. ::
@@ -125,11 +125,11 @@ def ensure_full_unihan(
 
     >>> @pytest.fixture
     ... def my_unihan(
-    ...     full_unihan_path: pathlib.Path,
-    ...     full_unihan_options: "UnihanOptions",
-    ...     full_unihan_packager: "Packager",
+    ...     unihan_full_path: pathlib.Path,
+    ...     unihan_full_options: "UnihanOptions",
+    ...     unihan_full_packager: "Packager",
     ... ) -> "Packager":
-    ...     return full_unihan_packager
+    ...     return unihan_full_packager
 
     >>> def test_my_extended_unihan_Fixture(my_unihan: "Packager") -> None:
     ...     my_unihan.download()
@@ -160,7 +160,7 @@ def ensure_full_unihan(
 
         >>> result.assert_outcomes(passed=1)
     """
-    pkgr = Packager(full_unihan_options)
+    pkgr = Packager(unihan_full_options)
     pkgr.download()
 
     if not pkgr.options.destination.exists():
@@ -170,30 +170,30 @@ def ensure_full_unihan(
 
 
 @pytest.fixture(scope="session")
-def quick_unihan_path(fixture_root: pathlib.Path) -> pathlib.Path:
-    return fixture_root / "quick"
+def unihan_quick_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
+    return unihan_fixture_root / "quick"
 
 
 @pytest.fixture(scope="session")
-def quick_unihan_zip_path(quick_unihan_path: pathlib.Path) -> pathlib.Path:
-    return quick_unihan_path / "downloads" / "Unihan.zip"
+def unihan_quick_zip_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
+    return unihan_quick_path / "downloads" / "Unihan.zip"
 
 
 @pytest.fixture(scope="session")
-def quick_unihan_zip(
-    quick_unihan_path: pathlib.Path,
-    quick_unihan_zip_path: pathlib.Path,
-    quick_fixture_files: t.List[pathlib.Path],
+def unihan_quick_zip(
+    unihan_quick_path: pathlib.Path,
+    unihan_quick_zip_path: pathlib.Path,
+    unihan_quick_fixture_files: t.List[pathlib.Path],
 ) -> zipfile.ZipFile:
     _files = []
-    for f in quick_fixture_files:
+    for f in unihan_quick_fixture_files:
         _files += [f]
 
     with contextlib.suppress(FileExistsError):
-        quick_unihan_zip_path.parent.mkdir(parents=True)
+        unihan_quick_zip_path.parent.mkdir(parents=True)
 
-    zf = zipfile.ZipFile(quick_unihan_zip_path, "a")
-    for _f in quick_fixture_files:
+    zf = zipfile.ZipFile(unihan_quick_zip_path, "a")
+    for _f in unihan_quick_fixture_files:
         if _f.name not in zf.namelist():
             zf.write(_f, _f.name)
     zf.close()
@@ -202,31 +202,31 @@ def quick_unihan_zip(
 
 
 @pytest.fixture(scope="session")
-def quick_unihan_options(
-    quick_unihan_path: pathlib.Path,
-    quick_unihan_zip: zipfile.ZipFile,
-    quick_unihan_zip_path: pathlib.Path,
+def unihan_quick_options(
+    unihan_quick_path: pathlib.Path,
+    unihan_quick_zip: zipfile.ZipFile,
+    unihan_quick_zip_path: pathlib.Path,
 ) -> UnihanOptions:
     return UnihanOptions(
-        work_dir=quick_unihan_path / "work",
-        zip_path=quick_unihan_zip_path,
-        destination=quick_unihan_path / "out" / "unihan.csv",
+        work_dir=unihan_quick_path / "work",
+        zip_path=unihan_quick_zip_path,
+        destination=unihan_quick_path / "out" / "unihan.csv",
     )
 
 
 @pytest.fixture(scope="session")
-def quick_unihan_packager(
-    quick_unihan_path: pathlib.Path, quick_unihan_options: "UnihanOptions"
+def unihan_quick_packager(
+    unihan_quick_path: pathlib.Path, unihan_quick_options: "UnihanOptions"
 ) -> "Packager":
     """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
-    return Packager(quick_unihan_options)
+    return Packager(unihan_quick_options)
 
 
 @pytest.fixture(scope="session")
-def ensure_quick_unihan(
-    quick_unihan_path: pathlib.Path,
-    quick_unihan_options: "UnihanOptions",
-    quick_unihan_packager: "Packager",
+def unihan_ensure_quick(
+    unihan_quick_path: pathlib.Path,
+    unihan_quick_options: "UnihanOptions",
+    unihan_quick_packager: "Packager",
 ) -> None:
     """Setup a tiny portion of UNIHAN, return a UnihanOptions.
 
@@ -235,17 +235,17 @@ def ensure_quick_unihan(
     >>> from unihan_etl.core import Packager
     >>> from unihan_etl.options import Options as UnihanOptions
 
-    >>> def test_ensure_quick_unihan(
-    ...     quick_unihan_path: pathlib.Path,
-    ...     quick_unihan_options: "UnihanOptions",
-    ...     quick_unihan_packager: "Packager",
+    >>> def test_unihan_ensure_quick(
+    ...     unihan_quick_path: pathlib.Path,
+    ...     unihan_quick_options: "UnihanOptions",
+    ...     unihan_quick_packager: "Packager",
     ... ) -> None:
-    ...     quick_unihan_destination = quick_unihan_options.destination
-    ...     assert quick_unihan_destination.exists()
-    ...     assert quick_unihan_destination.stat().st_size == 171_968
+    ...     unihan_quick_destination = unihan_quick_options.destination
+    ...     assert unihan_quick_destination.exists()
+    ...     assert unihan_quick_destination.stat().st_size == 171_968
     ...
-    ...     assert quick_unihan_options.work_dir.exists()
-    ...     unihan_readings = quick_unihan_options.work_dir / 'Unihan_Readings.txt'
+    ...     assert unihan_quick_options.work_dir.exists()
+    ...     unihan_readings = unihan_quick_options.work_dir / 'Unihan_Readings.txt'
     ...     assert unihan_readings.stat().st_size == 21_631
 
     .. ::
@@ -274,11 +274,11 @@ def ensure_quick_unihan(
 
     >>> @pytest.fixture
     ... def my_unihan(
-    ...     quick_unihan_path: pathlib.Path,
-    ...     quick_unihan_options: "UnihanOptions",
-    ...     quick_unihan_packager: "Packager",
+    ...     unihan_quick_path: pathlib.Path,
+    ...     unihan_quick_options: "UnihanOptions",
+    ...     unihan_quick_packager: "Packager",
     ... ) -> "Packager":
-    ...     return quick_unihan_packager
+    ...     return unihan_quick_packager
 
     >>> def test_my_extended_unihan_Fixture(my_unihan: "Packager") -> None:
     ...     my_unihan.download()
@@ -309,7 +309,7 @@ def ensure_quick_unihan(
 
         >>> result.assert_outcomes(passed=1)
     """
-    pkgr = Packager(quick_unihan_options)
+    pkgr = Packager(unihan_quick_options)
     pkgr.download()
 
     if not pkgr.options.destination.exists():
@@ -319,50 +319,52 @@ def ensure_quick_unihan(
 
 
 @pytest.fixture(scope="session")
-def bootstrap_all(ensure_full_unihan: None, ensure_quick_unihan: None) -> None:
+def unihan_bootstrap_all(unihan_ensure_full: None, unihan_ensure_quick: None) -> None:
     """This should be used like so in your project's conftest.py:
 
     >>> import pytest
     >>> @pytest.fixture(scope="session", autouse=True)
-    ... def bootstrap(bootstrap_all) -> None:
+    ... def bootstrap(unihan_bootstrap_all) -> None:
     ...     return None
     """
     return None
 
 
 @pytest.fixture(scope="session")
-def home_path(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+def unihan_home_path(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
     """Temporary `/home/` path."""
     return tmp_path_factory.mktemp("home")
 
 
 @pytest.fixture(scope="session")
-def home_user_name() -> str:
-    """Default username to set for :func:`user_path` fixture."""
+def unihan_home_user_name() -> str:
+    """Default username to set for :func:`unihan_user_path` fixture."""
     return getpass.getuser()
 
 
 @pytest.fixture(scope="session")
-def user_path(home_path: pathlib.Path, home_user_name: str) -> pathlib.Path:
+def unihan_user_path(
+    unihan_home_path: pathlib.Path, unihan_home_user_name: str
+) -> pathlib.Path:
     """Default temporary user directory.
 
-    Used by: :func:`zshrc`
+    Used by: :func:`unihan_zshrc`
 
     Note: You will need to set the home directory, see :ref:`set_home`.
     """
-    p = home_path / home_user_name
+    p = unihan_home_path / unihan_home_user_name
     p.mkdir()
     return p
 
 
 @pytest.mark.skipif(USING_ZSH, reason="Using ZSH")
 @pytest.fixture(scope="session")
-def zshrc(user_path: pathlib.Path) -> pathlib.Path:
+def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
     """This quiets ZSH default message.
 
-    Needs a startup file .zshenv, .zprofile, .zshrc, .zlogin.
+    Needs a startup file .zshenv, .zprofile, .unihan_zshrc, .zlogin.
     """
-    p = user_path / ".zshrc"
+    p = unihan_user_path / ".unihan_zshrc"
     p.touch()
     return p
 
@@ -376,17 +378,17 @@ if t.TYPE_CHECKING:
 
 
 @pytest.fixture
-def test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
+def unihan_test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 
 
 @pytest.fixture(scope="session")
-def mock_zip_pathname() -> str:
+def unihan_mock_zip_pathname() -> str:
     return "Unihan.zip"
 
 
 @pytest.fixture(scope="session")
-def quick_fixture_files() -> t.List[pathlib.Path]:
+def unihan_quick_fixture_files() -> t.List[pathlib.Path]:
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -401,37 +403,43 @@ def quick_fixture_files() -> t.List[pathlib.Path]:
 
 
 @pytest.fixture(scope="session")
-def mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+def unihan_mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
     return tmp_path_factory.mktemp("unihan_etl")
 
 
 @pytest.fixture(scope="session")
-def mock_zip_path(mock_test_dir: pathlib.Path, mock_zip_pathname: str) -> pathlib.Path:
-    return mock_test_dir / mock_zip_pathname
+def unihan_mock_zip_path(
+    unihan_mock_test_dir: pathlib.Path, unihan_mock_zip_pathname: str
+) -> pathlib.Path:
+    return unihan_mock_test_dir / unihan_mock_zip_pathname
 
 
 @pytest.fixture(scope="session")
-def mock_zip(mock_zip_path: pathlib.Path, quick_data: str) -> zipfile.ZipFile:
-    zf = zipfile.ZipFile(str(mock_zip_path), "a")
-    zf.writestr("Unihan_Readings.txt", quick_data.encode("utf-8"))
+def unihan_mock_zip(
+    unihan_mock_zip_path: pathlib.Path, unihan_quick_data: str
+) -> zipfile.ZipFile:
+    zf = zipfile.ZipFile(str(unihan_mock_zip_path), "a")
+    zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
     zf.close()
     return zf
 
 
 @pytest.fixture(scope="session")
-def TestPackager(mock_test_dir: pathlib.Path, mock_zip_path: pathlib.Path) -> Packager:
+def TestPackager(
+    unihan_mock_test_dir: pathlib.Path, unihan_mock_zip_path: pathlib.Path
+) -> Packager:
     # monkey-patching builder
     return Packager(
         UnihanOptions(
-            work_dir=mock_test_dir,
-            zip_path=mock_zip_path,
-            destination=mock_test_dir / "unihan.csv",
+            work_dir=unihan_mock_test_dir,
+            zip_path=unihan_mock_zip_path,
+            destination=unihan_mock_test_dir / "unihan.csv",
         )
     )
 
 
 @pytest.fixture(scope="session")
-def columns() -> "ColumnData":
+def unihan_quick_columns() -> "ColumnData":
     return (
         constants.CUSTOM_DELIMITED_FIELDS
         + constants.INDEX_FIELDS
@@ -440,32 +448,32 @@ def columns() -> "ColumnData":
 
 
 @pytest.fixture(scope="session")
-def quick_normalized_data(
-    columns: "ColumnData",
-    quick_fixture_files: t.List[pathlib.Path],
+def unihan_quick_normalized_data(
+    unihan_quick_columns: "ColumnData",
+    unihan_quick_fixture_files: t.List[pathlib.Path],
 ) -> "UntypedNormalizedData":
-    data = core.load_data(files=quick_fixture_files)
+    data = core.load_data(files=unihan_quick_fixture_files)
 
-    return core.normalize(data, columns)
+    return core.normalize(data, unihan_quick_columns)
 
 
 @pytest.fixture(scope="session")
-def quick_expanded_data(
-    quick_normalized_data: t.List[t.Dict[str, t.Any]]
+def unihan_quick_expanded_data(
+    unihan_quick_normalized_data: t.List[t.Dict[str, t.Any]]
 ) -> "ExpandedExport":
-    return core.expand_delimiters(quick_normalized_data)
+    return core.expand_delimiters(unihan_quick_normalized_data)
 
 
 @pytest.fixture(scope="session")
-def quick_data() -> str:
+def unihan_quick_data() -> str:
     r"""Raw snippet excerpted from UNIHAN corpus.
 
-    >>> def test_quick_data(
-    ...     quick_data: str,
+    >>> def test_unihan_quick_data(
+    ...     unihan_quick_data: str,
     ... ) -> None:
-    ...     assert isinstance(quick_data, str)
+    ...     assert isinstance(unihan_quick_data, str)
     ...
-    ...     assert isinstance(quick_data.splitlines()[1], str)
+    ...     assert isinstance(unihan_quick_data.splitlines()[1], str)
     ...
 
     .. ::
@@ -476,12 +484,12 @@ def quick_data() -> str:
         >>> pytester = request.getfixturevalue('pytester')
 
         >>> pytester.makepyfile(
-        ...     **{'test_pytest_plugin__quick_data.py': source}
+        ...     **{'test_pytest_plugin__unihan_quick_data.py': source}
         ... )
         PosixPath(...)
 
         >>> result = pytester.runpytest(
-        ...     'test_pytest_plugin__quick_data.py', '--disable-warnings'
+        ...     'test_pytest_plugin__unihan_quick_data.py', '--disable-warnings'
         ... )
         ===...
 
