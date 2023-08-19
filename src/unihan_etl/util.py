@@ -22,7 +22,7 @@ def ucn_to_unicode(ucn: str) -> str:
     """
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
-        if len(ucn) > int(4):
+        if len(ucn) > 4:
             bytechar = rb"\U" + format(int(ucn, 16), "08x").encode("latin1")
             char = bytechar.decode("unicode_escape")
         else:
