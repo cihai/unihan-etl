@@ -50,7 +50,7 @@ their own codepoints, carefully cross-referenced with information from,
 often multiple, distinct sources.
 
 The advantage that UNIHAN provides to east asian researchers, including
-sinologists and japanologists, linguists, anaylsts, language learners, and
+sinologists and japanologists, linguists, analysts, language learners, and
 hobbyists cannot be understated. Unbeknownst to users, its used under the hood
 in many applications and websites.
 

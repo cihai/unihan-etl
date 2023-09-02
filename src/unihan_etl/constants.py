@@ -147,7 +147,7 @@ SPACE_DELIMITED_DICT_FIELDS = ("kHanYu", "kXHC1983", "kMandarin", "kTotalStrokes
 
 #: Fields with multiple values UNIHAN delimits by spaces -> list
 SPACE_DELIMITED_LIST_FIELDS = (
-    "kAccountingNumberic",
+    "kAccountingNumeric",
     "kCantonese",
     "kCCCII",
     "kCheungBauer",

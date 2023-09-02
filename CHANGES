@@ -359,7 +359,7 @@ Infrastructure updates for static type checking and doctest examples.
 
 - Move to `furo` theme
 - Add :ref:`quickstart` page
-- Link to cihai's developer documention:
+- Link to cihai's developer documentation:
   https://cihai.git-pull.com/contributing/
 
 ## unihan-etl 0.13.0 (2021-06-16)
