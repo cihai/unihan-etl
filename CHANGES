@@ -19,7 +19,21 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Bug fix
+
+- `SPACE_DELIMITED_LIST_FIELDS`: Fix for field name `kAccountingNumeric` found
+  during automated sweep for typos.
+
 ### Development
+
+- Typo fixes
+
+  ```console
+  typos --format brief --write-changes
+  ```
+
+  One of these typos was for `kAccountingNumeric` in
+  `SPACE_DELIMITED_LIST_FIELDS`.
 
 - ruff: Remove ERA / `eradicate` plugin
 
