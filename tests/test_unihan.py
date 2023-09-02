@@ -146,6 +146,7 @@ def test_download_mock(
         dataclasses.replace(
             unihan_test_options,
             **{
+                **dataclasses.asdict(unihan_test_options),
                 "fields": ["kDefinition"],
                 "zip_path": dest_path,
                 "work_dir": unihan_mock_test_dir / "downloads",
@@ -181,6 +182,7 @@ def test_export_format(
         dataclasses.replace(
             unihan_test_options,
             **{
+                **dataclasses.asdict(unihan_test_options),
                 "fields": ["kDefinition"],
                 "zip_path": dest_path,
                 "work_dir": str(unihan_mock_test_dir / "downloads"),
