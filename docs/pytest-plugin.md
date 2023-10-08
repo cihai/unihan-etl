@@ -39,6 +39,7 @@ These are fixtures are automatically used when the plugin is enabled and `pytest
   - `/home/${user}` ({func}`user_path`)
 - Setting your home directory
   - Patch `$HOME` to point to {func}`user_path` ({func}`set_home`)
+
 ## Bootstrapping pytest in your `conftest.py`
 
 The most common scenario is you will want to configure the above fixtures with `autouse`.
