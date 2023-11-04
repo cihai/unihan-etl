@@ -23,6 +23,12 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 - Move pytest configuration to `pyproject.toml` (#299)
 
+### Development
+
+- Poetry: 1.6.1 -> 1.7.0
+
+  See also: https://github.com/python-poetry/poetry/blob/1.7.0/CHANGELOG.md
+
 ## unihan-etl 0.28.1 (2023-09-02)
 
 ### Bug fix
