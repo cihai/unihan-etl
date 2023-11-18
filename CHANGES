@@ -28,6 +28,12 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 - Poetry: 1.6.1 -> 1.7.0
 
   See also: https://github.com/python-poetry/poetry/blob/1.7.0/CHANGELOG.md
+- Move formatting from `black` to [`ruff format`] (#302)
+
+  This retains the same formatting style of `black` while eliminating a
+  dev dependency by using our existing rust-based `ruff` linter.
+
+  [`ruff format`]: https://docs.astral.sh/ruff/formatter/
 
 ## unihan-etl 0.28.1 (2023-09-02)
 
@@ -394,7 +400,7 @@ Infrastructure updates for static type checking and doctest examples.
 
 ## unihan-etl 0.12.0 (2021-06-15)
 
-- Update {}`black` to 21.6b0
+- Update `black` to 21.6b0
 - Update trove classifiers to 3.9
 - #235: Drop python 2.7, 3.5. Remove python 2 modesets and
   `__future__`
@@ -569,7 +575,7 @@ Infrastructure updates for static type checking and doctest examples.
 - Drop datapackages in favor of a universal JSON, YAML and CSV
   export.
 - Only use UnicodeWriter in Python 2, fixes issue with python
-  would encode {}`b` in front of values
+  would encode `b` in front of values
 
 ## unihan-etl 0.4.2 (2017-05-07)
 

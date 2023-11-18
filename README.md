@@ -362,7 +362,7 @@ $ git clone https://github.com/cihai/unihan-etl.git
 $ cd unihan-etl
 ```
 
-[Bootstrap your environment and learn more about contributing](https://cihai.git-pull.com/contributing/). We use the same conventions / tools across all cihai projects: `pytest`, `sphinx`, `flake8`, `mypy`, `black`, `isort`, `tmuxp`, and file watcher helpers (e.g. `entr(1)`).
+[Bootstrap your environment and learn more about contributing](https://cihai.git-pull.com/contributing/). We use the same conventions / tools across all cihai projects: `pytest`, `sphinx`, `mypy`, `ruff`, `tmuxp`, and file watcher helpers (e.g. `entr(1)`).
 
 ## More information
 
