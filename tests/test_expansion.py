@@ -363,7 +363,7 @@ def test_expand_radical_stroke_counts(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """KRSJapanese"""
+    """KRSJapanese."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item[field] == expected
 
