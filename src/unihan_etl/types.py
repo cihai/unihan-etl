@@ -1,3 +1,4 @@
+"""Typings for unihan-etl."""
 import dataclasses
 import pathlib
 import sys
@@ -42,6 +43,8 @@ UnihanFormats = t.Literal["json", "csv", "yaml", "python"]
 
 @dataclasses.dataclass()
 class Options:
+    """unihan-etl options."""
+
     source: str
     destination: pathlib.Path
     zip_path: pathlib.Path
@@ -57,13 +60,18 @@ class Options:
 
 
 class ReportHookFn(t.Protocol):
+    """Progress bar callback for download()."""
+
     def __call__(
         self, count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout
     ) -> object:
+        """Print progress bar during download."""
         ...
 
 
 class UrlRetrieveFn(t.Protocol):
+    """Type annotation for :func:`urllib.request.urlretrieve`."""
+
     def __call__(
         self,
         url: str,
@@ -71,4 +79,5 @@ class UrlRetrieveFn(t.Protocol):
         reporthook: t.Optional["ReportHookFn"] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> t.Tuple[str, "HTTPMessage"]:
+        """Download logic for :func:`urllib.request.urlretrieve`."""
         ...
