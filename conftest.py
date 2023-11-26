@@ -1,4 +1,4 @@
-"""Conftest.py (root-level)
+"""Conftest.py (root-level).
 
 We keep this in root pytest fixtures in pytest's doctest plugin to be available, as well
 as avoiding conftest.py from being included in the wheel, in addition to pytest_plugin
@@ -24,6 +24,7 @@ def add_doctest_fixtures(
     request: pytest.FixtureRequest,
     doctest_namespace: t.Dict[str, t.Any],
 ) -> None:
+    """Harness pytest fixtures to doctest namespace."""
     if isinstance(request._pyfuncitem, DoctestItem) and shutil.which("tmux"):
         request.getfixturevalue("set_home")
         doctest_namespace["request"] = request
@@ -34,6 +35,7 @@ def set_home(
     monkeypatch: pytest.MonkeyPatch,
     unihan_user_path: pathlib.Path,
 ) -> None:
+    """Set home directory for pytest tests."""
     monkeypatch.setenv("HOME", str(unihan_user_path))
 
 
@@ -44,5 +46,6 @@ def setup(
     unihan_ensure_quick: None,
     unihan_ensure_full: None,
 ) -> None:
+    """Configure test fixtures for pytest."""
     if USING_ZSH:
         request.getfixturevalue("unihan_zshrc")

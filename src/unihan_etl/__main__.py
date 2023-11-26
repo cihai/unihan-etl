@@ -13,6 +13,7 @@ if t.TYPE_CHECKING:
 
 
 def run() -> "_ExitCode":
+    """Execute unihan-etl via CLI entrypoint."""
     base = pathlib.Path(__file__).parent.parent
     sys.path.insert(0, str(base))
     from .core import Packager

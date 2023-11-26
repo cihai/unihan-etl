@@ -19,6 +19,14 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Development
+
+- ci: Add pydocstyle rule to ruff (#303)
+
+### Documentation
+
+- Add docstrings to functions, methods, classes, and packages (#303)
+
 ## unihan-etl 0.29.0 (2023-11-19)
 
 _Maintenance only, no bug fixes, or new features_

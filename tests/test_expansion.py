@@ -12,6 +12,7 @@ ExpandedData: "TypeAlias" = t.List[t.Dict[str, t.Any]]
 
 
 def test_expands_spaces(unihan_quick_expanded_data: ExpandedData) -> None:
+    """Test expansion expands spaces."""
     for item in unihan_quick_expanded_data:
         for field in item:
             if field in constants.SPACE_DELIMITED_LIST_FIELDS and item[field]:
@@ -19,7 +20,7 @@ def test_expands_spaces(unihan_quick_expanded_data: ExpandedData) -> None:
 
 
 def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
-    # test kCantonese
+    """Test expansion of kCantonese."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == "U+342B")
     if item["ucn"] == "U+342B":
         assert set(item["kCantonese"]) == {"gun3", "hung1", "zung1"}
@@ -45,7 +46,10 @@ def test_expand(
     field: str,
     expected: t.List[str],
 ) -> None:
-    # test kDefinition (split on ;), kJapanese, kJapaneseKun
+    """Test expansion of kDefinition, kJapaneseKun, kJapaneseOn.
+
+    kDefinition split on semicolons (";").
+    """
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert set(item[field]) == set(expected)
 
@@ -60,7 +64,10 @@ def test_expand(
 def test_expand_kMandarin(
     unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str]
 ) -> None:
-    """
+    """Test expansion of KMandarin.
+
+    From UNIHAN's documentation:
+
     The most customary pinyin reading for this character. When there are two
     values, then the first is preferred for zh-Hans (CN) and the second is
     preferred for zh-Hant (TW). When there is only one value, it is appropriate
@@ -80,7 +87,10 @@ def test_expand_kMandarin(
 def test_expand_kTotalStrokes(
     unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int]
 ) -> None:
-    """
+    """Test expansion of kTotalStrokes.
+
+    From UNIHAN's documentation:
+
     The total number of strokes in the character (including the radical). When
     there are two values, then the first is preferred for zh-Hans (CN) and the
     second is preferred for zh-Hant (TW). When there is only one value, it is
@@ -102,6 +112,7 @@ def test_expand_kTotalStrokes(
 def test_expand_kIRGHanyuDaZidian(
     ucn: str, expected: ExpandedData, unihan_quick_expanded_data: ExpandedData
 ) -> None:
+    """Test expansion of kIRGHanyuDaZidian."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRGHanyuDaZidian"] == expected
 
@@ -169,7 +180,10 @@ def test_expand_kHanyuPinyin(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kHanyuPinyin.
+
+    From UNIHAN's documentation:
+
     Each location has the form “ABCDE.XYZ” (as in “kHanYu”); multiple
     locations for a given pīnyīn reading are separated by “,” (comma). The
     list of locations is followed by “:” (colon), followed by a
@@ -235,7 +249,10 @@ def test_expand_kHanyuPinyin(
 def test_expand_HanYu(
     unihan_quick_expanded_data: ExpandedData, ucn: str, expected: ExpandedData
 ) -> None:
-    """
+    """Test expansion of HanYu.
+
+    From UNIHAN's documentation:
+
     The character references are given in the form “ABCDE.XYZ”, in which: “A”
     is the volume number [1..8]; “BCDE” is the zero-padded page number
     [0001..4809]; “XY” is the zero-padded number of the character on the page
@@ -318,7 +335,10 @@ def test_expand_kRSAdobe_Japan1_6(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kRSAdobe_Japan1_6.
+
+    From UNIHAN's documentation:
+
     The value consists of a number of space-separated entries. Each entry
     consists of three pieces of information separated by a plus sign:
 
@@ -363,7 +383,7 @@ def test_expand_radical_stroke_counts(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """kRSJapanese"""
+    """Test expansion of KRSJapanese."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item[field] == expected
 
@@ -382,7 +402,10 @@ def test_expand_kRSUnihan(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kRSUnihan.
+
+    From UNIHAN's documentation:
+
     The standard radical/stroke count for this character in the form
     “radical.additional strokes”. The radical is indicated by a number in the
     range (1..214) inclusive. An apostrophe (') after the radical indicates a
@@ -426,7 +449,10 @@ def test_expand_kCheungBauer(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kCheungBauer.
+
+    From UNIHAN's documentation:
+
     Each data value consists of three pieces, separated by semicolons:
 
     (1) the character`s radical-stroke index as a three-digit radical, slash,
@@ -451,7 +477,10 @@ def test_expand_kCihaiT(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kCiHaiT.
+
+    From UNIHAN's documentation:
+
     The position is indicated by a decimal number. The digits to the left of
     the decimal are the page number. The first digit after the decimal is the
     row on the page, and the remaining two digits after the decimal are the
@@ -475,7 +504,10 @@ def test_expand_kDaeJaweon(
     ucn: str,
     expected: t.Dict[str, int],
 ) -> None:
-    """
+    """Test expansion kDaeJaweon.
+
+    From UNIHAN's documentation:
+
     The position is in the form “page.position” with the final digit in the
     position being “0” for characters actually in the dictionary and “1” for
     characters not found in the dictionary and assigned a “virtual” position in
@@ -501,7 +533,10 @@ def test_expand_kIICore(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kIICore.
+
+    From UNIHAN's documentation:
+
     Each value consists of a letter (A, B, or C), indicating priority value,
     and one or more letters (G, H, J, K, M, P, or T), indicating source. The
     source letters are the same as used for IRG sources, except that "P" is
@@ -525,6 +560,7 @@ def test_expand_kIRGDaeJaweon(
     ucn: str,
     expected: t.List[t.Dict[str, int]],
 ) -> None:
+    """Test expansion of kIRGDaeJaweon."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRGDaeJaweon"] == expected
 
@@ -547,6 +583,7 @@ def test_expand_kFenn(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
+    """Test expansion of kFenn."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kFenn"] == expected
 
@@ -583,7 +620,10 @@ def test_expand_kHanyuPinlu(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kHanyuPinlu.
+
+    From UNIHAN's documentation:
+
     Immediately following the pronunciation, a numeric string appears in
     parentheses: e.g. in “ā(392)” the numeric string “392” indicates the sum
     total of the frequencies of the pronunciations of the character as given in
@@ -621,7 +661,10 @@ def test_expand_kHDZRadBreak(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kHDZRadBreak.
+
+    From UNIHAN's documentation:
+
     Hanyu Da Zidian has a radical break beginning at this character`s position.
     The field consists of the radical (with its Unicode code point), a colon,
     and then the Hanyu Da Zidian position as in the kHanyu field.
@@ -644,7 +687,10 @@ def test_expand_kSBGY(
     ucn: str,
     expected: ExpandedData,
 ) -> None:
-    """
+    """Test expansion of kSBGY.
+
+    From UNIHAN's documentation:
+
     The 25334 character references are given in the form “ABC.XY”, in which:
     "ABC” is the zero-padded page number [004..546]; “XY” is the zero-padded
     number of the character on the page [01..73]. For example, 364.38
@@ -730,7 +776,10 @@ def test_expand_kXHC1983(
         t.Dict[str, t.Union[t.List[t.Dict[str, t.Union[int, bool]]], str]]
     ],
 ) -> None:
-    r"""
+    r"""Tests for expansion of kXHC1983.
+
+    From UNIHAN's documentation:
+
     Each pīnyīn reading is preceded by the character`s location(s) in the
     dictionary, separated from the reading by “:” (colon); multiple locations
     for a given reading are separated by “,” (comma); multiple “location:
@@ -775,6 +824,7 @@ def test_expand_kIRG_GSource(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion kIRG_GSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRG_GSource"] == expected
 
@@ -798,6 +848,7 @@ def test_expand_kIRG_HSource(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion kIRG_HSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRG_HSource"] == expected
 
@@ -819,6 +870,7 @@ def test_expand_kIRG_JSource(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion kIRG_JSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRG_JSource"] == expected
 
@@ -874,6 +926,7 @@ def test_expand_kIRG_KPSource(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kIRG_KPSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item[field] == expected
 
@@ -904,6 +957,7 @@ def test_expand_kGSR(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kGSR."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kGSR"] == expected
 
@@ -929,6 +983,7 @@ def test_expand_kCheungBauerIndex(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kCheungBauerIndex."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kCheungBauerIndex"] == expected
 
@@ -950,6 +1005,7 @@ def test_expand_kFennIndex(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kFennIndex."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kFennIndex"] == expected
 
@@ -971,6 +1027,7 @@ def test_expand_kIRGKangXi(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kIRGKangXi."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRGKangXi"] == expected
 
@@ -992,6 +1049,7 @@ def test_expand_kCCCII(
     fieldval: str,
     expected: ExpandedData,
 ) -> None:
+    """Tests for expansion of kCCCII."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kCCCII"] == expected
 

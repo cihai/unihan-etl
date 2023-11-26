@@ -1,4 +1,4 @@
-#: Dictionary of tuples mapping locations of files to fields
+"""Constants for unihan_etl."""
 import importlib.util
 
 from appdirs import AppDirs as BaseAppDirs
@@ -11,6 +11,7 @@ from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.types import ColumnDataTuple
 from unihan_etl.util import get_fields
 
+#: Dictionary of tuples mapping locations of files to fields
 UNIHAN_MANIFEST = {
     "Unihan_DictionaryIndices.txt": (
         "kCheungBauerIndex",

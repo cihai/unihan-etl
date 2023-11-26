@@ -9,16 +9,16 @@ if t.TYPE_CHECKING:
 
 
 def ucn_to_unicode(ucn: str) -> str:
-    """Return a python unicode value from a UCN.
+    r"""Return a python unicode value from a UCN.
 
     Converts a Unicode Universal Character Number (e.g. ``"U+4E00"`` or ``"4E00"``) to
     Python unicode ``(u'\\u4e00')``
 
     >>> ucn_to_unicode("U+4E00")
-    '\\u4e00'
+    '一'
 
     >>> ucn_to_unicode("4E00")
-    '\\u4e00'
+    '一'
     """
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
@@ -36,8 +36,7 @@ def ucn_to_unicode(ucn: str) -> str:
 
 
 def ucnstring_to_python(ucn_string: str) -> bytes:
-    """Return string with Unicode UCN (e.g. "U+4E00") to native Python Unicode
-    (u'\\u4e00').
+    r"""Return Unicode UCN (e.g. "U+4E00") as native Python Unicode (u'\\u4e00').
 
     >>> ucnstring_to_python("U+4E00")
     b'\xe4\xb8\x80'
@@ -77,7 +76,7 @@ def _dl_progress(
     count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout
 ) -> None:
     """
-    MIT License: https://github.com/okfn/dpm-old/blob/master/dpm/util.py
+    MIT License: https://github.com/okfn/dpm-old/blob/master/dpm/util.py.
 
     Modification for testing: http://stackoverflow.com/a/4220278
 

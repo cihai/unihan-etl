@@ -35,6 +35,7 @@ log = logging.getLogger(__name__)
 
 
 def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
+    """Test zip_has_files() returns when zip file has files contents inside."""
     assert zip_has_files(["Unihan_Readings.txt"], unihan_mock_zip)
 
     assert not zip_has_files(["Unihan_Cats.txt"], unihan_mock_zip)
@@ -43,6 +44,7 @@ def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
 def test_has_valid_zip(
     tmp_path: pathlib.Path, unihan_mock_zip: zipfile.ZipFile
 ) -> None:
+    """Test has_valid_zip() returns whether zip file is valid."""
     if UNIHAN_ZIP_PATH.is_file():
         assert core.has_valid_zip(UNIHAN_ZIP_PATH)
     else:
@@ -59,13 +61,14 @@ def test_has_valid_zip(
 
 
 def test_in_fields() -> None:
+    """Test in_fields() returns correct."""
     columns = ["hey", "kDefinition", "kWhat"]
-    result = core.in_fields("kDefinition", columns)
-
-    assert result
+    assert core.in_fields("kDefinition", columns)
+    assert not core.in_fields("kDefinition", ["non_existent"])
 
 
 def test_filter_manifest() -> None:
+    """Test filter_manifest() returns correct files."""
     expected = {
         "Unihan_Variants.txt": [
             "kSemanticVariant",
@@ -82,6 +85,7 @@ def test_filter_manifest() -> None:
 
 
 def test_get_files() -> None:
+    """Test get_files() returns correct files."""
     fields = ["kKorean", "kRSUnicode"]
     expected = ["Unihan_Readings.txt", "Unihan_RadicalStrokeCounts.txt"]
 
@@ -96,6 +100,7 @@ def test_download(
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_zip_pathname: pathlib.Path,
 ) -> None:
+    """Test Packager.download() against a real data source."""
     dest_path = tmp_path / "data" / unihan_mock_zip_pathname
     assert (
         not dest_path.parent.exists() and not dest_path.parent.is_dir()
@@ -127,6 +132,7 @@ def test_download_mock(
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
 ) -> None:
+    """Test Packager.download() method via mock."""
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
@@ -166,6 +172,7 @@ def test_export_format(
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
 ) -> None:
+    """Test Packager exports to correct format."""
     data_path = tmp_path / "data"
     dest_path = data_path / "data" / "hey.zip"
 
@@ -203,6 +210,7 @@ def test_extract_zip(
     unihan_mock_zip_path: pathlib.Path,
     tmp_path: pathlib.Path,
 ) -> None:
+    """Test extract_zip() extracts files from zip."""
     zf = core.extract_zip(zip_path=unihan_mock_zip_path, dest_dir=tmp_path)
 
     assert len(zf.infolist()) == 1
@@ -214,6 +222,7 @@ def test_normalize_only_output_requested_columns(
     unihan_quick_normalized_data: UntypedNormalizedData,
     unihan_quick_columns: ColumnData,
 ) -> None:
+    """Assert normalize only returns columns requested."""
     in_columns = ["kDefinition", "kCantonese"]
 
     for data_labels in unihan_quick_normalized_data:
@@ -238,7 +247,7 @@ def test_normalize_only_output_requested_columns(
 
 
 def test_normalize_simple_data_format() -> None:
-    """normalize turns data into simple data format (SDF)."""
+    """Normalize turns data into simple data format (SDF)."""
     csv_files = [
         QUICK_FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
         QUICK_FIXTURE_PATH / "Unihan_Readings.txt",
@@ -263,7 +272,8 @@ def test_normalize_simple_data_format() -> None:
     rows = items[1:]  # NOQA
 
 
-def test_flatten_fields() -> None:
+def test_get_fields() -> None:
+    """Tests for get_fields()."""
     single_dataset = {"Unihan_Readings.txt": ["kCantonese", "kDefinition", "kHangul"]}
 
     expected = ["kCantonese", "kDefinition", "kHangul"]
@@ -296,7 +306,6 @@ def test_flatten_fields() -> None:
 
 def test_pick_files(unihan_mock_zip_path: pathlib.Path) -> None:
     """Pick a white list of files to build from."""
-
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
     options = Options(input_files=files, zip_path=unihan_mock_zip_path)
@@ -311,7 +320,6 @@ def test_pick_files(unihan_mock_zip_path: pathlib.Path) -> None:
 
 def test_raise_error_unknown_field() -> None:
     """Throw error if picking unknown field."""
-
     options = Options(fields=["kHello"])
 
     with pytest.raises(FieldNotFound) as excinfo:
@@ -321,7 +329,6 @@ def test_raise_error_unknown_field() -> None:
 
 def test_raise_error_unknown_file() -> None:
     """Throw error if picking unknown file."""
-
     options = Options(input_files=["Sparta.lol"])
 
     with pytest.raises(FileNotSupported) as excinfo:
@@ -331,7 +338,6 @@ def test_raise_error_unknown_file() -> None:
 
 def test_raise_error_unknown_field_filtered_files() -> None:
     """Throw error field not in file list, when files specified."""
-
     files = ["Unihan_Variants.txt"]
 
     options = Options(input_files=files, fields=["kDefinition"])
@@ -343,7 +349,6 @@ def test_raise_error_unknown_field_filtered_files() -> None:
 
 def test_set_reduce_files_automatically_when_only_field_specified() -> None:
     """Picks file automatically if none specified and fields are."""
-
     fields = (
         constants.UNIHAN_MANIFEST["Unihan_Readings.txt"]
         + constants.UNIHAN_MANIFEST["Unihan_Variants.txt"]
@@ -361,7 +366,6 @@ def test_set_reduce_files_automatically_when_only_field_specified() -> None:
 
 def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
     """Picks only necessary files when fields specified."""
-
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
     options = Options(input_files=files)
@@ -376,13 +380,11 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 
 def test_no_args() -> None:
     """Works without arguments."""
-
     assert Packager.from_cli([]).options == DEFAULT_OPTIONS
 
 
 def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     """Test CLI args + defaults."""
-
     option_subset = {"zip_path": str(unihan_mock_zip_path)}
     pkgr = Packager.from_cli(["-z", str(unihan_mock_zip_path)])
     assert_dict_contains_subset(option_subset, dataclasses.asdict(pkgr.options))
@@ -421,7 +423,6 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
 
 def test_cli_exit_emessage_to_stderr() -> None:
     """Sends exception .message to stderr on exit."""
-
     # SystemExit print's to stdout by default
     with pytest.raises(SystemExit) as excinfo:
         Packager.from_cli(["-d", "data/output.csv", "-f", "sdfa"])
@@ -431,6 +432,7 @@ def test_cli_exit_emessage_to_stderr() -> None:
 
 @pytest.mark.parametrize("flag", ["-v", "--version"])
 def test_cli_version(capsys: pytest.CaptureFixture[str], flag: str) -> None:
+    """Tests for retrieving unihan-etl version."""
     with pytest.raises(SystemExit):
         Packager.from_cli([flag])
     captured = capsys.readouterr()

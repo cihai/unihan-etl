@@ -3,7 +3,6 @@ Functions to uncompact details inside field values.
 
 Notes
 -----
-
 :func:`re.compile` operations are inside of expand functions:
 
 1. readability
@@ -23,6 +22,7 @@ N_DIACRITICS = "ńňǹ"
 
 
 def expand_kDefinition(value: str) -> t.List[str]:
+    """Expand kDefinition field."""
     return [c.strip() for c in value.split(";")]
 
 
@@ -33,6 +33,7 @@ kMandarinDict = t.TypedDict(
 
 
 def expand_kMandarin(value: t.List[str]) -> kMandarinDict:
+    """Expand kMandarin field."""
     cn = value[0]
     tw = value[0] if len(value) == 1 else value[1]
     return kMandarinDict({"zh-Hans": cn, "zh-Hant": tw})
@@ -45,12 +46,15 @@ kTotalStrokesDict = t.TypedDict(
 
 
 def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
+    """Expand kTotalStrokes field."""
     cn = value[0]
     tw = value[0] if len(value) == 1 else value[1]
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
 class kLocationDict(t.TypedDict):
+    """kLocation mapping."""
+
     volume: int
     page: int
     character: int
@@ -58,6 +62,7 @@ class kLocationDict(t.TypedDict):
 
 
 def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
+    """Expand kHanYu field."""
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -87,6 +92,7 @@ def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
 
 
 def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
+    """Expand kIRGHanyuDaZidian field."""
     pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -117,11 +123,15 @@ def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
 
 
 class kHanyuPinyinPreDict(t.TypedDict):
+    """kHanyuPinyin predicate mapping."""
+
     locations: t.Sequence[t.Union[str, kLocationDict]]
     readings: t.List[str]
 
 
 class kHanyuPinyinDict(t.TypedDict):
+    """kHanyuPinyin mapping."""
+
     locations: kLocationDict
     readings: t.List[str]
 
@@ -129,6 +139,7 @@ class kHanyuPinyinDict(t.TypedDict):
 def expand_kHanyuPinyin(
     value: t.List[str],
 ) -> t.List[kHanyuPinyinDict]:
+    """Expand kHanyuPinyin field."""
     location_pattern = re.compile(
         r"""
         (?P<volume>[1-8])
@@ -165,6 +176,8 @@ def expand_kHanyuPinyin(
 
 
 class kXHC1983LocationDict(t.TypedDict):
+    """kXHC1983 location mapping."""
+
     page: int
     character: int
     entry: t.Optional[int]
@@ -172,11 +185,15 @@ class kXHC1983LocationDict(t.TypedDict):
 
 
 class kXHC1983Dict(t.TypedDict):
+    """kXHC1983 mapping."""
+
     locations: kXHC1983LocationDict
     reading: str
 
 
 class kXHC1983PreDict(t.TypedDict):
+    """kXHC1983 predicate mapping."""
+
     locations: t.Union[t.List[str], kXHC1983LocationDict]
     reading: str
 
@@ -184,6 +201,7 @@ class kXHC1983PreDict(t.TypedDict):
 def expand_kXHC1983(
     value: t.List[str],
 ) -> t.List[kXHC1983Dict]:
+    """Expand kXHC1983 field."""
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -221,6 +239,8 @@ def expand_kXHC1983(
 
 
 class kCheungBauerDict(t.TypedDict):
+    """kCheungBauer mapping."""
+
     radical: int
     strokes: int
     cangjie: t.Optional[str]
@@ -230,6 +250,7 @@ class kCheungBauerDict(t.TypedDict):
 def expand_kCheungBauer(
     value: t.List[str],
 ) -> t.List[kCheungBauerDict]:
+    """Expand kCheungBauer field."""
     pattern = re.compile(
         r"""
         (?P<radical>[0-9]{3})\/(?P<strokes>[0-9]{2});
@@ -265,6 +286,7 @@ kRSAdobe_Japan1_6Dict = t.TypedDict(
 
 
 def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict]:
+    """Expand kRSAdobe_Japan1_6 field."""
     pattern = re.compile(
         r"""
         (?P<type>[CV])\+
@@ -298,12 +320,15 @@ def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict
 
 
 class kCihaiTDict(t.TypedDict):
+    """kCihaiT mapping."""
+
     page: int
     row: int
     character: int
 
 
 def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
+    """Expand kCihaiT field."""
     pattern = re.compile(
         r"""
         (?P<page>[1-9][0-9]{0,3})\.
@@ -333,6 +358,8 @@ def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
 
 
 class kIICoreDict(t.TypedDict):
+    """kIICore mapping."""
+
     priority: str
     sources: t.List[str]
 
@@ -340,6 +367,7 @@ class kIICoreDict(t.TypedDict):
 def expand_kIICore(
     value: t.List[str],
 ) -> t.List[kIICoreDict]:
+    """Expand kIICore field."""
     expanded: t.Sequence[t.Union[str, kIICoreDict]] = value.copy()
     assert isinstance(expanded, list)
 
@@ -349,12 +377,15 @@ def expand_kIICore(
 
 
 class kDaeJaweonDict(t.TypedDict):
+    """kDaehwan mapping."""
+
     page: int
     character: int
     virtual: int
 
 
 def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
+    """Expand kDaeJaweon field."""
     pattern = re.compile(
         r"""
         (?P<page>[0-9]{4})\.
@@ -377,6 +408,7 @@ def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
 
 
 def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+    """Expand kIRGKangXi field."""
     expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
@@ -386,6 +418,7 @@ def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
 
 
 def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+    """Expand kIRGDaeJaweon field."""
     expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
@@ -395,11 +428,14 @@ def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
 
 
 class kFennDict(t.TypedDict):
+    """kFenn mapping."""
+
     phonetic: str
     frequency: str
 
 
 def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
+    """Expand kFenn field."""
     pattern = re.compile(
         """
         (?P<phonetic>[0-9]+a?)
@@ -423,11 +459,14 @@ def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
 
 
 class kHanyuPinluDict(t.TypedDict):
+    """kHanyuPinlu mapping."""
+
     phonetic: str
     frequency: int
 
 
 def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
+    """Expand kHanyuPinlu field."""
     pattern = re.compile(
         rf"""
         (?P<phonetic>[a-z({zhon.pinyin.lowercase}{N_DIACRITICS}]+)
@@ -451,6 +490,8 @@ def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
 
 
 class LocationDict(t.TypedDict):
+    """Location mapping."""
+
     volume: int
     page: int
     character: int
@@ -458,12 +499,15 @@ class LocationDict(t.TypedDict):
 
 
 class kHDZRadBreakDict(t.TypedDict):
+    """kHDZRadBreak mapping."""
+
     radical: str
     ucn: str
     location: LocationDict
 
 
 def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
+    """Expand kHDZRadBreak field."""
     rad, loc = value.split(":")
 
     loc_pattern = re.compile(
@@ -504,11 +548,14 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
 
 
 class kSBGYDict(t.TypedDict):
+    """kSBGY mapping."""
+
     page: int
     character: int
 
 
 def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
+    """Expand kSBGY field."""
     expanded: t.Sequence[t.Union[str, kSBGYDict]] = value.copy()
     assert isinstance(expanded, list)
 
@@ -519,12 +566,15 @@ def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
 
 
 class kRSGenericDict(t.TypedDict):
+    """kRSGeneric mapping."""
+
     radical: int
     strokes: int
     simplified: bool
 
 
 def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
+    """Expand kRSGeneric field."""
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
@@ -557,11 +607,14 @@ expand_kRSKorean = _expand_kRSGeneric
 
 
 class SourceLocationDict(t.TypedDict):
+    """Source location mapping."""
+
     source: str
     location: t.Optional[str]
 
 
 def _expand_kIRG_GenericSource(value: str) -> SourceLocationDict:
+    """Expand kIRG_GenericSource field."""
     v = value.split("-")
     return SourceLocationDict(source=v[0], location=v[1] if len(v) > 1 else None)
 
@@ -578,12 +631,15 @@ expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
 class kGSRDict(t.TypedDict):
+    """kGSR mapping."""
+
     set: int
     letter: str
     apostrophe: bool
 
 
 def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
+    """Expand kGSR field."""
     pattern = re.compile(
         r"""
         (?P<set>[0-9]{4})
@@ -613,6 +669,8 @@ def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
 
 
 class kCheungBauerIndexDict(t.TypedDict):
+    """kCheungBauer mapping."""
+
     page: int
     character: int
 
@@ -620,6 +678,7 @@ class kCheungBauerIndexDict(t.TypedDict):
 def expand_kCheungBauerIndex(
     value: t.List[str],
 ) -> t.List[t.Union[str, kCheungBauerIndexDict]]:
+    """Expand kCheungBauerIndex field."""
     expanded: t.Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
     assert isinstance(expanded, list)
 
@@ -634,8 +693,7 @@ expand_kFennIndex = expand_kCheungBauerIndex
 
 
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
-    """
-    Return structured value of information in UNIHAN field.
+    """Return structured value of information in UNIHAN field.
 
     Parameters
     ----------
