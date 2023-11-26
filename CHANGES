@@ -19,6 +19,8 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+## unihan-etl 0.30.0post0 (2023-11-26)
+
 ### CI
 
 - Move CodeQL from advanced configuration file to GitHub's default
