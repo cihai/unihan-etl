@@ -15,10 +15,10 @@ def ucn_to_unicode(ucn: str) -> str:
     Python unicode ``(u'\\u4e00')``
 
     >>> ucn_to_unicode("U+4E00")
-    '\\u4e00'
+    '一'
 
     >>> ucn_to_unicode("4E00")
-    '\\u4e00'
+    '一'
     """
     if isinstance(ucn, str):
         ucn = ucn.strip("U+")
