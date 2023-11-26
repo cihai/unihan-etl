@@ -1,3 +1,19 @@
+"""AppDir wrapper for ``appdirs`` package.
+
+Special features
+----------------
+
+This module offers several advantages over 
+`appdirs <https://github.com/ActiveState/appdirs>`_:
+
+- :mod:`dataclasses`-based object
+- :mod:`pathlib` paths
+- Variable expansion:
+
+  - Environment variables are expanded via :func:`os.path.expandvars`
+  - XDG environmental variables are expanded via :func:`os.path.expandvars`
+  - Tilde expansion is expanded via :func:`os.path.expanduser`
+"""
 import dataclasses
 import os
 import pathlib
@@ -60,6 +76,7 @@ class AppDirs:
     user_log_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
 
     def __post_init__(self, _app_dirs: "BaseAppDirs") -> None:
+        """Initialize attributes for AppDirs object."""
         dir_attrs = [key for key in _app_dirs.__dir__() if key.endswith("_dir")]
         dir_mapping: t.Dict[str, str] = {k: getattr(_app_dirs, k) for k in dir_attrs}
         for attr in dir_attrs:
