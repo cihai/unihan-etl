@@ -3,7 +3,6 @@ Functions to uncompact details inside field values.
 
 Notes
 -----
-
 :func:`re.compile` operations are inside of expand functions:
 
 1. readability

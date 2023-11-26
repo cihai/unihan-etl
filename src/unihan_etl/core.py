@@ -112,7 +112,6 @@ def get_parser() -> argparse.ArgumentParser:
 
     Returns
     -------
-
     :py:class:`argparse.ArgumentParser` :
         argument parser for CLI use.
     """
@@ -486,7 +485,8 @@ def validate_options(
 
 class Packager:
     """Download and generate a tabular release of
-    `UNIHAN <http://www.unicode.org/reports/tr38/>`_."""
+    `UNIHAN <http://www.unicode.org/reports/tr38/>`_.
+    """
 
     options: Options
 

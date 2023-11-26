@@ -238,7 +238,7 @@ def test_normalize_only_output_requested_columns(
 
 
 def test_normalize_simple_data_format() -> None:
-    """normalize turns data into simple data format (SDF)."""
+    """Normalize turns data into simple data format (SDF)."""
     csv_files = [
         QUICK_FIXTURE_PATH / "Unihan_DictionaryLikeData.txt",
         QUICK_FIXTURE_PATH / "Unihan_Readings.txt",
@@ -296,7 +296,6 @@ def test_flatten_fields() -> None:
 
 def test_pick_files(unihan_mock_zip_path: pathlib.Path) -> None:
     """Pick a white list of files to build from."""
-
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
     options = Options(input_files=files, zip_path=unihan_mock_zip_path)
@@ -311,7 +310,6 @@ def test_pick_files(unihan_mock_zip_path: pathlib.Path) -> None:
 
 def test_raise_error_unknown_field() -> None:
     """Throw error if picking unknown field."""
-
     options = Options(fields=["kHello"])
 
     with pytest.raises(FieldNotFound) as excinfo:
@@ -321,7 +319,6 @@ def test_raise_error_unknown_field() -> None:
 
 def test_raise_error_unknown_file() -> None:
     """Throw error if picking unknown file."""
-
     options = Options(input_files=["Sparta.lol"])
 
     with pytest.raises(FileNotSupported) as excinfo:
@@ -331,7 +328,6 @@ def test_raise_error_unknown_file() -> None:
 
 def test_raise_error_unknown_field_filtered_files() -> None:
     """Throw error field not in file list, when files specified."""
-
     files = ["Unihan_Variants.txt"]
 
     options = Options(input_files=files, fields=["kDefinition"])
@@ -343,7 +339,6 @@ def test_raise_error_unknown_field_filtered_files() -> None:
 
 def test_set_reduce_files_automatically_when_only_field_specified() -> None:
     """Picks file automatically if none specified and fields are."""
-
     fields = (
         constants.UNIHAN_MANIFEST["Unihan_Readings.txt"]
         + constants.UNIHAN_MANIFEST["Unihan_Variants.txt"]
@@ -361,7 +356,6 @@ def test_set_reduce_files_automatically_when_only_field_specified() -> None:
 
 def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
     """Picks only necessary files when fields specified."""
-
     files = ["Unihan_Readings.txt", "Unihan_Variants.txt"]
 
     options = Options(input_files=files)
@@ -376,13 +370,11 @@ def test_set_reduce_fields_automatically_when_only_files_specified() -> None:
 
 def test_no_args() -> None:
     """Works without arguments."""
-
     assert Packager.from_cli([]).options == DEFAULT_OPTIONS
 
 
 def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     """Test CLI args + defaults."""
-
     option_subset = {"zip_path": str(unihan_mock_zip_path)}
     pkgr = Packager.from_cli(["-z", str(unihan_mock_zip_path)])
     assert_dict_contains_subset(option_subset, dataclasses.asdict(pkgr.options))
@@ -421,7 +413,6 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
 
 def test_cli_exit_emessage_to_stderr() -> None:
     """Sends exception .message to stderr on exit."""
-
     # SystemExit print's to stdout by default
     with pytest.raises(SystemExit) as excinfo:
         Packager.from_cli(["-d", "data/output.csv", "-f", "sdfa"])
