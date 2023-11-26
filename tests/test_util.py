@@ -1,7 +1,9 @@
+"""Tests for unihan-etl utilities."""
 from unihan_etl.util import ucn_to_unicode, ucnstring_to_unicode
 
 
 def test_conversion_ucn_to_unicode() -> None:
+    """Test ucnstring_to_unicode()."""
     before = "U+4E00"
     expected = "\u4e00"
 
