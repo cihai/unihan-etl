@@ -1,3 +1,4 @@
+"""pytest plugin for unihan-etl."""
 import contextlib
 import getpass
 import logging
@@ -30,34 +31,37 @@ app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
 
 @pytest.fixture(scope="session")
 def unihan_user_cache_path() -> pathlib.Path:
-    """Override this to destination of your choice."""
+    """unihan-etl cache directory, overridable."""
     return app_dirs.user_cache_dir
 
 
 @pytest.fixture(scope="session")
 def unihan_project_cache_path() -> pathlib.Path:
-    """Override this to destination of your choice."""
+    """Return unihan_etl project-based cache path. Override to path of your choice."""
     return PROJECT_PATH / ".unihan_cache"
 
 
 @pytest.fixture(scope="session")
 def unihan_cache_path(unihan_project_cache_path: pathlib.Path) -> pathlib.Path:
-    """Override this to destination of your choice."""
+    """Return unihan_etl cache path, override this to destination of your choice."""
     return unihan_project_cache_path
 
 
 @pytest.fixture(scope="session")
 def unihan_fixture_root(unihan_cache_path: pathlib.Path) -> pathlib.Path:
+    """Return pytest cached directory fixture root."""
     return unihan_cache_path / "f"
 
 
 @pytest.fixture(scope="session")
 def unihan_full_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
+    """Return directory path for "full" UNIHAN dataset."""
     return unihan_fixture_root / "full"
 
 
 @pytest.fixture(scope="session")
 def unihan_full_options(unihan_full_path: pathlib.Path) -> UnihanOptions:
+    """Return UnihanOptions for "full" UNIHAN dataset."""
     return UnihanOptions(
         work_dir=unihan_full_path / "work",
         zip_path=unihan_full_path / "downloads" / "Unihan.zip",
@@ -69,7 +73,7 @@ def unihan_full_options(unihan_full_path: pathlib.Path) -> UnihanOptions:
 def unihan_full_packager(
     unihan_full_path: pathlib.Path, unihan_full_options: "UnihanOptions"
 ) -> "Packager":
-    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    """Return Packager for "full" portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_full_options)
 
 
@@ -79,7 +83,7 @@ def unihan_ensure_full(
     unihan_full_options: "UnihanOptions",
     unihan_full_packager: "Packager",
 ) -> None:
-    """Downloads and extracts a full UNIHAN, return a UnihanOptions.
+    """Download and extract "full" UNIHAN, return UnihanOptions.
 
     >>> import pathlib
 
@@ -171,11 +175,13 @@ def unihan_ensure_full(
 
 @pytest.fixture(scope="session")
 def unihan_quick_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
+    """Return directory path for "quick" test data set."""
     return unihan_fixture_root / "quick"
 
 
 @pytest.fixture(scope="session")
 def unihan_quick_zip_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
+    """Return zip file path for "quick" test data set."""
     return unihan_quick_path / "downloads" / "Unihan.zip"
 
 
@@ -185,6 +191,7 @@ def unihan_quick_zip(
     unihan_quick_zip_path: pathlib.Path,
     unihan_quick_fixture_files: t.List[pathlib.Path],
 ) -> zipfile.ZipFile:
+    """Return zip file for "quick" test data set."""
     _files = []
     for f in unihan_quick_fixture_files:
         _files += [f]
@@ -207,6 +214,7 @@ def unihan_quick_options(
     unihan_quick_zip: zipfile.ZipFile,
     unihan_quick_zip_path: pathlib.Path,
 ) -> UnihanOptions:
+    """Return UnihanOptions for "quick" test data set."""
     return UnihanOptions(
         work_dir=unihan_quick_path / "work",
         zip_path=unihan_quick_zip_path,
@@ -218,7 +226,7 @@ def unihan_quick_options(
 def unihan_quick_packager(
     unihan_quick_path: pathlib.Path, unihan_quick_options: "UnihanOptions"
 ) -> "Packager":
-    """Setup a tiny portion of UNIHAN, return a UnihanOptions."""
+    """Bootstrap a small, but effective portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_quick_options)
 
 
@@ -228,7 +236,7 @@ def unihan_ensure_quick(
     unihan_quick_options: "UnihanOptions",
     unihan_quick_packager: "Packager",
 ) -> None:
-    """Setup a tiny portion of UNIHAN, return a UnihanOptions.
+    """Return a small, but effective portion of UNIHAN, return a UnihanOptions.
 
     >>> import pathlib
 
@@ -320,7 +328,9 @@ def unihan_ensure_quick(
 
 @pytest.fixture(scope="session")
 def unihan_bootstrap_all(unihan_ensure_full: None, unihan_ensure_quick: None) -> None:
-    """This should be used like so in your project's conftest.py:
+    """Noop that bootstraps all unihan_etl pytest datasets ("full" and "quick").
+
+    This should be used like so in your project's conftest.py:
 
     >>> import pytest
     >>> @pytest.fixture(scope="session", autouse=True)
@@ -332,13 +342,13 @@ def unihan_bootstrap_all(unihan_ensure_full: None, unihan_ensure_quick: None) ->
 
 @pytest.fixture(scope="session")
 def unihan_home_path(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
-    """Temporary `/home/` path."""
+    """Return temporary `/home/` path for use by unihan_etl pytest fixtures."""
     return tmp_path_factory.mktemp("home")
 
 
 @pytest.fixture(scope="session")
 def unihan_home_user_name() -> str:
-    """Default username to set for :func:`unihan_user_path` fixture."""
+    """Return username to set for :func:`unihan_user_path` fixture."""
     return getpass.getuser()
 
 
@@ -346,7 +356,7 @@ def unihan_home_user_name() -> str:
 def unihan_user_path(
     unihan_home_path: pathlib.Path, unihan_home_user_name: str
 ) -> pathlib.Path:
-    """Default temporary user directory.
+    """Return temporary user directory.
 
     Used by: :func:`unihan_zshrc`
 
@@ -360,7 +370,7 @@ def unihan_user_path(
 @pytest.mark.skipif(not USING_ZSH, reason="Using ZSH")
 @pytest.fixture(scope="session")
 def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
-    """This quiets ZSH default message.
+    """Suppress ZSH default message.
 
     Needs a startup file .zshenv, .zprofile, .unihan_zshrc, .zlogin.
     """
@@ -379,16 +389,19 @@ if t.TYPE_CHECKING:
 
 @pytest.fixture
 def unihan_test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
+    """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 
 
 @pytest.fixture(scope="session")
 def unihan_mock_zip_pathname() -> str:
+    """Return zip file name in "quick" test data set."""
     return "Unihan.zip"
 
 
 @pytest.fixture(scope="session")
 def unihan_quick_fixture_files() -> t.List[pathlib.Path]:
+    """Return files used in "quick" test data set."""
     files = [
         "Unihan_DictionaryIndices.txt",
         "Unihan_DictionaryLikeData.txt",
@@ -404,6 +417,7 @@ def unihan_quick_fixture_files() -> t.List[pathlib.Path]:
 
 @pytest.fixture(scope="session")
 def unihan_mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Path:
+    """Return temporary directory for unihan_etl py.test fixtures."""
     return tmp_path_factory.mktemp("unihan_etl")
 
 
@@ -411,6 +425,7 @@ def unihan_mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Pa
 def unihan_mock_zip_path(
     unihan_mock_test_dir: pathlib.Path, unihan_mock_zip_pathname: str
 ) -> pathlib.Path:
+    """Return path to Unihan zipfile."""
     return unihan_mock_test_dir / unihan_mock_zip_pathname
 
 
@@ -418,6 +433,7 @@ def unihan_mock_zip_path(
 def unihan_mock_zip(
     unihan_mock_zip_path: pathlib.Path, unihan_quick_data: str
 ) -> zipfile.ZipFile:
+    """Return Unihan zipfile."""
     zf = zipfile.ZipFile(str(unihan_mock_zip_path), "a")
     zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
     zf.close()
@@ -426,6 +442,7 @@ def unihan_mock_zip(
 
 @pytest.fixture(scope="session")
 def unihan_quick_columns() -> "ColumnData":
+    """Return columns used in "quick" test data set."""
     return (
         constants.CUSTOM_DELIMITED_FIELDS
         + constants.INDEX_FIELDS
@@ -438,6 +455,7 @@ def unihan_quick_normalized_data(
     unihan_quick_columns: "ColumnData",
     unihan_quick_fixture_files: t.List[pathlib.Path],
 ) -> "UntypedNormalizedData":
+    """Return normalized test data from "quick" test data set."""
     data = core.load_data(files=unihan_quick_fixture_files)
 
     return core.normalize(data, unihan_quick_columns)
@@ -447,12 +465,13 @@ def unihan_quick_normalized_data(
 def unihan_quick_expanded_data(
     unihan_quick_normalized_data: t.List[t.Dict[str, t.Any]]
 ) -> "ExpandedExport":
+    """Return a list of expanded fields from "quick" test data."""
     return core.expand_delimiters(unihan_quick_normalized_data)
 
 
 @pytest.fixture(scope="session")
 def unihan_quick_data() -> str:
-    r"""Raw snippet excerpted from UNIHAN corpus.
+    r"""Raw snippet excerpted from UNIHAN corpus from "quick" test data.
 
     >>> def test_unihan_quick_data(
     ...     unihan_quick_data: str,
