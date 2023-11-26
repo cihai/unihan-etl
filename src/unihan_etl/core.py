@@ -257,7 +257,7 @@ def download(
     reporthook: t.Optional["ReportHookFn"] = None,
     cache: bool = True,
 ) -> pathlib.Path:
-    """Download file at URL to a destination.
+    """Download UNIHAN zip from URL to destination.
 
     Parameters
     ----------
