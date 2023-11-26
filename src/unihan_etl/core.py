@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build Unihan into tabular / structured format and export it."""
+"""Download + ETL UNIHAN into structured format and export it."""
 import argparse
 import codecs
 import csv
@@ -79,17 +79,22 @@ def files_exist(path: pathlib.Path, files: t.List[str]) -> bool:
 
 
 class FieldNotFound(Exception):
+    """Raise if field not found in file list."""
+
     def __init__(self, field: str) -> None:
         return super().__init__(f"Field not found in file list: '{field}'")
 
 
 class FileNotSupported(Exception):
+    """Raise if field requested is not included in current file list."""
+
     def __init__(self, field: str) -> None:
         return super().__init__(f"File not supported: '{field}'")
 
 
 #: Return list of files from list of fields.
 def get_files(fields: t.Sequence[str]) -> t.List[str]:
+    """Return list of files required by fields. Simple dependency resolver."""
     files = set()
 
     for field in fields:
@@ -427,6 +432,7 @@ def export_csv(
     destination: "StrPath",
     fields: "ColumnData",
 ) -> None:
+    """Export UNIHAN in flattened, CSV format."""
     listified_data = listify(data, fields)
 
     with pathlib.Path(destination).open("w") as f:
@@ -436,12 +442,14 @@ def export_csv(
 
 
 def export_json(data: "UntypedNormalizedData", destination: "StrPath") -> None:
+    """Export UNIHAN in JSON format."""
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info(f"Saved output to: {destination}")
 
 
 def export_yaml(data: "UntypedNormalizedData", destination: "StrPath") -> None:
+    """Export UNIHAN in YAML format."""
     import yaml
 
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
@@ -450,12 +458,14 @@ def export_yaml(data: "UntypedNormalizedData", destination: "StrPath") -> None:
 
 
 def is_default_option(field_name: str, val: t.Any) -> bool:
+    """Return True if option is a unihan-etl default."""
     return bool(val == getattr(DEFAULT_OPTIONS, field_name, ""))
 
 
 def validate_options(
     options: Options,
 ) -> "TypeGuard[Options]":
+    """Validate unihan-etl options."""
     if not is_default_option("input_files", options.input_files) and is_default_option(
         "fields", options.fields
     ):
@@ -484,8 +494,12 @@ def validate_options(
 
 
 class Packager:
-    """Download and generate a tabular release of
-    `UNIHAN <http://www.unicode.org/reports/tr38/>`_.
+    """Download, ETL, and customize and export of UNIHAN.
+
+    See Also
+    --------
+    - `UNIHAN <http://www.unicode.org/reports/tr38/>`_
+
     """
 
     options: Options
@@ -494,7 +508,8 @@ class Packager:
         self,
         options: t.Union[Options, "t.Mapping[str, t.Any]"] = DEFAULT_OPTIONS,
     ) -> None:
-        """
+        """Initialize UNIHAN Packager.
+
         Parameters
         ----------
         options : dict or Options
@@ -611,7 +626,7 @@ def setup_logger(
     logger: t.Optional[logging.Logger] = None,
     level: "LogLevel" = "DEBUG",
 ) -> None:
-    """Setup logging for CLI use.
+    """Configure logger for CLI use.
 
     Parameters
     ----------
