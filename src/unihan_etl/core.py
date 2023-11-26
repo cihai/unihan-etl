@@ -494,12 +494,9 @@ def validate_options(
 
 
 class Packager:
-    """Download, ETL, and customize and export of UNIHAN.
+    """Download, ETL, and customize an export of UNIHAN.
 
-    See Also
-    --------
-    - `UNIHAN <http://www.unicode.org/reports/tr38/>`_
-
+    UNIHAN Documentation: http://www.unicode.org/reports/tr38/
     """
 
     options: Options
