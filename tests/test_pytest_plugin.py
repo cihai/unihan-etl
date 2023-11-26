@@ -1,3 +1,4 @@
+"""Test for unihan-etl pytest plugin."""
 import textwrap
 import typing as t
 
@@ -7,6 +8,8 @@ FixtureFileDict = t.Dict[str, str]
 
 
 class PytestPluginFixture(t.NamedTuple):
+    """Pytest fixture for testing unihan-etl pytest plugin."""
+
     # pytest
     test_id: str
 
@@ -103,6 +106,7 @@ def test_plugin(
     files: FixtureFileDict,
     tests_passed: int,
 ) -> None:
+    """Test pytest plugin for unihan_etl."""
     # Initialize variables
     pytester.plugins = ["pytest_plugin"]
     pytester.makefile(
