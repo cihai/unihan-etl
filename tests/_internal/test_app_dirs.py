@@ -1,3 +1,4 @@
+"""Tests for unihan_etl._internal.app_dirs."""
 import dataclasses
 import pathlib
 import typing as t
@@ -12,6 +13,8 @@ ExpectedAppDirsParam = t.Mapping[str, t.Union[str, pathlib.Path]]
 
 
 class AppDirFixture(t.NamedTuple):
+    """Pytest fixture for AppDir."""
+
     # pytest
     test_id: str
 
@@ -72,6 +75,7 @@ def test_basic(
     app_dirs_init_params: AppDirsInitParams,
     expected_app_dirs: ExpectedAppDirsParam,
 ) -> None:
+    """Test basic usage of AppDirs."""
     # Setup
     for k, v in env.items():
         monkeypatch.setenv(k, v.format(tmp_path=str(tmp_path)))
