@@ -577,7 +577,7 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
-        (?P<simplified>\'?)\.
+        (?P<simplified>\'{0,2})\.
         (?P<strokes>-?[0-9]{1,2})
     """,
         re.X,
