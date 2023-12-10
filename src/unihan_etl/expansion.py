@@ -1,5 +1,4 @@
-"""
-Functions to uncompact details inside field values.
+"""Functions to uncompact details inside field values.
 
 Notes
 -----
