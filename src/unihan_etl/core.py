@@ -300,7 +300,7 @@ def download(
 
 
 def load_data(
-    files: t.Sequence[t.Union[pathlib.Path, str]]
+    files: t.Sequence[t.Union[pathlib.Path, str]],
 ) -> "fileinput.FileInput[t.Any]":
     """Extract zip and process information into CSV's.
 

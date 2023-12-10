@@ -463,7 +463,7 @@ def unihan_quick_normalized_data(
 
 @pytest.fixture(scope="session")
 def unihan_quick_expanded_data(
-    unihan_quick_normalized_data: t.List[t.Dict[str, t.Any]]
+    unihan_quick_normalized_data: t.List[t.Dict[str, t.Any]],
 ) -> "ExpandedExport":
     """Return a list of expanded fields from "quick" test data."""
     return core.expand_delimiters(unihan_quick_normalized_data)
