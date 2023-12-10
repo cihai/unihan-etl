@@ -19,6 +19,10 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Bug fix
+
+- Expansions: Fix loading of double apostrophe values via `kRSUnicode` via `kRSGeneric` (#304)
+
 ## unihan-etl 0.30.0post0 (2023-11-26)
 
 ### CI
