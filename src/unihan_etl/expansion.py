@@ -573,7 +573,14 @@ class kRSGenericDict(t.TypedDict):
 
 
 def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
-    """Expand kRSGeneric field."""
+    """Expand kRSGeneric field.
+
+    Examples
+    --------
+    >>> _expand_kRSGeneric(['5.10', "213''.0"])  # doctest: +NORMALIZE_WHITESPACE
+    [{'radical': 5, 'strokes': 10, 'simplified': False},
+    {'radical': 213, 'strokes': 0, 'simplified': False}]
+    """
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
