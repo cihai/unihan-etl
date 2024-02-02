@@ -40,7 +40,6 @@ def set_home(
 
 
 @pytest.fixture(autouse=True, scope="session")
-@pytest.mark.usefixtures("clear_env")
 def setup(
     request: pytest.FixtureRequest,
     unihan_ensure_quick: None,
