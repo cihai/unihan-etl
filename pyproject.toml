@@ -66,6 +66,7 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 
 [tool.uv]
 dev-dependencies = [
+  "pydantic",
   # Docs
   "sphinx",
   "furo",
