@@ -354,6 +354,13 @@
             "format": "default"
           },
           {
+            "name": "kIRG_SSource",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kIRG_TSource",
             "title": "",
             "description": "",

@@ -17,6 +17,7 @@
 #	kIRG_KPSource
 #	kIRG_KSource
 #	kIRG_MSource
+#	kIRG_SSource
 #	kIRG_TSource
 #	kIRG_USource
 #	kIRG_VSource
@@ -511,6 +512,7 @@ U+48D3	kIICore	CG
 U+4E09	kIICore	AGTJHKMP
 U+4E0E	kIICore	AGJ
 U+2A660	kIRG_GSource	G4K
-
+U+2CEB7	kIRG_SSource	SAT-05296
+U+2CEBC	kIRG_SSource	SAT-04823
 
 # EOF

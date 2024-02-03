@@ -891,6 +891,13 @@ def test_expand_kIRG_JSource(
         ("kIRG_TSource", "U+3400", "T6-222C", {"source": "T6", "location": "222C"}),
         # U+3401  kIRG_TSource    T4-2224
         ("kIRG_TSource", "U+3401", "T4-2224", {"source": "T4", "location": "2224"}),
+        # U+2CEBC	kIRG_SSource	SAT-04823
+        (
+            "kIRG_SSource",
+            "U+2CEBC",
+            "SAT-04823",
+            {"source": "SAT", "location": "04823"},
+        ),
         # U+22016 kIRG_USource    UTC-00069
         (
             "kIRG_USource",
