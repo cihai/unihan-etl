@@ -367,10 +367,6 @@ def test_expand_kRSAdobe_Japan1_6(
         ("kRSKangXi", "U+4E99", [{"radical": 7, "strokes": 4, "simplified": False}]),
         # U+4E9A      kRSKangXi       1.5
         ("kRSKangXi", "U+4E9A", [{"radical": 1, "strokes": 5, "simplified": False}]),
-        # U+4E54      kRSKanWa        37.3
-        ("kRSKanWa", "U+4E54", [{"radical": 37, "strokes": 3, "simplified": False}]),
-        # U+4E55      kRSKanWa        4.6
-        ("kRSKanWa", "U+4E55", [{"radical": 4, "strokes": 6, "simplified": False}]),
         # U+5378      kRSKorean       26.7
         ("kRSKorean", "U+5378", [{"radical": 26, "strokes": 7, "simplified": False}]),
     ],

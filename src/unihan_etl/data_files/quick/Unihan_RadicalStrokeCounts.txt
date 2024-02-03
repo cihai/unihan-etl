@@ -11,7 +11,6 @@
 # This file contains data on the following fields from the Unihan database:
 #	kRSAdobe_Japan1_6
 #	kRSKangXi
-#	kRSKanWa
 #	kRSKorean
 #
 # For details on the file format, see http://www.unicode.org/reports/tr38/
@@ -27,7 +26,6 @@ U+346A	kRSAdobe_Japan1_6	C+17269+9.2.8 C+17269+210.8.2
 U+3488	kRSAdobe_Japan1_6	C+15442+9.2.12
 U+3492	kRSAdobe_Japan1_6	C+17294+9.2.13
 U+34B5	kRSAdobe_Japan1_6	C+16793+12.2.5 C+16793+106.5.2
-U+34B9	kRSKanWa	12.18
 U+34BC	kRSAdobe_Japan1_6	C+17303+11.2.9 C+17303+13.2.9
 U+34C1	kRSAdobe_Japan1_6	C+18384+10.2.2 C+18384+14.2.2 C+18384+122.4.0
 U+34C7	kRSAdobe_Japan1_6	C+17307+15.2.4
@@ -335,7 +333,6 @@ U+4E3B	kRSAdobe_Japan1_6	C+2323+3.1.4 C+2323+96.4.1 V+13812+8.2.3 V+13812+32.3.2
 U+4E3B	kRSKangXi	3.4
 U+4E3C	kRSAdobe_Japan1_6	C+4096+3.1.4
 U+4E3C	kRSKangXi	3.4
-U+4E3D	kRSKanWa	3.7
 U+4E3D	kRSKangXi	3.7
 U+4E3E	kRSKangXi	3.8
 U+4E3F	kRSAdobe_Japan1_6	C+4097+4.1.0
@@ -371,12 +368,9 @@ U+4E50	kRSKangXi	4.4
 U+4E51	kRSAdobe_Japan1_6	C+17241+4.1.5
 U+4E51	kRSKangXi	4.5
 U+4E52	kRSKangXi	4.5
-U+4E53	kRSKanWa	4.5
 U+4E53	kRSKangXi	4.5
-U+4E54	kRSKanWa	37.3
 U+4E54	kRSKangXi	37.3
 U+4E55	kRSAdobe_Japan1_6	C+6480+4.1.6 C+6480+50.3.4
-U+4E55	kRSKanWa	4.6
 U+4E55	kRSKangXi	4.6
 U+4E56	kRSAdobe_Japan1_6	C+4099+4.1.7
 U+4E56	kRSKangXi	4.7

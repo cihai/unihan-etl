@@ -607,7 +607,6 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
 
 expand_kRSUnicode = _expand_kRSGeneric
 expand_kRSKangXi = _expand_kRSGeneric
-expand_kRSKanWa = _expand_kRSGeneric
 expand_kRSKorean = _expand_kRSGeneric
 
 
