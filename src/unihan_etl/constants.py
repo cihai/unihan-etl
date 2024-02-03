@@ -58,6 +58,7 @@ UNIHAN_MANIFEST = {
         "kIRG_SSource",
         "kIRG_TSource",
         "kIRG_USource",
+        "kIRG_UKSource",
         "kIRG_VSource",
     ),
     "Unihan_NumericValues.txt": (
@@ -139,6 +140,7 @@ CUSTOM_DELIMITED_FIELDS = (
     "kIRG_SSource",
     "kIRG_TSource",
     "kIRG_USource",
+    "kIRG_UKSource",
     "kIRG_VSource",
 )
 

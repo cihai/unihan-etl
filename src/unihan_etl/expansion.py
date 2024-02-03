@@ -639,6 +639,7 @@ expand_kIRG_MSource = _expand_kIRG_GenericSource
 expand_kIRG_SSource = _expand_kIRG_GenericSource
 expand_kIRG_TSource = _expand_kIRG_GenericSource
 expand_kIRG_USource = _expand_kIRG_GenericSource
+expand_kIRG_UKSource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 

@@ -912,6 +912,13 @@ def test_expand_kIRG_JSource(
             "UCI-00937",
             {"source": "UCI", "location": "00937"},
         ),
+        # U+2DE4A	kIRG_UKSource	UK-02896
+        (
+            "kIRG_UKSource",
+            "U+2DE4A",
+            "UK-02896",
+            {"source": "UK", "location": "02896"},
+        ),
         # U+346B  kIRG_VSource    V0-3034
         ("kIRG_VSource", "U+346B", "V0-3034", {"source": "V0", "location": "3034"}),
         # U+340C  kIRG_VSource    V2-8874
