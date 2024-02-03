@@ -51,6 +51,27 @@ def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
+def expand_kUnihanCore2020(
+    value: str,
+) -> t.List[str]:
+    """Expand kUnihanCore2020 field.
+
+    Examples
+    --------
+    >>> expand_kUnihanCore2020('GHJ')
+    ['G', 'H', 'J']
+    """
+    set_pattern = re.compile(
+        r"""
+        (?P<set>[GHJKMPT]{1})
+    """,
+        re.X,
+    )
+    items = set_pattern.split(value)
+    sets = [s for s in items if s]
+    return sets
+
+
 class kLocationDict(t.TypedDict):
     """kLocation mapping."""
 

@@ -634,6 +634,13 @@
             "format": "default"
           },
           {
+            "name": "kUnihanCore2020",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kVietnamese",
             "title": "",
             "description": "",

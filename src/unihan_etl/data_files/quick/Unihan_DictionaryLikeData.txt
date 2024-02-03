@@ -510,6 +510,13 @@ U+4E00	kFourCornerCode	1000.0
 U+9FA4	kFourCornerCode	8126.1
 U+4E2B	kFourCornerCode	8020.0 8020.7
 U+807D	kFenn	381aA
-
+U+4FA1	kUnihanCore2020	J
+U+4FA8	kUnihanCore2020	GH
+U+4FB2	kUnihanCore2020	HMT
+U+4FB9	kUnihanCore2020	GHMT
+U+4FC9	kUnihanCore2020	HKMPT
+U+4E82	kUnihanCore2020	HJKMPT
+U+4F0B	kUnihanCore2020	GHKMPT
+U+4F7F	kUnihanCore2020	GHJKMPT
 
 # EOF

@@ -45,6 +45,7 @@ UNIHAN_MANIFEST = {
         "kHKGlyph",
         "kPhonetic",
         "kTotalStrokes",
+        "kUnihanCore2020",
     ),
     "Unihan_IRGSources.txt": (
         "kCompatibilityVariant",
