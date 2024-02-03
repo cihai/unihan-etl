@@ -802,6 +802,105 @@ def test_expand_kXHC1983(
 @pytest.mark.parametrize(
     "ucn,fieldval,expected",
     [
+        # U+3447	kTGHZ2013	482.140:zhòu
+        (
+            "U+3447",
+            "482.140:zhòu",
+            [
+                {
+                    "locations": [
+                        {
+                            "page": 482,
+                            "position": 14,
+                            "entry_type": 0,
+                        },
+                    ],
+                    "reading": "zhòu",
+                },
+            ],
+        ),
+        # U+4E0A	kTGHZ2013	326.050:shǎng 326.090:shàng
+        (
+            "U+4E0A",
+            "326.050:shǎng 326.090:shàng",
+            [
+                {
+                    "locations": [
+                        {
+                            "page": 326,
+                            "position": 5,
+                            "entry_type": 0,
+                        },
+                    ],
+                    "reading": "shǎng",
+                },
+                {
+                    "locations": [
+                        {
+                            "page": 326,
+                            "position": 9,
+                            "entry_type": 0,
+                        },
+                    ],
+                    "reading": "shàng",
+                },
+            ],
+        ),
+        # U+4E30	kTGHZ2013	097.110,097.120:fēng
+        (
+            "U+4E30",
+            "097.110,097.120:fēng",
+            [
+                {
+                    "locations": [
+                        {
+                            "page": 97,
+                            "position": 11,
+                            "entry_type": 0,
+                        },
+                        {
+                            "page": 97,
+                            "position": 12,
+                            "entry_type": 0,
+                        },
+                    ],
+                    "reading": "fēng",
+                },
+            ],
+        ),
+    ],
+)
+def test_expand_kTGHZ2013(
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    fieldval: str,
+    expected: t.List[
+        t.Dict[str, t.Union[t.List[t.Dict[str, t.Union[int, bool]]], str]]
+    ],
+) -> None:
+    r"""Tests for expansion of kTGHZ2013.
+
+    From UNIHAN's documentation:
+
+    Each pīnyīn reading is preceded by the ideograph's location(s) in the dictionary,
+    separated from the reading by a colon. Multiple locations for a given reading are
+    separated by commas. Multiple “location: reading” values are separated by a space.
+    Each location reference is of the form /[0-9]{3}\.[0-9]{3}/. The number preceding
+    the period is the page number, zero-padded to three digits. The first two digits of
+    the number following the period are the entry's position on the page, zero-padded.
+    The third digit is 0 for a main entry and greater than 0 for a parenthesized or
+    bracketed variant of the main entry.
+    """
+    item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
+
+    assert expansion.expand_field("kTGHZ2013", fieldval) == expected
+
+    assert item["kTGHZ2013"] == expected
+
+
+@pytest.mark.parametrize(
+    "ucn,fieldval,expected",
+    [
         # U+348C      kIRG_GSource    GKX-0118.03
         ("U+348C", "GKX-0118.03", {"source": "GKX", "location": "0118.03"}),
         # U+2A660  kIRG_GSource    G4K

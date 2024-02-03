@@ -613,6 +613,13 @@
             "format": "default"
           },
           {
+            "name": "kTGHZ2013",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kTotalStrokes",
             "title": "",
             "description": "",

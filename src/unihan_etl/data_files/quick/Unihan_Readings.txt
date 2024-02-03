@@ -19,6 +19,7 @@
 #	kKorean
 #	kMandarin
 #	kTang
+#	kTGHZ2013
 #	kVietnamese
 #	kXHC1983
 #
@@ -560,5 +561,8 @@ U+4E09	kHanyuPinlu	sān(3030)
 U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
 U+379E	kXHC1983	1092.070*,1092.071:sóng
 U+5750	kXHC1983	1551.040,1552.011:zuò
+U+3447	kTGHZ2013	482.140:zhòu
+U+4E0A	kTGHZ2013	326.050:shǎng 326.090:shàng
+U+4E30	kTGHZ2013	097.110,097.120:fēng
 
 # EOF

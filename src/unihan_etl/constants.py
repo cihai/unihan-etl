@@ -114,6 +114,7 @@ UNIHAN_MANIFEST = {
         "kKorean",
         "kMandarin",
         "kTang",
+        "kTGHZ2013",
         "kVietnamese",
         "kXHC1983",
     ),
@@ -149,6 +150,7 @@ CUSTOM_DELIMITED_FIELDS = (
 SPACE_DELIMITED_DICT_FIELDS = (
     "kHanYu",
     "kMandarin",
+    "kTGHZ2013",
     "kTotalStrokes",
     "kXHC1983",
 )
