@@ -74,6 +74,7 @@ def test_filter_manifest() -> None:
             "kSemanticVariant",
             "kSimplifiedVariant",
             "kSpecializedSemanticVariant",
+            "kSpoofingVariant",
             "kTraditionalVariant",
             "kZVariant",
         ]

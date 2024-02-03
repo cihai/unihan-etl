@@ -592,6 +592,13 @@
             "format": "default"
           },
           {
+            "name": "kSpoofingVariant",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kTaiwanTelegraph",
             "title": "",
             "description": "",

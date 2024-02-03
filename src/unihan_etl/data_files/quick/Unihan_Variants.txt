@@ -12,6 +12,7 @@
 #	kSemanticVariant
 #	kSimplifiedVariant
 #	kSpecializedSemanticVariant
+#	kSpoofingVariant
 #	kTraditionalVariant
 #	kZVariant
 #
@@ -499,5 +500,8 @@ U+4E89	kTraditionalVariant	U+722D
 U+4E8A	kSemanticVariant	U+4E8B<kFenn
 U+4E8A	kZVariant	U+4E8B
 U+4E8B	kSemanticVariant	U+4E8A<kFenn
+U+340B	kSpoofingVariant	U+340A
+U+2B738	kSpoofingVariant	U+53F1 U+20B9F
+U+277F1	kSpoofingVariant	U+277F5
 
 # EOF
