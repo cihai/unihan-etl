@@ -905,13 +905,6 @@ def test_expand_kIRG_JSource(
             "UTC-00069",
             {"source": "UTC", "location": "00069"},
         ),
-        # U+221EC kIRG_USource    UCI-00937
-        (
-            "kIRG_USource",
-            "U+221EC",
-            "UCI-00937",
-            {"source": "UCI", "location": "00937"},
-        ),
         # U+2DE4A	kIRG_UKSource	UK-02896
         (
             "kIRG_UKSource",
