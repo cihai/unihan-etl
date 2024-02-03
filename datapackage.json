@@ -550,13 +550,6 @@
             "format": "default"
           },
           {
-            "name": "kRSKorean",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kRSUnicode",
             "title": "",
             "description": "",

@@ -99,7 +99,6 @@ UNIHAN_MANIFEST = {
     "Unihan_RadicalStrokeCounts.txt": (
         "kRSAdobe_Japan1_6",
         "kRSKangXi",
-        "kRSKorean",
         "kRSUnicode",
     ),
     "Unihan_Readings.txt": (
@@ -200,7 +199,6 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kPrimaryNumeric",
     "kRSAdobe_Japan1_6",
     "kRSKangXi",
-    "kRSKorean",
     "kRSUnicode",
     "kSBGY",
     "kSemanticVariant",
