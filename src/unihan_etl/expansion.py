@@ -617,7 +617,15 @@ class SourceLocationDict(t.TypedDict):
 
 
 def _expand_kIRG_GenericSource(value: str) -> SourceLocationDict:
-    """Expand kIRG_GenericSource field."""
+    """Expand kIRG_GenericSource field.
+
+    Examples
+    --------
+    >>> _expand_kIRG_GenericSource('JMJ-056876')  # doctest: +NORMALIZE_WHITESPACE
+    {'source': 'JMJ', 'location': '056876'}
+    >>> _expand_kIRG_GenericSource('SAT-02570')  # doctest: +NORMALIZE_WHITESPACE
+    {'source': 'SAT', 'location': '02570'}
+    """
     v = value.split("-")
     return SourceLocationDict(source=v[0], location=v[1] if len(v) > 1 else None)
 
