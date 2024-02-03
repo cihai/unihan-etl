@@ -363,8 +363,6 @@ def test_expand_kRSAdobe_Japan1_6(
 @pytest.mark.parametrize(
     "field,ucn,expected",
     [
-        # U+4E55      kRSJapanese     4.6
-        ("kRSJapanese", "U+4E55", [{"radical": 4, "strokes": 6, "simplified": False}]),
         # U+4E99      kRSKangXi       7.4
         ("kRSKangXi", "U+4E99", [{"radical": 7, "strokes": 4, "simplified": False}]),
         # U+4E9A      kRSKangXi       1.5

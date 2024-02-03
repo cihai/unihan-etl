@@ -10,7 +10,6 @@
 #
 # This file contains data on the following fields from the Unihan database:
 #	kRSAdobe_Japan1_6
-#	kRSJapanese
 #	kRSKangXi
 #	kRSKanWa
 #	kRSKorean
@@ -377,7 +376,6 @@ U+4E53	kRSKangXi	4.5
 U+4E54	kRSKanWa	37.3
 U+4E54	kRSKangXi	37.3
 U+4E55	kRSAdobe_Japan1_6	C+6480+4.1.6 C+6480+50.3.4
-U+4E55	kRSJapanese	4.6
 U+4E55	kRSKanWa	4.6
 U+4E55	kRSKangXi	4.6
 U+4E56	kRSAdobe_Japan1_6	C+4099+4.1.7
