@@ -250,7 +250,7 @@ def unihan_ensure_quick(
     ... ) -> None:
     ...     unihan_quick_destination = unihan_quick_options.destination
     ...     assert unihan_quick_destination.exists()
-    ...     assert unihan_quick_destination.stat().st_size >= 170_000
+    ...     assert unihan_quick_destination.stat().st_size >= 140_000
     ...     assert unihan_quick_destination.stat().st_size < 200_000
     ...
     ...     assert unihan_quick_options.work_dir.exists()
@@ -296,7 +296,7 @@ def unihan_ensure_quick(
     ...     if not my_unihan_destination.exists():
     ...         my_unihan.export()
     ...     assert my_unihan_destination.exists()
-    ...     assert my_unihan_destination.stat().st_size >= 170_000
+    ...     assert my_unihan_destination.stat().st_size >= 140_000
     ...     assert my_unihan_destination.stat().st_size < 200_000
     ...
     ...     assert my_unihan.options.work_dir.exists()

@@ -9,6 +9,7 @@
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
 # This file contains data on the following fields from the Unihan database:
+#	kAlternateTotalStrokes
 #	kCangjie
 #	kCheungBauer
 #	kCihaiT
@@ -18,7 +19,9 @@
 #	kGradeLevel
 #	kHDZRadBreak
 #	kHKGlyph
+#	kMojiJoho
 #	kPhonetic
+#	kStrange
 #	kTotalStrokes
 #
 # For details on the file format, see http://www.unicode.org/reports/tr38/
@@ -510,6 +513,33 @@ U+4E00	kFourCornerCode	1000.0
 U+9FA4	kFourCornerCode	8126.1
 U+4E2B	kFourCornerCode	8020.0 8020.7
 U+807D	kFenn	381aA
-
+U+4FA1	kUnihanCore2020	J
+U+4FA8	kUnihanCore2020	GH
+U+4FB2	kUnihanCore2020	HMT
+U+4FB9	kUnihanCore2020	GHMT
+U+4FC9	kUnihanCore2020	HKMPT
+U+4E82	kUnihanCore2020	HJKMPT
+U+4F0B	kUnihanCore2020	GHKMPT
+U+4F7F	kUnihanCore2020	GHJKMPT
+U+5242	kStrange	I:U+5264
+U+56CD	kStrange	F
+U+5DDC	kStrange	B:U+310D I:U+5DDB
+U+2010F	kStrange	R:U+4E86
+U+2091C	kStrange	M:U+20917
+U+211A5	kStrange	K:U+30C8
+U+21245	kStrange	I:U+5409
+U+2A8B3	kStrange	H:U+3131
+U+9F98	kStrange	S:48
+U+20060	kStrange	U
+U+2CF00	kStrange	K:U+30B7:U+30C6
+U+2BCCD	kStrange	K:U+30A6:U+30C4:U+30DB
+U+4491	kAlternateTotalStrokes	3:J
+U+4E95	kAlternateTotalStrokes	-
+U+537F	kAlternateTotalStrokes	12:JK
+U+9AA8	kAlternateTotalStrokes	10:HJKPV
+U+3400	kMojiJoho	MJ000004
+U+342A	kMojiJoho	MJ000022 MJ000023:E0101 MJ000022:E0103
+U+342E	kMojiJoho	MJ000027 MJ000027:E0101 MJ000028:E0102 MJ000029:E0103
+U+34DE	kMojiJoho	MJ000185 MJ000183:E0100 MJ000184:E0102 MJ000185:E0103
 
 # EOF

@@ -39,6 +39,13 @@
             "format": "default"
           },
           {
+            "name": "kAlternateTotalStrokes",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kBigFive",
             "title": "",
             "description": "",
@@ -235,13 +242,6 @@
             "format": "default"
           },
           {
-            "name": "kHKSCS",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kHanYu",
             "title": "",
             "description": "",
@@ -285,13 +285,6 @@
           },
           {
             "name": "kIRGDaeJaweon",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kIRGDaiKanwaZiten",
             "title": "",
             "description": "",
             "type": "string",
@@ -354,6 +347,13 @@
             "format": "default"
           },
           {
+            "name": "kIRG_SSource",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kIRG_TSource",
             "title": "",
             "description": "",
@@ -369,6 +369,13 @@
           },
           {
             "name": "kIRG_VSource",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kJapanese0213",
             "title": "",
             "description": "",
             "type": "string",
@@ -410,34 +417,6 @@
             "format": "default"
           },
           {
-            "name": "kKPS0",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kKPS1",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kKSC0",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kKSC1",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kKangXi",
             "title": "",
             "description": "",
@@ -460,6 +439,13 @@
           },
           {
             "name": "kLau",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kMojiJoho",
             "title": "",
             "description": "",
             "type": "string",
@@ -543,34 +529,6 @@
             "format": "default"
           },
           {
-            "name": "kRSJapanese",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kRSKanWa",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kRSKangXi",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
-            "name": "kRSKorean",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kRSUnicode",
             "title": "",
             "description": "",
@@ -599,7 +557,35 @@
             "format": "default"
           },
           {
+            "name": "kSMSZD2003Index",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kSMSZD2003Readings",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kSpecializedSemanticVariant",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kSpoofingVariant",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kStrange",
             "title": "",
             "description": "",
             "type": "string",
@@ -620,6 +606,13 @@
             "format": "default"
           },
           {
+            "name": "kTGHZ2013",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kTotalStrokes",
             "title": "",
             "description": "",
@@ -634,7 +627,21 @@
             "format": "default"
           },
           {
+            "name": "kUnihanCore2020",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kVietnamese",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kVietnameseNumeric",
             "title": "",
             "description": "",
             "type": "string",
@@ -649,6 +656,13 @@
           },
           {
             "name": "kXerox",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kZhuangNumeric",
             "title": "",
             "description": "",
             "type": "string",

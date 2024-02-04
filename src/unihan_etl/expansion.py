@@ -16,6 +16,9 @@ import zhon.pinyin
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
+if t.TYPE_CHECKING:
+    from typing_extensions import TypeGuard
+
 #: diacritics from kHanyuPinlu
 N_DIACRITICS = "ńňǹ"
 
@@ -49,6 +52,112 @@ def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     cn = value[0]
     tw = value[0] if len(value) == 1 else value[1]
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
+
+
+kAlternateTotalStrokesLiteral = t.Literal[
+    "-",  # All
+    "B",
+    "H",
+    "J",
+    "K",
+    "M",
+    "P",
+    "S",
+    "U",
+    "V",
+]
+
+
+class kAlternateTotalStrokesDict(t.TypedDict):
+    """kAlternateTotalStrokes mapping."""
+
+    sources: t.List[kAlternateTotalStrokesLiteral]
+    strokes: t.Optional[int]
+
+
+K_ALTERNATE_TOTAL_STROKES_IRG_SOURCES = t.get_args(kAlternateTotalStrokesLiteral)
+
+
+def is_valid_kAlternateTotalStrokes_irg_source(
+    value: t.Any,
+) -> "TypeGuard[kAlternateTotalStrokesLiteral]":
+    """Return True and upcast if valid kAlternateTotalStrokes source."""
+    if not isinstance(value, str):
+        return False
+    return value in K_ALTERNATE_TOTAL_STROKES_IRG_SOURCES
+
+
+def expand_kAlternateTotalStrokes(
+    value: t.List[str],
+) -> t.List[kAlternateTotalStrokesDict]:
+    """Expand kAlternateTotalStrokes field.
+
+    Examples
+    --------
+    >>> expand_kAlternateTotalStrokes(['3:J'])
+    [{'strokes': 3, 'sources': ['J']}]
+
+    >>> expand_kAlternateTotalStrokes(['12:JK'])
+    [{'strokes': 12, 'sources': ['J', 'K']}]
+
+    >>> expand_kAlternateTotalStrokes(['-'])
+    [{'strokes': None, 'sources': ['-']}]
+    """
+    expanded: t.List[kAlternateTotalStrokesDict] = []
+
+    for val in value:
+        strokes: t.Optional[int]
+        if ":" in val:
+            _strokes, unexploded_sources = val.split(":", maxsplit=1)
+            strokes = int(_strokes)
+            _sources = list(unexploded_sources)
+
+            # Raise loudly here so we detect updated sources, to avoid silently
+            # skipping sources.
+            assert all(
+                is_valid_kAlternateTotalStrokes_irg_source(value=source)
+                for source in _sources
+            )
+            sources = [
+                source
+                for source in _sources
+                if is_valid_kAlternateTotalStrokes_irg_source(value=source)
+            ]
+        elif val == "-":
+            strokes = None
+            sources = ["-"]
+        else:
+            strokes = None
+            sources = []
+
+        expanded.append(
+            kAlternateTotalStrokesDict(
+                strokes=strokes,
+                sources=sources,
+            )
+        )
+    return expanded
+
+
+def expand_kUnihanCore2020(
+    value: str,
+) -> t.List[str]:
+    """Expand kUnihanCore2020 field.
+
+    Examples
+    --------
+    >>> expand_kUnihanCore2020('GHJ')
+    ['G', 'H', 'J']
+    """
+    set_pattern = re.compile(
+        r"""
+        (?P<set>[GHJKMPT]{1})
+    """,
+        re.X,
+    )
+    items = set_pattern.split(value)
+    sets = [s for s in items if s]
+    return sets
 
 
 class kLocationDict(t.TypedDict):
@@ -117,6 +226,172 @@ def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
             page=int(m["page"]),
             character=int(m["character"]),
             virtual=int(m["virtual"]),
+        )
+    return expanded
+
+
+class kTGHZ2013LocationDict(t.TypedDict):
+    """kTGHZ2013 location mapping."""
+
+    page: int
+    position: int
+    # 0 for a main entry and greater than 0 for a parenthesized or bracketed variant #
+    # of the main entry
+    entry_type: int
+
+
+class kTGHZ2013Dict(t.TypedDict):
+    """kTGHZ2013 mapping."""
+
+    reading: str
+    locations: t.Sequence[t.Union[str, kTGHZ2013LocationDict]]
+
+
+def expand_kTGHZ2013(
+    value: t.List[str],
+) -> t.List[kTGHZ2013Dict]:
+    """Expand kTGHZ2013 field.
+
+    Examples
+    --------
+    >>> expand_kTGHZ2013(['097.110,097.120:fēng'])
+    [{'reading': 'fēng', 'locations': [{'page': 97, 'position': 11, 'entry_type': 0},
+    {'page': 97, 'position': 12, 'entry_type': 0}]}]
+
+    >>> expand_kTGHZ2013(['482.140:zhòu'])  # doctest: +NORMALIZE_WHITESPACE
+    [{'reading': 'zhòu', 'locations': [{'page': 482, 'position': 14, 'entry_type': 0}]}]
+    """
+    location_pattern = re.compile(
+        r"""
+        (?P<page>[\d]{3})\.
+        (?P<position>[\d]{2})
+        (?P<entry_type>[\d]{1})
+    """,
+        re.X,
+    )
+
+    expanded: t.List[kTGHZ2013Dict] = []
+
+    for val in value:
+        v = val.split(":")
+        locations = v[0].split(",")
+        reading = v[1]
+        exploded_locations = []
+
+        for loc in locations:
+            m = location_pattern.match(loc)
+            assert m is not None
+            g = m.groupdict()
+            assert g is not None
+
+            exploded_locations.append(
+                kTGHZ2013LocationDict(
+                    page=int(g["page"]),
+                    position=int(g["position"]),
+                    entry_type=int(g["entry_type"]),
+                )
+            )
+        expanded.append(
+            kTGHZ2013Dict(
+                reading=reading,
+                locations=exploded_locations,
+            )
+        )
+    return expanded
+
+
+class kSMSZD2003IndexDict(t.TypedDict):
+    """kSMSZD2003Index location mapping."""
+
+    page: int
+    position: int
+
+
+def expand_kSMSZD2003Index(
+    value: t.List[str],
+) -> t.List[kSMSZD2003IndexDict]:
+    """Expand kSMSZD2003Index Soengmou San Zidin (商務新字典) field.
+
+    Examples
+    --------
+    >>> expand_kSMSZD2003Index(['26.07'])
+    [{'page': 26, 'position': 7}]
+
+    >>> expand_kSMSZD2003Index(['769.05', '15.17', '291.20', '493.13'])
+    [{'page': 769, 'position': 5},
+    {'page': 15, 'position': 17},
+    {'page': 291, 'position': 20},
+    {'page': 493, 'position': 13}]
+
+    Bibliography
+    ------------
+    Wong Gongsang 黃港生, ed. Shangwu Xin Zidian / Soengmou San Zidin 商務新字典 (New
+    Commercial Press Character Dictionary). Hong Kong: 商務印書館(香港)有限公司
+    (Commercial Press [Hong Kong], Ltd.), 2003. ISBN 962-07-0140-2.
+    """
+    location_pattern = re.compile(
+        r"""
+        (?P<page>[\d]{1,3})\.
+        (?P<position>[\d]{2})
+    """,
+        re.X,
+    )
+
+    expanded: t.List[kSMSZD2003IndexDict] = []
+
+    for loc in value:
+        m = location_pattern.match(loc)
+        assert m is not None
+        g = m.groupdict()
+        assert g is not None
+
+        expanded.append(
+            kSMSZD2003IndexDict(
+                page=int(g["page"]),
+                position=int(g["position"]),
+            )
+        )
+    return expanded
+
+
+class kSMSZD2003ReadingsDict(t.TypedDict):
+    """kSMSZD2003Readings location mapping."""
+
+    mandarin: t.List[str]
+    cantonese: t.List[str]
+
+
+def expand_kSMSZD2003Readings(
+    value: t.List[str],
+) -> t.List[kSMSZD2003ReadingsDict]:
+    """Expand kSMSZD2003Readings Soengmou San Zidin (商務新字典) field.
+
+    Examples
+    --------
+    >>> expand_kSMSZD2003Readings(['tà粵taat3'])
+    [{'mandarin': ['tà'], 'cantonese': ['taat3']}]
+
+    >>> expand_kSMSZD2003Readings(['ma粵maa1,maa3', 'má粵maa1', 'mǎ粵maa1'])
+    [{'mandarin': ['ma'], 'cantonese': ['maa1', 'maa3']},
+    {'mandarin': ['má'], 'cantonese': ['maa1']},
+    {'mandarin': ['mǎ'], 'cantonese': ['maa1']}]
+
+    Bibliography
+    ------------
+    Wong Gongsang 黃港生, ed. Shangwu Xin Zidian / Soengmou San Zidin 商務新字典 (New
+    Commercial Press Character Dictionary). Hong Kong: 商務印書館(香港)有限公司
+    (Commercial Press [Hong Kong], Ltd.), 2003. ISBN 962-07-0140-2.
+    """
+    expanded: t.List[kSMSZD2003ReadingsDict] = []
+
+    for val in value:
+        mandarin, cantonese = val.split("粵")
+
+        expanded.append(
+            kSMSZD2003ReadingsDict(
+                mandarin=mandarin.split(","),
+                cantonese=cantonese.split(","),
+            )
         )
     return expanded
 
@@ -606,10 +881,6 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
 
 
 expand_kRSUnicode = _expand_kRSGeneric
-expand_kRSJapanese = _expand_kRSGeneric
-expand_kRSKangXi = _expand_kRSGeneric
-expand_kRSKanWa = _expand_kRSGeneric
-expand_kRSKorean = _expand_kRSGeneric
 
 
 class SourceLocationDict(t.TypedDict):
@@ -620,7 +891,15 @@ class SourceLocationDict(t.TypedDict):
 
 
 def _expand_kIRG_GenericSource(value: str) -> SourceLocationDict:
-    """Expand kIRG_GenericSource field."""
+    """Expand kIRG_GenericSource field.
+
+    Examples
+    --------
+    >>> _expand_kIRG_GenericSource('JMJ-056876')  # doctest: +NORMALIZE_WHITESPACE
+    {'source': 'JMJ', 'location': '056876'}
+    >>> _expand_kIRG_GenericSource('SAT-02570')  # doctest: +NORMALIZE_WHITESPACE
+    {'source': 'SAT', 'location': '02570'}
+    """
     v = value.split("-")
     return SourceLocationDict(source=v[0], location=v[1] if len(v) > 1 else None)
 
@@ -631,8 +910,10 @@ expand_kIRG_JSource = _expand_kIRG_GenericSource
 expand_kIRG_KPSource = _expand_kIRG_GenericSource
 expand_kIRG_KSource = _expand_kIRG_GenericSource
 expand_kIRG_MSource = _expand_kIRG_GenericSource
+expand_kIRG_SSource = _expand_kIRG_GenericSource
 expand_kIRG_TSource = _expand_kIRG_GenericSource
 expand_kIRG_USource = _expand_kIRG_GenericSource
+expand_kIRG_UKSource = _expand_kIRG_GenericSource
 expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
@@ -696,6 +977,165 @@ def expand_kCheungBauerIndex(
 
 
 expand_kFennIndex = expand_kCheungBauerIndex
+
+
+kStrangeLiteral = t.Literal[
+    # Category A = [A]symmetric (exhibits a structure that is asymmetric)
+    "A",
+    # Category B = [B]opomofo (visually resembles a bopomofo character)
+    "B",
+    # Category C = [C]ursive (is cursive or includes one or more cursive components that
+    # do not adhere to Han ideograph stroke conventions)
+    "C",
+    # Category F = [F]ully-reflective (is fully-reflective or includes components that
+    # are fully-reflective, meaning that the mirrored and unmirrored components are
+    # arranged side-by-side or stacked top-and-bottom)
+    "F",
+    # Category H = [H]angul Component (includes a hangul component)
+    "H",
+    # Category I = [I]ncomplete (appears to be an incomplete version of an existing or
+    # possible ideograph, meaning that one or more components appear to be incomplete,
+    # without regard to semantics)
+    "I",
+    # Category K = [K]atakana Component (includes one or more components that visually
+    # resemble a katakana syllable)
+    "K",
+    # Category M = [M]irrored (is either mirrored or includes one or more components
+    # that are mirrored)
+    "M",
+    # Category O = [O]dd Component (includes one or more components that are symbol-like
+    # or are otherwise considered odd)
+    "O",
+    # Category R = [R]otated (is either rotated or includes one or more components that
+    # are rotated)
+    "R",
+    # Category S = [S]troke-heavy (has 40 or more strokes)
+    "S",
+    # Category U = [U]nusual Arrangment/Structure (has an unusual structure or component
+    # arrangement)
+    "U",
+]
+
+
+class kStrangeDict(t.TypedDict):
+    """kStrange mapping."""
+
+    property_type: kStrangeLiteral
+    characters: t.Sequence[str]
+
+
+K_STRANGE_PROPERTIES = t.get_args(kStrangeLiteral)
+
+
+def is_valid_kstrange_property(value: t.Any) -> "TypeGuard[kStrangeLiteral]":
+    """Return True and upcast if valid kStrange property type."""
+    if not isinstance(value, str):
+        return False
+    return value in K_STRANGE_PROPERTIES
+
+
+def expand_kStrange(
+    value: t.List[str],
+) -> t.List[kStrangeDict]:
+    """Expand kStrange field.
+
+    Examples
+    --------
+    >>> expand_kStrange(['B:U+310D', 'I:U+5DDB'])
+    [{'property_type': 'B', 'characters': ['U+310D']},
+    {'property_type': 'I', 'characters': ['U+5DDB']}]
+
+    >>> expand_kStrange(['K:U+30A6:U+30C4:U+30DB'])  # doctest: +NORMALIZE_WHITESPACE
+    [{'property_type': 'K', 'characters': ['U+30A6', 'U+30C4', 'U+30DB']}]
+
+    >>> expand_kStrange(['U'])  # doctest: +NORMALIZE_WHITESPACE
+    [{'property_type': 'U', 'characters': []}]
+    """
+    expanded: t.List[kStrangeDict] = []
+
+    for val in value:
+        if ":" in val:
+            property_type, unexploded_chars = val.split(":", maxsplit=1)
+            characters = unexploded_chars.split(":")
+        else:
+            property_type = val
+            characters = []
+
+        assert is_valid_kstrange_property(value=property_type)
+
+        expanded.append(
+            kStrangeDict(
+                property_type=property_type,
+                characters=characters,
+            )
+        )
+    return expanded
+
+
+class kMojiJohoVariationDict(t.TypedDict):
+    """Variation sequence of Moji Jōhō Kiban entry."""
+
+    serial_number: str
+    variation_sequence: str
+    # If a Moji Jōhō Kiban database serial number appears both by itself and followed by
+    # a colon and VS, the registered Moji_Joho IVS that corresponds to the latter is
+    # considered the default (that is, encoded) form.
+    standard: bool
+
+
+class kMojiJohoDict(t.TypedDict):
+    """kMojiJoho mapping."""
+
+    serial_number: str
+    variants: t.List[kMojiJohoVariationDict]
+
+
+def expand_kMojiJoho(
+    value: str,
+) -> kMojiJohoDict:
+    """Expand kMojiJoho (Moji Jōhō Kiban) field.
+
+    Examples
+    --------
+    >>> expand_kMojiJoho('MJ000004')
+    {'serial_number': 'MJ000004', 'variants': []}
+
+    >>> expand_kMojiJoho('MJ000022 MJ000023:E0101 MJ000022:E0103')
+    {'serial_number': 'MJ000022', 'variants':
+        [{'serial_number': 'MJ000023', 'variation_sequence': 'E0101',
+        'standard': False},
+        {'serial_number': 'MJ000022', 'variation_sequence': 'E0103',
+        'standard': True}]}
+
+    See Also
+    --------
+    Assume 㐪:
+
+        U+342A	kMojiJoho	MJ000022 MJ000023:E0101 MJ000022:E0103:
+
+    Database link: https://moji.or.jp/mojikibansearch/info?MJ%E6%96%87%E5%AD%97%E5%9B%B3%E5%BD%A2%E5%90%8D=MJ000022
+    """
+    variants: t.List[kMojiJohoVariationDict] = []
+    values = value.split(" ")
+    if len(values) == 1:
+        return kMojiJohoDict(serial_number=values[0], variants=[])
+    default_serial = values.pop(0)
+
+    for val in values:
+        assert ":" in val
+        serial_number, variation_sequence = val.split(":", maxsplit=1)
+
+        variants.append(
+            kMojiJohoVariationDict(
+                serial_number=serial_number,
+                variation_sequence=variation_sequence,
+                standard=serial_number == default_serial,
+            )
+        )
+    return kMojiJohoDict(
+        serial_number=default_serial,
+        variants=variants,
+    )
 
 
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:

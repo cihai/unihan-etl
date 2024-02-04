@@ -17,8 +17,10 @@
 #	kIRG_KPSource
 #	kIRG_KSource
 #	kIRG_MSource
+#	kIRG_SSource
 #	kIRG_TSource
 #	kIRG_USource
+#	kIRG_UKSource
 #	kIRG_VSource
 #	kRSUnicode
 #
@@ -506,11 +508,12 @@ U+3ED0	kIRG_KPSource	KP0-EAB2
 U+4E06	kIRG_KSource	K2-2121
 U+21290	kIRG_MSource	MAC-00077
 U+22016	kIRG_USource	UTC-00069
-U+221EC	kIRG_USource	UCI-00937
 U+48D3	kIICore	CG
 U+4E09	kIICore	AGTJHKMP
 U+4E0E	kIICore	AGJ
 U+2A660	kIRG_GSource	G4K
-
+U+2CEB7	kIRG_SSource	SAT-05296
+U+2CEBC	kIRG_SSource	SAT-04823
+U+2DE4A	kIRG_UKSource	UK-02896
 
 # EOF

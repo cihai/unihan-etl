@@ -83,7 +83,7 @@ def test_ensure_unihan_quick(
 
     unihan_quick_destination = unihan_quick_options.destination
     assert unihan_quick_destination.exists()
-    assert unihan_quick_destination.stat().st_size >= 170_768
+    assert unihan_quick_destination.stat().st_size >= 140_768
     assert unihan_quick_destination.stat().st_size < 200_000
 
     assert unihan_quick_options.work_dir.exists()
