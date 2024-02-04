@@ -70,6 +70,7 @@ UNIHAN_MANIFEST = {
         "kAccountingNumeric",
         "kOtherNumeric",
         "kPrimaryNumeric",
+        "kVietnameseNumeric",
     ),
     "Unihan_OtherMappings.txt": (
         "kBigFive",
@@ -229,6 +230,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kTGH",
     "kTraditionalVariant",
     "kVietnamese",
+    "kVietnameseNumeric",
     "kXerox",
     "kZVariant",
 )

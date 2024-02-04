@@ -690,6 +690,13 @@
             "format": "default"
           },
           {
+            "name": "kVietnameseNumeric",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kXHC1983",
             "title": "",
             "description": "",

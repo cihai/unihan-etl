@@ -390,7 +390,7 @@ def expand_kSMSZD2003Readings(
         expanded.append(
             kSMSZD2003ReadingsDict(
                 mandarin=mandarin.split(","),
-                cantonese=cantonese.split(",")
+                cantonese=cantonese.split(","),
             )
         )
     return expanded

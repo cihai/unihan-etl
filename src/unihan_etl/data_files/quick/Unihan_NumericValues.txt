@@ -12,6 +12,7 @@
 #	kAccountingNumeric
 #	kOtherNumeric
 #	kPrimaryNumeric
+#	kVietnameseNumeric
 #
 # For details on the file format, see http://www.unicode.org/reports/tr38/
 #
@@ -88,5 +89,8 @@ U+22390	kOtherNumeric	2
 U+22998	kOtherNumeric	3
 U+23B1B	kOtherNumeric	3
 U+2626D	kOtherNumeric	4
+U+3431	kVietnameseNumeric	9
+U+53F0	kVietnameseNumeric	2
+U+5549	kVietnameseNumeric	100
 
 # EOF
