@@ -417,13 +417,6 @@
             "format": "default"
           },
           {
-            "name": "kKSC0",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kKSC1",
             "title": "",
             "description": "",
