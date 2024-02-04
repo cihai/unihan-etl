@@ -19,6 +19,11 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Development
+
+- Quiet pytest tracebacks (#310)
+- Relax pytest plugin assertions in regards to zip / export file size (#310)
+
 ## unihan-etl 0.30.1 (2023-12-10)
 
 ### Bug fix

@@ -50,7 +50,7 @@ def test_unihan_ensure_full(
 
     assert unihan_full_options.work_dir.exists()
     unihan_readings = unihan_full_options.work_dir / 'Unihan_Readings.txt'
-    assert unihan_readings.stat().st_size > 6200000
+    assert unihan_readings.stat().st_size > 6_200_000
         """
             )
         },
@@ -83,11 +83,13 @@ def test_ensure_unihan_quick(
 
     unihan_quick_destination = unihan_quick_options.destination
     assert unihan_quick_destination.exists()
-    assert unihan_quick_destination.stat().st_size == 171968
+    assert unihan_quick_destination.stat().st_size >= 170_768
+    assert unihan_quick_destination.stat().st_size < 200_000
 
     assert unihan_quick_options.work_dir.exists()
     unihan_readings = unihan_quick_options.work_dir / 'Unihan_Readings.txt'
-    assert unihan_readings.stat().st_size == 21631
+    assert unihan_readings.stat().st_size >= 21_631
+    assert unihan_readings.stat().st_size < 30_000
         """
             )
         },

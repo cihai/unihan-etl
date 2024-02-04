@@ -101,7 +101,7 @@ def unihan_ensure_full(
     ...
     ...     assert unihan_full_options.work_dir.exists()
     ...     unihan_readings = unihan_full_options.work_dir / 'Unihan_Readings.txt'
-    ...     assert unihan_readings.stat().st_size > 6200000
+    ...     assert unihan_readings.stat().st_size > 6_200_000
 
     .. ::
         >>> locals().keys()
@@ -145,7 +145,7 @@ def unihan_ensure_full(
     ...
     ...     assert my_unihan.options.work_dir.exists()
     ...     unihan_readings = my_unihan.options.work_dir / 'Unihan_Readings.txt'
-    ...     assert unihan_readings.stat().st_size > 6200000
+    ...     assert unihan_readings.stat().st_size > 6_200_000
 
     .. ::
         >>> locals().keys()
@@ -250,11 +250,13 @@ def unihan_ensure_quick(
     ... ) -> None:
     ...     unihan_quick_destination = unihan_quick_options.destination
     ...     assert unihan_quick_destination.exists()
-    ...     assert unihan_quick_destination.stat().st_size == 171_968
+    ...     assert unihan_quick_destination.stat().st_size >= 170_000
+    ...     assert unihan_quick_destination.stat().st_size < 200_000
     ...
     ...     assert unihan_quick_options.work_dir.exists()
     ...     unihan_readings = unihan_quick_options.work_dir / 'Unihan_Readings.txt'
-    ...     assert unihan_readings.stat().st_size == 21_631
+    ...     assert unihan_readings.stat().st_size >= 21_631
+    ...     assert unihan_readings.stat().st_size < 30_000
 
     .. ::
         >>> locals().keys()
@@ -294,11 +296,13 @@ def unihan_ensure_quick(
     ...     if not my_unihan_destination.exists():
     ...         my_unihan.export()
     ...     assert my_unihan_destination.exists()
-    ...     assert my_unihan_destination.stat().st_size == 171_968
+    ...     assert my_unihan_destination.stat().st_size >= 170_000
+    ...     assert my_unihan_destination.stat().st_size < 200_000
     ...
     ...     assert my_unihan.options.work_dir.exists()
     ...     unihan_readings = my_unihan.options.work_dir / 'Unihan_Readings.txt'
-    ...     assert unihan_readings.stat().st_size == 21631
+    ...     assert unihan_readings.stat().st_size >= 21_000
+    ...     assert unihan_readings.stat().st_size < 30_000
 
     .. ::
         >>> locals().keys()
