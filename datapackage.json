@@ -242,13 +242,6 @@
             "format": "default"
           },
           {
-            "name": "kHKSCS",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kHanYu",
             "title": "",
             "description": "",

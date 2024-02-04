@@ -85,7 +85,6 @@ UNIHAN_MANIFEST = {
         "kGB5",
         "kGB7",
         "kGB8",
-        "kHKSCS",
         "kIBMJapan",
         "kJa",
         "kJinmeiyoKanji",
