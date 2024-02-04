@@ -54,6 +54,91 @@ def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
     return kTotalStrokesDict({"zh-Hans": int(cn), "zh-Hant": int(tw)})
 
 
+kAlternateTotalStrokesLiteral = t.Literal[
+    "-",  # All
+    "B",
+    "H",
+    "J",
+    "K",
+    "M",
+    "P",
+    "S",
+    "U",
+    "V",
+]
+
+
+class kAlternateTotalStrokesDict(t.TypedDict):
+    """kAlternateTotalStrokes mapping."""
+
+    sources: t.List[kAlternateTotalStrokesLiteral]
+    strokes: t.Optional[int]
+
+
+K_ALTERNATE_TOTAL_STROKES_IRG_SOURCES = t.get_args(kAlternateTotalStrokesLiteral)
+
+
+def is_valid_kAlternateTotalStrokes_irg_source(
+    value: t.Any,
+) -> "TypeGuard[kAlternateTotalStrokesLiteral]":
+    """Return True and upcast if valid kAlternateTotalStrokes source."""
+    if not isinstance(value, str):
+        return False
+    return value in K_ALTERNATE_TOTAL_STROKES_IRG_SOURCES
+
+
+def expand_kAlternateTotalStrokes(
+    value: t.List[str],
+) -> t.List[kAlternateTotalStrokesDict]:
+    """Expand kAlternateTotalStrokes field.
+
+    Examples
+    --------
+    >>> expand_kAlternateTotalStrokes(['3:J'])
+    [{'strokes': 3, 'sources': ['J']}]
+
+    >>> expand_kAlternateTotalStrokes(['12:JK'])
+    [{'strokes': 12, 'sources': ['J', 'K']}]
+
+    >>> expand_kAlternateTotalStrokes(['-'])
+    [{'strokes': None, 'sources': ['-']}]
+    """
+    expanded: t.List[kAlternateTotalStrokesDict] = []
+
+    for val in value:
+        strokes: t.Optional[int]
+        if ":" in val:
+            _strokes, unexploded_sources = val.split(":", maxsplit=1)
+            strokes = int(_strokes)
+            _sources = list(unexploded_sources)
+
+            # Raise loudly here so we detect updated sources, to avoid silently
+            # skipping sources.
+            assert all(
+                is_valid_kAlternateTotalStrokes_irg_source(value=source)
+                for source in _sources
+            )
+            sources = [
+                source
+                for source in _sources
+                if is_valid_kAlternateTotalStrokes_irg_source(value=source)
+            ]
+        elif val == "-":
+            strokes = None
+            sources = ["-"]
+        else:
+            strokes = None
+            sources = []
+
+        expanded.append(
+            kAlternateTotalStrokesDict(
+                strokes=strokes,
+                sources=sources,
+            )
+        )
+    return expanded
+
+
 def expand_kUnihanCore2020(
     value: str,
 ) -> t.List[str]:

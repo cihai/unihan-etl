@@ -34,6 +34,7 @@ UNIHAN_MANIFEST = {
         "kSBGY",
     ),
     "Unihan_DictionaryLikeData.txt": (
+        "kAlternateTotalStrokes",
         "kCangjie",
         "kCheungBauer",
         "kCihaiT",
@@ -150,6 +151,7 @@ CUSTOM_DELIMITED_FIELDS = (
 
 #: Fields with multiple values UNIHAN delimits by spaces -> dict
 SPACE_DELIMITED_DICT_FIELDS = (
+    "kAlternateTotalStrokes",
     "kHanYu",
     "kMandarin",
     "kTGHZ2013",

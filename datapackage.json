@@ -39,6 +39,13 @@
             "format": "default"
           },
           {
+            "name": "kAlternateTotalStrokes",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kBigFive",
             "title": "",
             "description": "",

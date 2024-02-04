@@ -9,6 +9,7 @@
 # For documentation, see http://www.unicode.org/reports/tr44/
 #
 # This file contains data on the following fields from the Unihan database:
+#	kAlternateTotalStrokes
 #	kCangjie
 #	kCheungBauer
 #	kCihaiT
@@ -531,5 +532,9 @@ U+9F98	kStrange	S:48
 U+20060	kStrange	U
 U+2CF00	kStrange	K:U+30B7:U+30C6
 U+2BCCD	kStrange	K:U+30A6:U+30C4:U+30DB
+U+4491	kAlternateTotalStrokes	3:J
+U+4E95	kAlternateTotalStrokes	-
+U+537F	kAlternateTotalStrokes	12:JK
+U+9AA8	kAlternateTotalStrokes	10:HJKPV
 
 # EOF
