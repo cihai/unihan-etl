@@ -25,7 +25,6 @@
 #	kJis0
 #	kJis1
 #	kJIS0213
-#	kKSC1
 #	kMainlandTelegraph
 #	kPseudoGB1
 #	kTaiwanTelegraph
