@@ -417,13 +417,6 @@
             "format": "default"
           },
           {
-            "name": "kKPS0",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kKPS1",
             "title": "",
             "description": "",

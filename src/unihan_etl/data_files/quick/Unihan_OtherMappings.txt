@@ -25,7 +25,6 @@
 #	kJis0
 #	kJis1
 #	kJIS0213
-#	kKPS0
 #	kKPS1
 #	kKSC0
 #	kKSC1
