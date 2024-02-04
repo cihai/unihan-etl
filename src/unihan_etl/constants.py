@@ -44,6 +44,7 @@ UNIHAN_MANIFEST = {
         "kHDZRadBreak",
         "kHKGlyph",
         "kPhonetic",
+        "kStrange",
         "kTotalStrokes",
         "kUnihanCore2020",
     ),
@@ -152,6 +153,7 @@ SPACE_DELIMITED_DICT_FIELDS = (
     "kHanYu",
     "kMandarin",
     "kTGHZ2013",
+    "kStrange",
     "kTotalStrokes",
     "kXHC1983",
 )

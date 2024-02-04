@@ -599,6 +599,13 @@
             "format": "default"
           },
           {
+            "name": "kStrange",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kTaiwanTelegraph",
             "title": "",
             "description": "",

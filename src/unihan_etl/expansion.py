@@ -796,6 +796,86 @@ def expand_kCheungBauerIndex(
 expand_kFennIndex = expand_kCheungBauerIndex
 
 
+kStrangeLiteral = t.Literal[
+    # Category A = [A]symmetric (exhibits a structure that is asymmetric)
+    "A",
+    # Category B = [B]opomofo (visually resembles a bopomofo character)
+    "B",
+    # Category C = [C]ursive (is cursive or includes one or more cursive components that
+    # do not adhere to Han ideograph stroke conventions)
+    "C",
+    # Category F = [F]ully-reflective (is fully-reflective or includes components that
+    # are fully-reflective, meaning that the mirrored and unmirrored components are
+    # arranged side-by-side or stacked top-and-bottom)
+    "F",
+    # Category H = [H]angul Component (includes a hangul component)
+    "H",
+    # Category I = [I]ncomplete (appears to be an incomplete version of an existing or
+    # possible ideograph, meaning that one or more components appear to be incomplete,
+    # without regard to semantics)
+    "I",
+    # Category K = [K]atakana Component (includes one or more components that visually
+    # resemble a katakana syllable)
+    "K",
+    # Category M = [M]irrored (is either mirrored or includes one or more components
+    # that are mirrored)
+    "M",
+    # Category O = [O]dd Component (includes one or more components that are symbol-like
+    # or are otherwise considered odd)
+    "O",
+    # Category R = [R]otated (is either rotated or includes one or more components that
+    # are rotated)
+    "R",
+    # Category S = [S]troke-heavy (has 40 or more strokes)
+    "S",
+    # Category U = [U]nusual Arrangment/Structure (has an unusual structure or component
+    # arrangement)
+    "U",
+]
+
+
+class kStrangeDict(t.TypedDict):
+    """kStrange mapping."""
+
+    property_type: str
+    characters: t.Sequence[str]
+
+
+def expand_kStrange(
+    value: t.List[str],
+) -> t.List[kStrangeDict]:
+    """Expand kStrange field.
+
+    Examples
+    --------
+    >>> expand_kStrange(['B:U+310D', 'I:U+5DDB'])
+    [{'property_type': 'B', 'characters': ['U+310D']},
+    {'property_type': 'I', 'characters': ['U+5DDB']}]
+
+    >>> expand_kStrange(['K:U+30A6:U+30C4:U+30DB'])  # doctest: +NORMALIZE_WHITESPACE
+    [{'property_type': 'K', 'characters': ['U+30A6', 'U+30C4', 'U+30DB']}]
+
+    >>> expand_kStrange(['U'])  # doctest: +NORMALIZE_WHITESPACE
+    [{'property_type': 'U', 'characters': []}]
+    """
+    expanded: t.List[kStrangeDict] = []
+
+    for val in value:
+        if ":" in val:
+            property_type, unexploded_chars = val.split(":", maxsplit=1)
+            characters = unexploded_chars.split(":")
+        else:
+            property_type = val
+            characters = []
+        expanded.append(
+            kStrangeDict(
+                property_type=property_type,
+                characters=characters,
+            )
+        )
+    return expanded
+
+
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
     """Return structured value of information in UNIHAN field.
 
