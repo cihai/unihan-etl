@@ -711,6 +711,13 @@
             "format": "default"
           },
           {
+            "name": "kZhuangNumeric",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kZVariant",
             "title": "",
             "description": "",
