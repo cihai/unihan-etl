@@ -361,26 +361,6 @@ def test_expand_kRSAdobe_Japan1_6(
 
 
 @pytest.mark.parametrize(
-    "field,ucn,expected",
-    [
-        # U+4E99      kRSKangXi       7.4
-        ("kRSKangXi", "U+4E99", [{"radical": 7, "strokes": 4, "simplified": False}]),
-        # U+4E9A      kRSKangXi       1.5
-        ("kRSKangXi", "U+4E9A", [{"radical": 1, "strokes": 5, "simplified": False}]),
-    ],
-)
-def test_expand_radical_stroke_counts(
-    unihan_quick_expanded_data: ExpandedData,
-    field: str,
-    ucn: str,
-    expected: ExpandedData,
-) -> None:
-    """Test expansion of KRSJapanese."""
-    item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
-    assert item[field] == expected
-
-
-@pytest.mark.parametrize(
     "ucn,expected",
     [
         # U+3491      kRSUnicode      9.13

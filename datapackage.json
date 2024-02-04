@@ -529,13 +529,6 @@
             "format": "default"
           },
           {
-            "name": "kRSKangXi",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kRSUnicode",
             "title": "",
             "description": "",
