@@ -291,13 +291,6 @@
             "format": "default"
           },
           {
-            "name": "kIRGDaiKanwaZiten",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kIRGHanyuDaZidian",
             "title": "",
             "description": "",

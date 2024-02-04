@@ -16,7 +16,6 @@
 #	kGSR
 #	kHanYu
 #	kIRGDaeJaweon
-#	kIRGDaiKanwaZiten
 #	kIRGHanyuDaZidian
 #	kIRGKangXi
 #	kKangXi
