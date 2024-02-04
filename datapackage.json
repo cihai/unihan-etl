@@ -389,6 +389,13 @@
             "format": "default"
           },
           {
+            "name": "kJapanese0213",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kJIS0213",
             "title": "",
             "description": "",

@@ -14,6 +14,7 @@
 #	kHangul
 #	kHanyuPinlu
 #	kHanyuPinyin
+#	kJapanese
 #	kJapaneseKun
 #	kJapaneseOn
 #	kKorean
@@ -564,5 +565,23 @@ U+5750	kXHC1983	1551.040,1552.011:zuò
 U+3447	kTGHZ2013	482.140:zhòu
 U+4E0A	kTGHZ2013	326.050:shǎng 326.090:shàng
 U+4E30	kTGHZ2013	097.110,097.120:fēng
+U+3405	kJapanese	ゴ
+U+3421	kJapanese	ジュ
+U+343C	kJapanese	ショウ
+U+344D	kJapanese	ライ レ
+U+341C	kJapanese	キュウ グ
+U+3427	kJapanese	ダイ テイ ただ ついで やしき
+U+342C	kJapanese	リュウ ル コウ トツ
+U+3432	kJapanese	フク タイ ダイ ふせる ふす
+U+35E8	kJapanese	カイ ケ アイ ア キツ コチ
+U+371D	kJapanese	ガン ゴン アン オン カン ゲン エン
+U+3743	kJapanese	ブン モン ハン ホン ベン メン バン マン
+U+47FD	kJapanese	ショ ソ ス とおる うとい おろそか うとむ あらい まばら
+U+4E0A	kJapanese	ジョウ ショウ うえ うわ かみ あげる あがる のぼる のぼせる のぼす たっとぶ たてまつる ほとり
+U+4E0B	kJapanese	カ ゲ ア した しも もと さげる さがる くだる くだす くださる おろす おりる
+U+53CD	kJapanese	ハン ホン タン ヘン ベン そる そらす かえす かえって かえる そむく たん
+U+6035	kJapanese	ジュツ チュツ シュツ キツ ジュチ シュチ キチ いざなう いざなわれる いたむ おそれる かなしむ はしる
+U+660E	kJapanese	メイ ミョウ ミン ベイ ボウ あかり あかるい あかるむ あからむ あきらか あける あく あくる あかす ひかり
+kJapanese	シャク タク トウ ドウ ジョウ ニョウ ショク ゾク うるおう しなやか どろ ぬかる ぬれる やわらかい やわらぐ
 
 # EOF
