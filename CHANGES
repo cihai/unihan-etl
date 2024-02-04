@@ -19,6 +19,42 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking: UNIHAN upgrades (#305)
+
+#### Removed fields
+
+- 15.1.0: [kHKSCS](https://www.unicode.org/L2/L2023/23005.htm#174-C10),
+  [kIRGDaiKanwaZiten](https://www.unicode.org/L2/L2022/22241.htm#173-C9),
+  [kKPS0](https://www.unicode.org/L2/L2023/23005.htm#174-C11),
+  [kKPS1](https://www.unicode.org/L2/L2023/23005.htm#174-C11),
+  [kKSC0](https://www.unicode.org/L2/L2023/23005.htm#174-C9),
+  [kKSC1](https://www.unicode.org/L2/L2023/23005.htm#174-C9),
+  [kRSKangXi](https://www.unicode.org/L2/L2022/22241.htm#173-C12)
+- 13.0.0:
+  [kRSJapanese](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209),
+  [kRSKanWa](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209),
+  [kRSKorean](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209)
+- 12.0.0:
+  [kDefaultSortKey](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/18-118)
+  (private property)
+
+#### New fields
+
+- 15.1.0: [kJapanese](https://www.unicode.org/reports/tr38/#kJapanese),
+  [kMojiJoho](https://www.unicode.org/reports/tr38/#kMojiJoho),
+  [kSMSZD2003Index](https://www.unicode.org/reports/tr38/#kSMSZD2003Index),
+  [kSMSZD2003Readings](https://www.unicode.org/reports/tr38/#kSMSZD2003Readings),
+  [kVietnameseNumeric](https://www.unicode.org/reports/tr38/#kVietnameseNumeric),
+  [kZhuangNumeric](https://www.unicode.org/reports/tr38/#kZhuangNumeric)
+- 15.0.0:
+  [kAlternateTotalStrokes](https://www.unicode.org/reports/tr38/#kAlternateTotalStrokes)
+- 14.0.0: [kStrange ](https://www.unicode.org/reports/tr38/#kStrange)
+- 13.0.0: [kIRG_SSource](https://www.unicode.org/reports/tr38/#kIRG_SSource),
+  [kIRG_UKSource](https://www.unicode.org/reports/tr38/#kIRG_UKSource),
+  [kSpoofingVariant](https://www.unicode.org/reports/tr38/#kSpoofingVariant),
+  [kTGHZ2013](https://www.unicode.org/reports/tr38/#kTGHZ2013),
+  [kUnihanCore2020](https://www.unicode.org/reports/tr38/#kUnihanCore2020)
+
 ### Development
 
 - Quiet pytest tracebacks (#310)
