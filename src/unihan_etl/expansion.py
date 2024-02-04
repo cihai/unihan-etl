@@ -354,6 +354,48 @@ def expand_kSMSZD2003Index(
     return expanded
 
 
+class kSMSZD2003ReadingsDict(t.TypedDict):
+    """kSMSZD2003Readings location mapping."""
+
+    mandarin: t.List[str]
+    cantonese: t.List[str]
+
+
+def expand_kSMSZD2003Readings(
+    value: t.List[str],
+) -> t.List[kSMSZD2003ReadingsDict]:
+    """Expand kSMSZD2003Readings Soengmou San Zidin (商務新字典) field.
+
+    Examples
+    --------
+    >>> expand_kSMSZD2003Readings(['tà粵taat3'])
+    [{'mandarin': ['tà'], 'cantonese': ['taat3']}]
+
+    >>> expand_kSMSZD2003Readings(['ma粵maa1,maa3', 'má粵maa1', 'mǎ粵maa1'])
+    [{'mandarin': ['ma'], 'cantonese': ['maa1', 'maa3']},
+    {'mandarin': ['má'], 'cantonese': ['maa1']},
+    {'mandarin': ['mǎ'], 'cantonese': ['maa1']}]
+
+    Bibliography
+    ------------
+    Wong Gongsang 黃港生, ed. Shangwu Xin Zidian / Soengmou San Zidin 商務新字典 (New
+    Commercial Press Character Dictionary). Hong Kong: 商務印書館(香港)有限公司
+    (Commercial Press [Hong Kong], Ltd.), 2003. ISBN 962-07-0140-2.
+    """
+    expanded: t.List[kSMSZD2003ReadingsDict] = []
+
+    for val in value:
+        mandarin, cantonese = val.split("粵")
+
+        expanded.append(
+            kSMSZD2003ReadingsDict(
+                mandarin=mandarin.split(","),
+                cantonese=cantonese.split(",")
+            )
+        )
+    return expanded
+
+
 class kHanyuPinyinPreDict(t.TypedDict):
     """kHanyuPinyin predicate mapping."""
 

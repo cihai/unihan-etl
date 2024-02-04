@@ -613,6 +613,13 @@
             "format": "default"
           },
           {
+            "name": "kSMSZD2003Readings",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kSpecializedSemanticVariant",
             "title": "",
             "description": "",
