@@ -977,6 +977,72 @@ def expand_kStrange(
     return expanded
 
 
+class kMojiJohoVariationDict(t.TypedDict):
+    """Variation sequence of Moji Jōhō Kiban entry."""
+
+    serial_number: str
+    variation_sequence: str
+    # If a Moji Jōhō Kiban database serial number appears both by itself and followed by
+    # a colon and VS, the registered Moji_Joho IVS that corresponds to the latter is
+    # considered the default (that is, encoded) form.
+    standard: bool
+
+
+class kMojiJohoDict(t.TypedDict):
+    """kMojiJoho mapping."""
+
+    serial_number: str
+    variants: t.List[kMojiJohoVariationDict]
+
+
+def expand_kMojiJoho(
+    value: str,
+) -> kMojiJohoDict:
+    """Expand kMojiJoho (Moji Jōhō Kiban) field.
+
+    Examples
+    --------
+    >>> expand_kMojiJoho('MJ000004')
+    {'serial_number': 'MJ000004', 'variants': []}
+
+    >>> expand_kMojiJoho('MJ000022 MJ000023:E0101 MJ000022:E0103')
+    {'serial_number': 'MJ000022', 'variants':
+        [{'serial_number': 'MJ000023', 'variation_sequence': 'E0101',
+        'standard': False},
+        {'serial_number': 'MJ000022', 'variation_sequence': 'E0103',
+        'standard': True}]}
+
+    See Also
+    --------
+    Assume 㐪:
+
+        U+342A	kMojiJoho	MJ000022 MJ000023:E0101 MJ000022:E0103:
+
+    Database link: https://moji.or.jp/mojikibansearch/info?MJ%E6%96%87%E5%AD%97%E5%9B%B3%E5%BD%A2%E5%90%8D=MJ000022
+    """
+    variants: t.List[kMojiJohoVariationDict] = []
+    values = value.split(" ")
+    if len(values) == 1:
+        return kMojiJohoDict(serial_number=values[0], variants=[])
+    default_serial = values.pop(0)
+
+    for val in values:
+        assert ":" in val
+        serial_number, variation_sequence = val.split(":", maxsplit=1)
+
+        variants.append(
+            kMojiJohoVariationDict(
+                serial_number=serial_number,
+                variation_sequence=variation_sequence,
+                standard=serial_number == default_serial,
+            )
+        )
+    return kMojiJohoDict(
+        serial_number=default_serial,
+        variants=variants,
+    )
+
+
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
     """Return structured value of information in UNIHAN field.
 

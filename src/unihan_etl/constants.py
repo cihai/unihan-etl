@@ -44,6 +44,7 @@ UNIHAN_MANIFEST = {
         "kGradeLevel",
         "kHDZRadBreak",
         "kHKGlyph",
+        "kMojiJoho",
         "kPhonetic",
         "kStrange",
         "kTotalStrokes",

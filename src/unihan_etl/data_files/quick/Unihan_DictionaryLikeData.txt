@@ -19,6 +19,7 @@
 #	kGradeLevel
 #	kHDZRadBreak
 #	kHKGlyph
+#	kMojiJoho
 #	kPhonetic
 #	kStrange
 #	kTotalStrokes
@@ -536,5 +537,9 @@ U+4491	kAlternateTotalStrokes	3:J
 U+4E95	kAlternateTotalStrokes	-
 U+537F	kAlternateTotalStrokes	12:JK
 U+9AA8	kAlternateTotalStrokes	10:HJKPV
+U+3400	kMojiJoho	MJ000004
+U+342A	kMojiJoho	MJ000022 MJ000023:E0101 MJ000022:E0103
+U+342E	kMojiJoho	MJ000027 MJ000027:E0101 MJ000028:E0102 MJ000029:E0103
+U+34DE	kMojiJoho	MJ000185 MJ000183:E0100 MJ000184:E0102 MJ000185:E0103
 
 # EOF

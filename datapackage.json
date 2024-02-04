@@ -487,6 +487,13 @@
             "format": "default"
           },
           {
+            "name": "kMojiJoho",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kMainlandTelegraph",
             "title": "",
             "description": "",
