@@ -27,6 +27,7 @@
 #	kMorohashi
 #	kNelson
 #	kSBGY
+#	kSMSZD2003Index
 #
 # For details on the file format, see http://www.unicode.org/reports/tr38/
 #
@@ -509,6 +510,10 @@ U+4E07	kIRGDaeJaweon	0137.070
 U+4E37	kIRGDaeJaweon	0162.211
 U+34BC	kCheungBauerIndex	402.06
 U+3578	kCheungBauerIndex	351.02 351.03
-
+U+3447	kSMSZD2003Index	26.07
+U+3565	kSMSZD2003Index	20.04 89.10
+U+4E38	kSMSZD2003Index	6.09 6.10 8.01 10.06
+U+5154	kSMSZD2003Index	45.08 9.05 45.11 60.10
+U+97F3	kSMSZD2003Index	769.05 15.17 291.20 493.13
 
 # EOF

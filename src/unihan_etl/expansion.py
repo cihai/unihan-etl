@@ -300,6 +300,60 @@ def expand_kTGHZ2013(
     return expanded
 
 
+class kSMSZD2003IndexDict(t.TypedDict):
+    """kSMSZD2003Index location mapping."""
+
+    page: int
+    position: int
+
+
+def expand_kSMSZD2003Index(
+    value: t.List[str],
+) -> t.List[kSMSZD2003IndexDict]:
+    """Expand kSMSZD2003Index Soengmou San Zidin (商務新字典) field.
+
+    Examples
+    --------
+    >>> expand_kSMSZD2003Index(['26.07'])
+    [{'page': 26, 'position': 7}]
+
+    >>> expand_kSMSZD2003Index(['769.05', '15.17', '291.20', '493.13'])
+    [{'page': 769, 'position': 5},
+    {'page': 15, 'position': 17},
+    {'page': 291, 'position': 20},
+    {'page': 493, 'position': 13}]
+
+    Bibliography
+    ------------
+    Wong Gongsang 黃港生, ed. Shangwu Xin Zidian / Soengmou San Zidin 商務新字典 (New
+    Commercial Press Character Dictionary). Hong Kong: 商務印書館(香港)有限公司
+    (Commercial Press [Hong Kong], Ltd.), 2003. ISBN 962-07-0140-2.
+    """
+    location_pattern = re.compile(
+        r"""
+        (?P<page>[\d]{1,3})\.
+        (?P<position>[\d]{2})
+    """,
+        re.X,
+    )
+
+    expanded: t.List[kSMSZD2003IndexDict] = []
+
+    for loc in value:
+        m = location_pattern.match(loc)
+        assert m is not None
+        g = m.groupdict()
+        assert g is not None
+
+        expanded.append(
+            kSMSZD2003IndexDict(
+                page=int(g["page"]),
+                position=int(g["position"]),
+            )
+        )
+    return expanded
+
+
 class kHanyuPinyinPreDict(t.TypedDict):
     """kHanyuPinyin predicate mapping."""
 

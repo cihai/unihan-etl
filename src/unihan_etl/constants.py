@@ -32,6 +32,7 @@ UNIHAN_MANIFEST = {
         "kMorohashi",
         "kNelson",
         "kSBGY",
+        "kSMSZD2003Index",
     ),
     "Unihan_DictionaryLikeData.txt": (
         "kAlternateTotalStrokes",
@@ -157,6 +158,7 @@ SPACE_DELIMITED_DICT_FIELDS = (
     "kHanYu",
     "kMandarin",
     "kTGHZ2013",
+    "kSMSZD2003Index",
     "kStrange",
     "kTotalStrokes",
     "kXHC1983",
