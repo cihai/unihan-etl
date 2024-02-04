@@ -16,6 +16,9 @@ import zhon.pinyin
 
 from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
+if t.TYPE_CHECKING:
+    from typing_extensions import TypeGuard
+
 #: diacritics from kHanyuPinlu
 N_DIACRITICS = "ńňǹ"
 
@@ -837,8 +840,18 @@ kStrangeLiteral = t.Literal[
 class kStrangeDict(t.TypedDict):
     """kStrange mapping."""
 
-    property_type: str
+    property_type: kStrangeLiteral
     characters: t.Sequence[str]
+
+
+K_STRANGE_PROPERTIES = t.get_args(kStrangeLiteral)
+
+
+def is_valid_kstrange_property(value: t.Any) -> "TypeGuard[kStrangeLiteral]":
+    """Return True and upcast if valid kStrange property type."""
+    if not isinstance(value, str):
+        return False
+    return value in K_STRANGE_PROPERTIES
 
 
 def expand_kStrange(
@@ -867,6 +880,9 @@ def expand_kStrange(
         else:
             property_type = val
             characters = []
+
+        assert is_valid_kstrange_property(value=property_type)
+
         expanded.append(
             kStrangeDict(
                 property_type=property_type,
