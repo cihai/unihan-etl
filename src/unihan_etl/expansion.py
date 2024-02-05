@@ -244,7 +244,7 @@ class kTGHZ2013Dict(t.TypedDict):
     """kTGHZ2013 mapping."""
 
     reading: str
-    locations: t.Sequence[t.Union[str, kTGHZ2013LocationDict]]
+    locations: t.Sequence[kTGHZ2013LocationDict]
 
 
 def expand_kTGHZ2013(
@@ -260,6 +260,10 @@ def expand_kTGHZ2013(
 
     >>> expand_kTGHZ2013(['482.140:zhòu'])  # doctest: +NORMALIZE_WHITESPACE
     [{'reading': 'zhòu', 'locations': [{'page': 482, 'position': 14, 'entry_type': 0}]}]
+
+    >>> expand_kTGHZ2013(['256.090:mò', '379.160:wàn'])
+    [{'reading': 'mò', 'locations': [{'page': 256, 'position': 9, 'entry_type': 0}]},
+     {'reading': 'wàn', 'locations': [{'page': 379, 'position': 16, 'entry_type': 0}]}]
     """
     location_pattern = re.compile(
         r"""
