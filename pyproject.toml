@@ -114,6 +114,9 @@ files = [
   "tests/",
 ]
 mypy_path = "type_stubs"
+exclude = [
+  "type_stubs/.*"
+]
 
 [[tool.mypy.overrides]]
 module = [
