@@ -244,7 +244,7 @@ class kTGHZ2013Dict(t.TypedDict):
     """kTGHZ2013 mapping."""
 
     reading: str
-    locations: t.Sequence[t.Union[str, kTGHZ2013LocationDict]]
+    locations: t.Sequence[kTGHZ2013LocationDict]
 
 
 def expand_kTGHZ2013(
