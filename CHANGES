@@ -15,13 +15,25 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 // Usage: unihan-etl@next
 ```
 
-## unihan-etl 0.32.x (unreleased)
+## unihan-etl 0.33.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
+
+## unihan-etl 0.32.0 (2024-02-05)
 
 ### Documentation
 
 - Highlighting for CSV and TSV examples (#253)
+
+### Improvements
+
+- Typing fixes and additional doctest for `kTGH2013` (#312)
+
+### Development
+
+- Added `types-pygments` package (#253)
+- Added some manual type stubs for `pygments`' `Lexer` (#253)
+- pytest-watcher: Silent `*.py.*py` reruns (#312)
 
 ## unihan-etl 0.31.0 (2024-02-04)
 
