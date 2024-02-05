@@ -44,6 +44,7 @@ packages = [
 ]
 include = [
   { path = "tests", format = "sdist" },
+  { path = "type_stubs", format = "sdist" },
 ]
 
 [tool.poetry.scripts]
@@ -101,6 +102,7 @@ types-docutils = "*"
 types-PyYAML = "*"
 types-appdirs = "*"
 types-requests = "*"
+types-pygments = "*"
 
 [tool.poetry.plugins.pytest11]
 unihan_etl = "unihan_etl.pytest_plugin"
@@ -110,6 +112,10 @@ strict = true
 files = [
   "src/",
   "tests/",
+]
+mypy_path = "type_stubs"
+exclude = [
+  "type_stubs/.*"
 ]
 
 [[tool.mypy.overrides]]

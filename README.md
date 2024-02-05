@@ -20,21 +20,25 @@ UNIHAN Version compatibility (as of unihan-etl v0.10.0):
 [UNIHAN](http://www.unicode.org/charts/unihan.html)'s data is dispersed across multiple files in the
 format of:
 
-    U+3400  kCantonese  jau1
-    U+3400  kDefinition (same as U+4E18 丘) hillock or mound
-    U+3400  kMandarin   qiū
-    U+3401  kCantonese  tim2
-    U+3401  kDefinition to lick; to taste, a mat, bamboo bark
-    U+3401  kHanyuPinyin    10019.020:tiàn
-    U+3401  kMandarin   tiàn
+```tsv
+U+3400	kCantonese		jau1
+U+3400	kDefinition		(same as U+4E18 丘) hillock or mound
+U+3400	kMandarin		qiū
+U+3401	kCantonese		tim2
+U+3401	kDefinition		to lick; to taste, a mat, bamboo bark
+U+3401	kHanyuPinyin		10019.020:tiàn
+U+3401	kMandarin		tiàn
+```
 
 Values vary in shape and structure depending on their field type.
 [kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin) maps Unicode codepoints to
 [Hànyǔ Dà Zìdiǎn](https://en.wikipedia.org/wiki/Hanyu_Da_Zidian), where `10019.020:tiàn` represents
 an entry. Complicating it further, more variations:
 
-    U+5EFE  kHanyuPinyin    10513.110,10514.010,10514.020:gǒng
-    U+5364  kHanyuPinyin    10093.130:xī,lǔ 74609.020:lǔ,xī
+```tsv
+U+5EFE	kHanyuPinyin		10513.110,10514.010,10514.020:gǒng
+U+5364	kHanyuPinyin		10093.130:xī,lǔ 74609.020:lǔ,xī
+```
 
 _kHanyuPinyin_ supports multiple entries delimited by spaces. ":" (colon) separate locations in the
 work from pinyin readings. "," (comma) separate multiple entries/readings. This is just one of 90
@@ -54,6 +58,23 @@ $ unihan-etl
 char,ucn,kCantonese,kDefinition,kHanyuPinyin,kMandarin
 㐀,U+3400,jau1,(same as U+4E18 丘) hillock or mound,,qiū
 㐁,U+3401,tim2,"to lick; to taste, a mat, bamboo bark",10019.020:tiàn,tiàn
+```
+
+With `$ unihan-etl -F yaml --no-expand`:
+
+```yaml
+- char: 㐀
+  kCantonese: jau1
+  kDefinition: (same as U+4E18 丘) hillock or mound
+  kHanyuPinyin: null
+  kMandarin: qiū
+  ucn: U+3400
+- char: 㐁
+  kCantonese: tim2
+  kDefinition: to lick; to taste, a mat, bamboo bark
+  kHanyuPinyin: 10019.020:tiàn
+  kMandarin: tiàn
+  ucn: U+3401
 ```
 
 To preview in the CLI, try [tabview](https://github.com/TabViewer/tabview) or
