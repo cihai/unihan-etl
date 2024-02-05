@@ -6,6 +6,11 @@ import sys
 import typing as t
 from os.path import relpath
 
+from pygments import token
+from pygments.lexer import RegexLexer, bygroups
+from pygments.token import Keyword, Literal, Name, Operator, Punctuation
+from sphinx.highlighting import lexers
+
 import unihan_etl
 
 if t.TYPE_CHECKING:
@@ -215,6 +220,152 @@ def linkcode_resolve(domain: str, info: t.Dict[str, str]) -> t.Union[None, str]:
             fn,
             linespec,
         )
+
+
+class CsvLexer(RegexLexer):
+    """Simple CSV lexer for Pygments.
+
+    Credit: https://github.com/fish2000/pygments-csv-lexer/blob/8c18fbc/csvlexer/csv.py
+    Original Author: SashaChernykh, Editor: fish2000
+    License: MIT
+
+    Extends:
+        pygments.lexer.RegexLexer
+
+    Class Variables:
+        name {str} -- name of lexer:
+            * http://pygments.org/docs/api/#pygments.lexer.Lexer.name
+        aliases {list} - languages, against whose GFM block names CsvLexer will apply
+            * https://git.io/fhjla
+        filenames {list} - file name patterns, for whose contents CsvLexer will apply
+        tokens {dict} - regular expressions internally matching CsvLexer's components
+
+    Based on StackOverflow user Adobe's code:
+        * https://stackoverflow.com/a/25508711/298171
+    """
+
+    name = "Csv"
+    aliases: t.ClassVar = [
+        "csv",
+        "comma-separated",
+        "comma-separated-values",
+    ]
+    filenames: t.ClassVar[t.List[str]] = ["*.csv"]
+
+    csv_pattern: str = r"(,)([^,\n]*)"
+
+    tokens: t.ClassVar = {
+        "root": [
+            (r"^[^,\n]*", Operator, "second"),
+        ],
+        "second": [
+            (csv_pattern, bygroups(Punctuation, Name.Constant), "third"),
+        ],
+        "third": [
+            (csv_pattern, bygroups(Punctuation, Keyword.Declaration), "fourth"),
+        ],
+        "fourth": [
+            (csv_pattern, bygroups(Punctuation, Literal.Number), "fifth"),
+        ],
+        "fifth": [
+            (csv_pattern, bygroups(Punctuation, Literal.String.Single), "sixth"),
+        ],
+        "sixth": [
+            (csv_pattern, bygroups(Punctuation, Name.Constant), "seventh"),
+        ],
+        "seventh": [
+            (csv_pattern, bygroups(Punctuation, Keyword.Namespace), "eighth"),
+        ],
+        "eighth": [
+            (csv_pattern, bygroups(Punctuation, Literal.Number), "ninth"),
+        ],
+        "ninth": [
+            (csv_pattern, bygroups(Punctuation, Literal.String.Single), "tenth"),
+        ],
+        "tenth": [
+            (csv_pattern, bygroups(Punctuation, Keyword.Type), "unsupported"),
+        ],
+        "unsupported": [
+            (r"(.+)", bygroups(Punctuation)),
+        ],
+    }
+
+
+lexers["csv"] = CsvLexer()
+
+
+class TsvLexer(CsvLexer):
+    """Simple TSV lexer for Pygments.
+
+    Based on CsvLexer, see credit above
+
+    Extends:
+        pygments.lexer.RegexLexer
+
+    Class Variables:
+        name {str} -- name of lexer:
+            * http://pygments.org/docs/api/#pygments.lexer.Lexer.name
+        aliases {list} - languages, against whose GFM block names CsvLexer will apply
+            * https://git.io/fhjla
+        filenames {list} - file name patterns, for whose contents CsvLexer will apply
+        tokens {dict} - regular expressions internally matching CsvLexer's components
+
+    Based on StackOverflow user Adobe's code:
+        * https://stackoverflow.com/a/25508711/298171
+    """
+
+    tsv_pattern = r"([ \t]+)([^[\t\n]*)"
+
+    name = "Tsv"
+    aliases: t.ClassVar[t.List[str]] = ["tsv", "tab-separated", "tab-separated-values"]
+    filenames: t.ClassVar[t.List[str]] = ["*.tsv"]
+
+    tokens: t.ClassVar = {
+        "root": [
+            (r"^[^\t\n]*", token.Name.Constant, "second"),
+        ],
+        "second": [
+            (
+                tsv_pattern,
+                bygroups(Punctuation, Name.Attribute),
+                "third",
+            ),
+        ],
+        "third": [
+            (
+                tsv_pattern,
+                bygroups(Punctuation, token.Text),
+                "fourth",
+            ),
+        ],
+        "fourth": [
+            (tsv_pattern, bygroups(Punctuation, Literal.Number), "fifth"),
+        ],
+        "fifth": [
+            (tsv_pattern, bygroups(Punctuation, Literal.String.Single), "sixth"),
+        ],
+        "sixth": [
+            (tsv_pattern, bygroups(Punctuation, Name.Constant), "seventh"),
+        ],
+        "seventh": [
+            (tsv_pattern, bygroups(Punctuation, Keyword.Namespace), "eighth"),
+        ],
+        "eighth": [
+            (tsv_pattern, bygroups(Punctuation, Literal.Number), "ninth"),
+        ],
+        "ninth": [
+            (tsv_pattern, bygroups(Punctuation, Literal.String.Single), "tenth"),
+        ],
+        "tenth": [
+            (tsv_pattern, bygroups(Punctuation, Keyword.Type), "unsupported"),
+        ],
+        "unsupported": [
+            (r"(.+)", bygroups(Punctuation)),
+        ],
+    }
+
+
+lexers["tsv"] = TsvLexer()
 
 
 def remove_tabs_js(app: "Sphinx", exc: Exception) -> None:
