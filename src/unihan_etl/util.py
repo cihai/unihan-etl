@@ -73,7 +73,10 @@ def ucnstring_to_unicode(ucn_string: str) -> str:
 
 
 def _dl_progress(
-    count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout,
+    count: int,
+    block_size: int,
+    total_size: int,
+    out: t.IO[str] = sys.stdout,
 ) -> None:
     """
     MIT License: https://github.com/okfn/dpm-old/blob/master/dpm/util.py.

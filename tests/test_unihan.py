@@ -42,7 +42,8 @@ def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
 
 
 def test_has_valid_zip(
-    tmp_path: pathlib.Path, unihan_mock_zip: zipfile.ZipFile,
+    tmp_path: pathlib.Path,
+    unihan_mock_zip: zipfile.ZipFile,
 ) -> None:
     """Test has_valid_zip() returns whether zip file is valid."""
     if UNIHAN_ZIP_PATH.is_file():
@@ -393,7 +394,8 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     option_subset_one_field = {"fields": ["kDefinition"]}
     pkgr = Packager.from_cli(["-f", "kDefinition"])
     assert_dict_contains_subset(
-        option_subset_one_field, dataclasses.asdict(pkgr.options),
+        option_subset_one_field,
+        dataclasses.asdict(pkgr.options),
     )
 
     option_subset_two_fields = {"fields": ["kDefinition", "kXerox"]}
@@ -418,7 +420,9 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     pkgr = Packager.from_cli(["--format", "json"])
     option_subset = {"format": "json"}
     assert_dict_contains_subset(
-        option_subset, dataclasses.asdict(pkgr.options), msg="format argument works",
+        option_subset,
+        dataclasses.asdict(pkgr.options),
+        msg="format argument works",
     )
 
 

@@ -62,7 +62,9 @@ def test_expand(
     ],
 )
 def test_expand_kMandarin(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str],
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.Dict[str, str],
 ) -> None:
     """Test expansion of KMandarin.
 
@@ -85,7 +87,9 @@ def test_expand_kMandarin(
     ],
 )
 def test_expand_kTotalStrokes(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int],
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.Dict[str, int],
 ) -> None:
     """Test expansion of kTotalStrokes.
 
@@ -110,7 +114,9 @@ def test_expand_kTotalStrokes(
     ],
 )
 def test_expand_kIRGHanyuDaZidian(
-    ucn: str, expected: ExpandedData, unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
+    unihan_quick_expanded_data: ExpandedData,
 ) -> None:
     """Test expansion of kIRGHanyuDaZidian."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -247,7 +253,9 @@ def test_expand_kHanyuPinyin(
     ],
 )
 def test_expand_HanYu(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: ExpandedData,
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
 ) -> None:
     """Test expansion of HanYu.
 

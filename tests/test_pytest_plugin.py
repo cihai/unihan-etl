@@ -99,7 +99,9 @@ def test_ensure_unihan_quick(
 
 
 @pytest.mark.parametrize(
-    PytestPluginFixture._fields, FIXTURES, ids=[f.test_id for f in FIXTURES],
+    PytestPluginFixture._fields,
+    FIXTURES,
+    ids=[f.test_id for f in FIXTURES],
 )
 def test_plugin(
     pytester: pytest.Pytester,

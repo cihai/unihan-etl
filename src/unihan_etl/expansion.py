@@ -448,7 +448,8 @@ def expand_kHanyuPinyin(
                 virtual=int(g["virtual"]),
             )
         expanded[i] = kHanyuPinyinDict(
-            locations=expanded[i]["locations"], readings=expanded[i]["readings"],
+            locations=expanded[i]["locations"],
+            readings=expanded[i]["readings"],
         )
     return expanded
 
@@ -511,7 +512,8 @@ def expand_kXHC1983(
                 substituted=g["substituted"] == "*",
             )
         expanded[i] = kXHC1983Dict(
-            locations=expanded[i]["locations"], reading=expanded[i]["reading"],
+            locations=expanded[i]["locations"],
+            reading=expanded[i]["reading"],
         )
     return expanded
 
