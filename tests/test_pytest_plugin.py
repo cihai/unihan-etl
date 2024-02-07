@@ -51,8 +51,8 @@ def test_unihan_ensure_full(
     assert unihan_full_options.work_dir.exists()
     unihan_readings = unihan_full_options.work_dir / 'Unihan_Readings.txt'
     assert unihan_readings.stat().st_size > 6_200_000
-        """
-            )
+        """,
+            ),
         },
         tests_passed=1,
     ),
@@ -90,8 +90,8 @@ def test_ensure_unihan_quick(
     unihan_readings = unihan_quick_options.work_dir / 'Unihan_Readings.txt'
     assert unihan_readings.stat().st_size >= 21_631
     assert unihan_readings.stat().st_size < 30_000
-        """
-            )
+        """,
+            ),
         },
         tests_passed=1,
     ),
@@ -99,7 +99,7 @@ def test_ensure_unihan_quick(
 
 
 @pytest.mark.parametrize(
-    PytestPluginFixture._fields, FIXTURES, ids=[f.test_id for f in FIXTURES]
+    PytestPluginFixture._fields, FIXTURES, ids=[f.test_id for f in FIXTURES],
 )
 def test_plugin(
     pytester: pytest.Pytester,
@@ -117,7 +117,7 @@ def test_plugin(
             """
 [pytest]
 addopts=-vv
-        """.strip()
+        """.strip(),
         ),
     )
     pytester.makeconftest(
@@ -131,8 +131,8 @@ def setup(
     request: pytest.FixtureRequest,
 ) -> None:
     pass
-    """
-        )
+    """,
+        ),
     )
     tests_path = pytester.path / "tests"
     first_test_key = next(iter(files.keys()))

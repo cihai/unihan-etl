@@ -63,7 +63,7 @@ class ReportHookFn(t.Protocol):
     """Progress bar callback for download()."""
 
     def __call__(
-        self, count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout
+        self, count: int, block_size: int, total_size: int, out: t.IO[str] = sys.stdout,
     ) -> object:
         """Print progress bar during download."""
         ...

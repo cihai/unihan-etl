@@ -88,7 +88,7 @@ class AppDirs:
                     pathlib.Path(
                         os.path.expanduser(  # noqa: PTH111
                             os.path.expandvars(str(val)),
-                        ).format(**dir_mapping)
+                        ).format(**dir_mapping),
                     ),
                 )
 
@@ -108,6 +108,6 @@ class AppDirs:
                     pathlib.Path(
                         os.path.expanduser(  # noqa: PTH111
                             os.path.expandvars(str(val)),
-                        ).format(**dir_mapping)
+                        ).format(**dir_mapping),
                     ),
                 )

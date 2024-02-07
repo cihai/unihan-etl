@@ -146,7 +146,7 @@ def get_parser() -> argparse.ArgumentParser:
         help=f"Output of .csv. Default: {DESTINATION_DIR}/unihan.{{json,csv,yaml}}",
     )
     parser.add_argument(
-        "-w", "--work-dir", dest="work_dir", help=f"Default: {WORK_DIR}"
+        "-w", "--work-dir", dest="work_dir", help=f"Default: {WORK_DIR}",
     )
     parser.add_argument(
         "-F",
@@ -315,7 +315,7 @@ def load_data(
     """
     log.info(f"Loading data: {', '.join([str(s) for s in files])}")
     raw_data = fileinput.FileInput(
-        files=files, openhook=fileinput.hook_encoded("utf-8")
+        files=files, openhook=fileinput.hook_encoded("utf-8"),
     )
     log.info("Done loading data.")
 
@@ -412,7 +412,7 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
 
 
 def listify(
-    data: "UntypedNormalizedData", fields: t.Sequence[str]
+    data: "UntypedNormalizedData", fields: t.Sequence[str],
 ) -> "ListifiedExport":
     """Convert tabularized data to a CSV-friendly list.
 
@@ -467,7 +467,7 @@ def validate_options(
 ) -> "TypeGuard[Options]":
     """Validate unihan-etl options."""
     if not is_default_option("input_files", options.input_files) and is_default_option(
-        "fields", options.fields
+        "fields", options.fields,
     ):
         # Filter fields when only files specified.
         try:
@@ -475,12 +475,12 @@ def validate_options(
         except (KeyError, FieldNotFound) as e:
             raise FileNotSupported(str(e)) from e
     elif not is_default_option("fields", options.fields) and is_default_option(
-        "input_files", options.input_files
+        "input_files", options.input_files,
     ):
         # Filter files when only field specified.
         options.input_files = get_files(options.fields)
     elif not is_default_option("fields", options.fields) and not is_default_option(
-        "input_files", options.input_files
+        "input_files", options.input_files,
     ):
         # Filter fields when only files specified.
         fields_in_files = get_fields(filter_manifest(options.input_files))
@@ -520,7 +520,7 @@ class Packager:
         setup_logger(logger=None, level=options.log_level or DEFAULT_OPTIONS.log_level)
 
         merged_options = dataclasses.replace(
-            DEFAULT_OPTIONS, **dataclasses.asdict(options)
+            DEFAULT_OPTIONS, **dataclasses.asdict(options),
         )
 
         self.options = merged_options
@@ -561,7 +561,7 @@ class Packager:
 
         # Replace {ext} with extension to use.
         self.options.destination = pathlib.Path(
-            str(self.options.destination).format(ext=self.options.format)
+            str(self.options.destination).format(ext=self.options.format),
         )
 
         if not self.options.destination.parent.exists():
@@ -613,7 +613,7 @@ class Packager:
 
         try:
             return cls(
-                Options(**{k: v for k, v in vars(args).items() if v is not None})
+                Options(**{k: v for k, v in vars(args).items() if v is not None}),
             )
         except Exception as e:
             sys.exit(str(e))

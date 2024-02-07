@@ -26,7 +26,7 @@ class Options:
     zip_path: pathlib.Path = UNIHAN_ZIP_PATH
     work_dir: pathlib.Path = WORK_DIR
     fields: t.Sequence[str] = dataclasses.field(
-        default_factory=lambda: INDEX_FIELDS + UNIHAN_FIELDS
+        default_factory=lambda: INDEX_FIELDS + UNIHAN_FIELDS,
     )
     format: t.Literal["json", "csv", "yaml", "python"] = "csv"
     input_files: t.List[str] = dataclasses.field(default_factory=lambda: UNIHAN_FILES)
