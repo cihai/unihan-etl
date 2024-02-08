@@ -62,7 +62,9 @@ def test_expand(
     ],
 )
 def test_expand_kMandarin(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, str]
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.Dict[str, str],
 ) -> None:
     """Test expansion of KMandarin.
 
@@ -85,7 +87,9 @@ def test_expand_kMandarin(
     ],
 )
 def test_expand_kTotalStrokes(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: t.Dict[str, int]
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.Dict[str, int],
 ) -> None:
     """Test expansion of kTotalStrokes.
 
@@ -110,7 +114,9 @@ def test_expand_kTotalStrokes(
     ],
 )
 def test_expand_kIRGHanyuDaZidian(
-    ucn: str, expected: ExpandedData, unihan_quick_expanded_data: ExpandedData
+    ucn: str,
+    expected: ExpandedData,
+    unihan_quick_expanded_data: ExpandedData,
 ) -> None:
     """Test expansion of kIRGHanyuDaZidian."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -130,7 +136,7 @@ def test_expand_kIRGHanyuDaZidian(
                         {"volume": 1, "page": 514, "character": 2, "virtual": 0},
                     ],
                     "readings": ["gǒng"],
-                }
+                },
             ],
         ),
         (
@@ -138,13 +144,13 @@ def test_expand_kIRGHanyuDaZidian(
             [
                 {  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
                     "locations": [
-                        {"volume": 1, "page": 93, "character": 13, "virtual": 0}
+                        {"volume": 1, "page": 93, "character": 13, "virtual": 0},
                     ],
                     "readings": ["xī", "lǔ"],
                 },
                 {
                     "locations": [
-                        {"volume": 7, "page": 4609, "character": 2, "virtual": 0}
+                        {"volume": 7, "page": 4609, "character": 2, "virtual": 0},
                     ],
                     "readings": ["lǔ", "xī"],
                 },
@@ -159,7 +165,7 @@ def test_expand_kIRGHanyuDaZidian(
                         {"volume": 1, "page": 278, "character": 9, "virtual": 0},
                     ],
                     "readings": ["sù"],
-                }
+                },
             ],
         ),
         (
@@ -167,10 +173,10 @@ def test_expand_kIRGHanyuDaZidian(
             [
                 {  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
                     "locations": [
-                        {"volume": 1, "page": 297, "character": 26, "virtual": 0}
+                        {"volume": 1, "page": 297, "character": 26, "virtual": 0},
                     ],
                     "readings": ["qīn", "qìn", "qǐn"],
-                }
+                },
             ],
         ),
     ],
@@ -218,7 +224,7 @@ def test_expand_kHanyuPinyin(
                     "page": 4699,
                     "character": 12,
                     "virtual": 2,
-                }
+                },
             ],
         ),
         (
@@ -241,13 +247,15 @@ def test_expand_kHanyuPinyin(
                     "page": 273,
                     "character": 12,
                     "virtual": 0,
-                }
+                },
             ],
         ),
     ],
 )
 def test_expand_HanYu(
-    unihan_quick_expanded_data: ExpandedData, ucn: str, expected: ExpandedData
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: ExpandedData,
 ) -> None:
     """Test expansion of HanYu.
 
@@ -305,7 +313,7 @@ def test_expand_HanYu(
                     "radical": 7,
                     "strokes": 2,
                     "strokes-residue": 6,
-                }
+                },
             ],
         ),
         # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
@@ -411,7 +419,7 @@ def test_expand_kRSUnihan(
                     "strokes": 7,
                     "cangjie": "RMMV",
                     "readings": ["san2", "seon2"],
-                }
+                },
             ],
         ),
     ],
@@ -441,7 +449,7 @@ def test_expand_kCheungBauer(
     "ucn,expected",
     [
         # U+34D6      kCihaiT 170.105
-        ("U+34D6", [{"page": 170, "row": 1, "character": 5}])
+        ("U+34D6", [{"page": 170, "row": 1, "character": 5}]),
     ],
 )
 def test_expand_kCihaiT(
@@ -683,13 +691,13 @@ def test_expand_kSBGY(
             [
                 {
                     "locations": [
-                        {"page": 295, "character": 1, "entry": 1, "substituted": False}
+                        {"page": 295, "character": 1, "entry": 1, "substituted": False},
                     ],
                     "reading": "fā",
                 },
                 {
                     "locations": [
-                        {"page": 884, "character": 8, "entry": 1, "substituted": False}
+                        {"page": 884, "character": 8, "entry": 1, "substituted": False},
                     ],
                     "reading": "pō",
                 },
@@ -711,7 +719,7 @@ def test_expand_kSBGY(
                         },
                     ],
                     "reading": "sóng",
-                }
+                },
             ],
         ),
         # U+5750  kXHC1983        1551.040,1552.011:zuò
@@ -735,7 +743,7 @@ def test_expand_kSBGY(
                         },
                     ],
                     "reading": "zuò",
-                }
+                },
             ],
         ),
     ],

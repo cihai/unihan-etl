@@ -134,7 +134,7 @@ def expand_kAlternateTotalStrokes(
             kAlternateTotalStrokesDict(
                 strokes=strokes,
                 sources=sources,
-            )
+            ),
         )
     return expanded
 
@@ -293,13 +293,13 @@ def expand_kTGHZ2013(
                     page=int(g["page"]),
                     position=int(g["position"]),
                     entry_type=int(g["entry_type"]),
-                )
+                ),
             )
         expanded.append(
             kTGHZ2013Dict(
                 reading=reading,
                 locations=exploded_locations,
-            )
+            ),
         )
     return expanded
 
@@ -353,7 +353,7 @@ def expand_kSMSZD2003Index(
             kSMSZD2003IndexDict(
                 page=int(g["page"]),
                 position=int(g["position"]),
-            )
+            ),
         )
     return expanded
 
@@ -395,7 +395,7 @@ def expand_kSMSZD2003Readings(
             kSMSZD2003ReadingsDict(
                 mandarin=mandarin.split(","),
                 cantonese=cantonese.split(","),
-            )
+            ),
         )
     return expanded
 
@@ -448,7 +448,8 @@ def expand_kHanyuPinyin(
                 virtual=int(g["virtual"]),
             )
         expanded[i] = kHanyuPinyinDict(
-            locations=expanded[i]["locations"], readings=expanded[i]["readings"]
+            locations=expanded[i]["locations"],
+            readings=expanded[i]["readings"],
         )
     return expanded
 
@@ -511,7 +512,8 @@ def expand_kXHC1983(
                 substituted=g["substituted"] == "*",
             )
         expanded[i] = kXHC1983Dict(
-            locations=expanded[i]["locations"], reading=expanded[i]["reading"]
+            locations=expanded[i]["locations"],
+            reading=expanded[i]["reading"],
         )
     return expanded
 
@@ -592,7 +594,7 @@ def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict
                 "radical": int(g["radical"]),
                 "strokes": int(g["strokes"]),
                 "strokes-residue": int(g["strokes_residue"]),
-            }
+            },
         )
     return expanded
 
@@ -630,7 +632,7 @@ def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
                 "page": int(m["page"]),
                 "row": int(m["row"]),
                 "character": int(m["character"]),
-            }
+            },
         )
     return expanded
 
@@ -731,7 +733,7 @@ def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
         assert g is not None
 
         expanded[i] = kFennDict(
-            {"phonetic": g["phonetic"], "frequency": g["frequency"]}
+            {"phonetic": g["phonetic"], "frequency": g["frequency"]},
         )
     return expanded
 
@@ -762,7 +764,7 @@ def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
         assert g is not None
 
         expanded[i] = kHanyuPinluDict(
-            {"phonetic": g["phonetic"], "frequency": int(g["frequency"])}
+            {"phonetic": g["phonetic"], "frequency": int(g["frequency"])},
         )
     return expanded
 
@@ -954,7 +956,7 @@ def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
                 "set": int(g["set"]),
                 "letter": g["letter"],
                 "apostrophe": g["apostrophe"] == "'",
-            }
+            },
         )
     return expanded
 
@@ -1071,7 +1073,7 @@ def expand_kStrange(
             kStrangeDict(
                 property_type=property_type,
                 characters=characters,
-            )
+            ),
         )
     return expanded
 
@@ -1134,7 +1136,7 @@ def expand_kMojiJoho(
                 serial_number=serial_number,
                 variation_sequence=variation_sequence,
                 standard=serial_number == default_serial,
-            )
+            ),
         )
     return kMojiJohoDict(
         serial_number=default_serial,

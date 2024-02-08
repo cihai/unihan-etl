@@ -42,7 +42,8 @@ def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
 
 
 def test_has_valid_zip(
-    tmp_path: pathlib.Path, unihan_mock_zip: zipfile.ZipFile
+    tmp_path: pathlib.Path,
+    unihan_mock_zip: zipfile.ZipFile,
 ) -> None:
     """Test has_valid_zip() returns whether zip file is valid."""
     if UNIHAN_ZIP_PATH.is_file():
@@ -77,7 +78,7 @@ def test_filter_manifest() -> None:
             "kSpoofingVariant",
             "kTraditionalVariant",
             "kZVariant",
-        ]
+        ],
     }
 
     result = core.filter_manifest(["Unihan_Variants.txt"])
@@ -159,7 +160,7 @@ def test_download_mock(
                 "work_dir": unihan_mock_test_dir / "downloads",
                 "destination": data_path / "unihan.csv",
             },
-        )
+        ),
     )
     p.download(urlretrieve_fn=urlretrieve)
     assert dest_path.exists()
@@ -243,7 +244,7 @@ def test_normalize_only_output_requested_columns(
 
     assert [] == not_in_columns, "normalize filters columns not specified."
     assert set(in_columns).issubset(
-        set(unihan_quick_columns)
+        set(unihan_quick_columns),
     ), "normalize returns correct columns specified + ucn and char."
 
 
@@ -393,7 +394,8 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     option_subset_one_field = {"fields": ["kDefinition"]}
     pkgr = Packager.from_cli(["-f", "kDefinition"])
     assert_dict_contains_subset(
-        option_subset_one_field, dataclasses.asdict(pkgr.options)
+        option_subset_one_field,
+        dataclasses.asdict(pkgr.options),
     )
 
     option_subset_two_fields = {"fields": ["kDefinition", "kXerox"]}
@@ -418,7 +420,9 @@ def test_cli_plus_defaults(unihan_mock_zip_path: pathlib.Path) -> None:
     pkgr = Packager.from_cli(["--format", "json"])
     option_subset = {"format": "json"}
     assert_dict_contains_subset(
-        option_subset, dataclasses.asdict(pkgr.options), msg="format argument works"
+        option_subset,
+        dataclasses.asdict(pkgr.options),
+        msg="format argument works",
     )
 
 

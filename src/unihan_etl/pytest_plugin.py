@@ -71,7 +71,8 @@ def unihan_full_options(unihan_full_path: pathlib.Path) -> UnihanOptions:
 
 @pytest.fixture(scope="session")
 def unihan_full_packager(
-    unihan_full_path: pathlib.Path, unihan_full_options: "UnihanOptions"
+    unihan_full_path: pathlib.Path,
+    unihan_full_options: "UnihanOptions",
 ) -> "Packager":
     """Return Packager for "full" portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_full_options)
@@ -224,7 +225,8 @@ def unihan_quick_options(
 
 @pytest.fixture(scope="session")
 def unihan_quick_packager(
-    unihan_quick_path: pathlib.Path, unihan_quick_options: "UnihanOptions"
+    unihan_quick_path: pathlib.Path,
+    unihan_quick_options: "UnihanOptions",
 ) -> "Packager":
     """Bootstrap a small, but effective portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_quick_options)
@@ -358,7 +360,8 @@ def unihan_home_user_name() -> str:
 
 @pytest.fixture(scope="session")
 def unihan_user_path(
-    unihan_home_path: pathlib.Path, unihan_home_user_name: str
+    unihan_home_path: pathlib.Path,
+    unihan_home_user_name: str,
 ) -> pathlib.Path:
     """Return temporary user directory.
 
@@ -427,7 +430,8 @@ def unihan_mock_test_dir(tmp_path_factory: pytest.TempPathFactory) -> pathlib.Pa
 
 @pytest.fixture(scope="session")
 def unihan_mock_zip_path(
-    unihan_mock_test_dir: pathlib.Path, unihan_mock_zip_pathname: str
+    unihan_mock_test_dir: pathlib.Path,
+    unihan_mock_zip_pathname: str,
 ) -> pathlib.Path:
     """Return path to Unihan zipfile."""
     return unihan_mock_test_dir / unihan_mock_zip_pathname
@@ -435,7 +439,8 @@ def unihan_mock_zip_path(
 
 @pytest.fixture(scope="session")
 def unihan_mock_zip(
-    unihan_mock_zip_path: pathlib.Path, unihan_quick_data: str
+    unihan_mock_zip_path: pathlib.Path,
+    unihan_quick_data: str,
 ) -> zipfile.ZipFile:
     """Return Unihan zipfile."""
     zf = zipfile.ZipFile(str(unihan_mock_zip_path), "a")
