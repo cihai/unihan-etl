@@ -66,6 +66,8 @@ _Maintenance release: No bug fixes or new features._
 
 ### Breaking: UNIHAN upgrades (#305)
 
+Bump UNIHAN compatibility from 11.0.0 to [15.1.0](https://www.unicode.org/reports/tr38/tr38-35.html#History) (released 2023-09-01, revision 35).
+
 #### Removed fields
 
 - 15.1.0: [kHKSCS](https://www.unicode.org/L2/L2023/23005.htm#174-C10),

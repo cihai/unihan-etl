@@ -13,9 +13,9 @@ YAML file.
 Part of the [cihai](https://cihai.git-pull.com) project. Similar project:
 [libUnihan](http://libunihan.sourceforge.net/).
 
-UNIHAN Version compatibility (as of unihan-etl v0.10.0):
-[11.0.0](https://www.unicode.org/reports/tr38/tr38-25.html#History) (released 2018-05-08, revision
-25).
+UNIHAN Version compatibility (as of unihan-etl v0.31.0):
+[15.1.0](https://www.unicode.org/reports/tr38/tr38-35.html#History) (released 2023-09-01, revision
+35).
 
 [UNIHAN](http://www.unicode.org/charts/unihan.html)'s data is dispersed across multiple files in the
 format of:
