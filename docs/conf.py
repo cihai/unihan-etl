@@ -252,7 +252,7 @@ class CsvLexer(RegexLexer):
     ]
     filenames: t.ClassVar[t.List[str]] = ["*.csv"]
 
-    csv_pattern: str = r"(,)([^,\n]*)"
+    csv_pattern: str = r"(,)((\".*\")|[^,\n]*)"
 
     tokens: t.ClassVar = {
         "root": [
