@@ -1,24 +1,16 @@
 # unihan-etl &middot; [![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](https://pypi.org/project/unihan-etl/) [![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE) [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 
-[ETL] tool for Unicode's Han Unification
-([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases. unihan-etl retrieves
-(downloads), extracts (unzips), and transforms the database from Unicode's website to a flat,
-tabular or structured, tree-like format.
+An [ETL](http://www.unicode.org/charts/unihan.html) tool for the Unicode Han Unification ([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases. unihan-etl is designed to fetch (download), unpack (unzip), and convert the database from the Unicode website into either a flattened, tabular format or a structured, hierarchical format.
 
-unihan-etl can be used as a python library through its
-[API], to retrieve data as a python object, or
-through the [CLI](https://unihan-etl.git-pull.com/en/latest/cli.html) to retrieve a CSV, JSON, or
-YAML file.
+unihan-etl serves dual purposes: as a Python library offering an [API](https://unihan-etl.git-pull.com/en/latest/) for accessing data as Python objects, and as a command-line interface ([CLI](https://unihan-etl.git-pull.com/en/latest/cli.html)) for exporting data into CSV, JSON, or YAML formats.
 
-Part of the [cihai](https://cihai.git-pull.com) project. Similar project:
-[libUnihan](http://libunihan.sourceforge.net/).
+This tool is a component of the [cihai](https://cihai.git-pull.com) suite of CJK related projects. For a similar tool, see [libUnihan](http://libunihan.sourceforge.net/).
 
-UNIHAN Version compatibility (as of unihan-etl v0.31.0):
-[15.1.0](https://www.unicode.org/reports/tr38/tr38-35.html#History) (released 2023-09-01, revision
-35).
+As of v0.31.0, unihan-etl is compatible with UNIHAN Version 15.1.0 ([released on 2023-09-01, revision 35](https://www.unicode.org/reports/tr38/tr38-35.html#History)).
 
-[UNIHAN](http://www.unicode.org/charts/unihan.html)'s data is dispersed across multiple files in the
-format of:
+## The UNIHAN database
+
+The [UNIHAN](http://www.unicode.org/charts/unihan.html) database organizes data across multiple files, exemplified below:
 
 ```tsv
 U+3400	kCantonese		jau1
