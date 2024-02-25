@@ -62,6 +62,8 @@ unicodecsv = "*"
 appdirs = "*"
 zhon = "~2.0"
 PyYAML = "*"
+typing-extensions = "^4"
+pydantic = "~2.6"
 
 [tool.poetry.group.docs.dependencies]
 ### Docs ###
