@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Download + ETL UNIHAN into structured format and export it."""
+
 import argparse
 import codecs
 import csv

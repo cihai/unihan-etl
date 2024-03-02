@@ -1,4 +1,5 @@
 """Test for unihan-etl pytest plugin."""
+
 import textwrap
 import typing as t
 

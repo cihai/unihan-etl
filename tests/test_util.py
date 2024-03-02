@@ -1,4 +1,5 @@
 """Tests for unihan-etl utilities."""
+
 from unihan_etl.util import ucn_to_unicode, ucnstring_to_unicode
 
 

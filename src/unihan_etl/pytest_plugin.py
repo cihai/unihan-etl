@@ -1,4 +1,5 @@
 """pytest plugin for unihan-etl."""
+
 import contextlib
 import getpass
 import logging

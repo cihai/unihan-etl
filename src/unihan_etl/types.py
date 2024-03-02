@@ -1,4 +1,5 @@
 """Typings for unihan-etl."""
+
 import dataclasses
 import pathlib
 import sys
