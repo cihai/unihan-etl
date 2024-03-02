@@ -1,4 +1,5 @@
 """Test expansion of multi-value fields in UNIHAN."""
+
 import typing as t
 
 import pytest

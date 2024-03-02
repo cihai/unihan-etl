@@ -1,4 +1,5 @@
 """Configuration for the unihan-etl package."""
+
 import dataclasses
 import pathlib
 import typing as t

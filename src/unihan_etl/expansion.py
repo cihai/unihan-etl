@@ -8,6 +8,7 @@ Notes
 2. module-level function bytecode is cached in python
 3. the last used compiled regexes are cached
 """
+
 import re
 import typing as t
 

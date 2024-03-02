@@ -1,4 +1,5 @@
 """Utilities for parsing UNIHAN's data and structures."""
+
 import re
 import sys
 import typing as t

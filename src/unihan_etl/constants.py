@@ -1,4 +1,5 @@
 """Constants for unihan_etl."""
+
 import importlib.util
 
 from appdirs import AppDirs as BaseAppDirs

@@ -1,4 +1,5 @@
 """Tests for unihan data download and processing."""
+
 import dataclasses
 import logging
 import pathlib

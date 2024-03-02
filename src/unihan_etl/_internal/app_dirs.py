@@ -3,7 +3,7 @@
 Special features
 ----------------
 
-This module offers several advantages over 
+This module offers several advantages over
 `appdirs <https://github.com/ActiveState/appdirs>`_:
 
 - :mod:`dataclasses`-based object
@@ -14,6 +14,7 @@ This module offers several advantages over
   - XDG environmental variables are expanded via :func:`os.path.expandvars`
   - Tilde expansion is expanded via :func:`os.path.expanduser`
 """
+
 import dataclasses
 import os
 import pathlib
