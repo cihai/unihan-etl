@@ -243,7 +243,7 @@ def test_normalize_only_output_requested_columns(
         else:
             in_columns.append(v)
 
-    assert [] == not_in_columns, "normalize filters columns not specified."
+    assert not_in_columns == [], "normalize filters columns not specified."
     assert set(in_columns).issubset(
         set(unihan_quick_columns),
     ), "normalize returns correct columns specified + ucn and char."

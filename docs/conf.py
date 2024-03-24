@@ -212,15 +212,14 @@ def linkcode_resolve(domain: str, info: t.Dict[str, str]) -> t.Union[None, str]:
             fn,
             linespec,
         )
-    else:
-        return "{}/blob/v{}/{}/{}/{}{}".format(
-            about["__github__"],
-            about["__version__"],
-            "src",
-            about["__package_name__"],
-            fn,
-            linespec,
-        )
+    return "{}/blob/v{}/{}/{}/{}{}".format(
+        about["__github__"],
+        about["__version__"],
+        "src",
+        about["__package_name__"],
+        fn,
+        linespec,
+    )
 
 
 class CsvLexer(RegexLexer):

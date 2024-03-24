@@ -154,11 +154,10 @@ def expand_kUnihanCore2020(
         r"""
         (?P<set>[GHJKMPT]{1})
     """,
-        re.X,
+        re.VERBOSE,
     )
     items = set_pattern.split(value)
-    sets = [s for s in items if s]
-    return sets
+    return [s for s in items if s]
 
 
 class kLocationDict(t.TypedDict):
@@ -179,7 +178,7 @@ def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
         (?P<character>[0-3][0-9])
         (?P<virtual>[0-3])
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -209,7 +208,7 @@ def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
         (?P<character>[0-3][0-9])
         (?P<virtual>[01])
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
@@ -272,7 +271,7 @@ def expand_kTGHZ2013(
         (?P<position>[\d]{2})
         (?P<entry_type>[\d]{1})
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.List[kTGHZ2013Dict] = []
@@ -339,7 +338,7 @@ def expand_kSMSZD2003Index(
         (?P<page>[\d]{1,3})\.
         (?P<position>[\d]{2})
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.List[kSMSZD2003IndexDict] = []
@@ -426,7 +425,7 @@ def expand_kHanyuPinyin(
         (?P<character>[0-3][0-9])
         (?P<virtual>[0-3])
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
@@ -489,7 +488,7 @@ def expand_kXHC1983(
         (?P<entry>[0-9]{1})
         (?P<substituted>\*?)
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
@@ -538,7 +537,7 @@ def expand_kCheungBauer(
         (?P<cangjie>[A-Z]*);
         (?P<readings>[a-z1-6\[\]\/,]+)
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
@@ -576,7 +575,7 @@ def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict
         (?P<strokes>[1-9][0-9]?)\.
         (?P<strokes_residue>[0-9]{1,2})
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
     assert isinstance(expanded, list)
@@ -616,7 +615,7 @@ def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
         (?P<row>[0-9]{1})
         (?P<character>[0-9]{2})
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kCihaiTDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -673,7 +672,7 @@ def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
         (?P<character>[0-9]{2})
         (?P<virtual>[01])
     """,
-        re.X,
+        re.VERBOSE,
     )
     m = pattern.match(value)
     assert m is not None
@@ -722,7 +721,7 @@ def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
         (?P<phonetic>[0-9]+a?)
         (?P<frequency>[A-KP*])
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kFennDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -753,7 +752,7 @@ def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
         (?P<phonetic>[a-z({zhon.pinyin.lowercase}{N_DIACRITICS}]+)
         \((?P<frequency>[0-9]+)\)
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -798,7 +797,7 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
         (?P<character>[0-3][0-9])
         (?P<virtual>[01])
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     loc_m = loc_pattern.match(loc)
@@ -818,7 +817,7 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
         (?P<radical>[{zhon.hanzi.radicals}]+)
         \[(?P<ucn>U\+2F[0-9A-D][0-9A-F])\]
     """,
-        re.X,
+        re.VERBOSE,
     )
     m = pattern.match(rad)
     assert m is not None
@@ -869,7 +868,7 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
         (?P<simplified>\'{0,2})\.
         (?P<strokes>-?[0-9]{1,2})
     """,
-        re.X,
+        re.VERBOSE,
     )
     expanded: t.Sequence[t.Union[str, kRSGenericDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -940,7 +939,7 @@ def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
         (?P<letter>[a-vx-z])
         (?P<apostrophe>\')?
     """,
-        re.X,
+        re.VERBOSE,
     )
 
     expanded: t.Sequence[t.Union[str, kGSRDict]] = value.copy()

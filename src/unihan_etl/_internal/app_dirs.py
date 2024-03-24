@@ -24,7 +24,7 @@ if t.TYPE_CHECKING:
     from appdirs import AppDirs as BaseAppDirs
 
 
-MISSING_DIR = pathlib.Path(str(dataclasses.MISSING.__hash__()))
+MISSING_DIR = pathlib.Path(str(hash(dataclasses.MISSING)))
 """A sentinel object to detect if a path is supplied or not.
 
 :meta hide-value:
@@ -98,10 +98,10 @@ class AppDirs:
             # Python 3.11 removes the recommendation to user object.__setattr__ instead
             # of super().__setattr__
             try:
-                assert object.__getattribute__(self, attr) not in [
+                assert object.__getattribute__(self, attr) not in {
                     None,
                     MISSING_DIR,
-                ]
+                }
             except (AttributeError, AssertionError):  # noqa: PERF203
                 object.__setattr__(
                     self,
