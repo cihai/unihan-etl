@@ -3,9 +3,10 @@
 import re
 import sys
 import typing as t
-from collections.abc import Mapping
 
 if t.TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from unihan_etl.types import UntypedUnihanData
 
 
@@ -94,12 +95,11 @@ def _dl_progress(
     def format_size(_bytes: int) -> str:
         if _bytes > 1000 * 1000:
             return "%.1fMb" % (_bytes / 1000.0 / 1000)
-        elif _bytes > 10 * 1000:
+        if _bytes > 10 * 1000:
             return "%iKb" % (_bytes / 1000)
-        elif _bytes > 1000:
+        if _bytes > 1000:
             return "%.1fKb" % (_bytes / 1000.0)
-        else:
-            return "%ib" % _bytes
+        return "%ib" % _bytes
 
     if not count:
         print("Total size: %s" % format_size(total_size))
@@ -152,7 +152,7 @@ def merge_dict(
             r = merge_dict(d.get(k, {}), v)
             d[k] = r
         else:
-            d[k] = u[k]
+            d[k] = v
     return d
 
 

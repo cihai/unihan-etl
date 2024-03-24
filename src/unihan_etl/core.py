@@ -232,9 +232,8 @@ def has_valid_zip(zip_path: "StrPath") -> bool:
     if zipfile.is_zipfile(zip_path):
         log.info(f"Exists, is valid zip: {zip_path}")
         return True
-    else:
-        log.info(f"Not a valid zip: {zip_path}")
-        return False
+    log.info(f"Not a valid zip: {zip_path}")
+    return False
 
 
 def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
@@ -369,7 +368,7 @@ def normalize(
     """
     log.info("Collecting field data...")
     items = {}
-    for _idx, line in enumerate(raw_data):
+    for line in raw_data:
         if not_junk(line):
             line = line.strip().split("\t")
             if in_fields(line[1], fields):

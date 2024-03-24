@@ -31,7 +31,7 @@ def add_doctest_fixtures(
         doctest_namespace["request"] = request
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(autouse=True)
 def set_home(
     monkeypatch: pytest.MonkeyPatch,
     unihan_user_path: pathlib.Path,

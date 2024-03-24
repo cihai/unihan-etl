@@ -4,10 +4,10 @@ import dataclasses
 import pathlib
 import sys
 import typing as t
-from os import PathLike
 
 if t.TYPE_CHECKING:
     from http.client import HTTPMessage
+    from os import PathLike
     from urllib.request import _DataType
 
     from typing_extensions import TypeAlias

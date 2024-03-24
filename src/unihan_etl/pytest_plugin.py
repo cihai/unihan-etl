@@ -172,8 +172,6 @@ def unihan_ensure_full(
     if not pkgr.options.destination.exists():
         pkgr.export()
 
-    return None
-
 
 @pytest.fixture(scope="session")
 def unihan_quick_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
@@ -330,8 +328,6 @@ def unihan_ensure_quick(
     if not pkgr.options.destination.exists():
         pkgr.export()
 
-    return None
-
 
 @pytest.fixture(scope="session")
 def unihan_bootstrap_all(unihan_ensure_full: None, unihan_ensure_quick: None) -> None:
@@ -344,7 +340,7 @@ def unihan_bootstrap_all(unihan_ensure_full: None, unihan_ensure_quick: None) ->
     ... def bootstrap(unihan_bootstrap_all) -> None:
     ...     return None
     """
-    return None
+    return
 
 
 @pytest.fixture(scope="session")
@@ -395,7 +391,7 @@ if t.TYPE_CHECKING:
     )
 
 
-@pytest.fixture
+@pytest.fixture()
 def unihan_test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
