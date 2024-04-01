@@ -98,7 +98,6 @@ mypy = "*"
 
 [tool.poetry.group.types.dependencies]
 ### Types ###
-types-docutils = "*"
 types-PyYAML = "*"
 types-appdirs = "*"
 types-requests = "*"
