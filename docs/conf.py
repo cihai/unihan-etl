@@ -50,6 +50,7 @@ myst_enable_extensions = [
     "substitution",
     "replacements",
     "strikethrough",
+    "linkify",
 ]
 
 templates_path = ["_templates"]
