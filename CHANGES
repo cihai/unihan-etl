@@ -19,6 +19,12 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Development
+
+- poetry: 1.8.1 -> 1.8.2
+
+  See also: https://github.com/python-poetry/poetry/blob/1.8.2/CHANGELOG.md
+
 ## unihan-etl 0.34.0 (2024-03-24)
 
 ### Development
