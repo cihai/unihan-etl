@@ -1164,7 +1164,7 @@ def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
         fvalue = fvalue.split(" ")
 
     try:
-        expansion_func = eval("expand_%s" % field)
+        expansion_func = eval(f"expand_{field}")
         return expansion_func(fvalue)
     except NameError:
         pass
