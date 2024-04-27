@@ -102,7 +102,7 @@ def _dl_progress(
         return "%ib" % _bytes
 
     if not count:
-        print("Total size: %s" % format_size(total_size))  # NOQA: T201, RUF100
+        print(f"Total size: {format_size(total_size)}")  # NOQA: T201, RUF100
     last_percent = int((count - 1) * block_size * 100 / total_size)
     # may have downloaded less if count*block_size > total_size
     maxdownloaded = count * block_size
