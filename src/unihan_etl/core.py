@@ -440,7 +440,7 @@ def export_csv(
     """Export UNIHAN in flattened, CSV format."""
     listified_data = listify(data, fields)
 
-    with pathlib.Path(destination).open("w") as f:
+    with pathlib.Path(destination).open("w", encoding="utf-8") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(listified_data)
         log.info(f"Saved output to: {destination}")

@@ -391,7 +391,7 @@ if t.TYPE_CHECKING:
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def unihan_test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
