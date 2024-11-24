@@ -1,10 +1,12 @@
-[tool.poetry]
+[project]
 name = "unihan-etl"
 version = "0.35.0"
 description = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
-license = "MIT"
-authors = ["Tony Narlock <tony@git-pull.com>"]
-
+requires-python = ">=3.8,<4.0"
+authors = [
+  {name = "Tony Narlock", email = "tony@git-pull.com"}
+]
+license = { text = "MIT" }
 classifiers = [
   "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
@@ -47,66 +49,95 @@ include = [
   { path = "tests", format = "sdist" },
   { path = "type_stubs", format = "sdist" },
 ]
+dependencies = [
+  "unicodecsv",
+  "appdirs",
+  "zhon~=2.0",
+  "PyYAML"
+]
 
-[tool.poetry.scripts]
+[project.scripts]
 unihan-etl = "unihan_etl.__main__:run"
 
-[tool.poetry.urls]
+[project.urls]
 "Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
 Documentation = "https://unihan-etl.git-pull.com"
 Repository = "https://github.com/cihai/unihan-etl"
 Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-unicodecsv = "*"
-appdirs = "*"
-zhon = "~2.0"
-PyYAML = "*"
+[tool.uv]
+dev-dependencies = [
+  # Docs
+  "sphinx",
+  "furo",
+  "gp-libs",
+  "sphinx-autobuild",
+  "sphinx-autodoc-typehints",
+  "sphinx-inline-tabs",
+  "sphinxext-opengraph",
+  "sphinx-copybutton",
+  "sphinxext-rediraffe",
+  "myst-parser",
+  "linkify-it-py",
+  # Testing
+  "gp-libs",
+  "pytest",
+  "pytest-rerunfailures",
+  "pytest-mock",
+  "pytest-watcher",
+  # Coverage
+  "codecov",
+  "coverage",
+  "pytest-cov",
+  # Lint
+  "ruff",
+  "mypy",
+  # Typings
+  "types-appdirs",
+  "types-pygments",
+  "types-PyYAML",
+  "types-requests",
+]
 
-[tool.poetry.group.docs.dependencies]
-### Docs ###
-sphinx = "*"
-sphinx-argparse = "*"
-furo = "*"
-gp-libs = "*"
-sphinx-autobuild = "*"
-sphinx-autodoc-typehints = "*"
-sphinx-inline-tabs = "*"
-sphinxext-opengraph = "<0.8" # https://github.com/wpilibsuite/sphinxext-opengraph/issues/100
-sphinx-copybutton = "*"
-sphinxext-rediraffe = "*"
-myst_parser = ">=0.18.1"
-docutils = "*"
-linkify-it-py = "*"
+[dependency-groups]
+docs = [
+  "sphinx",
+  "furo",
+  "gp-libs",
+  "sphinx-autobuild",
+  "sphinx-autodoc-typehints",
+  "sphinx-inline-tabs",
+  "sphinxext-opengraph",
+  "sphinx-copybutton",
+  "sphinxext-rediraffe",
+  "myst-parser",
+  "linkify-it-py",
+]
+testing = [
+  "gp-libs",
+  "pytest",
+  "pytest-rerunfailures",
+  "pytest-mock",
+  "pytest-watcher",
+]
+coverage =[
+  "codecov",
+  "coverage",
+  "pytest-cov",
+]
+types = [
+  "types-appdirs",
+  "types-pygments",
+  "types-PyYAML",
+  "types-requests",
+]
 
-[tool.poetry.group.test.dependencies]
-### Testing ###
-pytest = "*"
-pytest-rerunfailures = "*"
-pytest-watcher = "*"
-gp-libs = "*"
-
-[tool.poetry.group.coverage.dependencies]
-### Coverage ###
-codecov = "*"
-coverage = "*"
-pytest-cov = "*"
-
-[tool.poetry.group.lint.dependencies]
-### Lint ###
-ruff = "*"
-mypy = "*"
-
-[tool.poetry.group.types.dependencies]
-### Types ###
-types-PyYAML = "*"
-types-appdirs = "*"
-types-requests = "*"
-types-pygments = "*"
-
-[tool.poetry.plugins.pytest11]
+[project.entry-points.pytest11]
 unihan_etl = "unihan_etl.pytest_plugin"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.mypy]
 strict = true
@@ -202,7 +233,3 @@ filterwarnings = [
 [tool.pytest-watcher]
 now = true
 ignore_patterns = ["*.py.*.py"]
-
-[build-system]
-requires = ["poetry_core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
