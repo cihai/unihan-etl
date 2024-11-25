@@ -172,6 +172,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kCheungBauerIndex",
     "kCihaiT",
     "kCowles",
+    "kFanqie",
     "kFenn",
     "kFennIndex",
     "kFourCornerCode",
