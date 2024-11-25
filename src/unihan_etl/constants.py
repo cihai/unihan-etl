@@ -41,7 +41,6 @@ UNIHAN_MANIFEST = {
         "kCihaiT",
         "kFenn",
         "kFourCornerCode",
-        "kFrequency",
         "kGradeLevel",
         "kHDZRadBreak",
         "kHKGlyph",
