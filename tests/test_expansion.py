@@ -39,7 +39,6 @@ def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
             "kDefinition",
             ["variant of 出 U+51FA, to go out, send out", "to stand", "to produce"],
         ),
-        ("U+3A4B", "kFanqie", ["蘇彫", "先鳥", "蘇弔", "所六", "息逐"]),
         ("U+4FFE", "kHangul", ["비"]),
         ("U+3427", "kJapanese", ["ダイ", "テイ", "ただ", "ついで", "やしき"]),
         ("U+91B1", "kKorean", ["PAL"]),
@@ -1198,3 +1197,29 @@ def test_expand_kCCCII(
     assert item["kCCCII"] == expected
 
     assert expansion.expand_field("kCCCII", fieldval) == expected
+
+
+@pytest.mark.parametrize(
+    ("ucn", "expected"),
+    [
+        (
+            "U+3A4B",
+            [
+                {"initial": "蘇", "final": "彫"},
+                {"initial": "先", "final": "鳥"},
+                {"initial": "蘇", "final": "弔"},
+                {"initial": "所", "final": "六"},
+                {"initial": "息", "final": "逐"},
+            ],
+        ),
+        ("U+3A53", [{"initial": "許", "final": "委"}]),
+    ],
+)
+def test_expand_kFanqie(
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.List[t.Dict[str, str]],
+) -> None:
+    """Test expansion of kFanqie."""
+    item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
+    assert item["kFanqie"] == expected

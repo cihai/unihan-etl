@@ -1199,6 +1199,37 @@ def expand_kMojiJoho(
     )
 
 
+class kFanqieDict(t.TypedDict):
+    """kFanqie mapping."""
+
+    initial: str
+    final: str
+
+
+def expand_kFanqie(value: t.List[str]) -> t.List[kFanqieDict]:
+    """Expand kFanqie field.
+
+    Examples
+    --------
+    >>> expand_kFanqie(['德紅'])
+    [{'initial': '德', 'final': '紅'}]
+
+    >>> expand_kFanqie(['蘇彫', '先鳥'])
+    [{'initial': '蘇', 'final': '彫'}, {'initial': '先', 'final': '鳥'}]
+    """
+    expanded: t.List[kFanqieDict] = []
+
+    for val in value:
+        assert len(val) == 2
+        expanded.append(
+            kFanqieDict(
+                initial=val[0],
+                final=val[1],
+            ),
+        )
+    return expanded
+
+
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
     """Return structured value of information in UNIHAN field.
 
