@@ -223,6 +223,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kVietnamese",
     "kVietnameseNumeric",
     "kXerox",
+    "kZhuang",
     "kZhuangNumeric",
     "kZVariant",
 )
