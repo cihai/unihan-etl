@@ -120,6 +120,7 @@ UNIHAN_MANIFEST = {
         "kTGHZ2013",
         "kVietnamese",
         "kXHC1983",
+        "kZhuang",
     ),
     "Unihan_Variants.txt": (
         "kSemanticVariant",
