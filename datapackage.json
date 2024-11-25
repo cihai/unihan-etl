@@ -165,13 +165,6 @@
             "format": "default"
           },
           {
-            "name": "kFrequency",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kGB0",
             "title": "",
             "description": "",
