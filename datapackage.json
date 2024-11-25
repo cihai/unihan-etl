@@ -662,6 +662,13 @@
             "format": "default"
           },
           {
+            "name": "kZhuang",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kZhuangNumeric",
             "title": "",
             "description": "",
