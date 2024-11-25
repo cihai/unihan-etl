@@ -106,6 +106,7 @@ UNIHAN_MANIFEST = {
     "Unihan_Readings.txt": (
         "kCantonese",
         "kDefinition",
+        "kFanqie",
         "kHangul",
         "kHanyuPinlu",
         "kHanyuPinyin",
