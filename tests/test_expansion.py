@@ -373,9 +373,59 @@ def test_expand_kRSAdobe_Japan1_6(
     ("ucn", "expected"),
     [
         # U+3491      kRSUnicode      9.13
-        ("U+3491", [{"radical": 9, "strokes": 13, "simplified": False}]),
+        (
+            "U+3491",
+            [
+                {
+                    "radical": 9,
+                    "strokes": 13,
+                    "simplified": False,
+                }
+            ],
+        ),
         # U+4336       kRSUnicode      120'.3
-        ("U+4336", [{"radical": 120, "strokes": 3, "simplified": True}]),
+        (
+            "U+4336",
+            [
+                {
+                    "radical": 120,
+                    "strokes": 3,
+                    "simplified": expansion.kRSSimplifiedType.Chinese,
+                }
+            ],
+        ),
+        # U+2CC7B	kRSUnicode	182''.5 117.4
+        (
+            "U+2CC7B",
+            [
+                {
+                    "radical": 182,
+                    "strokes": 5,
+                    "simplified": expansion.kRSSimplifiedType.NonChinese,
+                },
+                {
+                    "radical": 117,
+                    "strokes": 4,
+                    "simplified": False,
+                },
+            ],
+        ),
+        # U+31E22	kRSUnicode	118.11 212'''.6
+        (
+            "U+31E22",
+            [
+                {
+                    "radical": 118,
+                    "strokes": 11,
+                    "simplified": False,
+                },
+                {
+                    "radical": 212,
+                    "strokes": 6,
+                    "simplified": expansion.kRSSimplifiedType.SecondNonChinese,
+                },
+            ],
+        ),
     ],
 )
 def test_expand_kRSUnihan(
