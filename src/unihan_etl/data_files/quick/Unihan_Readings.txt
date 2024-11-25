@@ -11,6 +11,7 @@
 # This file contains data on the following fields from the Unihan database:
 #	kCantonese
 #	kDefinition
+#	kFanqie
 #	kHangul
 #	kHanyuPinlu
 #	kHanyuPinyin
@@ -24,6 +25,7 @@
 #	kTGHZ2013
 #	kVietnamese
 #	kXHC1983
+#	kZhuang
 #
 # For details on the file format, see http://www.unicode.org/reports/tr38/
 #
@@ -505,6 +507,8 @@ U+34C2	kCantonese	kaau3 taau3
 U+37AE	kDefinition	variant of 出 U+51FA, to go out, send out; to stand; to produce
 U+37AE	kJapaneseKun	DERU DASU
 U+37AE	kJapaneseOn	SHUTSU SUI
+U+3A4B	kFanqie	蘇彫 先鳥 蘇弔 所六 息逐
+U+3A53	kFanqie	許委
 U+5364	kCantonese	lou5
 U+5364	kDefinition	salt
 U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
@@ -589,8 +593,12 @@ U+3493	kSMSZD2003Readings	tà粵taat3
 U+4661	kSMSZD2003Readings	kuì粵wai3 huì粵kui2
 U+4E0A	kSMSZD2003Readings	shàng粵soeng6 shàng粵soeng5 shǎng,shàng粵soeng5
 U+548B	kSMSZD2003Readings	zé粵zaak3 zhà粵zaa3 zǎ粵zaa3 zhā粵zaa1
+U+54B6	kFanqie	火怪 火夬 下刮
+U+54C6	kFanqie	敕加 尺氏 丁可 昌者 昌志 丁佐 陟駕
 U+554A	kSMSZD2003Readings	ā粵aa1 á粵aa2 ǎ粵aa2 à粵aa3 a粵aa3
 U+55CE	kSMSZD2003Readings	ma粵maa1,maa3 má粵maa1 mǎ粵maa1
 U+6B38	kSMSZD2003Readings	āi粵oi1 ê̄粵ei1 ế,éi粵ei4 ê̌,ěi粵ei2 ề,èi粵ei6 ǎi,ǎo粵oi2,ou2
+U+2CEB2	kZhuang	naengh
+U+3230D	kZhuang	fa*
 
 # EOF

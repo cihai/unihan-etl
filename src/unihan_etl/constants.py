@@ -41,7 +41,6 @@ UNIHAN_MANIFEST = {
         "kCihaiT",
         "kFenn",
         "kFourCornerCode",
-        "kFrequency",
         "kGradeLevel",
         "kHDZRadBreak",
         "kHKGlyph",
@@ -107,6 +106,7 @@ UNIHAN_MANIFEST = {
     "Unihan_Readings.txt": (
         "kCantonese",
         "kDefinition",
+        "kFanqie",
         "kHangul",
         "kHanyuPinlu",
         "kHanyuPinyin",
@@ -120,6 +120,7 @@ UNIHAN_MANIFEST = {
         "kTGHZ2013",
         "kVietnamese",
         "kXHC1983",
+        "kZhuang",
     ),
     "Unihan_Variants.txt": (
         "kSemanticVariant",
@@ -171,6 +172,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kCheungBauerIndex",
     "kCihaiT",
     "kCowles",
+    "kFanqie",
     "kFenn",
     "kFennIndex",
     "kFourCornerCode",
@@ -221,6 +223,7 @@ SPACE_DELIMITED_LIST_FIELDS = (
     "kVietnamese",
     "kVietnameseNumeric",
     "kXerox",
+    "kZhuang",
     "kZhuangNumeric",
     "kZVariant",
 )

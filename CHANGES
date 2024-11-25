@@ -32,6 +32,39 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
   via [ruff 0.4.2](https://github.com/astral-sh/ruff/blob/v0.4.2/CHANGELOG.md).
 
+### Revision 37 updates (#330)
+
+These changes align with Unicode Technical Report #38's [37th revision](https://www.unicode.org/reports/tr38/tr38-37.html#Modifications) and are part of ongoing improvements to Unihan data handling.
+
+#### Add `kFanqie` and `kZhuang`
+
+Adds support for the `kFanqie` and `kZhuang` fields.
+
+See also:
+- https://www.unicode.org/reports/tr38/#kFanqie
+- https://www.unicode.org/reports/tr38/#kZhuang
+
+#### Support `kRSUnicode` for apostrophes
+
+`Unihan_IRGSources`: Updated `kRSUnicode` for apostrophes.
+
+See also:
+- https://www.unicode.org/reports/tr38/#ChronologicalListing
+- https://github.com/cihai/unihan-etl/issues/318
+- https://github.com/cihai/unihan-etl/issues/315#issuecomment-2029105502
+
+#### Removals
+
+- `kFrequency`: Removed from `Unihan_DictionaryLikeData`, `constants`, and `datapackage.json`.
+
+See also:
+- https://www.unicode.org/L2/L2024/24006.htm#178-C17
+- https://www.unicode.org/reports/tr38/#ChronologicalListing
+
+#### Tests
+
+- Added tests for simplified expansions to ensure correctness of `kFanqie` and `kZhuang`.
+
 ## unihan-etl 0.34.0 (2024-03-24)
 
 ### Development

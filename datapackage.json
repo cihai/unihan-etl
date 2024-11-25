@@ -144,6 +144,13 @@
             "format": "default"
           },
           {
+            "name": "kFanqie",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kFenn",
             "title": "",
             "description": "",
@@ -162,13 +169,6 @@
             "title": "",
             "description": "",
             "type": "integer",
-            "format": "default"
-          },
-          {
-            "name": "kFrequency",
-            "title": "",
-            "description": "",
-            "type": "string",
             "format": "default"
           },
           {
@@ -656,6 +656,13 @@
           },
           {
             "name": "kXerox",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kZhuang",
             "title": "",
             "description": "",
             "type": "string",

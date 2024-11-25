@@ -9,6 +9,7 @@ Notes
 3. the last used compiled regexes are cached
 """
 
+import enum
 import re
 import typing as t
 
@@ -845,12 +846,61 @@ def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
     return expanded
 
 
+class kRSSimplifiedType(enum.Enum):
+    r"""Whether ideograph is a simplified form of a radical.
+
+    "The radical is indicated by a number in the range 1-214, followed by an optional
+    single apostrophe (U+0027 ' APOSTROPHE) or, double apostrophe (''), or triple
+    apostrophe (''') suffix. A single apostrophe after the radical indicates a Chinese
+    simplified version of the given radical. Two apostrophes after the radical
+    indicates a non-Chinese simplified version of the given radical. Three apostrophes
+    after the radical indicates a second non-Chinese simplified version of the given
+    radical." Source: https://www.unicode.org/reports/tr38/tr38-36.html#kRSUnicode
+    """
+
+    Chinese = "Chinese"
+    NonChinese = "NonChinese"
+    SecondNonChinese = "SecondNonChinese"
+
+
 class kRSGenericDict(t.TypedDict):
     """kRSGeneric mapping."""
 
     radical: int
     strokes: int
-    simplified: bool
+    simplified: t.Union[kRSSimplifiedType, t.Literal[False]]
+
+
+def get_krs_simplified_type(val: str) -> t.Union[kRSSimplifiedType, t.Literal[False]]:
+    """Detect type of simplified radical, if one at all.
+
+    Examples
+    --------
+    >>> get_krs_simplified_type('')
+    False
+
+    >>> get_krs_simplified_type("'")
+    <kRSSimplifiedType.Chinese: 'Chinese'>
+
+    >>> get_krs_simplified_type("''")
+    <kRSSimplifiedType.NonChinese: 'NonChinese'>
+
+    >>> get_krs_simplified_type("'''")
+    <kRSSimplifiedType.SecondNonChinese: 'SecondNonChinese'>
+    """
+    #: Chinese simplified version of the given radical.
+    if val == "'":
+        return kRSSimplifiedType.Chinese
+
+    #: Non-Chinese simplified version of the given radical.
+    if val == "''":
+        return kRSSimplifiedType.NonChinese
+
+    #: Second non-Chinese simplified version of the given radical.
+    if val == "'''":
+        return kRSSimplifiedType.SecondNonChinese
+
+    return False
 
 
 def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
@@ -860,12 +910,17 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
     --------
     >>> _expand_kRSGeneric(['5.10', "213''.0"])  # doctest: +NORMALIZE_WHITESPACE
     [{'radical': 5, 'strokes': 10, 'simplified': False},
-    {'radical': 213, 'strokes': 0, 'simplified': False}]
+    {'radical': 213, 'strokes': 0, 'simplified':
+        <kRSSimplifiedType.NonChinese: 'NonChinese'>}]
+
+    >>> _expand_kRSGeneric(["120'.3"])  # doctest: +NORMALIZE_WHITESPACE
+    [{'radical': 120, 'strokes': 3, 'simplified':
+        <kRSSimplifiedType.Chinese: 'Chinese'>}]
     """
     pattern = re.compile(
         r"""
         (?P<radical>[1-9][0-9]{0,2})
-        (?P<simplified>\'{0,2})\.
+        (?P<simplified>\'{0,3})\.
         (?P<strokes>-?[0-9]{1,2})
     """,
         re.VERBOSE,
@@ -881,7 +936,7 @@ def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
         expanded[i] = kRSGenericDict(
             radical=int(g["radical"]),
             strokes=int(g["strokes"]),
-            simplified=g["simplified"] == "'",
+            simplified=get_krs_simplified_type(g["simplified"]),
         )
     return expanded
 
@@ -1142,6 +1197,69 @@ def expand_kMojiJoho(
         serial_number=default_serial,
         variants=variants,
     )
+
+
+class kFanqieDict(t.TypedDict):
+    """kFanqie mapping."""
+
+    initial: str
+    final: str
+
+
+def expand_kFanqie(value: t.List[str]) -> t.List[kFanqieDict]:
+    """Expand kFanqie field.
+
+    Examples
+    --------
+    >>> expand_kFanqie(['德紅'])
+    [{'initial': '德', 'final': '紅'}]
+
+    >>> expand_kFanqie(['蘇彫', '先鳥'])
+    [{'initial': '蘇', 'final': '彫'}, {'initial': '先', 'final': '鳥'}]
+    """
+    expanded: t.List[kFanqieDict] = []
+
+    for val in value:
+        assert len(val) == 2
+        expanded.append(
+            kFanqieDict(
+                initial=val[0],
+                final=val[1],
+            ),
+        )
+    return expanded
+
+
+class kZhuangDict(t.TypedDict):
+    """kZhuang mapping."""
+
+    reading: str
+    non_standard: bool
+
+
+def expand_kZhuang(value: t.List[str]) -> t.List[kZhuangDict]:
+    """Expand kZhuang field.
+
+    Examples
+    --------
+    >>> expand_kZhuang(['naengh'])
+    [{'reading': 'naengh', 'non_standard': False}]
+
+    >>> expand_kZhuang(['fa*'])
+    [{'reading': 'fa', 'non_standard': True}]
+    """
+    expanded: t.List[kZhuangDict] = []
+
+    for val in value:
+        non_standard = val.endswith(r"*")
+        reading = val[:-1] if non_standard else val
+        expanded.append(
+            kZhuangDict(
+                reading=reading,
+                non_standard=non_standard,
+            ),
+        )
+    return expanded
 
 
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:

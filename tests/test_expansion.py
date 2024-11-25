@@ -39,6 +39,10 @@ def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
             "kDefinition",
             ["variant of 出 U+51FA, to go out, send out", "to stand", "to produce"],
         ),
+        ("U+4FFE", "kHangul", ["비"]),
+        ("U+3427", "kJapanese", ["ダイ", "テイ", "ただ", "ついで", "やしき"]),
+        ("U+91B1", "kKorean", ["PAL"]),
+        ("U+91B1", "kTang", [r"pɑt"]),  # NOQA: RUF001
     ],
 )
 def test_expand(
@@ -373,9 +377,59 @@ def test_expand_kRSAdobe_Japan1_6(
     ("ucn", "expected"),
     [
         # U+3491      kRSUnicode      9.13
-        ("U+3491", [{"radical": 9, "strokes": 13, "simplified": False}]),
+        (
+            "U+3491",
+            [
+                {
+                    "radical": 9,
+                    "strokes": 13,
+                    "simplified": False,
+                }
+            ],
+        ),
         # U+4336       kRSUnicode      120'.3
-        ("U+4336", [{"radical": 120, "strokes": 3, "simplified": True}]),
+        (
+            "U+4336",
+            [
+                {
+                    "radical": 120,
+                    "strokes": 3,
+                    "simplified": expansion.kRSSimplifiedType.Chinese,
+                }
+            ],
+        ),
+        # U+2CC7B	kRSUnicode	182''.5 117.4
+        (
+            "U+2CC7B",
+            [
+                {
+                    "radical": 182,
+                    "strokes": 5,
+                    "simplified": expansion.kRSSimplifiedType.NonChinese,
+                },
+                {
+                    "radical": 117,
+                    "strokes": 4,
+                    "simplified": False,
+                },
+            ],
+        ),
+        # U+31E22	kRSUnicode	118.11 212'''.6
+        (
+            "U+31E22",
+            [
+                {
+                    "radical": 118,
+                    "strokes": 11,
+                    "simplified": False,
+                },
+                {
+                    "radical": 212,
+                    "strokes": 6,
+                    "simplified": expansion.kRSSimplifiedType.SecondNonChinese,
+                },
+            ],
+        ),
     ],
 )
 def test_expand_kRSUnihan(
@@ -1141,3 +1195,29 @@ def test_expand_kCCCII(
     assert item["kCCCII"] == expected
 
     assert expansion.expand_field("kCCCII", fieldval) == expected
+
+
+@pytest.mark.parametrize(
+    ("ucn", "expected"),
+    [
+        (
+            "U+3A4B",
+            [
+                {"initial": "蘇", "final": "彫"},
+                {"initial": "先", "final": "鳥"},
+                {"initial": "蘇", "final": "弔"},
+                {"initial": "所", "final": "六"},
+                {"initial": "息", "final": "逐"},
+            ],
+        ),
+        ("U+3A53", [{"initial": "許", "final": "委"}]),
+    ],
+)
+def test_expand_kFanqie(
+    unihan_quick_expanded_data: ExpandedData,
+    ucn: str,
+    expected: t.List[t.Dict[str, str]],
+) -> None:
+    """Test expansion of kFanqie."""
+    item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
+    assert item["kFanqie"] == expected
