@@ -43,8 +43,6 @@ def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
         ("U+3427", "kJapanese", ["ダイ", "テイ", "ただ", "ついで", "やしき"]),
         ("U+91B1", "kKorean", ["PAL"]),
         ("U+91B1", "kTang", [r"pɑt"]),  # NOQA: RUF001
-        ("U+2CEB2", "kZhuang", ["naengh"]),
-        ("U+3230D", "kZhuang", ["fa*"]),
     ],
 )
 def test_expand(

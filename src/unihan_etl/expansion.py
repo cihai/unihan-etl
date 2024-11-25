@@ -1230,6 +1230,38 @@ def expand_kFanqie(value: t.List[str]) -> t.List[kFanqieDict]:
     return expanded
 
 
+class kZhuangDict(t.TypedDict):
+    """kZhuang mapping."""
+
+    reading: str
+    non_standard: bool
+
+
+def expand_kZhuang(value: t.List[str]) -> t.List[kZhuangDict]:
+    """Expand kZhuang field.
+
+    Examples
+    --------
+    >>> expand_kZhuang(['naengh'])
+    [{'reading': 'naengh', 'non_standard': False}]
+
+    >>> expand_kZhuang(['fa*'])
+    [{'reading': 'fa', 'non_standard': True}]
+    """
+    expanded: t.List[kZhuangDict] = []
+
+    for val in value:
+        non_standard = val.endswith(r"*")
+        reading = val[:-1] if non_standard else val
+        expanded.append(
+            kZhuangDict(
+                reading=reading,
+                non_standard=non_standard,
+            ),
+        )
+    return expanded
+
+
 def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
     """Return structured value of information in UNIHAN field.
 
