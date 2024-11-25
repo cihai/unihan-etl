@@ -39,6 +39,13 @@ def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
             "kDefinition",
             ["variant of 出 U+51FA, to go out, send out", "to stand", "to produce"],
         ),
+        ("U+3A4B", "kFanqie", ["蘇彫", "先鳥", "蘇弔", "所六", "息逐"]),
+        ("U+4FFE", "kHangul", ["비"]),
+        ("U+3427", "kJapanese", ["ダイ", "テイ", "ただ", "ついで", "やしき"]),
+        ("U+91B1", "kKorean", ["PAL"]),
+        ("U+91B1", "kTang", [r"pɑt"]),  # NOQA: RUF001
+        ("U+2CEB2", "kZhuang", ["naengh"]),
+        ("U+3230D", "kZhuang", ["fa*"]),
     ],
 )
 def test_expand(
