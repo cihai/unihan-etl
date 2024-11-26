@@ -1,6 +1,6 @@
 [project]
 name = "unihan-etl"
-version = "0.35.0"
+version = "0.36.0"
 description = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
 requires-python = ">=3.8,<4.0"
 authors = [
