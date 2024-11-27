@@ -23,13 +23,21 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 _Maintenance release: No bug fixes or new features._
 
-### Development
+### Breaking changes
 
-- Project and package management: poetry to uv (#329)
+#### Project and package management: poetry to uv (#329)
 
-  [uv] is the new package and project manager for the project, replacing Poetry.
+[uv] is the new package and project manager for the project, replacing Poetry.
 
 [uv]: https://github.com/astral-sh/uv
+
+#### Build system: poetry to hatchling (#329)
+
+[Build system] moved from [poetry] to [hatchling].
+
+[Build system]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#choosing-a-build-backend
+[poetry]: https://github.com/python-poetry/poetry
+[hatchling]: https://hatch.pypa.io/latest/
 
 ## unihan-etl 0.35.0 (2024-11-25)
 
