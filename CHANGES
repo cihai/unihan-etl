@@ -41,19 +41,6 @@ _Maintenance release: No bug fixes or new features._
 
 ## unihan-etl 0.35.0 (2024-11-25)
 
-### Documentation
-
-- Automatically linkify links that were previously only text.
-
-### Development
-
-- poetry: 1.8.1 -> 1.8.2
-
-  See also: https://github.com/python-poetry/poetry/blob/1.8.2/CHANGELOG.md
-- Code quality: Use f-strings in more places (#320)
-
-  via [ruff 0.4.2](https://github.com/astral-sh/ruff/blob/v0.4.2/CHANGELOG.md).
-
 ### Revision 37 updates (#330)
 
 These changes align with Unicode Technical Report #38's [37th revision](https://www.unicode.org/reports/tr38/tr38-37.html#Modifications) and are part of ongoing improvements to Unihan data handling.
@@ -86,6 +73,19 @@ See also:
 #### Tests
 
 - Added tests for simplified expansions to ensure correctness of `kFanqie` and `kZhuang`.
+
+### Documentation
+
+- Automatically linkify links that were previously only text.
+
+### Development
+
+- poetry: 1.8.1 -> 1.8.2
+
+  See also: https://github.com/python-poetry/poetry/blob/1.8.2/CHANGELOG.md
+- Code quality: Use f-strings in more places (#320)
+
+  via [ruff 0.4.2](https://github.com/astral-sh/ruff/blob/v0.4.2/CHANGELOG.md).
 
 ## unihan-etl 0.34.0 (2024-03-24)
 
