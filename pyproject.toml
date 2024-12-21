@@ -142,6 +142,7 @@ build-backend = "hatchling.build"
 
 [tool.mypy]
 strict = true
+python_version = "3.9"
 files = [
   "src/",
   "tests/",
