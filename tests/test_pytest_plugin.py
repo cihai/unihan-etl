@@ -5,7 +5,7 @@ import typing as t
 
 import pytest
 
-FixtureFileDict = t.Dict[str, str]
+FixtureFileDict = dict[str, str]
 
 
 class PytestPluginFixture(t.NamedTuple):

@@ -26,7 +26,7 @@ sys.path.insert(0, str(src_root))
 sys.path.insert(0, str(cwd / "_ext"))
 
 # package data
-about: t.Dict[str, str] = {}
+about: dict[str, str] = {}
 with (src_root / "unihan_etl" / "__about__.py").open() as fp:
     exec(fp.read(), about)
 
@@ -75,8 +75,8 @@ html_extra_path = ["manifest.json"]
 html_css_files = ["css/custom.css"]
 html_favicon = "_static/favicon.ico"
 html_theme = "furo"
-html_theme_path: t.List[str] = []
-html_theme_options: t.Dict[str, t.Union[str, t.List[t.Dict[str, str]]]] = {
+html_theme_path: list[str] = []
+html_theme_options: dict[str, t.Union[str, list[dict[str, str]]]] = {
     "light_logo": "img/cihai.svg",
     "dark_logo": "img/cihai.svg",
     "footer_icons": [
@@ -153,7 +153,7 @@ intersphinx_mapping = {
 }
 
 
-def linkcode_resolve(domain: str, info: t.Dict[str, str]) -> t.Union[None, str]:
+def linkcode_resolve(domain: str, info: dict[str, str]) -> t.Union[None, str]:
     """
     Determine the URL corresponding to Python object.
 
@@ -251,7 +251,7 @@ class CsvLexer(RegexLexer):
         "comma-separated",
         "comma-separated-values",
     ]
-    filenames: t.ClassVar[t.List[str]] = ["*.csv"]
+    filenames: t.ClassVar[list[str]] = ["*.csv"]
 
     csv_pattern: str = r"(,)((\".*\")|[^,\n]*)"
 
@@ -318,8 +318,8 @@ class TsvLexer(CsvLexer):
     tsv_pattern = r"([ \t]+)([^[\t\n]*)"
 
     name = "Tsv"
-    aliases: t.ClassVar[t.List[str]] = ["tsv", "tab-separated", "tab-separated-values"]
-    filenames: t.ClassVar[t.List[str]] = ["*.tsv"]
+    aliases: t.ClassVar[list[str]] = ["tsv", "tab-separated", "tab-separated-values"]
+    filenames: t.ClassVar[list[str]] = ["*.tsv"]
 
     tokens: t.ClassVar = {
         "root": [

@@ -189,12 +189,12 @@ def unihan_quick_zip_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
 def unihan_quick_zip(
     unihan_quick_path: pathlib.Path,
     unihan_quick_zip_path: pathlib.Path,
-    unihan_quick_fixture_files: t.List[pathlib.Path],
+    unihan_quick_fixture_files: list[pathlib.Path],
 ) -> zipfile.ZipFile:
     """Return zip file for "quick" test data set."""
-    _files = []
+    files = []
     for f in unihan_quick_fixture_files:
-        _files += [f]
+        files += [f]
 
     with contextlib.suppress(FileExistsError):
         unihan_quick_zip_path.parent.mkdir(parents=True)
@@ -404,7 +404,7 @@ def unihan_mock_zip_pathname() -> str:
 
 
 @pytest.fixture(scope="session")
-def unihan_quick_fixture_files() -> t.List[pathlib.Path]:
+def unihan_quick_fixture_files() -> list[pathlib.Path]:
     """Return files used in "quick" test data set."""
     files = [
         "Unihan_DictionaryIndices.txt",
@@ -459,7 +459,7 @@ def unihan_quick_columns() -> "ColumnData":
 @pytest.fixture(scope="session")
 def unihan_quick_normalized_data(
     unihan_quick_columns: "ColumnData",
-    unihan_quick_fixture_files: t.List[pathlib.Path],
+    unihan_quick_fixture_files: list[pathlib.Path],
 ) -> "UntypedNormalizedData":
     """Return normalized test data from "quick" test data set."""
     data = core.load_data(files=unihan_quick_fixture_files)
@@ -469,7 +469,7 @@ def unihan_quick_normalized_data(
 
 @pytest.fixture(scope="session")
 def unihan_quick_expanded_data(
-    unihan_quick_normalized_data: t.List[t.Dict[str, t.Any]],
+    unihan_quick_normalized_data: list[dict[str, t.Any]],
 ) -> "ExpandedExport":
     """Return a list of expanded fields from "quick" test data."""
     return core.expand_delimiters(unihan_quick_normalized_data)

@@ -79,7 +79,7 @@ class AppDirs:
     def __post_init__(self, _app_dirs: "BaseAppDirs") -> None:
         """Initialize attributes for AppDirs object."""
         dir_attrs = [key for key in _app_dirs.__dir__() if key.endswith("_dir")]
-        dir_mapping: t.Dict[str, str] = {k: getattr(_app_dirs, k) for k in dir_attrs}
+        dir_mapping: dict[str, str] = {k: getattr(_app_dirs, k) for k in dir_attrs}
         for attr in dir_attrs:
             val = getattr(self, attr, None)
             if val is not None and isinstance(val, (str, pathlib.Path)):

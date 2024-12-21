@@ -114,8 +114,8 @@ def _dl_progress(
             "%3d%% [%s>%s]\r"
             % (
                 percent,
-                int(round(percent / 2)) * "=",
-                int(round(50 - percent / 2)) * " ",
+                round(percent / 2) * "=",
+                round(50 - percent / 2) * " ",
             ),
         )
         out.flush()
@@ -156,6 +156,6 @@ def merge_dict(
     return d
 
 
-def get_fields(d: "UntypedUnihanData") -> t.List[str]:
+def get_fields(d: "UntypedUnihanData") -> list[str]:
     """Return list of fields from dict of {filename: ['field', 'field1']}."""
     return sorted({c for cs in d.values() for c in cs})

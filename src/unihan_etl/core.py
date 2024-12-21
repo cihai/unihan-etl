@@ -68,13 +68,13 @@ def in_fields(
 
 
 def filter_manifest(
-    files: t.List[str],
+    files: list[str],
 ) -> "UntypedUnihanData":
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
 
-def files_exist(path: pathlib.Path, files: t.List[str]) -> bool:
+def files_exist(path: pathlib.Path, files: list[str]) -> bool:
     """Return True if all files exist in specified path."""
     return all((pathlib.Path(path) / f).exists() for f in files)
 
@@ -94,7 +94,7 @@ class FileNotSupported(Exception):
 
 
 #: Return list of files from list of fields.
-def get_files(fields: t.Sequence[str]) -> t.List[str]:
+def get_files(fields: t.Sequence[str]) -> list[str]:
     """Return list of files required by fields. Simple dependency resolver."""
     files = set()
 
@@ -236,7 +236,7 @@ def has_valid_zip(zip_path: "StrPath") -> bool:
     return False
 
 
-def zip_has_files(files: t.List[str], zip_file: zipfile.ZipFile) -> bool:
+def zip_has_files(files: list[str], zip_file: zipfile.ZipFile) -> bool:
     """Return True if zip has the files inside.
 
     Parameters

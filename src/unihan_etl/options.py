@@ -30,7 +30,7 @@ class Options:
         default_factory=lambda: INDEX_FIELDS + UNIHAN_FIELDS,
     )
     format: t.Literal["json", "csv", "yaml", "python"] = "csv"
-    input_files: t.List[str] = dataclasses.field(default_factory=lambda: UNIHAN_FILES)
+    input_files: list[str] = dataclasses.field(default_factory=lambda: UNIHAN_FILES)
     download: bool = False
     expand: bool = True
     prune_empty: bool = True

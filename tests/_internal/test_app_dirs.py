@@ -9,7 +9,7 @@ from appdirs import AppDirs as BaseAppDirs
 
 from unihan_etl._internal.app_dirs import AppDirs
 
-AppDirsInitParams = t.Dict[str, t.Any]
+AppDirsInitParams = dict[str, t.Any]
 ExpectedAppDirsParam = t.Mapping[str, t.Union[str, pathlib.Path]]
 
 
@@ -20,7 +20,7 @@ class AppDirFixture(t.NamedTuple):
     test_id: str
 
     # Environment vars
-    env: t.Dict[str, str]
+    env: dict[str, str]
 
     # Configuration
     app_dirs_init_params: AppDirsInitParams
@@ -72,7 +72,7 @@ def test_basic(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: pathlib.Path,
     test_id: str,
-    env: t.Dict[str, str],
+    env: dict[str, str],
     app_dirs_init_params: AppDirsInitParams,
     expected_app_dirs: ExpectedAppDirsParam,
 ) -> None:
@@ -85,8 +85,8 @@ def test_basic(
         app_dirs_init_params[k] = v.format(tmp_path=str(tmp_path))
 
     # Initialize
-    _app_dirs = BaseAppDirs()
-    app_dirs = AppDirs(_app_dirs=_app_dirs, **app_dirs_init_params)
+    app_dirs_ = BaseAppDirs()
+    app_dirs = AppDirs(_app_dirs=app_dirs_, **app_dirs_init_params)
 
     # Assert
     for field in dataclasses.fields(app_dirs):

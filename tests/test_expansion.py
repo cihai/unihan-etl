@@ -9,7 +9,7 @@ from unihan_etl import constants, expansion
 if t.TYPE_CHECKING:
     from typing_extensions import TypeAlias
 
-ExpandedData: "TypeAlias" = t.List[t.Dict[str, t.Any]]
+ExpandedData: "TypeAlias" = list[dict[str, t.Any]]
 
 
 def test_expands_spaces(unihan_quick_expanded_data: ExpandedData) -> None:
@@ -49,7 +49,7 @@ def test_expand(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
     field: str,
-    expected: t.List[str],
+    expected: list[str],
 ) -> None:
     """Test expansion of kDefinition, kJapaneseKun, kJapaneseOn.
 
@@ -69,7 +69,7 @@ def test_expand(
 def test_expand_kMandarin(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
-    expected: t.Dict[str, str],
+    expected: dict[str, str],
 ) -> None:
     """Test expansion of KMandarin.
 
@@ -94,7 +94,7 @@ def test_expand_kMandarin(
 def test_expand_kTotalStrokes(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
-    expected: t.Dict[str, int],
+    expected: dict[str, int],
 ) -> None:
     """Test expansion of kTotalStrokes.
 
@@ -384,7 +384,7 @@ def test_expand_kRSAdobe_Japan1_6(
                     "radical": 9,
                     "strokes": 13,
                     "simplified": False,
-                }
+                },
             ],
         ),
         # U+4336       kRSUnicode      120'.3
@@ -395,7 +395,7 @@ def test_expand_kRSAdobe_Japan1_6(
                     "radical": 120,
                     "strokes": 3,
                     "simplified": expansion.kRSSimplifiedType.Chinese,
-                }
+                },
             ],
         ),
         # U+2CC7B	kRSUnicode	182''.5 117.4
@@ -535,9 +535,9 @@ def test_expand_kCihaiT(
     ],
 )
 def test_expand_kDaeJaweon(
-    unihan_quick_expanded_data: t.List[t.Dict[str, t.Any]],
+    unihan_quick_expanded_data: list[dict[str, t.Any]],
     ucn: str,
-    expected: t.Dict[str, int],
+    expected: dict[str, int],
 ) -> None:
     """Test expansion kDaeJaweon.
 
@@ -593,7 +593,7 @@ def test_expand_kIICore(
 def test_expand_kIRGDaeJaweon(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
-    expected: t.List[t.Dict[str, int]],
+    expected: list[dict[str, int]],
 ) -> None:
     """Test expansion of kIRGDaeJaweon."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -807,9 +807,7 @@ def test_expand_kXHC1983(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: t.List[
-        t.Dict[str, t.Union[t.List[t.Dict[str, t.Union[int, bool]]], str]]
-    ],
+    expected: list[dict[str, t.Union[list[dict[str, t.Union[int, bool]]], str]]],
 ) -> None:
     r"""Tests for expansion of kXHC1983.
 
@@ -917,9 +915,7 @@ def test_expand_kTGHZ2013(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: t.List[
-        t.Dict[str, t.Union[t.List[t.Dict[str, t.Union[int, bool]]], str]]
-    ],
+    expected: list[dict[str, t.Union[list[dict[str, t.Union[int, bool]]], str]]],
 ) -> None:
     r"""Tests for expansion of kTGHZ2013.
 
@@ -1216,7 +1212,7 @@ def test_expand_kCCCII(
 def test_expand_kFanqie(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
-    expected: t.List[t.Dict[str, str]],
+    expected: list[dict[str, str]],
 ) -> None:
     """Test expansion of kFanqie."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)

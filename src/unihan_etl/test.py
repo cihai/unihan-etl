@@ -4,7 +4,7 @@ import typing as t
 
 
 def assert_dict_contains_subset(
-    subset: t.Dict[str, t.Any],
+    subset: dict[str, t.Any],
     dictionary: t.Mapping[str, t.Any],
     msg: t.Optional[str] = None,
 ) -> None:
