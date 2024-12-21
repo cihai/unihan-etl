@@ -25,7 +25,7 @@ if t.TYPE_CHECKING:
 N_DIACRITICS = "ńňǹ"
 
 
-def expand_kDefinition(value: str) -> t.List[str]:
+def expand_kDefinition(value: str) -> list[str]:
     """Expand kDefinition field."""
     return [c.strip() for c in value.split(";")]
 
@@ -36,7 +36,7 @@ kMandarinDict = t.TypedDict(
 )
 
 
-def expand_kMandarin(value: t.List[str]) -> kMandarinDict:
+def expand_kMandarin(value: list[str]) -> kMandarinDict:
     """Expand kMandarin field."""
     cn = value[0]
     tw = value[0] if len(value) == 1 else value[1]
@@ -49,7 +49,7 @@ kTotalStrokesDict = t.TypedDict(
 )
 
 
-def expand_kTotalStrokes(value: t.List[str]) -> kTotalStrokesDict:
+def expand_kTotalStrokes(value: list[str]) -> kTotalStrokesDict:
     """Expand kTotalStrokes field."""
     cn = value[0]
     tw = value[0] if len(value) == 1 else value[1]
@@ -73,7 +73,7 @@ kAlternateTotalStrokesLiteral = t.Literal[
 class kAlternateTotalStrokesDict(t.TypedDict):
     """kAlternateTotalStrokes mapping."""
 
-    sources: t.List[kAlternateTotalStrokesLiteral]
+    sources: list[kAlternateTotalStrokesLiteral]
     strokes: t.Optional[int]
 
 
@@ -90,8 +90,8 @@ def is_valid_kAlternateTotalStrokes_irg_source(
 
 
 def expand_kAlternateTotalStrokes(
-    value: t.List[str],
-) -> t.List[kAlternateTotalStrokesDict]:
+    value: list[str],
+) -> list[kAlternateTotalStrokesDict]:
     """Expand kAlternateTotalStrokes field.
 
     Examples
@@ -105,24 +105,24 @@ def expand_kAlternateTotalStrokes(
     >>> expand_kAlternateTotalStrokes(['-'])
     [{'strokes': None, 'sources': ['-']}]
     """
-    expanded: t.List[kAlternateTotalStrokesDict] = []
+    expanded: list[kAlternateTotalStrokesDict] = []
 
     for val in value:
         strokes: t.Optional[int]
         if ":" in val:
-            _strokes, unexploded_sources = val.split(":", maxsplit=1)
-            strokes = int(_strokes)
-            _sources = list(unexploded_sources)
+            strokes_, unexploded_sources = val.split(":", maxsplit=1)
+            strokes = int(strokes_)
+            sources_ = list(unexploded_sources)
 
             # Raise loudly here so we detect updated sources, to avoid silently
             # skipping sources.
             assert all(
                 is_valid_kAlternateTotalStrokes_irg_source(value=source)
-                for source in _sources
+                for source in sources_
             )
             sources = [
                 source
-                for source in _sources
+                for source in sources_
                 if is_valid_kAlternateTotalStrokes_irg_source(value=source)
             ]
         elif val == "-":
@@ -143,7 +143,7 @@ def expand_kAlternateTotalStrokes(
 
 def expand_kUnihanCore2020(
     value: str,
-) -> t.List[str]:
+) -> list[str]:
     """Expand kUnihanCore2020 field.
 
     Examples
@@ -170,7 +170,7 @@ class kLocationDict(t.TypedDict):
     virtual: int
 
 
-def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
+def expand_kHanYu(value: list[str]) -> list[kLocationDict]:
     """Expand kHanYu field."""
     pattern = re.compile(
         r"""
@@ -200,7 +200,7 @@ def expand_kHanYu(value: t.List[str]) -> t.List[kLocationDict]:
     return expanded
 
 
-def expand_kIRGHanyuDaZidian(value: t.List[str]) -> t.List[kLocationDict]:
+def expand_kIRGHanyuDaZidian(value: list[str]) -> list[kLocationDict]:
     """Expand kIRGHanyuDaZidian field."""
     pattern = re.compile(
         r"""
@@ -249,8 +249,8 @@ class kTGHZ2013Dict(t.TypedDict):
 
 
 def expand_kTGHZ2013(
-    value: t.List[str],
-) -> t.List[kTGHZ2013Dict]:
+    value: list[str],
+) -> list[kTGHZ2013Dict]:
     """Expand kTGHZ2013 field.
 
     Examples
@@ -275,7 +275,7 @@ def expand_kTGHZ2013(
         re.VERBOSE,
     )
 
-    expanded: t.List[kTGHZ2013Dict] = []
+    expanded: list[kTGHZ2013Dict] = []
 
     for val in value:
         v = val.split(":")
@@ -313,8 +313,8 @@ class kSMSZD2003IndexDict(t.TypedDict):
 
 
 def expand_kSMSZD2003Index(
-    value: t.List[str],
-) -> t.List[kSMSZD2003IndexDict]:
+    value: list[str],
+) -> list[kSMSZD2003IndexDict]:
     """Expand kSMSZD2003Index Soengmou San Zidin (商務新字典) field.
 
     Examples
@@ -342,7 +342,7 @@ def expand_kSMSZD2003Index(
         re.VERBOSE,
     )
 
-    expanded: t.List[kSMSZD2003IndexDict] = []
+    expanded: list[kSMSZD2003IndexDict] = []
 
     for loc in value:
         m = location_pattern.match(loc)
@@ -362,13 +362,13 @@ def expand_kSMSZD2003Index(
 class kSMSZD2003ReadingsDict(t.TypedDict):
     """kSMSZD2003Readings location mapping."""
 
-    mandarin: t.List[str]
-    cantonese: t.List[str]
+    mandarin: list[str]
+    cantonese: list[str]
 
 
 def expand_kSMSZD2003Readings(
-    value: t.List[str],
-) -> t.List[kSMSZD2003ReadingsDict]:
+    value: list[str],
+) -> list[kSMSZD2003ReadingsDict]:
     """Expand kSMSZD2003Readings Soengmou San Zidin (商務新字典) field.
 
     Examples
@@ -387,7 +387,7 @@ def expand_kSMSZD2003Readings(
     Commercial Press Character Dictionary). Hong Kong: 商務印書館(香港)有限公司
     (Commercial Press [Hong Kong], Ltd.), 2003. ISBN 962-07-0140-2.
     """
-    expanded: t.List[kSMSZD2003ReadingsDict] = []
+    expanded: list[kSMSZD2003ReadingsDict] = []
 
     for val in value:
         mandarin, cantonese = val.split("粵")
@@ -405,19 +405,19 @@ class kHanyuPinyinPreDict(t.TypedDict):
     """kHanyuPinyin predicate mapping."""
 
     locations: t.Sequence[t.Union[str, kLocationDict]]
-    readings: t.List[str]
+    readings: list[str]
 
 
 class kHanyuPinyinDict(t.TypedDict):
     """kHanyuPinyin mapping."""
 
     locations: kLocationDict
-    readings: t.List[str]
+    readings: list[str]
 
 
 def expand_kHanyuPinyin(
-    value: t.List[str],
-) -> t.List[kHanyuPinyinDict]:
+    value: list[str],
+) -> list[kHanyuPinyinDict]:
     """Expand kHanyuPinyin field."""
     location_pattern = re.compile(
         r"""
@@ -474,13 +474,13 @@ class kXHC1983Dict(t.TypedDict):
 class kXHC1983PreDict(t.TypedDict):
     """kXHC1983 predicate mapping."""
 
-    locations: t.Union[t.List[str], kXHC1983LocationDict]
+    locations: t.Union[list[str], kXHC1983LocationDict]
     reading: str
 
 
 def expand_kXHC1983(
-    value: t.List[str],
-) -> t.List[kXHC1983Dict]:
+    value: list[str],
+) -> list[kXHC1983Dict]:
     """Expand kXHC1983 field."""
     pattern = re.compile(
         r"""
@@ -525,12 +525,12 @@ class kCheungBauerDict(t.TypedDict):
     radical: int
     strokes: int
     cangjie: t.Optional[str]
-    readings: t.List[str]
+    readings: list[str]
 
 
 def expand_kCheungBauer(
-    value: t.List[str],
-) -> t.List[kCheungBauerDict]:
+    value: list[str],
+) -> list[kCheungBauerDict]:
     """Expand kCheungBauer field."""
     pattern = re.compile(
         r"""
@@ -566,7 +566,7 @@ kRSAdobe_Japan1_6Dict = t.TypedDict(
 )
 
 
-def expand_kRSAdobe_Japan1_6(value: t.List[str]) -> t.List[kRSAdobe_Japan1_6Dict]:
+def expand_kRSAdobe_Japan1_6(value: list[str]) -> list[kRSAdobe_Japan1_6Dict]:
     """Expand kRSAdobe_Japan1_6 field."""
     pattern = re.compile(
         r"""
@@ -608,7 +608,7 @@ class kCihaiTDict(t.TypedDict):
     character: int
 
 
-def expand_kCihaiT(value: t.List[str]) -> t.List[kCihaiTDict]:
+def expand_kCihaiT(value: list[str]) -> list[kCihaiTDict]:
     """Expand kCihaiT field."""
     pattern = re.compile(
         r"""
@@ -642,12 +642,12 @@ class kIICoreDict(t.TypedDict):
     """kIICore mapping."""
 
     priority: str
-    sources: t.List[str]
+    sources: list[str]
 
 
 def expand_kIICore(
-    value: t.List[str],
-) -> t.List[kIICoreDict]:
+    value: list[str],
+) -> list[kIICoreDict]:
     """Expand kIICore field."""
     expanded: t.Sequence[t.Union[str, kIICoreDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -688,7 +688,7 @@ def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
     )
 
 
-def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+def expand_kIRGKangXi(value: list[str]) -> list[kDaeJaweonDict]:
     """Expand kIRGKangXi field."""
     expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -698,7 +698,7 @@ def expand_kIRGKangXi(value: t.List[str]) -> t.List[kDaeJaweonDict]:
     return expanded
 
 
-def expand_kIRGDaeJaweon(value: t.List[str]) -> t.List[kDaeJaweonDict]:
+def expand_kIRGDaeJaweon(value: list[str]) -> list[kDaeJaweonDict]:
     """Expand kIRGDaeJaweon field."""
     expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -715,10 +715,10 @@ class kFennDict(t.TypedDict):
     frequency: str
 
 
-def expand_kFenn(value: t.List[str]) -> t.List[kFennDict]:
+def expand_kFenn(value: list[str]) -> list[kFennDict]:
     """Expand kFenn field."""
     pattern = re.compile(
-        """
+        r"""
         (?P<phonetic>[0-9]+a?)
         (?P<frequency>[A-KP*])
     """,
@@ -746,7 +746,7 @@ class kHanyuPinluDict(t.TypedDict):
     frequency: int
 
 
-def expand_kHanyuPinlu(value: t.List[str]) -> t.List[kHanyuPinluDict]:
+def expand_kHanyuPinlu(value: list[str]) -> list[kHanyuPinluDict]:
     """Expand kHanyuPinlu field."""
     pattern = re.compile(
         rf"""
@@ -835,7 +835,7 @@ class kSBGYDict(t.TypedDict):
     character: int
 
 
-def expand_kSBGY(value: t.List[str]) -> t.List[kSBGYDict]:
+def expand_kSBGY(value: list[str]) -> list[kSBGYDict]:
     """Expand kSBGY field."""
     expanded: t.Sequence[t.Union[str, kSBGYDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -903,7 +903,7 @@ def get_krs_simplified_type(val: str) -> t.Union[kRSSimplifiedType, t.Literal[Fa
     return False
 
 
-def _expand_kRSGeneric(value: t.List[str]) -> t.List[kRSGenericDict]:
+def _expand_kRSGeneric(value: list[str]) -> list[kRSGenericDict]:
     """Expand kRSGeneric field.
 
     Examples
@@ -986,7 +986,7 @@ class kGSRDict(t.TypedDict):
     apostrophe: bool
 
 
-def expand_kGSR(value: t.List[str]) -> t.List[kGSRDict]:
+def expand_kGSR(value: list[str]) -> list[kGSRDict]:
     """Expand kGSR field."""
     pattern = re.compile(
         r"""
@@ -1024,8 +1024,8 @@ class kCheungBauerIndexDict(t.TypedDict):
 
 
 def expand_kCheungBauerIndex(
-    value: t.List[str],
-) -> t.List[t.Union[str, kCheungBauerIndexDict]]:
+    value: list[str],
+) -> list[t.Union[str, kCheungBauerIndexDict]]:
     """Expand kCheungBauerIndex field."""
     expanded: t.Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
     assert isinstance(expanded, list)
@@ -1096,8 +1096,8 @@ def is_valid_kstrange_property(value: t.Any) -> "TypeGuard[kStrangeLiteral]":
 
 
 def expand_kStrange(
-    value: t.List[str],
-) -> t.List[kStrangeDict]:
+    value: list[str],
+) -> list[kStrangeDict]:
     """Expand kStrange field.
 
     Examples
@@ -1112,7 +1112,7 @@ def expand_kStrange(
     >>> expand_kStrange(['U'])  # doctest: +NORMALIZE_WHITESPACE
     [{'property_type': 'U', 'characters': []}]
     """
-    expanded: t.List[kStrangeDict] = []
+    expanded: list[kStrangeDict] = []
 
     for val in value:
         if ":" in val:
@@ -1148,7 +1148,7 @@ class kMojiJohoDict(t.TypedDict):
     """kMojiJoho mapping."""
 
     serial_number: str
-    variants: t.List[kMojiJohoVariationDict]
+    variants: list[kMojiJohoVariationDict]
 
 
 def expand_kMojiJoho(
@@ -1176,7 +1176,7 @@ def expand_kMojiJoho(
 
     Database link: https://moji.or.jp/mojikibansearch/info?MJ%E6%96%87%E5%AD%97%E5%9B%B3%E5%BD%A2%E5%90%8D=MJ000022
     """
-    variants: t.List[kMojiJohoVariationDict] = []
+    variants: list[kMojiJohoVariationDict] = []
     values = value.split(" ")
     if len(values) == 1:
         return kMojiJohoDict(serial_number=values[0], variants=[])
@@ -1206,7 +1206,7 @@ class kFanqieDict(t.TypedDict):
     final: str
 
 
-def expand_kFanqie(value: t.List[str]) -> t.List[kFanqieDict]:
+def expand_kFanqie(value: list[str]) -> list[kFanqieDict]:
     """Expand kFanqie field.
 
     Examples
@@ -1217,7 +1217,7 @@ def expand_kFanqie(value: t.List[str]) -> t.List[kFanqieDict]:
     >>> expand_kFanqie(['蘇彫', '先鳥'])
     [{'initial': '蘇', 'final': '彫'}, {'initial': '先', 'final': '鳥'}]
     """
-    expanded: t.List[kFanqieDict] = []
+    expanded: list[kFanqieDict] = []
 
     for val in value:
         assert len(val) == 2
@@ -1237,7 +1237,7 @@ class kZhuangDict(t.TypedDict):
     non_standard: bool
 
 
-def expand_kZhuang(value: t.List[str]) -> t.List[kZhuangDict]:
+def expand_kZhuang(value: list[str]) -> list[kZhuangDict]:
     """Expand kZhuang field.
 
     Examples
@@ -1248,7 +1248,7 @@ def expand_kZhuang(value: t.List[str]) -> t.List[kZhuangDict]:
     >>> expand_kZhuang(['fa*'])
     [{'reading': 'fa', 'non_standard': True}]
     """
-    expanded: t.List[kZhuangDict] = []
+    expanded: list[kZhuangDict] = []
 
     for val in value:
         non_standard = val.endswith(r"*")
@@ -1262,7 +1262,7 @@ def expand_kZhuang(value: t.List[str]) -> t.List[kZhuangDict]:
     return expanded
 
 
-def expand_field(field: str, fvalue: t.Union[str, t.List[str]]) -> t.Any:
+def expand_field(field: str, fvalue: t.Union[str, list[str]]) -> t.Any:
     """Return structured value of information in UNIHAN field.
 
     Parameters

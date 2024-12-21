@@ -114,7 +114,7 @@ def test_download(
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
-    ) -> t.Tuple[str, "HTTPMessage"]:
+    ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return (
             "",
@@ -144,7 +144,7 @@ def test_download_mock(
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
-    ) -> t.Tuple[str, "HTTPMessage"]:
+    ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(unihan_mock_zip_path, dest_path)
         return (
             "",
@@ -184,7 +184,7 @@ def test_export_format(
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
-    ) -> t.Tuple[str, "HTTPMessage"]:
+    ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return ("", HTTPMessage())
 
@@ -234,7 +234,7 @@ def test_normalize_only_output_requested_columns(
     items = core.listify(unihan_quick_normalized_data, in_columns)
     example_result = items[0]
 
-    not_in_columns: t.List[str] = []
+    not_in_columns: list[str] = []
 
     # columns not selected in normalize must not be in result.
     for v in example_result:

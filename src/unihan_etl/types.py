@@ -25,7 +25,7 @@ LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Column data
 ColumnData = t.Sequence[str]
-ColumnDataTuple = t.Tuple[str, ...]
+ColumnDataTuple = tuple[str, ...]
 
 # In situ
 UntypedUnihanData = t.Mapping[str, t.Any]
@@ -33,7 +33,7 @@ UntypedUnihanData = t.Mapping[str, t.Any]
 UntypedNormalizedData = t.Sequence[UntypedUnihanData]
 
 # Export w/ listify()
-ListifiedExport = t.List[t.List[str]]
+ListifiedExport = list[list[str]]
 
 # Export w/ listify() -> expand_delimiters()
 ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
@@ -50,9 +50,9 @@ class Options:
     destination: pathlib.Path
     zip_path: pathlib.Path
     work_dir: pathlib.Path
-    fields: t.Tuple[str, ...]
+    fields: tuple[str, ...]
     format: UnihanFormats
-    input_files: t.List[str]
+    input_files: list[str]
     download: bool
     expand: bool
     prune_empty: bool
@@ -83,6 +83,6 @@ class UrlRetrieveFn(t.Protocol):
         filename: t.Optional["StrPath"] = None,
         reporthook: t.Optional["ReportHookFn"] = None,
         data: "t.Optional[_DataType]" = None,
-    ) -> t.Tuple[str, "HTTPMessage"]:
+    ) -> tuple[str, "HTTPMessage"]:
         """Download logic for :func:`urllib.request.urlretrieve`."""
         ...
