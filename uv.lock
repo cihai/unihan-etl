@@ -1355,6 +1355,7 @@ dev = [
     { name = "types-pygments" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 docs = [
     { name = "furo" },
@@ -1386,6 +1387,7 @@ types = [
     { name = "types-pygments" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 
 [package.metadata]
@@ -1429,6 +1431,7 @@ dev = [
     { name = "types-pygments" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 docs = [
     { name = "furo" },
@@ -1456,6 +1459,7 @@ types = [
     { name = "types-pygments" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 
 [[package]]

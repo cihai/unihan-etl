@@ -98,6 +98,7 @@ dev-dependencies = [
   "types-pygments",
   "types-PyYAML",
   "types-requests",
+  "typing-extensions",
 ]
 
 [dependency-groups]
@@ -132,6 +133,7 @@ types = [
   "types-pygments",
   "types-PyYAML",
   "types-requests",
+  "typing-extensions",
 ]
 
 [project.entry-points.pytest11]
