@@ -1,5 +1,7 @@
 """Tests for unihan-etl utilities."""
 
+from __future__ import annotations
+
 from unihan_etl.util import ucn_to_unicode, ucnstring_to_unicode
 
 

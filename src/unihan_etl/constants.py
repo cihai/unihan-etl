@@ -1,6 +1,9 @@
 """Constants for unihan_etl."""
 
+from __future__ import annotations
+
 import importlib.util
+import typing as t
 
 from appdirs import AppDirs as BaseAppDirs
 
@@ -9,8 +12,10 @@ from unihan_etl.__about__ import (
     __package_name__,
 )
 from unihan_etl._internal.app_dirs import AppDirs
-from unihan_etl.types import ColumnDataTuple
 from unihan_etl.util import get_fields
+
+if t.TYPE_CHECKING:
+    from unihan_etl.types import ColumnDataTuple
 
 #: Dictionary of tuples mapping locations of files to fields
 UNIHAN_MANIFEST = {
@@ -248,7 +253,7 @@ DESTINATION_DIR = app_dirs.user_data_dir
 #: Filepath to download Zip file.
 UNIHAN_ZIP_PATH = WORK_DIR / "Unihan.zip"
 #: Default Unihan fields
-UNIHAN_FIELDS: "ColumnDataTuple" = tuple(get_fields(UNIHAN_MANIFEST))
+UNIHAN_FIELDS: ColumnDataTuple = tuple(get_fields(UNIHAN_MANIFEST))
 #: Allowed export types
 ALLOWED_EXPORT_TYPES = ["json", "csv"]
 

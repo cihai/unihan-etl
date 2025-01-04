@@ -1,5 +1,7 @@
 """Tests for unihan_etl._internal.app_dirs."""
 
+from __future__ import annotations
+
 import dataclasses
 import pathlib
 import typing as t

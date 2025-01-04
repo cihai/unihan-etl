@@ -1,9 +1,10 @@
 """Configuration for the unihan-etl package."""
 
+from __future__ import annotations
+
 import dataclasses
 import pathlib
 import typing as t
-from collections.abc import Sequence
 
 from .constants import (
     DESTINATION_DIR,
@@ -16,6 +17,8 @@ from .constants import (
 )
 
 if t.TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from .types import LogLevel
 
 
@@ -23,7 +26,7 @@ if t.TYPE_CHECKING:
 class Options:
     """Options for unihan-etl."""
 
-    source: t.Union[str, pathlib.Path] = UNIHAN_URL
+    source: str | pathlib.Path = UNIHAN_URL
     destination: pathlib.Path = DESTINATION_DIR / "unihan.{ext}"
     zip_path: pathlib.Path = UNIHAN_ZIP_PATH
     work_dir: pathlib.Path = WORK_DIR
@@ -36,7 +39,7 @@ class Options:
     expand: bool = True
     prune_empty: bool = True
     cache: bool = True
-    log_level: "LogLevel" = "INFO"
+    log_level: LogLevel = "INFO"
 
     def __post_init__(self) -> None:
         """Post-initialization for unihan-etl options."""

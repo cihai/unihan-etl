@@ -179,6 +179,7 @@ exclude_lines = [
   "if TYPE_CHECKING:",
   "if t.TYPE_CHECKING:",
   "@overload( |$)",
+  "from __future__ import annotations",
 ]
 
 [tool.ruff]
@@ -202,16 +203,25 @@ select = [
   "PERF", # Perflint
   "RUF", # Ruff-specific rules
   "D", # pydocstyle
+  "FA100",  # future annotations
 ]
 ignore = [
   "COM812", # missing trailing comma, ruff format conflict
   "SIM115", # Use a context manager for opening files
   "UP031", # Use format specifiers instead of percent format
 ]
+extend-safe-fixes = [
+  "UP006",
+  "UP007",
+]
+pyupgrade.keep-runtime-typing = false
 
 [tool.ruff.lint.isort]
 known-first-party = ["unihan_etl", "cihai"]
 combine-as-imports = true
+required-imports = [
+  "from __future__ import annotations",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

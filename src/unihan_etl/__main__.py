@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """For accessing cihai as a package."""
 
+from __future__ import annotations
+
 import pathlib
 import sys
 import typing as t
@@ -13,7 +15,7 @@ if t.TYPE_CHECKING:
     _ExitCode: TypeAlias = t.Optional[t.Union[str, int]]
 
 
-def run() -> "_ExitCode":
+def run() -> _ExitCode:
     """Execute unihan-etl via CLI entrypoint."""
     base = pathlib.Path(__file__).parent.parent
     sys.path.insert(0, str(base))

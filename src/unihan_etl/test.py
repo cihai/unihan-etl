@@ -1,13 +1,17 @@
 """Test helpers functions for downloading and processing Unihan data."""
 
+from __future__ import annotations
+
 import typing as t
-from collections.abc import Mapping
+
+if t.TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 def assert_dict_contains_subset(
     subset: dict[str, t.Any],
     dictionary: Mapping[str, t.Any],
-    msg: t.Optional[str] = None,
+    msg: str | None = None,
 ) -> None:
     """
     Ported assertion for dict subsets in py.test.

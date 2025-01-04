@@ -1,12 +1,12 @@
 """Tests for unihan data download and processing."""
 
+from __future__ import annotations
+
 import dataclasses
 import logging
 import pathlib
 import shutil
 import typing as t
-import zipfile
-from collections.abc import Callable
 from http.client import HTTPMessage
 
 import pytest
@@ -24,13 +24,14 @@ from unihan_etl.core import (
 from unihan_etl.options import Options
 from unihan_etl.pytest_plugin import QUICK_FIXTURE_PATH
 from unihan_etl.test import assert_dict_contains_subset
-from unihan_etl.types import ColumnData, UntypedNormalizedData
 from unihan_etl.util import get_fields
 
 if t.TYPE_CHECKING:
+    import zipfile
+    from collections.abc import Callable
     from urllib.request import _DataType
 
-    from unihan_etl.types import StrPath
+    from unihan_etl.types import ColumnData, StrPath, UntypedNormalizedData
 
 
 log = logging.getLogger(__name__)
@@ -112,10 +113,10 @@ def test_download(
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
-        data: "t.Optional[_DataType]" = None,
-    ) -> tuple[str, "HTTPMessage"]:
+        filename: StrPath | None = None,
+        reporthook: Callable[[int, int, int], object] | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return (
             "",
@@ -142,10 +143,10 @@ def test_download_mock(
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
-        data: "t.Optional[_DataType]" = None,
-    ) -> tuple[str, "HTTPMessage"]:
+        filename: StrPath | None = None,
+        reporthook: Callable[[int, int, int], object] | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
         shutil.copy(unihan_mock_zip_path, dest_path)
         return (
             "",
@@ -182,10 +183,10 @@ def test_export_format(
 
     def urlretrieve(
         url: str,
-        filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
-        data: "t.Optional[_DataType]" = None,
-    ) -> tuple[str, "HTTPMessage"]:
+        filename: StrPath | None = None,
+        reporthook: Callable[[int, int, int], object] | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))
         return ("", HTTPMessage())
 

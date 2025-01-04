@@ -8,7 +8,8 @@ See "pytest_plugins in non-top-level conftest files" in
 https://docs.pytest.org/en/stable/deprecations.html
 """
 
-import pathlib
+from __future__ import annotations
+
 import shutil
 import typing as t
 
@@ -16,6 +17,9 @@ import pytest
 from _pytest.doctest import DoctestItem
 
 from unihan_etl.pytest_plugin import USING_ZSH
+
+if t.TYPE_CHECKING:
+    import pathlib
 
 pytest_plugins = ["pytester"]
 
