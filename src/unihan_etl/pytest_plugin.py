@@ -1,5 +1,7 @@
 """pytest plugin for unihan-etl."""
 
+from __future__ import annotations
+
 import contextlib
 import getpass
 import logging
@@ -7,7 +9,6 @@ import os
 import pathlib
 import typing as t
 import zipfile
-from collections.abc import Mapping
 
 import pytest
 from appdirs import AppDirs as BaseAppDirs
@@ -74,8 +75,8 @@ def unihan_full_options(unihan_full_path: pathlib.Path) -> UnihanOptions:
 @pytest.fixture(scope="session")
 def unihan_full_packager(
     unihan_full_path: pathlib.Path,
-    unihan_full_options: "UnihanOptions",
-) -> "Packager":
+    unihan_full_options: UnihanOptions,
+) -> Packager:
     """Return Packager for "full" portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_full_options)
 
@@ -83,8 +84,8 @@ def unihan_full_packager(
 @pytest.fixture(scope="session")
 def unihan_ensure_full(
     unihan_full_path: pathlib.Path,
-    unihan_full_options: "UnihanOptions",
-    unihan_full_packager: "Packager",
+    unihan_full_options: UnihanOptions,
+    unihan_full_packager: Packager,
 ) -> None:
     """Download and extract "full" UNIHAN, return UnihanOptions.
 
@@ -226,8 +227,8 @@ def unihan_quick_options(
 @pytest.fixture(scope="session")
 def unihan_quick_packager(
     unihan_quick_path: pathlib.Path,
-    unihan_quick_options: "UnihanOptions",
-) -> "Packager":
+    unihan_quick_options: UnihanOptions,
+) -> Packager:
     """Bootstrap a small, but effective portion of UNIHAN, return a UnihanOptions."""
     return Packager(unihan_quick_options)
 
@@ -235,8 +236,8 @@ def unihan_quick_packager(
 @pytest.fixture(scope="session")
 def unihan_ensure_quick(
     unihan_quick_path: pathlib.Path,
-    unihan_quick_options: "UnihanOptions",
-    unihan_quick_packager: "Packager",
+    unihan_quick_options: UnihanOptions,
+    unihan_quick_packager: Packager,
 ) -> None:
     """Return a small, but effective portion of UNIHAN, return a UnihanOptions.
 
@@ -385,6 +386,8 @@ def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
 
 
 if t.TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from unihan_etl.types import (
         ColumnData,
         ExpandedExport,
@@ -393,7 +396,7 @@ if t.TYPE_CHECKING:
 
 
 @pytest.fixture
-def unihan_test_options() -> t.Union[UnihanOptions, Mapping[str, t.Any]]:
+def unihan_test_options() -> UnihanOptions | Mapping[str, t.Any]:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 
@@ -448,7 +451,7 @@ def unihan_mock_zip(
 
 
 @pytest.fixture(scope="session")
-def unihan_quick_columns() -> "ColumnData":
+def unihan_quick_columns() -> ColumnData:
     """Return columns used in "quick" test data set."""
     return (
         constants.CUSTOM_DELIMITED_FIELDS
@@ -459,9 +462,9 @@ def unihan_quick_columns() -> "ColumnData":
 
 @pytest.fixture(scope="session")
 def unihan_quick_normalized_data(
-    unihan_quick_columns: "ColumnData",
+    unihan_quick_columns: ColumnData,
     unihan_quick_fixture_files: list[pathlib.Path],
-) -> "UntypedNormalizedData":
+) -> UntypedNormalizedData:
     """Return normalized test data from "quick" test data set."""
     data = core.load_data(files=unihan_quick_fixture_files)
 
@@ -471,7 +474,7 @@ def unihan_quick_normalized_data(
 @pytest.fixture(scope="session")
 def unihan_quick_expanded_data(
     unihan_quick_normalized_data: list[dict[str, t.Any]],
-) -> "ExpandedExport":
+) -> ExpandedExport:
     """Return a list of expanded fields from "quick" test data."""
     return core.expand_delimiters(unihan_quick_normalized_data)
 

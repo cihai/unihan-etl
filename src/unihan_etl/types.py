@@ -1,19 +1,21 @@
 """Typings for unihan-etl."""
 
+from __future__ import annotations
+
 import dataclasses
-import pathlib
 import sys
 import typing as t
 from collections.abc import Mapping, Sequence
 
 if t.TYPE_CHECKING:
+    import pathlib
     from http.client import HTTPMessage
     from os import PathLike
     from urllib.request import _DataType
 
     from typing_extensions import TypeAlias
 
-StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
+StrPath: TypeAlias = t.Union[str, "PathLike[str]"]
 """:class:`os.PathLike` or :class:`str`
 
 :class:`StrPath` is based on `typeshed`__'s.
@@ -81,9 +83,9 @@ class UrlRetrieveFn(t.Protocol):
     def __call__(
         self,
         url: str,
-        filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional["ReportHookFn"] = None,
-        data: "t.Optional[_DataType]" = None,
-    ) -> tuple[str, "HTTPMessage"]:
+        filename: StrPath | None = None,
+        reporthook: ReportHookFn | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
         """Download logic for :func:`urllib.request.urlretrieve`."""
         ...

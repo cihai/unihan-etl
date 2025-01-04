@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Download + ETL UNIHAN into structured format and export it."""
 
+from __future__ import annotations
+
 import argparse
 import codecs
 import csv
@@ -13,7 +15,6 @@ import shutil
 import sys
 import typing as t
 import zipfile
-from collections.abc import Mapping, Sequence
 from urllib.request import urlretrieve
 
 from unihan_etl import expansion
@@ -37,6 +38,8 @@ from unihan_etl.options import Options
 from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
+
     from typing_extensions import TypeGuard
 
     from unihan_etl.types import (
@@ -70,7 +73,7 @@ def in_fields(
 
 def filter_manifest(
     files: list[str],
-) -> "UntypedUnihanData":
+) -> UntypedUnihanData:
     """Return filtered :attr:`~.UNIHAN_MANIFEST` from list of file names."""
     return {f: UNIHAN_MANIFEST[f] for f in files}
 
@@ -210,7 +213,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def has_valid_zip(zip_path: "StrPath") -> bool:
+def has_valid_zip(zip_path: StrPath) -> bool:
     """Return True if valid zip exists.
 
     Parameters
@@ -255,10 +258,10 @@ def zip_has_files(files: list[str], zip_file: zipfile.ZipFile) -> bool:
 
 
 def download(
-    url: "StrPath",
+    url: StrPath,
     dest: pathlib.Path,
-    urlretrieve_fn: "UrlRetrieveFn" = urlretrieve,
-    reporthook: t.Optional["ReportHookFn"] = None,
+    urlretrieve_fn: UrlRetrieveFn = urlretrieve,
+    reporthook: ReportHookFn | None = None,
     cache: bool = True,
 ) -> pathlib.Path:
     """Download UNIHAN zip from URL to destination.
@@ -304,8 +307,8 @@ def download(
 
 
 def load_data(
-    files: Sequence[t.Union[pathlib.Path, str]],
-) -> "fileinput.FileInput[t.Any]":
+    files: Sequence[pathlib.Path | str],
+) -> fileinput.FileInput[t.Any]:
     """Extract zip and process information into CSV's.
 
     Parameters
@@ -350,9 +353,9 @@ def extract_zip(zip_path: pathlib.Path, dest_dir: pathlib.Path) -> zipfile.ZipFi
 
 
 def normalize(
-    raw_data: "fileinput.FileInput[t.Any]",
+    raw_data: fileinput.FileInput[t.Any],
     fields: Sequence[str],
-) -> "UntypedNormalizedData":
+) -> UntypedNormalizedData:
     """Return normalized data from a UNIHAN data files.
 
     Parameters
@@ -391,7 +394,7 @@ def normalize(
     return list(items.values())
 
 
-def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExport":
+def expand_delimiters(normalized_data: UntypedNormalizedData) -> ExpandedExport:
     """Return expanded multi-value fields in UNIHAN.
 
     Parameters
@@ -417,9 +420,9 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
 
 
 def listify(
-    data: "UntypedNormalizedData",
+    data: UntypedNormalizedData,
     fields: Sequence[str],
-) -> "ListifiedExport":
+) -> ListifiedExport:
     """Convert tabularized data to a CSV-friendly list.
 
     Parameters
@@ -434,9 +437,9 @@ def listify(
 
 
 def export_csv(
-    data: "UntypedNormalizedData",
-    destination: "StrPath",
-    fields: "ColumnData",
+    data: UntypedNormalizedData,
+    destination: StrPath,
+    fields: ColumnData,
 ) -> None:
     """Export UNIHAN in flattened, CSV format."""
     listified_data = listify(data, fields)
@@ -447,14 +450,14 @@ def export_csv(
         log.info(f"Saved output to: {destination}")
 
 
-def export_json(data: "UntypedNormalizedData", destination: "StrPath") -> None:
+def export_json(data: UntypedNormalizedData, destination: StrPath) -> None:
     """Export UNIHAN in JSON format."""
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info(f"Saved output to: {destination}")
 
 
-def export_yaml(data: "UntypedNormalizedData", destination: "StrPath") -> None:
+def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
     """Export UNIHAN in YAML format."""
     import yaml
 
@@ -470,7 +473,7 @@ def is_default_option(field_name: str, val: t.Any) -> bool:
 
 def validate_options(
     options: Options,
-) -> "TypeGuard[Options]":
+) -> TypeGuard[Options]:
     """Validate unihan-etl options."""
     if not is_default_option("input_files", options.input_files) and is_default_option(
         "fields",
@@ -512,7 +515,7 @@ class Packager:
 
     def __init__(
         self,
-        options: t.Union[Options, "Mapping[str, t.Any]"] = DEFAULT_OPTIONS,
+        options: Options | Mapping[str, t.Any] = DEFAULT_OPTIONS,
     ) -> None:
         """Initialize UNIHAN Packager.
 
@@ -558,7 +561,7 @@ class Packager:
         ):
             extract_zip(self.options.zip_path, self.options.work_dir)
 
-    def export(self) -> t.Union[None, "UntypedNormalizedData"]:
+    def export(self) -> None | UntypedNormalizedData:
         """Extract zip and process information into CSV's."""
         fields = list(self.options.fields)
         for k in INDEX_FIELDS:
@@ -604,7 +607,7 @@ class Packager:
         return None
 
     @classmethod
-    def from_cli(cls, argv: Sequence[str]) -> "Packager":
+    def from_cli(cls, argv: Sequence[str]) -> Packager:
         """Create Packager instance from CLI :mod:`argparse` arguments.
 
         Parameters
@@ -630,8 +633,8 @@ class Packager:
 
 
 def setup_logger(
-    logger: t.Optional[logging.Logger] = None,
-    level: "LogLevel" = "DEBUG",
+    logger: logging.Logger | None = None,
+    level: LogLevel = "DEBUG",
 ) -> None:
     """Configure logger for CLI use.
 

@@ -15,6 +15,8 @@ This module offers several advantages over
   - Tilde expansion is expanded via :func:`os.path.expanduser`
 """
 
+from __future__ import annotations
+
 import dataclasses
 import os
 import pathlib
@@ -67,7 +69,7 @@ class AppDirs:
     PosixPath('/var/cache')
     """
 
-    _app_dirs: dataclasses.InitVar["BaseAppDirs"]
+    _app_dirs: dataclasses.InitVar[BaseAppDirs]
     user_data_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
     site_data_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
     user_config_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
@@ -76,7 +78,7 @@ class AppDirs:
     user_state_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
     user_log_dir: pathlib.Path = dataclasses.field(default=MISSING_DIR)
 
-    def __post_init__(self, _app_dirs: "BaseAppDirs") -> None:
+    def __post_init__(self, _app_dirs: BaseAppDirs) -> None:
         """Initialize attributes for AppDirs object."""
         dir_attrs = [key for key in _app_dirs.__dir__() if key.endswith("_dir")]
         dir_mapping: dict[str, str] = {k: getattr(_app_dirs, k) for k in dir_attrs}

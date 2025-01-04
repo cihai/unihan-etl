@@ -1,5 +1,7 @@
 """Test expansion of multi-value fields in UNIHAN."""
 
+from __future__ import annotations
+
 import typing as t
 
 import pytest
@@ -9,7 +11,7 @@ from unihan_etl import constants, expansion
 if t.TYPE_CHECKING:
     from typing_extensions import TypeAlias
 
-ExpandedData: "TypeAlias" = list[dict[str, t.Any]]
+ExpandedData: TypeAlias = list[dict[str, t.Any]]
 
 
 def test_expands_spaces(unihan_quick_expanded_data: ExpandedData) -> None:
@@ -807,7 +809,7 @@ def test_expand_kXHC1983(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: list[dict[str, t.Union[list[dict[str, t.Union[int, bool]]], str]]],
+    expected: list[dict[str, list[dict[str, int | bool]] | str]],
 ) -> None:
     r"""Tests for expansion of kXHC1983.
 
@@ -915,7 +917,7 @@ def test_expand_kTGHZ2013(
     unihan_quick_expanded_data: ExpandedData,
     ucn: str,
     fieldval: str,
-    expected: list[dict[str, t.Union[list[dict[str, t.Union[int, bool]]], str]]],
+    expected: list[dict[str, list[dict[str, int | bool]] | str]],
 ) -> None:
     r"""Tests for expansion of kTGHZ2013.
 

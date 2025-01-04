@@ -1,5 +1,7 @@
 """Utilities for parsing UNIHAN's data and structures."""
 
+from __future__ import annotations
+
 import re
 import sys
 import typing as t
@@ -156,6 +158,6 @@ def merge_dict(
     return d
 
 
-def get_fields(d: "UntypedUnihanData") -> list[str]:
+def get_fields(d: UntypedUnihanData) -> list[str]:
     """Return list of fields from dict of {filename: ['field', 'field1']}."""
     return sorted({c for cs in d.values() for c in cs})

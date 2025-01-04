@@ -1,5 +1,7 @@
 """Metadata for unihan-etl package."""
 
+from __future__ import annotations
+
 __title__ = "unihan-etl"
 __package_name__ = "unihan_etl"
 __description__ = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
