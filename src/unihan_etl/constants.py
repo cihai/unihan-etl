@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
-from typing import TYPE_CHECKING
+import typing as t
 
 from appdirs import AppDirs as BaseAppDirs
 
@@ -14,7 +14,7 @@ from unihan_etl.__about__ import (
 from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.util import get_fields
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from unihan_etl.types import ColumnDataTuple
 
 #: Dictionary of tuples mapping locations of files to fields
