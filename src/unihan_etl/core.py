@@ -13,6 +13,7 @@ import shutil
 import sys
 import typing as t
 import zipfile
+from collections.abc import Mapping, Sequence
 from urllib.request import urlretrieve
 
 from unihan_etl import expansion
@@ -61,7 +62,7 @@ def not_junk(line: str) -> bool:
 
 def in_fields(
     c: str,
-    fields: t.Sequence[str],
+    fields: Sequence[str],
 ) -> bool:
     """Return True if string is in the default fields."""
     return c in tuple(fields) + INDEX_FIELDS
@@ -94,7 +95,7 @@ class FileNotSupported(Exception):
 
 
 #: Return list of files from list of fields.
-def get_files(fields: t.Sequence[str]) -> list[str]:
+def get_files(fields: Sequence[str]) -> list[str]:
     """Return list of files required by fields. Simple dependency resolver."""
     files = set()
 
@@ -303,7 +304,7 @@ def download(
 
 
 def load_data(
-    files: t.Sequence[t.Union[pathlib.Path, str]],
+    files: Sequence[t.Union[pathlib.Path, str]],
 ) -> "fileinput.FileInput[t.Any]":
     """Extract zip and process information into CSV's.
 
@@ -350,7 +351,7 @@ def extract_zip(zip_path: pathlib.Path, dest_dir: pathlib.Path) -> zipfile.ZipFi
 
 def normalize(
     raw_data: "fileinput.FileInput[t.Any]",
-    fields: t.Sequence[str],
+    fields: Sequence[str],
 ) -> "UntypedNormalizedData":
     """Return normalized data from a UNIHAN data files.
 
@@ -417,7 +418,7 @@ def expand_delimiters(normalized_data: "UntypedNormalizedData") -> "ExpandedExpo
 
 def listify(
     data: "UntypedNormalizedData",
-    fields: t.Sequence[str],
+    fields: Sequence[str],
 ) -> "ListifiedExport":
     """Convert tabularized data to a CSV-friendly list.
 
@@ -511,7 +512,7 @@ class Packager:
 
     def __init__(
         self,
-        options: t.Union[Options, "t.Mapping[str, t.Any]"] = DEFAULT_OPTIONS,
+        options: t.Union[Options, "Mapping[str, t.Any]"] = DEFAULT_OPTIONS,
     ) -> None:
         """Initialize UNIHAN Packager.
 
@@ -603,7 +604,7 @@ class Packager:
         return None
 
     @classmethod
-    def from_cli(cls, argv: t.Sequence[str]) -> "Packager":
+    def from_cli(cls, argv: Sequence[str]) -> "Packager":
         """Create Packager instance from CLI :mod:`argparse` arguments.
 
         Parameters

@@ -7,6 +7,7 @@ import os
 import pathlib
 import typing as t
 import zipfile
+from collections.abc import Mapping
 
 import pytest
 from appdirs import AppDirs as BaseAppDirs
@@ -392,7 +393,7 @@ if t.TYPE_CHECKING:
 
 
 @pytest.fixture
-def unihan_test_options() -> t.Union[UnihanOptions, t.Mapping[str, t.Any]]:
+def unihan_test_options() -> t.Union[UnihanOptions, Mapping[str, t.Any]]:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 

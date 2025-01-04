@@ -6,6 +6,7 @@ import pathlib
 import shutil
 import typing as t
 import zipfile
+from collections.abc import Callable
 from http.client import HTTPMessage
 
 import pytest
@@ -112,7 +113,7 @@ def test_download(
     def urlretrieve(
         url: str,
         filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))
@@ -142,7 +143,7 @@ def test_download_mock(
     def urlretrieve(
         url: str,
         filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(unihan_mock_zip_path, dest_path)
@@ -182,7 +183,7 @@ def test_export_format(
     def urlretrieve(
         url: str,
         filename: t.Optional["StrPath"] = None,
-        reporthook: t.Optional[t.Callable[[int, int, int], object]] = None,
+        reporthook: t.Optional[Callable[[int, int, int], object]] = None,
         data: "t.Optional[_DataType]" = None,
     ) -> tuple[str, "HTTPMessage"]:
         shutil.copy(str(unihan_mock_zip_path), str(dest_path))

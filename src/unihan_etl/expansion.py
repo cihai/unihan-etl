@@ -12,6 +12,7 @@ Notes
 import enum
 import re
 import typing as t
+from collections.abc import Sequence
 
 import zhon.hanzi
 import zhon.pinyin
@@ -181,7 +182,7 @@ def expand_kHanYu(value: list[str]) -> list[kLocationDict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -212,7 +213,7 @@ def expand_kIRGHanyuDaZidian(value: list[str]) -> list[kLocationDict]:
         re.VERBOSE,
     )
 
-    expanded: t.Sequence[t.Union[str, kLocationDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kLocationDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -245,7 +246,7 @@ class kTGHZ2013Dict(t.TypedDict):
     """kTGHZ2013 mapping."""
 
     reading: str
-    locations: t.Sequence[kTGHZ2013LocationDict]
+    locations: Sequence[kTGHZ2013LocationDict]
 
 
 def expand_kTGHZ2013(
@@ -404,7 +405,7 @@ def expand_kSMSZD2003Readings(
 class kHanyuPinyinPreDict(t.TypedDict):
     """kHanyuPinyin predicate mapping."""
 
-    locations: t.Sequence[t.Union[str, kLocationDict]]
+    locations: Sequence[t.Union[str, kLocationDict]]
     readings: list[str]
 
 
@@ -429,7 +430,7 @@ def expand_kHanyuPinyin(
         re.VERBOSE,
     )
 
-    expanded: t.Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kHanyuPinyinDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, val in enumerate(value):
@@ -492,7 +493,7 @@ def expand_kXHC1983(
         re.VERBOSE,
     )
 
-    expanded: t.Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
+    expanded: Sequence[t.Union[str, kXHC1983Dict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -541,7 +542,7 @@ def expand_kCheungBauer(
         re.VERBOSE,
     )
 
-    expanded: t.Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kCheungBauerDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -578,7 +579,7 @@ def expand_kRSAdobe_Japan1_6(value: list[str]) -> list[kRSAdobe_Japan1_6Dict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
+    expanded: Sequence[t.Union[str, kRSAdobe_Japan1_6Dict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -618,7 +619,7 @@ def expand_kCihaiT(value: list[str]) -> list[kCihaiTDict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kCihaiTDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kCihaiTDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -649,7 +650,7 @@ def expand_kIICore(
     value: list[str],
 ) -> list[kIICoreDict]:
     """Expand kIICore field."""
-    expanded: t.Sequence[t.Union[str, kIICoreDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kIICoreDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -690,7 +691,7 @@ def expand_kDaeJaweon(value: str) -> kDaeJaweonDict:
 
 def expand_kIRGKangXi(value: list[str]) -> list[kDaeJaweonDict]:
     """Expand kIRGKangXi field."""
-    expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -700,7 +701,7 @@ def expand_kIRGKangXi(value: list[str]) -> list[kDaeJaweonDict]:
 
 def expand_kIRGDaeJaweon(value: list[str]) -> list[kDaeJaweonDict]:
     """Expand kIRGDaeJaweon field."""
-    expanded: t.Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kDaeJaweonDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -724,7 +725,7 @@ def expand_kFenn(value: list[str]) -> list[kFennDict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kFennDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kFennDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -755,7 +756,7 @@ def expand_kHanyuPinlu(value: list[str]) -> list[kHanyuPinluDict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kHanyuPinluDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -837,7 +838,7 @@ class kSBGYDict(t.TypedDict):
 
 def expand_kSBGY(value: list[str]) -> list[kSBGYDict]:
     """Expand kSBGY field."""
-    expanded: t.Sequence[t.Union[str, kSBGYDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kSBGYDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -925,7 +926,7 @@ def _expand_kRSGeneric(value: list[str]) -> list[kRSGenericDict]:
     """,
         re.VERBOSE,
     )
-    expanded: t.Sequence[t.Union[str, kRSGenericDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kRSGenericDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -997,7 +998,7 @@ def expand_kGSR(value: list[str]) -> list[kGSRDict]:
         re.VERBOSE,
     )
 
-    expanded: t.Sequence[t.Union[str, kGSRDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kGSRDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -1027,7 +1028,7 @@ def expand_kCheungBauerIndex(
     value: list[str],
 ) -> list[t.Union[str, kCheungBauerIndexDict]]:
     """Expand kCheungBauerIndex field."""
-    expanded: t.Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
+    expanded: Sequence[t.Union[str, kCheungBauerIndexDict]] = value.copy()
     assert isinstance(expanded, list)
 
     for i, v in enumerate(value):
@@ -1082,7 +1083,7 @@ class kStrangeDict(t.TypedDict):
     """kStrange mapping."""
 
     property_type: kStrangeLiteral
-    characters: t.Sequence[str]
+    characters: Sequence[str]
 
 
 K_STRANGE_PROPERTIES = t.get_args(kStrangeLiteral)

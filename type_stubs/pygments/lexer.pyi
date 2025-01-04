@@ -1,4 +1,5 @@
 import typing as t
+from collections.abc import Generator
 
 if t.TYPE_CHECKING:
     from pygments.token import _TokenType
@@ -18,4 +19,4 @@ class RegexLexer(Lexer): ...
 
 def bygroups(
     *args: Lexer | _TokenType,
-) -> t.Generator[None, Lexer | _TokenType, None]: ...
+) -> Generator[None, Lexer | _TokenType, None]: ...

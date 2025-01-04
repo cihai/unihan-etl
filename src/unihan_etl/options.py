@@ -3,6 +3,7 @@
 import dataclasses
 import pathlib
 import typing as t
+from collections.abc import Sequence
 
 from .constants import (
     DESTINATION_DIR,
@@ -26,7 +27,7 @@ class Options:
     destination: pathlib.Path = DESTINATION_DIR / "unihan.{ext}"
     zip_path: pathlib.Path = UNIHAN_ZIP_PATH
     work_dir: pathlib.Path = WORK_DIR
-    fields: t.Sequence[str] = dataclasses.field(
+    fields: Sequence[str] = dataclasses.field(
         default_factory=lambda: INDEX_FIELDS + UNIHAN_FIELDS,
     )
     format: t.Literal["json", "csv", "yaml", "python"] = "csv"

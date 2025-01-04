@@ -4,6 +4,7 @@ import dataclasses
 import pathlib
 import sys
 import typing as t
+from collections.abc import Mapping, Sequence
 
 if t.TYPE_CHECKING:
     from http.client import HTTPMessage
@@ -24,19 +25,19 @@ StrPath: "TypeAlias" = t.Union[str, "PathLike[str]"]
 LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Column data
-ColumnData = t.Sequence[str]
+ColumnData = Sequence[str]
 ColumnDataTuple = tuple[str, ...]
 
 # In situ
-UntypedUnihanData = t.Mapping[str, t.Any]
+UntypedUnihanData = Mapping[str, t.Any]
 
-UntypedNormalizedData = t.Sequence[UntypedUnihanData]
+UntypedNormalizedData = Sequence[UntypedUnihanData]
 
 # Export w/ listify()
 ListifiedExport = list[list[str]]
 
 # Export w/ listify() -> expand_delimiters()
-ExpandedExport = t.Sequence[t.Mapping[str, t.Any]]
+ExpandedExport = Sequence[Mapping[str, t.Any]]
 
 # Valid output formats
 UnihanFormats = t.Literal["json", "csv", "yaml", "python"]
