@@ -107,9 +107,9 @@ def test_download(
 ) -> None:
     """Test Packager.download() against a real data source."""
     dest_path = tmp_path / "data" / unihan_mock_zip_pathname
-    assert (
-        not dest_path.parent.exists() and not dest_path.parent.is_dir()
-    ), "Test setup: Should not exist yet, core.download() should create them!"
+    assert not dest_path.parent.exists() and not dest_path.parent.is_dir(), (
+        "Test setup: Should not exist yet, core.download() should create them!"
+    )
 
     def urlretrieve(
         url: str,
@@ -125,9 +125,9 @@ def test_download(
 
     core.download(url=unihan_mock_zip_path, dest=dest_path, urlretrieve_fn=urlretrieve)
 
-    assert (
-        dest_path.parent.exists() and dest_path.parent.is_dir()
-    ), "Creates data's parent directory if doesn't exist."
+    assert dest_path.parent.exists() and dest_path.parent.is_dir(), (
+        "Creates data's parent directory if doesn't exist."
+    )
 
 
 def test_download_mock(
