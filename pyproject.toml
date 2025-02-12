@@ -66,6 +66,7 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 
 [tool.uv]
 dev-dependencies = [
+  "pydantic",
   # Docs
   "sphinx",
   "furo",
@@ -97,6 +98,7 @@ dev-dependencies = [
   "types-pygments",
   "types-PyYAML",
   "types-requests",
+  "typing-extensions",
 ]
 
 [dependency-groups]
@@ -131,6 +133,7 @@ types = [
   "types-pygments",
   "types-PyYAML",
   "types-requests",
+  "typing-extensions",
 ]
 
 [project.entry-points.pytest11]
