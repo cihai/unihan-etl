@@ -30,28 +30,20 @@ This is especially useful for:
 
 Filter characters by grade level to create age-appropriate educational materials:
 
-```python
-# Example of filtering by grade level (conceptual example)
-options = {
-    "fields": ["kGradeLevel", "kTotalStrokes", "kDefinition"],
-}
-packager = Packager(options)
-# ... process data ...
-elementary_chars = [item for item in data if item.get("kGradeLevel") in ["1", "2", "3"]]
+```{literalinclude} ../../tests/examples/test_educational_filtering.py
+:language: python
+:linenos:
+:caption: Filtering characters by grade level
 ```
 
 ### Simplified/Traditional Pairs
 
 Identify characters with simplified variants:
 
-```python
-# Example of identifying simplified/traditional pairs (conceptual example)
-options = {
-    "fields": ["kSimplifiedVariant", "kTraditionalVariant"],
-}
-packager = Packager(options)
-# ... process data ...
-simplified_pairs = [item for item in data if "kSimplifiedVariant" in item or "kTraditionalVariant" in item]
+```{literalinclude} ../../tests/examples/test_simplified_traditional.py
+:language: python
+:linenos:
+:caption: Identifying simplified/traditional character pairs
 ```
 
 ## Tips for Character Filtering

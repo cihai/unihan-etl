@@ -30,43 +30,20 @@ UNIHAN-ETL can be used for academic research on Chinese characters:
 
 Trace the historical development of characters across time:
 
-```python
-# Conceptual example of historical analysis
-def analyze_historical_variants(character):
-    # Find character data
-    char_data = find_character_data(character)
-    
-    # Extract historical variant information
-    variants = []
-    if "kSemanticVariant" in char_data:
-        variants.extend(char_data["kSemanticVariant"])
-    if "kZVariant" in char_data:
-        variants.extend(char_data["kZVariant"])
-    if "kSpecializedSemanticVariant" in char_data:
-        variants.extend(char_data["kSpecializedSemanticVariant"])
-        
-    return variants
+```{literalinclude} ../../tests/examples/test_historical_variants.py
+:language: python
+:linenos:
+:caption: Historical variant analysis
 ```
 
 ### Cross-language Comparisons
 
 Compare character usage across Chinese, Japanese, and Korean:
 
-```python
-# Conceptual example of cross-language analysis
-def compare_cjk_readings(character):
-    # Find character data
-    char_data = find_character_data(character)
-    
-    # Extract readings in different languages
-    return {
-        "mandarin": char_data.get("kMandarin", ""),
-        "cantonese": char_data.get("kCantonese", ""),
-        "japanese_on": char_data.get("kJapaneseOn", ""),
-        "japanese_kun": char_data.get("kJapaneseKun", ""),
-        "korean": char_data.get("kKorean", ""),
-        "vietnamese": char_data.get("kVietnamese", "")
-    }
+```{literalinclude} ../../tests/examples/test_cross_language_comparison.py
+:language: python
+:linenos:
+:caption: Cross-language comparison
 ```
 
 ## Tips for Linguistic Research
