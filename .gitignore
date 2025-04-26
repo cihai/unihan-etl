@@ -60,3 +60,6 @@ data/
 
 # Monkeytype
 monkeytype.sqlite3
+
+# AI
+.aider*
