@@ -169,7 +169,7 @@ def get_parser() -> argparse.ArgumentParser:
         action="store_false",
         help=(
             "Don't expand values to lists in multi-value UNIHAN fields. "
-            + "Doesn't apply to CSVs."
+            "Doesn't apply to CSVs."
         ),
     )
     parser.add_argument(
