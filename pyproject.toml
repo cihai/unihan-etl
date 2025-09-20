@@ -64,8 +64,8 @@ Documentation = "https://unihan-etl.git-pull.com"
 Repository = "https://github.com/cihai/unihan-etl"
 Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   # Docs
   "sphinx",
   "furo",
@@ -99,7 +99,6 @@ dev-dependencies = [
   "types-requests",
 ]
 
-[dependency-groups]
 docs = [
   "sphinx",
   "furo",
