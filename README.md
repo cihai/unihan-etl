@@ -248,8 +248,22 @@ If you encounter a problem or have a question, please
 
 To download and build your own UNIHAN export:
 
+Using [uv](https://docs.astral.sh/uv/) to add the CLI to your project:
+
+```console
+$ uv add unihan-etl
+```
+
+Using [pip](https://pip.pypa.io/en/stable/):
+
 ```console
 $ pip install --user unihan-etl
+```
+
+Run the tool without a persistent install via [`uvx`](https://docs.astral.sh/uv/guides/tools/):
+
+```console
+$ uvx unihan-etl
 ```
 
 or by [pipx](https://pypa.github.io/pipx/docs/):
@@ -259,6 +273,18 @@ $ pipx install unihan-etl
 ```
 
 ### Developmental releases
+
+Using [uv](https://docs.astral.sh/uv/getting-started/features/), opt-in to pre-release versions:
+
+```console
+$ uv add --prerelease=allow unihan-etl
+```
+
+To pin a specific pre-release (for example `0.27.0a1`):
+
+```console
+$ uv add --prerelease=allow 'unihan-etl==0.27.0a1'
+```
 
 [pip](https://pip.pypa.io/en/stable/):
 
@@ -270,8 +296,23 @@ $ pip install --user --upgrade --pre unihan-etl
 
 ```console
 $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
-// Usage: unihan-etl@next load yoursession
 ```
+
+Then run `unihan-etl@next load yoursession`.
+
+Run pre-release builds without installing with [`uvx`](https://docs.astral.sh/uv/guides/tools/):
+
+```console
+$ uvx --prerelease=allow unihan-etl
+```
+
+Or pinned to that example version:
+
+```console
+$ uvx --from 'unihan-etl==0.27.0a1' unihan-etl
+```
+
+Swap `0.27.0a1` for whichever pre-release you plan to use.
 
 ## Usage
 
@@ -294,8 +335,21 @@ $ unihan-etl -F json
 
 To output YAML:
 
+Add PyYAML with uv:
+
+```console
+$ uv add pyyaml
+```
+
+Or install it with pip:
+
 ```console
 $ pip install --user pyyaml
+```
+
+Then run:
+
+```console
 $ unihan-etl -F yaml
 ```
 

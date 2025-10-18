@@ -14,6 +14,20 @@ Download and reuse UNIHAN.zip on the fly in [pytest].
 
 Install `unihan-etl` via the python package manager of your choosing, e.g.
 
+Using uv to add it to your project:
+
+```console
+$ uv add unihan-etl
+```
+
+Run it without installing via uvx:
+
+```console
+$ uvx unihan-etl
+```
+
+Install it system-wide with pip:
+
 ```console
 $ pip install unihan-etl
 ```
