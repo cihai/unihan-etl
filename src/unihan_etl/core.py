@@ -375,7 +375,7 @@ def normalize(
         if not_junk(line):
             line = line.strip().split("\t")
             if in_fields(line[1], fields):
-                item = dict(zip(["ucn", "field", "value"], line))
+                item = dict(zip(["ucn", "field", "value"], line, strict=False))
                 char = ucn_to_unicode(item["ucn"])
                 if char not in items:
                     items[char] = {}.fromkeys(fields)
