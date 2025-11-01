@@ -41,14 +41,8 @@ For example, `0.27.0a1` is the first alpha release of `0.27.0` before general av
 - [uv]:
 
   ```console
-  $ uv add --prerelease=allow unihan-etl
+  $ uv add unihan-etl --prerelease allow
   ```
-
-  ```console
-  $ uv add --prerelease=allow 'unihan-etl==0.27.0a1'
-  ```
-
-  The second command demonstrates pinning to a specific pre-release version.
 
 - [pip]\:
 
@@ -64,19 +58,19 @@ For example, `0.27.0a1` is the first alpha release of `0.27.0` before general av
 
   Then run `unihan-etl@next load [session]`.
 
-- `uvx`:
+- [uv tool install][uv-tools]:
 
   ```console
-  $ uvx --prerelease=allow unihan-etl
+  $ uv tool install --prerelease allow unihan-etl
   ```
+
+- [uvx][uvx]:
 
   ```console
-  $ uvx --from 'unihan-etl==0.27.0a1' unihan-etl
+  $ uvx --from 'unihan-etl' --prerelease allow unihan-etl
   ```
 
-  The second command runs the pinned pre-release without installing it.
-
-  Then rerun with your desired arguments, e.g. `uvx --prerelease=allow unihan-etl load [session]`.
+  Then rerun with your desired arguments, e.g. `uvx --prerelease allow unihan-etl load [session]`.
 
 via trunk (can break easily):
 
@@ -103,6 +97,8 @@ via trunk (can break easily):
 [pip]: https://pip.pypa.io/en/stable/
 [pipx]: https://pypa.github.io/pipx/docs/
 [uv]: https://docs.astral.sh/uv/
+[uv-tools]: https://docs.astral.sh/uv/concepts/tools/
+[uvx]: https://docs.astral.sh/uv/guides/tools/
 
 ## Commands
 
