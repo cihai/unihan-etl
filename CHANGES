@@ -42,6 +42,8 @@ Then run `unihan-etl@next`.
 
 ### Development
 
+- Add Python 3.14 to test matrix (#337)
+
 #### chore: Implement PEP 563 deferred annotation resolution (#333)
 
 - Add `from __future__ import annotations` to defer annotation resolution and reduce unnecessary runtime computations during type checking.
