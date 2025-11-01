@@ -40,6 +40,14 @@ Then run `unihan-etl@next`.
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Breaking changes
+
+- Drop support for Python 3.9; the new minimum is Python 3.10 (#386)
+
+  See also:
+  - [Python 3.9 EOL timeline](https://devguide.python.org/versions/#:~:text=Release%20manager-,3.9,-PEP%20596)
+  - [PEP 596](https://peps.python.org/pep-0596/)
+
 ### Development
 
 - Add Python 3.14 to test matrix (#337)
