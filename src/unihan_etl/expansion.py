@@ -22,8 +22,7 @@ from unihan_etl.constants import SPACE_DELIMITED_FIELDS
 
 if t.TYPE_CHECKING:
     from collections.abc import Sequence
-
-    from typing_extensions import TypeGuard
+    from typing import TypeGuard
 
 #: diacritics from kHanyuPinlu
 N_DIACRITICS = "ńňǹ"

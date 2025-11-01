@@ -39,8 +39,7 @@ from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
-
-    from typing_extensions import TypeGuard
+    from typing import TypeGuard
 
     from unihan_etl.types import (
         ColumnData,
