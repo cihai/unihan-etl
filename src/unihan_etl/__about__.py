@@ -5,7 +5,7 @@ from __future__ import annotations
 __title__ = "unihan-etl"
 __package_name__ = "unihan_etl"
 __description__ = "Export UNIHAN data of Chinese, Japanese, Korean to CSV, JSON or YAML"
-__version__ = "0.37.0"
+__version__ = "0.38.0"
 __author__ = "Tony Narlock"
 __email__ = "cihai@git-pull.com"
 __github__ = "https://github.com/cihai/unihan-etl"

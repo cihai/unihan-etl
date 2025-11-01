@@ -28,9 +28,13 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 Then run `unihan-etl@next`.
 
-## unihan-etl 0.38.x (unreleased)
+## unihan-etl 0.39.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
+
+_Add your latest changes from PRs here_
+
+## unihan-etl 0.38.0 (2025-11-01)
 
 ### Breaking changes
 
