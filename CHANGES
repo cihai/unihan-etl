@@ -5,22 +5,14 @@ To install the unreleased unihan-etl version, see [developmental releases](https
 [uv](https://docs.astral.sh/uv/):
 
 ```console
-$ uv add --prerelease=allow unihan-etl
+$ uv add unihan-etl --prerelease allow
 ```
 
 ```console
-$ uv add --prerelease=allow 'unihan-etl==0.27.0a1'
+$ uvx --from 'unihan-etl' --prerelease allow unihan-etl
 ```
 
-```console
-$ uvx --prerelease=allow unihan-etl
-```
-
-```console
-$ uvx --from 'unihan-etl==0.27.0a1' unihan-etl
-```
-
-The second pair of commands shows how to pin and run a specific pre-release.
+These commands install or run the latest available pre-release.
 
 [pip](https://pip.pypa.io/en/stable/):
 
