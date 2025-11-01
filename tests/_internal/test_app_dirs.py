@@ -13,7 +13,7 @@ from appdirs import AppDirs as BaseAppDirs
 from unihan_etl._internal.app_dirs import AppDirs
 
 AppDirsInitParams = dict[str, t.Any]
-ExpectedAppDirsParam = Mapping[str, t.Union[str, pathlib.Path]]
+ExpectedAppDirsParam = Mapping[str, str | pathlib.Path]
 
 
 class AppDirFixture(t.NamedTuple):

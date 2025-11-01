@@ -9,7 +9,7 @@ import pytest
 from unihan_etl import constants, expansion
 
 if t.TYPE_CHECKING:
-    from typing_extensions import TypeAlias
+    from typing import TypeAlias
 
 ExpandedData: TypeAlias = list[dict[str, t.Any]]
 

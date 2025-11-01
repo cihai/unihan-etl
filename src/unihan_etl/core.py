@@ -39,8 +39,7 @@ from unihan_etl.util import _dl_progress, get_fields, ucn_to_unicode
 
 if t.TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
-
-    from typing_extensions import TypeGuard
+    from typing import TypeGuard
 
     from unihan_etl.types import (
         ColumnData,
@@ -230,13 +229,13 @@ def has_valid_zip(zip_path: StrPath) -> bool:
         zip_path = pathlib.Path(zip_path)
 
     if not zip_path.is_file():
-        log.info(f"Exists, but is not a file: {zip_path}")
+        log.info("Exists, but is not a file: %s", zip_path)
         return False
 
     if zipfile.is_zipfile(zip_path):
-        log.info(f"Exists, is valid zip: {zip_path}")
+        log.info("Exists, is valid zip: %s", zip_path)
         return True
-    log.info(f"Not a valid zip: {zip_path}")
+    log.info("Not a valid zip: %s", zip_path)
     return False
 
 
@@ -297,7 +296,7 @@ def download(
 
     if (no_unihan_files_exist() and not_downloaded()) or not cache:
         log.info("Downloading Unihan.zip...")
-        log.info(f"{url} to {dest}")
+        log.info("%s to %s", url, dest)
         if pathlib.Path(url).is_file():
             shutil.copy(url, dest)
         else:
@@ -346,7 +345,7 @@ def extract_zip(zip_path: pathlib.Path, dest_dir: pathlib.Path) -> zipfile.ZipFi
         The extracted zip.
     """
     z = zipfile.ZipFile(zip_path)
-    log.info(f"extract_zip dest dir: {dest_dir}")
+    log.info("extract_zip dest dir: %s", dest_dir)
     z.extractall(dest_dir)
 
     return z
@@ -376,7 +375,7 @@ def normalize(
         if not_junk(line):
             line = line.strip().split("\t")
             if in_fields(line[1], fields):
-                item = dict(zip(["ucn", "field", "value"], line))
+                item = dict(zip(["ucn", "field", "value"], line, strict=False))
                 char = ucn_to_unicode(item["ucn"])
                 if char not in items:
                     items[char] = {}.fromkeys(fields)
@@ -447,14 +446,14 @@ def export_csv(
     with pathlib.Path(destination).open("w", encoding="utf-8") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerows(listified_data)
-        log.info(f"Saved output to: {destination}")
+        log.info("Saved output to: %s", destination)
 
 
 def export_json(data: UntypedNormalizedData, destination: StrPath) -> None:
     """Export UNIHAN in JSON format."""
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-        log.info(f"Saved output to: {destination}")
+        log.info("Saved output to: %s", destination)
 
 
 def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
@@ -463,7 +462,7 @@ def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
 
     with codecs.open(str(destination), "w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
-        log.info(f"Saved output to: {destination}")
+        log.info("Saved output to: %s", destination)
 
 
 def is_default_option(field_name: str, val: t.Any) -> bool:

@@ -11,9 +11,8 @@ if t.TYPE_CHECKING:
     import pathlib
     from http.client import HTTPMessage
     from os import PathLike
+    from typing import TypeAlias
     from urllib.request import _DataType
-
-    from typing_extensions import TypeAlias
 
 StrPath: TypeAlias = t.Union[str, "PathLike[str]"]
 """:class:`os.PathLike` or :class:`str`

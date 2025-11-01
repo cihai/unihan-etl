@@ -8,11 +8,11 @@ import sys
 import typing as t
 
 if t.TYPE_CHECKING:
-    from typing_extensions import TypeAlias
+    from typing import TypeAlias
 
     # see https://github.com/python/typeshed/issues/8513#issue-1333671093 for the
     # rationale behind this alias
-    _ExitCode: TypeAlias = t.Optional[t.Union[str, int]]
+    _ExitCode: TypeAlias = str | int | None
 
 
 def run() -> _ExitCode:
