@@ -140,8 +140,6 @@ why: Reason or impact.
 what:
 - Key technical changes
 - Single topic only
-
-refs: #issue-or-links (note BREAKING when applicable)
 ```
 
 Guidelines:
@@ -158,7 +156,7 @@ Guidelines:
 ## Notes and Docs
 
 - When editing markdown under `notes/**`, keep it concise, structured with headings/lists, and mark code with fenced blocks.
-- Link syntax for external refs should be regular Markdown; keep redundancy low.
+- Link syntax for external PRs should be regular Markdown; keep redundancy low.
 
 ## Domain-Specific Notes
 
