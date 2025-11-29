@@ -180,6 +180,12 @@ exclude_lines = [
   "@overload( |$)",
   "from __future__ import annotations",
 ]
+omit = [
+  "*/_compat.py",
+  "docs/conf.py",
+  "tests/test_*.py",
+  "tests/*/test_*.py",
+]
 
 [tool.ruff]
 target-version = "py310"
