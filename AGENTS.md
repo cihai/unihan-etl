@@ -123,7 +123,7 @@ just design-docs    # rebuild CSS/JS assets
 ## Coding Standards
 
 - Always begin Python modules with `from __future__ import annotations`.
-- Prefer namespace imports (`import typing as t`, `import pathlib`, etc.); avoid `from X import Y` when feasible.
+- Prefer namespace imports for stdlib (`import typing as t`, `import pathlib`, etc.); third-party packages may use `from X import Y`.
 - Use NumPy-style docstrings in reStructuredText format for public APIs.
 - Format before review: `uv run ruff format .`; then lint (`uv run ruff check . --fix --show-fixes`); then type-check (`uv run mypy`); re-run tests.
 - Doctests: keep short, narrative examples in docstrings; move complex flows into `tests/examples/**`.
