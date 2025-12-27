@@ -34,6 +34,10 @@ Then run `unihan-etl@next`.
 
 _Add your latest changes from PRs here_
 
+### Documentation
+
+- Migrate docs deployment to AWS OIDC authentication and AWS CLI
+
 ## unihan-etl 0.38.0 (2025-11-01)
 
 ### Breaking changes
