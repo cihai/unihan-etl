@@ -34,6 +34,13 @@ Then run `unihan-etl@next`.
 
 _Add your latest changes from PRs here_
 
+### Development
+
+#### Makefile -> Justfile (#340)
+
+- Migrate from `Makefile` to `justfile` for running development tasks
+- Update documentation to reference `just` commands
+
 ### Documentation
 
 - Migrate docs deployment to AWS OIDC authentication and AWS CLI

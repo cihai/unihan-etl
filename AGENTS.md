@@ -48,43 +48,43 @@ uv pip install --editable . -G dev
 
 ```bash
 # Run all tests
-make test          # -> uv run py.test
+just test          # -> uv run py.test
 # or directly
 uv run py.test
 
 # Watch tests
-make start         # runs tests once then starts ptw
+just start         # runs tests once then starts ptw
 uv run ptw .
 
 # Dead code scan
-make vulture
+just vulture
 ```
 
 ### Linting and Type Checking
 
 ```bash
 # Lint
-make ruff
+just ruff
 uv run ruff check .
 
 # Format
-make ruff_format
+just ruff-format
 uv run ruff format .
 
 # Lint with fixes
 uv run ruff check . --fix --show-fixes
 
 # Type check
-make mypy
+just mypy
 uv run mypy src tests
 ```
 
 ### Documentation
 
 ```bash
-make build_docs     # build Sphinx docs
-make start_docs     # autobuild + serve
-make design_docs    # rebuild CSS/JS assets
+just build-docs     # build Sphinx docs
+just start-docs     # autobuild + serve
+just design-docs    # rebuild CSS/JS assets
 ```
 
 ## Code Architecture
@@ -111,7 +111,7 @@ make design_docs    # rebuild CSS/JS assets
 
 - Prefer the provided pytest fixtures (`unihan_quick_*`, `unihan_full_*`) instead of ad-hoc downloads; they bootstrap caches and zip fixtures for deterministic tests.
 - Quick fixtures create a small synthetic UNIHAN subset suitable for fast unit tests; full fixtures mirror the complete dataset and may be slower/heavier.
-- Use `uv run ptw .` or `make start` for watch mode during development.
+- Use `uv run ptw .` or `just start` for watch mode during development.
 - When adding new fixtures, keep them under the existing cache paths defined in `pytest_plugin.py`.
 - Avoid network access in unit tests; rely on cached zips or local fixtures.
 
