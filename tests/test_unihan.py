@@ -27,7 +27,6 @@ from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import get_fields
 
 if t.TYPE_CHECKING:
-    import zipfile
     from collections.abc import Callable
     from urllib.request import _DataType
 
@@ -100,7 +99,6 @@ def test_get_files() -> None:
 
 def test_download(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_zip_pathname: pathlib.Path,
 ) -> None:
@@ -131,7 +129,6 @@ def test_download(
 
 def test_download_mock(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
@@ -171,7 +168,6 @@ def test_download_mock(
 
 def test_export_format(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
@@ -210,7 +206,6 @@ def test_export_format(
 
 
 def test_extract_zip(
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     tmp_path: pathlib.Path,
 ) -> None:
