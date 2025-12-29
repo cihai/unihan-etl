@@ -75,9 +75,11 @@ def test_lazy_data(unihan_quick_data_lazy: UnihanData) -> None:
 Container for UNIHAN zip file with lazy access:
 
 ```python
+import pathlib
+
 from unihan_etl.types import UnihanZip
 
-def test_zip(unihan_quick_zip: UnihanZip) -> None:
+def test_zip(unihan_quick_zip: UnihanZip, tmp_path: pathlib.Path) -> None:
     # Path access
     assert unihan_quick_zip.path.exists()
     assert unihan_quick_zip.exists()
@@ -89,8 +91,8 @@ def test_zip(unihan_quick_zip: UnihanZip) -> None:
     # Convenience property
     files = unihan_quick_zip.namelist
 
-    # Extract all
-    unihan_quick_zip.extract(some_path)
+    # Extract to destination
+    unihan_quick_zip.extract(tmp_path)
 ```
 
 ### UnihanDataset
