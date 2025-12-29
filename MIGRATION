@@ -31,8 +31,9 @@ Before:
 
 ```python
 def test_example(unihan_mock_zip: zipfile.ZipFile) -> None:
-    # This was broken - ZipFile was closed before return!
-    files = unihan_mock_zip.namelist()  # Would fail
+    # ZipFile was closed before return - couldn't read file contents!
+    with unihan_mock_zip.open("Unihan_Readings.txt") as f:
+        content = f.read()  # Would fail - handle closed
 ```
 
 After:
