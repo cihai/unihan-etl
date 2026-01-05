@@ -10,6 +10,8 @@
 
 quickstart
 cli
+use-cases
+examples/index
 api/index
 pytest-plugin
 
@@ -25,4 +27,3 @@ history
 migration
 Developer Guide <https://cihai.git-pull.com/contributing/>
 GitHub <https://github.com/cihai/unihan-etl>
-```
