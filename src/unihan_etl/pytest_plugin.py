@@ -1,8 +1,19 @@
-"""pytest plugin for unihan-etl."""
+"""pytest plugin for unihan-etl.
+
+Provides fixtures for testing with UNIHAN data. Two dataset tiers are available:
+
+- **quick**: Bundled subset (~140KB), no network required - use for unit tests
+- **full**: Complete UNIHAN dataset (~20MB), downloads once - use for integration tests
+
+Key fixtures:
+- ``unihan_quick``: Quick dataset container (UnihanDataset)
+- ``unihan_full``: Full dataset container (UnihanDataset)
+- ``unihan_ensure_quick``: Ensures quick data is extracted (side-effect)
+- ``unihan_ensure_full``: Ensures full data is downloaded and extracted (side-effect)
+"""
 
 from __future__ import annotations
 
-import contextlib
 import getpass
 import logging
 import os
@@ -18,6 +29,7 @@ from unihan_etl import constants, core
 from unihan_etl._internal.app_dirs import AppDirs
 from unihan_etl.core import Packager
 from unihan_etl.options import Options as UnihanOptions
+from unihan_etl.types import UnihanData, UnihanDataset, UnihanZip
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +42,37 @@ DATA_FIXTURE_PATH = UNIHAN_ETL_PATH / "data_files"
 QUICK_FIXTURE_PATH = DATA_FIXTURE_PATH / "quick"
 
 app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
+
+
+# ---------------------------------------------------------------------------
+# Pytest hooks
+# ---------------------------------------------------------------------------
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """Add unihan-etl command line options."""
+    group = parser.getgroup("unihan", "UNIHAN dataset options")
+    group.addoption(
+        "--unihan-cache-dir",
+        type=pathlib.Path,
+        default=None,
+        metavar="PATH",
+        help="Override cache directory for UNIHAN fixtures",
+    )
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_configure(config: pytest.Config) -> None:
+    """Configure unihan-etl plugin markers."""
+    config.addinivalue_line(
+        "markers",
+        "unihan_full: mark test as requiring full UNIHAN dataset (downloads ~26MB)",
+    )
+
+
+# ---------------------------------------------------------------------------
+# Base path fixtures
+# ---------------------------------------------------------------------------
 
 
 @pytest.fixture(scope="session")
@@ -45,8 +88,17 @@ def unihan_project_cache_path() -> pathlib.Path:
 
 
 @pytest.fixture(scope="session")
-def unihan_cache_path(unihan_project_cache_path: pathlib.Path) -> pathlib.Path:
-    """Return unihan_etl cache path, override this to destination of your choice."""
+def unihan_cache_path(
+    request: pytest.FixtureRequest,
+    unihan_project_cache_path: pathlib.Path,
+) -> pathlib.Path:
+    """Return unihan_etl cache path.
+
+    Override this fixture or use ``--unihan-cache-dir`` CLI option to customize.
+    """
+    cli_cache_dir = request.config.getoption("--unihan-cache-dir", default=None)
+    if cli_cache_dir is not None:
+        return pathlib.Path(cli_cache_dir)
     return unihan_project_cache_path
 
 
@@ -60,6 +112,82 @@ def unihan_fixture_root(unihan_cache_path: pathlib.Path) -> pathlib.Path:
 def unihan_full_path(unihan_fixture_root: pathlib.Path) -> pathlib.Path:
     """Return directory path for "full" UNIHAN dataset."""
     return unihan_fixture_root / "full"
+
+
+# ---------------------------------------------------------------------------
+# Primary dataset fixtures (new API)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session")
+def unihan_quick(
+    unihan_quick_path: pathlib.Path,
+    unihan_quick_zip: UnihanZip,
+) -> UnihanDataset:
+    """Quick UNIHAN dataset container (bundled, no network required).
+
+    This is the primary fixture for unit tests. It provides access to all
+    paths and lazy data loading without requiring network access.
+
+    Returns
+    -------
+    UnihanDataset
+        Complete dataset container with paths and lazy access methods
+
+    Examples
+    --------
+    >>> def test_with_quick_data(unihan_quick: UnihanDataset) -> None:
+    ...     assert unihan_quick.name == "quick"
+    ...     assert unihan_quick.zip.exists()
+    ...     with unihan_quick.zip.open() as zf:
+    ...         assert "Unihan_Readings.txt" in zf.namelist()
+    """
+    return UnihanDataset(
+        name="quick",
+        root=unihan_quick_path,
+        zip=unihan_quick_zip,
+        work_dir=unihan_quick_path / "work",
+        destination=unihan_quick_path / "out" / "unihan.csv",
+    )
+
+
+@pytest.fixture(scope="session")
+def unihan_full(
+    unihan_full_path: pathlib.Path,
+) -> UnihanDataset:
+    """Full UNIHAN dataset container (downloads ~26MB on first use).
+
+    This is the primary fixture for integration tests requiring complete
+    UNIHAN data. Mark tests with ``@pytest.mark.unihan_full``.
+
+    Returns
+    -------
+    UnihanDataset
+        Complete dataset container with paths and lazy access methods
+
+    Examples
+    --------
+    >>> @pytest.mark.unihan_full
+    ... def test_with_full_data(
+    ...     unihan_full: UnihanDataset,
+    ...     unihan_ensure_full: None,
+    ... ) -> None:
+    ...     assert unihan_full.name == "full"
+    ...     assert unihan_full.is_ready
+    """
+    zip_path = unihan_full_path / "downloads" / "Unihan.zip"
+    return UnihanDataset(
+        name="full",
+        root=unihan_full_path,
+        zip=UnihanZip(path=zip_path),
+        work_dir=unihan_full_path / "work",
+        destination=unihan_full_path / "out" / "unihan.csv",
+    )
+
+
+# ---------------------------------------------------------------------------
+# Full dataset fixtures
+# ---------------------------------------------------------------------------
 
 
 @pytest.fixture(scope="session")
@@ -189,37 +317,39 @@ def unihan_quick_zip_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
 
 @pytest.fixture(scope="session")
 def unihan_quick_zip(
-    unihan_quick_path: pathlib.Path,
     unihan_quick_zip_path: pathlib.Path,
     unihan_quick_fixture_files: list[pathlib.Path],
-) -> zipfile.ZipFile:
-    """Return zip file for "quick" test data set."""
-    files = []
-    for f in unihan_quick_fixture_files:
-        files += [f]
+) -> UnihanZip:
+    """Return UnihanZip container for "quick" test data set.
 
-    with contextlib.suppress(FileExistsError):
-        unihan_quick_zip_path.parent.mkdir(parents=True)
+    Creates the zip file from bundled fixture files if it doesn't exist.
 
-    zf = zipfile.ZipFile(unihan_quick_zip_path, "a")
-    for _f in unihan_quick_fixture_files:
-        if _f.name not in zf.namelist():
-            zf.write(_f, _f.name)
-    zf.close()
+    Returns
+    -------
+    UnihanZip
+        Container with path and lazy access methods
+    """
+    unihan_quick_zip_path.parent.mkdir(parents=True, exist_ok=True)
 
-    return zf
+    # Create/update zip with fixture files
+    with zipfile.ZipFile(unihan_quick_zip_path, "a") as zf:
+        existing = set(zf.namelist())
+        for fixture_file in unihan_quick_fixture_files:
+            if fixture_file.name not in existing:
+                zf.write(fixture_file, fixture_file.name)
+
+    return UnihanZip(path=unihan_quick_zip_path)
 
 
 @pytest.fixture(scope="session")
 def unihan_quick_options(
     unihan_quick_path: pathlib.Path,
-    unihan_quick_zip: zipfile.ZipFile,
-    unihan_quick_zip_path: pathlib.Path,
+    unihan_quick_zip: UnihanZip,
 ) -> UnihanOptions:
     """Return UnihanOptions for "quick" test data set."""
     return UnihanOptions(
         work_dir=unihan_quick_path / "work",
-        zip_path=unihan_quick_zip_path,
+        zip_path=unihan_quick_zip.path,
         destination=unihan_quick_path / "out" / "unihan.csv",
     )
 
@@ -442,12 +572,21 @@ def unihan_mock_zip_path(
 def unihan_mock_zip(
     unihan_mock_zip_path: pathlib.Path,
     unihan_quick_data: str,
-) -> zipfile.ZipFile:
-    """Return Unihan zipfile."""
-    zf = zipfile.ZipFile(str(unihan_mock_zip_path), "a")
-    zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
-    zf.close()
-    return zf
+) -> UnihanZip:
+    """Return UnihanZip container for mock test data.
+
+    Creates a minimal zip with just Unihan_Readings.txt for lightweight tests.
+
+    Returns
+    -------
+    UnihanZip
+        Container with path and lazy access methods
+    """
+    with zipfile.ZipFile(unihan_mock_zip_path, "a") as zf:
+        if "Unihan_Readings.txt" not in zf.namelist():
+            zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
+
+    return UnihanZip(path=unihan_mock_zip_path)
 
 
 @pytest.fixture(scope="session")
@@ -477,6 +616,31 @@ def unihan_quick_expanded_data(
 ) -> ExpandedExport:
     """Return a list of expanded fields from "quick" test data."""
     return core.expand_delimiters(unihan_quick_normalized_data)
+
+
+@pytest.fixture(scope="session")
+def unihan_quick_data_lazy(
+    unihan_quick_packager: Packager,
+    unihan_ensure_quick: None,
+) -> UnihanData:
+    """Lazy-loaded data container for quick dataset.
+
+    Data is only processed when properties are accessed, making this
+    efficient for tests that may not need all data fields.
+
+    Returns
+    -------
+    UnihanData
+        Lazy container with .normalized, .expanded, and .by_char properties
+
+    Examples
+    --------
+    >>> def test_lazy_data(unihan_quick_data_lazy: UnihanData) -> None:
+    ...     # Data not loaded yet
+    ...     data = unihan_quick_data_lazy.expanded  # Loads on first access
+    ...     assert len(data) > 0
+    """
+    return UnihanData(packager=unihan_quick_packager)
 
 
 @pytest.fixture(scope="session")

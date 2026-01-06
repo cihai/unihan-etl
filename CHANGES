@@ -32,7 +32,60 @@ Then run `unihan-etl@next`.
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
-_Add your latest changes from PRs here_
+### Breaking changes
+
+#### pytest plugin: Fixture dataclass containers (#341)
+
+Fixtures that previously returned `zipfile.ZipFile` now return `UnihanZip` dataclass:
+
+- `unihan_quick_zip` → returns `UnihanZip` (was `zipfile.ZipFile`)
+- `unihan_mock_zip` → returns `UnihanZip` (was `zipfile.ZipFile`)
+
+**Migration:**
+
+```python
+# Before (broken - ZipFile was closed before return!)
+def test_example(unihan_mock_zip: zipfile.ZipFile) -> None:
+    files = unihan_mock_zip.namelist()
+
+# After
+from unihan_etl.types import UnihanZip
+
+def test_example(unihan_mock_zip: UnihanZip) -> None:
+    with unihan_mock_zip.open() as zf:
+        files = zf.namelist()
+    # Or use convenience property:
+    files = unihan_mock_zip.namelist
+```
+
+See {ref}`MIGRATION <migration>` for full details.
+
+### Features
+
+#### pytest plugin: New dataclass types (#341)
+
+New typed containers in `unihan_etl.types` for pytest fixtures:
+
+- `UnihanZip`: Container for zip file with `path`, `open()`, `namelist`, `extract()`, `exists()`
+- `UnihanDataset`: Complete dataset container with `name`, `root`, `zip`, `work_dir`, `destination`, `is_ready`
+- `UnihanData`: Lazy-loaded data with `.normalized`, `.expanded`, `.by_char` properties
+
+#### pytest plugin: New fixtures (#341)
+
+- `unihan_quick` → `UnihanDataset` (primary fixture for quick dataset)
+- `unihan_full` → `UnihanDataset` (primary fixture for full dataset)
+- `unihan_quick_data_lazy` → `UnihanData` (lazy-loaded data container)
+
+#### pytest plugin: CLI option and marker (#341)
+
+- `--unihan-cache-dir`: Override cache directory via command line
+- `@pytest.mark.unihan_full`: Mark tests requiring full UNIHAN dataset
+
+### Bug fixes
+
+#### pytest plugin: Fix closed ZipFile handles (#341)
+
+`unihan_quick_zip` and `unihan_mock_zip` fixtures were returning closed `ZipFile` handles, making them unusable. Now return `UnihanZip` dataclass with proper lazy access.
 
 ### Development
 
@@ -44,6 +97,7 @@ _Add your latest changes from PRs here_
 ### Documentation
 
 - Migrate docs deployment to AWS OIDC authentication and AWS CLI
+- Rewrite `docs/pytest-plugin.md` with new fixture API (#341)
 
 ## unihan-etl 0.38.0 (2025-11-01)
 
