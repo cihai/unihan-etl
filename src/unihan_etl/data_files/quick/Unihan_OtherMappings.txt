@@ -18,7 +18,6 @@
 #	kGB1
 #	kGB3
 #	kGB5
-#	kGB7
 #	kGB8
 #	kIBMJapan
 #	kJa
