@@ -147,6 +147,18 @@ Guidelines:
 - One topic per commit; separate subject and body with a blank line.
 - Examples: `Packager(fix[export]): Handle empty fields`, `py(deps[dev]): Update pytest to v8.1`.
 
+Common commit types:
+- **feat**: New features or enhancements
+- **fix**: Bug fixes
+- **refactor**: Code restructuring without functional change
+- **docs**: Documentation updates
+- **chore**: Maintenance (dependencies, tooling, config)
+- **test**: Test-related updates
+- **style**: Code style and formatting
+- **py(deps)**: Dependencies
+- **py(deps[dev])**: Dev dependencies
+- **ai(rules[LLM type])**: AI rule updates (e.g., `ai(rules[AGENTS])`)
+
 ## Documentation Standards
 
 ### Code Blocks in Documentation
