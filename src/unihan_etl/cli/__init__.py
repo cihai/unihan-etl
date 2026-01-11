@@ -39,20 +39,20 @@ CLI_DESCRIPTION = build_description(
 Download and export Unicode Han character database.""",
     (
         (
-            "Export",
+            None,  # Generates "examples:" to trigger formatter colorization
             [
                 "unihan-etl export",
                 "unihan-etl export -F json -f kDefinition",
             ],
         ),
         (
-            "Download",
+            "Download",  # Colorized as category inside examples block
             [
                 "unihan-etl download",
             ],
         ),
         (
-            "Explore",
+            "Explore",  # Colorized as category inside examples block
             [
                 "unihan-etl fields",
                 "unihan-etl files",
