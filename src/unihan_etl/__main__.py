@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-"""For accessing cihai as a package."""
+"""Run unihan-etl as a CLI tool."""
 
 from __future__ import annotations
 
-import pathlib
 import sys
 import typing as t
 
@@ -17,15 +16,9 @@ if t.TYPE_CHECKING:
 
 def run() -> _ExitCode:
     """Execute unihan-etl via CLI entrypoint."""
-    base = pathlib.Path(__file__).parent.parent
-    sys.path.insert(0, str(base))
-    from .core import Packager
+    from unihan_etl.cli import cli
 
-    p = Packager.from_cli(sys.argv[1:])
-    p.download()
-    p.export()
-
-    return 0
+    return cli()
 
 
 if __name__ == "__main__":
