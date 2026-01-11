@@ -606,6 +606,13 @@
             "format": "default"
           },
           {
+            "name": "kTayNumeric",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
             "name": "kTGHZ2013",
             "title": "",
             "description": "",
