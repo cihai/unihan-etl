@@ -34,7 +34,7 @@ class CLIUsageLexer(RegexLexer):
     tokens = {  # noqa: RUF012
         "root": [
             # "usage:" at start of line
-            (r"^(usage:)(\s+)", bygroups(Generic.Heading, Whitespace)),  # type: ignore[no-untyped-call]
+            (r"^(usage:)(\s+)", bygroups(Generic.Heading, Whitespace)),
             # Continuation lines (leading whitespace for wrapped usage)
             (r"^(\s+)(?=\S)", Whitespace),
             include("inline"),
@@ -45,14 +45,14 @@ class CLIUsageLexer(RegexLexer):
             # Long options with = value (e.g., --log-level=VALUE)
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Tag, Operator, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with space-separated value (e.g., -S socket-path)
             (
                 r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Attribute, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
             (r"-[a-zA-Z0-9]", Name.Attribute),
