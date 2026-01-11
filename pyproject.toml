@@ -94,6 +94,7 @@ dev = [
   "mypy",
   # Typings
   "types-appdirs",
+  "types-docutils",
   "types-pygments",
   "types-PyYAML",
   "types-requests",
@@ -127,6 +128,7 @@ coverage =[
 ]
 types = [
   "types-appdirs",
+  "types-docutils",
   "types-pygments",
   "types-PyYAML",
   "types-requests",
