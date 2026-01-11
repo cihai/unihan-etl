@@ -12,6 +12,7 @@
 #	kAccountingNumeric
 #	kOtherNumeric
 #	kPrimaryNumeric
+#	kTayNumeric
 #	kVietnameseNumeric
 #	kZhuangNumeric
 #
@@ -95,5 +96,7 @@ U+53F0	kVietnameseNumeric	2
 U+5549	kVietnameseNumeric	100
 U+3576	kZhuangNumeric	5
 U+4E86	kZhuangNumeric	1
+U+5200	kTayNumeric	1
+U+2B871	kTayNumeric	2
 
 # EOF

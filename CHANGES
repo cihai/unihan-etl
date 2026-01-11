@@ -34,6 +34,31 @@ Then run `unihan-etl@next`.
 
 _Add your latest changes from PRs here_
 
+### Revision 39 updates (#343)
+
+These changes align with UNIHAN's [39th revision](https://www.unicode.org/reports/tr38/tr38-39.html#Modifications) and are part of ongoing improvements to Unihan data handling.
+
+#### New field
+
+- `kTayNumeric`: Numeric value for Tày Nôm characters (Unicode 17.0)
+
+  See also: https://www.unicode.org/reports/tr38/#kTayNumeric
+
+#### New property type
+
+- `kStrange`: Add 'Y' (S**y**mmetric) property type for symmetric ideographs (Unicode 16.0)
+
+  The letter 'Y' was chosen because 'S' was already assigned to Stroke-heavy.
+
+  See also: https://www.unicode.org/reports/tr38/#kStrange
+
+#### Removed fields
+
+- `kGB7`: Removed in Unicode 17.0
+- `kJa`: Removed in Unicode 17.0
+
+  See also: https://www.unicode.org/reports/tr38/#ChronologicalListing
+
 ### Development
 
 #### Makefile -> Justfile (#340)

@@ -200,13 +200,6 @@
             "format": "default"
           },
           {
-            "name": "kGB7",
-            "title": "",
-            "description": "",
-            "type": "string",
-            "format": "default"
-          },
-          {
             "name": "kGB8",
             "title": "",
             "description": "",
@@ -600,6 +593,13 @@
           },
           {
             "name": "kTang",
+            "title": "",
+            "description": "",
+            "type": "string",
+            "format": "default"
+          },
+          {
+            "name": "kTayNumeric",
             "title": "",
             "description": "",
             "type": "string",

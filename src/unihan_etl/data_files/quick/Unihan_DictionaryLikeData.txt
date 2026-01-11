@@ -521,8 +521,9 @@ U+4E82	kUnihanCore2020	HJKMPT
 U+4F0B	kUnihanCore2020	GHKMPT
 U+4F7F	kUnihanCore2020	GHJKMPT
 U+5242	kStrange	I:U+5264
-U+56CD	kStrange	F
+U+56CD	kStrange	Y
 U+5DDC	kStrange	B:U+310D I:U+5DDB
+U+71DB	kStrange	Y
 U+2010F	kStrange	R:U+4E86
 U+2091C	kStrange	M:U+20917
 U+211A5	kStrange	K:U+30C8
