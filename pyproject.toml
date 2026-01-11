@@ -164,6 +164,7 @@ branch = true
 parallel = true
 omit = [
   "docs/conf.py",
+  "docs/_ext/*",
   "conftest.py",
   "tests/conftest.py",
 ]
