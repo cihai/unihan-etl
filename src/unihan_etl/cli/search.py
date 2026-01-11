@@ -37,22 +37,22 @@ Requires UNIHAN data to be downloaded (will download if not cached).""",
         (
             None,
             [
-                "unihan-etl search 一",
-                "unihan-etl search U+4E00",
-                "unihan-etl search 4E00",
+                "unihan-etl search 好",
+                "unihan-etl search U+597D",
+                "unihan-etl search 597D",
             ],
         ),
         (
             "Output formats",
             [
-                "unihan-etl search 一 --json",
-                "unihan-etl search 一 --ndjson",
+                "unihan-etl search 好 --json",
+                "unihan-etl search 好 --ndjson",
             ],
         ),
         (
             "Field filtering",
             [
-                "unihan-etl search 一 -f kDefinition kMandarin",
+                "unihan-etl search 好 -f kDefinition kMandarin",
             ],
         ),
     ),
@@ -107,7 +107,7 @@ def normalize_char_input(char_input: str) -> str:
     """Normalize character input to a single character.
 
     Accepts:
-    - A single character (e.g., "一")
+    - A single character (e.g., "好")
     - UCN format (e.g., "U+4E00")
     - Hex codepoint (e.g., "4E00")
 
