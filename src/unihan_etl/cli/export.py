@@ -177,11 +177,14 @@ def command_export(
         Exit code (0 for success, non-zero for failure).
     """
     try:
-        # Build options from arguments, filtering out None values
+        # Build options from arguments, filtering out None values and empty lists
+        # (empty lists from nargs='*' args like --fields without values)
         option_kwargs = {
             k: v
             for k, v in vars(args).items()
-            if v is not None and k not in ("subparser_name", "log_level", "color")
+            if v is not None
+            and v != []
+            and k not in ("subparser_name", "log_level", "color")
         }
 
         packager = Packager(Options(**option_kwargs))
