@@ -156,6 +156,7 @@ exclude = [
 [[tool.mypy.overrides]]
 module = [
   "zhon.*",
+  "sphinxarg.*",
   "cli_usage_lexer",
 ]
 ignore_missing_imports = true
