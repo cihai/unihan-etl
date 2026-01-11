@@ -152,7 +152,7 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
                 expect_value = colored_content.expect_value
                 formatted_content = colored_content.text
             else:
-                formatted_content = stripped_line
+                formatted_content = content
 
             newline = "\n" if has_newline else ""
             formatted_lines.append(f"{indent}{leading}{formatted_content}{newline}")
