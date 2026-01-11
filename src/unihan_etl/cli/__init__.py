@@ -56,7 +56,7 @@ Download and export Unicode Han character database.""",
             [
                 "unihan-etl fields",
                 "unihan-etl files",
-                "unihan-etl search 一",
+                "unihan-etl search 好",
             ],
         ),
     ),
