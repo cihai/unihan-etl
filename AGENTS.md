@@ -161,6 +161,18 @@ Common commit types:
 
 ## Documentation Standards
 
+### CHANGES File
+
+When editing the CHANGES file, **never delete** these markers in the unreleased section:
+
+```markdown
+<!-- Maintainers, insert changes / features for the next release here -->
+
+_Add your latest changes from PRs here_
+```
+
+Insert new entries **after** these markers, not in place of them.
+
 ### Code Blocks in Documentation
 
 When writing documentation (README, CHANGES, docs/), follow these rules for code blocks:
