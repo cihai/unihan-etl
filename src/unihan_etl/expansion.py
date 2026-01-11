@@ -1078,6 +1078,9 @@ kStrangeLiteral = t.Literal[
     # Category U = [U]nusual Arrangment/Structure (has an unusual structure or component
     # arrangement)
     "U",
+    # Category Y = S[Y]mmetric (is symmetric when mirrored or rotated; "Y" used because
+    # "S" was already assigned to Stroke-heavy) - Added in Unicode 16.0
+    "Y",
 ]
 
 
