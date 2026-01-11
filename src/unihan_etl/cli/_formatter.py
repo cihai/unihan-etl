@@ -116,7 +116,8 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
         for line in lines:
             if line.strip() == "":
-                in_examples_block = False
+                # Keep in_examples_block active across blank lines so category
+                # headings like "Download:" stay colorized after "examples:"
                 expect_value = False
                 formatted_lines.append(f"{indent}{line}")
                 continue
