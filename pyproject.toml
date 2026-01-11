@@ -150,7 +150,8 @@ files = [
 ]
 mypy_path = "type_stubs"
 exclude = [
-  "type_stubs/.*"
+  "type_stubs/.*",
+  "docs/_ext/.*",
 ]
 
 [[tool.mypy.overrides]]
