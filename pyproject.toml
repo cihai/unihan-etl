@@ -56,7 +56,7 @@ dependencies = [
 ]
 
 [project.scripts]
-unihan-etl = "unihan_etl.__main__:run"
+unihan-etl = "unihan_etl.cli:cli"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/cihai/unihan-etl/issues"
