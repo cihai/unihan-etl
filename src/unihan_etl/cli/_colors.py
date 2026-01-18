@@ -136,10 +136,10 @@ class Colors:
     def _should_enable(self) -> bool:
         """Determine if color should be enabled.
 
-        Follows CPython-style precedence:
-        1. NO_COLOR env var (any value) -> disable
-        2. ColorMode.NEVER -> disable
-        3. ColorMode.ALWAYS -> enable
+        Precedence:
+        1. ColorMode.NEVER -> disable (explicit user choice)
+        2. ColorMode.ALWAYS -> enable (explicit user choice)
+        3. NO_COLOR env var (any value) -> disable
         4. FORCE_COLOR env var (any value) -> enable
         5. TTY check -> enable if stdout is a terminal
 
@@ -154,16 +154,15 @@ class Colors:
         >>> colors._should_enable()
         False
         """
-        # NO_COLOR takes highest priority (standard convention)
-        if os.environ.get("NO_COLOR"):
-            return False
-
+        # Explicit mode takes precedence over environment
         if self.mode == ColorMode.NEVER:
             return False
         if self.mode == ColorMode.ALWAYS:
             return True
 
-        # AUTO mode: check FORCE_COLOR then TTY
+        # AUTO mode: check NO_COLOR, then FORCE_COLOR, then TTY
+        if os.environ.get("NO_COLOR"):
+            return False
         if os.environ.get("FORCE_COLOR"):
             return True
 
