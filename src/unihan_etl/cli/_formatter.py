@@ -67,8 +67,8 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
     This formatter extends RawDescriptionHelpFormatter to preserve formatting
     of description text while adding syntax highlighting to example sections.
 
-    The formatter uses a `_help_theme` attribute (set externally) to apply colors.
-    If no theme is set, the formatter falls back to plain text output.
+    The formatter uses Python 3.14's native `_theme` attribute for colorization.
+    If no theme is set (non-TTY or NO_COLOR), the formatter falls back to plain text.
 
     Examples
     --------
@@ -76,10 +76,6 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
     >>> formatter  # doctest: +ELLIPSIS
     <...UnihanHelpFormatter object at ...>
     """
-
-    # Theme for colorization, set by create_themed_formatter() or externally
-    # Note: Uses _help_theme to avoid conflict with Python 3.14+ argparse's _theme
-    _help_theme: HelpTheme | None = None
 
     def _fill_text(self, text: str, width: int, indent: str) -> str:
         """Fill text, colorizing examples sections if theme is available.
@@ -106,7 +102,7 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
         >>> formatter._fill_text("hello", 80, "")
         'hello'
         """
-        theme = getattr(self, "_help_theme", None)
+        theme = getattr(self, "_theme", None)
         if not text or theme is None:
             return super()._fill_text(text, width, indent)
 
@@ -194,7 +190,11 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
         With an empty theme (no colors), returns text unchanged:
 
         >>> formatter = UnihanHelpFormatter("test")
-        >>> theme = HelpTheme.from_colors(None)
+        >>> from types import SimpleNamespace
+        >>> theme = SimpleNamespace(
+        ...     prog="", action="", long_option="", short_option="",
+        ...     label="", heading="", reset=""
+        ... )
         >>> result = formatter._colorize_example_line(
         ...     "unihan-etl export", theme=theme, expect_value=False
         ... )
@@ -245,136 +245,34 @@ class UnihanHelpFormatter(argparse.RawDescriptionHelpFormatter):
         return self._ColorizedLine(text="".join(parts), expect_value=expecting_value)
 
 
-class HelpTheme(t.NamedTuple):
-    """Theme colors for help output.
+def create_themed_formatter() -> type[UnihanHelpFormatter]:
+    """Create a help formatter class.
 
-    Examples
-    --------
-    >>> from unihan_etl.cli._formatter import HelpTheme
-    >>> theme = HelpTheme.from_colors(None)
-    >>> theme.reset
-    ''
-    """
-
-    prog: str
-    action: str
-    long_option: str
-    short_option: str
-    label: str
-    heading: str
-    reset: str
-
-    @classmethod
-    def from_colors(cls, colors: t.Any) -> HelpTheme:
-        """Create theme from Colors instance.
-
-        Parameters
-        ----------
-        colors : Colors | None
-            Colors instance, or None for no colors.
-
-        Returns
-        -------
-        HelpTheme
-            Theme with ANSI codes if colors enabled, empty strings otherwise.
-
-        Examples
-        --------
-        >>> from unihan_etl.cli._colors import Colors, ColorMode
-        >>> from unihan_etl.cli._formatter import HelpTheme
-        >>> colors = Colors(ColorMode.NEVER)
-        >>> theme = HelpTheme.from_colors(colors)
-        >>> theme.reset
-        ''
-        """
-        if colors is None or not colors._enabled:
-            return cls(
-                prog="",
-                action="",
-                long_option="",
-                short_option="",
-                label="",
-                heading="",
-                reset="",
-            )
-
-        # Import style here to avoid circular import
-        from unihan_etl.cli._colors import style
-
-        return cls(
-            prog=style("", fg="magenta", bold=True).removesuffix("\033[0m"),
-            action=style("", fg="cyan").removesuffix("\033[0m"),
-            long_option=style("", fg="green").removesuffix("\033[0m"),
-            short_option=style("", fg="green").removesuffix("\033[0m"),
-            label=style("", fg="yellow").removesuffix("\033[0m"),
-            heading=style("", fg="blue").removesuffix("\033[0m"),
-            reset="\033[0m",
-        )
-
-
-def create_themed_formatter(
-    colors: t.Any | None = None,
-) -> type[UnihanHelpFormatter]:
-    """Create a help formatter class with theme bound.
-
-    This factory creates a formatter subclass with the theme injected,
-    allowing colorized help output without modifying argparse internals.
-
-    When no colors argument is provided, uses AUTO mode which respects
-    NO_COLOR, FORCE_COLOR environment variables and TTY detection.
-
-    Parameters
-    ----------
-    colors : Colors | None
-        Colors instance for styling. If None, uses ColorMode.AUTO.
+    The formatter uses Python 3.14's native _theme attribute for colorization.
+    We don't inject our own theme - argparse handles this automatically based
+    on TTY detection and environment variables (NO_COLOR, FORCE_COLOR).
 
     Returns
     -------
     type[UnihanHelpFormatter]
-        Formatter class with theme bound.
+        Formatter class that uses Python's native theme support.
 
     Examples
     --------
-    >>> from unihan_etl.cli._colors import ColorMode, Colors
-    >>> from unihan_etl.cli._formatter import create_themed_formatter, HelpTheme
+    >>> from unihan_etl.cli._formatter import create_themed_formatter
 
-    With explicit colors enabled:
+    Create formatter (uses Python 3.14 native theming):
 
-    >>> colors = Colors(ColorMode.ALWAYS)
-    >>> formatter_cls = create_themed_formatter(colors)
+    >>> formatter_cls = create_themed_formatter()
     >>> formatter = formatter_cls("test")
-    >>> formatter._help_theme is not None
-    True
-
-    With colors disabled:
-
-    >>> colors = Colors(ColorMode.NEVER)
-    >>> formatter_cls = create_themed_formatter(colors)
-    >>> formatter = formatter_cls("test")
-    >>> formatter._help_theme is None
-    True
+    >>> formatter  # doctest: +ELLIPSIS
+    <...UnihanHelpFormatter object at ...>
     """
-    # Import here to avoid circular import at module load
-    from unihan_etl.cli._colors import ColorMode, Colors
-
-    if colors is None:
-        colors = Colors(ColorMode.AUTO)
-
-    # Create theme if colors are enabled, None otherwise
-    theme = HelpTheme.from_colors(colors) if colors._enabled else None
-
-    class ThemedUnihanHelpFormatter(UnihanHelpFormatter):
-        """UnihanHelpFormatter with theme pre-configured."""
-
-        def __init__(self, prog: str, **kwargs: t.Any) -> None:
-            super().__init__(prog, **kwargs)
-            self._help_theme = theme
-
-    return ThemedUnihanHelpFormatter
+    # Simply return the formatter class - Python 3.14 handles theming
+    return UnihanHelpFormatter
 
 
 __all__ = [
-    "HelpTheme",
     "UnihanHelpFormatter",
     "create_themed_formatter",
 ]

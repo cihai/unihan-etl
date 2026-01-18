@@ -16,7 +16,7 @@ import sys
 import typing as t
 
 from unihan_etl.__about__ import __version__
-from unihan_etl.cli._colors import ColorMode, Colors, build_description, get_color_mode
+from unihan_etl.cli._colors import build_description
 from unihan_etl.cli._formatter import create_themed_formatter
 from unihan_etl.cli.download import command_download, create_download_subparser
 from unihan_etl.cli.export import command_export, create_export_subparser
@@ -63,23 +63,18 @@ Download and export Unicode Han character database.""",
 )
 
 
-def create_parser(colors: Colors | None = None) -> argparse.ArgumentParser:
+def create_parser() -> argparse.ArgumentParser:
     """Create the main argument parser with subcommands.
 
-    Parameters
-    ----------
-    colors : Colors | None
-        Colors instance for styling. If None, uses ColorMode.AUTO.
+    The formatter uses Python 3.14's native color theming based on TTY
+    detection and environment variables (NO_COLOR, FORCE_COLOR).
 
     Returns
     -------
     argparse.ArgumentParser
         Configured argument parser with all subcommands.
     """
-    if colors is None:
-        colors = Colors(ColorMode.AUTO)
-
-    formatter_class = create_themed_formatter(colors)
+    formatter_class = create_themed_formatter()
 
     parser = argparse.ArgumentParser(
         prog="unihan-etl",
@@ -140,19 +135,9 @@ def cli(args: list[str] | None = None) -> _ExitCode:
     if args is None:
         args = sys.argv[1:]
 
-    # First pass to get color mode (before full parse)
-    # This allows help text to be colored correctly
-    color_mode = ColorMode.AUTO
-    for i, arg in enumerate(args):
-        if arg == "--color" and i + 1 < len(args):
-            color_mode = get_color_mode(args[i + 1])
-            break
-        if arg.startswith("--color="):
-            color_mode = get_color_mode(arg.split("=", 1)[1])
-            break
-
-    colors = Colors(color_mode)
-    parser = create_parser(colors)
+    # Python 3.14's argparse handles color detection automatically
+    # based on TTY, NO_COLOR, and FORCE_COLOR environment variables
+    parser = create_parser()
     parsed = parser.parse_args(args)
 
     # Setup logging

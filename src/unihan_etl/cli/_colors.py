@@ -21,8 +21,7 @@ Force colors on or off:
 >>> colors.success("exported")
 'exported'
 
-Environment variables NO_COLOR and FORCE_COLOR are respected.
-NO_COLOR takes highest priority (disables even in ALWAYS mode).
+Environment variable NO_COLOR is respected in AUTO mode (disables colors).
 """
 
 from __future__ import annotations
@@ -140,8 +139,7 @@ class Colors:
         1. ColorMode.NEVER -> disable (explicit user choice)
         2. ColorMode.ALWAYS -> enable (explicit user choice)
         3. NO_COLOR env var (any value) -> disable
-        4. FORCE_COLOR env var (any value) -> enable
-        5. TTY check -> enable if stdout is a terminal
+        4. TTY check -> enable if stdout is a terminal
 
         Returns
         -------
@@ -160,11 +158,9 @@ class Colors:
         if self.mode == ColorMode.ALWAYS:
             return True
 
-        # AUTO mode: check NO_COLOR, then FORCE_COLOR, then TTY
+        # AUTO mode: check NO_COLOR, then TTY
         if os.environ.get("NO_COLOR"):
             return False
-        if os.environ.get("FORCE_COLOR"):
-            return True
 
         return sys.stdout.isatty()
 

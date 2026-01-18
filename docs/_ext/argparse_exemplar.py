@@ -967,6 +967,28 @@ def _is_examples_section(
     return any(config.examples_term_suffix in id_str.lower() for id_str in ids)
 
 
+def _fix_parent_references(node: nodes.Node, parent: nodes.Node | None = None) -> None:
+    """Recursively fix parent references in a node tree.
+
+    When nodes are extracted from containers or created in lists,
+    their parent references may be None or stale. This function
+    walks the tree and ensures all children point to their actual parent.
+
+    Parameters
+    ----------
+    node : nodes.Node
+        The node to fix, along with all its descendants.
+    parent : nodes.Node | None
+        The parent to assign to this node. If None, only fixes descendants.
+    """
+    if parent is not None:
+        node.parent = parent
+
+    if hasattr(node, "children"):
+        for child in node.children:
+            _fix_parent_references(child, node)
+
+
 def _reorder_nodes(
     processed: list[nodes.Node], *, config: ExemplarConfig | None = None
 ) -> list[nodes.Node]:
@@ -1188,7 +1210,15 @@ class CleanArgParseDirective(ArgparseDirective):  # type: ignore[misc]
                 flattened.append(node)
 
         # Reorder: usage sections/blocks before examples sections
-        return _reorder_nodes(flattened, config=config)
+        result = _reorder_nodes(flattened, config=config)
+
+        # Fix parent references for all returned nodes
+        # Nodes returned from directives should have parent=None at the top level
+        # but all descendants must have valid parent references
+        for node in result:
+            _fix_parent_references(node, parent=None)
+
+        return result
 
 
 def setup(app: Sphinx) -> dict[str, t.Any]:

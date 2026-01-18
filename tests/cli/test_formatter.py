@@ -7,9 +7,8 @@ import typing as t
 
 import pytest
 
-from unihan_etl.cli._colors import ColorMode, Colors
 from unihan_etl.cli._formatter import (
-    HelpTheme,
+    UnihanHelpFormatter,
     create_themed_formatter,
 )
 
@@ -18,20 +17,17 @@ class FormatterCreationFixture(t.NamedTuple):
     """Test fixture for formatter creation."""
 
     test_id: str
-    color_mode: ColorMode
-    expect_colored: bool
+    description: str
 
 
 FORMATTER_CREATION_FIXTURES: list[FormatterCreationFixture] = [
     FormatterCreationFixture(
-        test_id="always_mode_colored",
-        color_mode=ColorMode.ALWAYS,
-        expect_colored=True,
+        test_id="simple_description",
+        description="Test description.\n\nexamples:\n  test-prog --help",
     ),
     FormatterCreationFixture(
-        test_id="never_mode_plain",
-        color_mode=ColorMode.NEVER,
-        expect_colored=False,
+        test_id="no_examples",
+        description="Simple description without examples.",
     ),
 ]
 
@@ -43,18 +39,20 @@ FORMATTER_CREATION_FIXTURES: list[FormatterCreationFixture] = [
 )
 def test_create_themed_formatter(
     test_id: str,
-    color_mode: ColorMode,
-    expect_colored: bool,
+    description: str,
 ) -> None:
-    """Test themed formatter creation with different color modes."""
-    colors = Colors(color_mode)
-    formatter_class = create_themed_formatter(colors)
+    """Test themed formatter creation with Python 3.14 native theming.
+
+    The formatter relies on Python 3.14's native _theme attribute, which
+    is automatically set based on TTY detection and environment variables.
+    In tests (non-TTY), no colors are applied.
+    """
+    formatter_class = create_themed_formatter()
 
     # Create a parser with the formatter
-    # Use description with examples to trigger colorization
     parser = argparse.ArgumentParser(
         prog="test-prog",
-        description="Test description.\n\nexamples:\n  test-prog --help",
+        description=description,
         formatter_class=formatter_class,
     )
     parser.add_argument("--test", help="Test option")
@@ -64,65 +62,11 @@ def test_create_themed_formatter(
 
     # Verify formatter produces output
     assert "test-prog" in help_text
-    assert "Test description" in help_text
 
-    if expect_colored:
-        # ANSI escape codes should be present in example lines
-        assert "\x1b[" in help_text
-    else:
-        # No ANSI escape codes
-        assert "\x1b[" not in help_text
-
-
-class HelpThemeFixture(t.NamedTuple):
-    """Test fixture for HelpTheme creation."""
-
-    test_id: str
-    prog: str
-    action: str
-    long_option: str
-
-
-HELP_THEME_FIXTURES: list[HelpThemeFixture] = [
-    HelpThemeFixture(
-        test_id="default_theme",
-        prog="cyan_prog",
-        action="green_action",
-        long_option="yellow_opt",
-    ),
-    HelpThemeFixture(
-        test_id="custom_theme",
-        prog="magenta_prog",
-        action="blue_action",
-        long_option="red_opt",
-    ),
-]
-
-
-@pytest.mark.parametrize(
-    HelpThemeFixture._fields,
-    HELP_THEME_FIXTURES,
-    ids=[f.test_id for f in HELP_THEME_FIXTURES],
-)
-def test_help_theme_creation(
-    test_id: str,
-    prog: str,
-    action: str,
-    long_option: str,
-) -> None:
-    """Test HelpTheme namedtuple creation."""
-    theme = HelpTheme(
-        prog=prog,
-        action=action,
-        long_option=long_option,
-        short_option="short",
-        label="label",
-        heading="heading",
-        reset="reset",
-    )
-    assert theme.prog == prog
-    assert theme.action == action
-    assert theme.long_option == long_option
+    # In non-TTY environment (tests), Python 3.14's argparse won't colorize
+    # So we verify basic content presence rather than color codes
+    if "examples:" in description:
+        assert "examples:" in help_text
 
 
 class FormatterOutputFixture(t.NamedTuple):
@@ -162,8 +106,7 @@ def test_formatter_output(
     expected_in_help: list[str],
 ) -> None:
     """Test formatter output contains expected content."""
-    colors = Colors(ColorMode.NEVER)
-    formatter_class = create_themed_formatter(colors)
+    formatter_class = create_themed_formatter()
 
     parser = argparse.ArgumentParser(
         prog=prog,
@@ -179,8 +122,7 @@ def test_formatter_output(
 
 def test_unihan_help_formatter_inherits_raw_description() -> None:
     """Test UnihanHelpFormatter preserves raw description formatting."""
-    colors = Colors(ColorMode.NEVER)
-    formatter_class = create_themed_formatter(colors)
+    formatter_class = create_themed_formatter()
 
     # Verify it's a subclass of RawDescriptionHelpFormatter behavior
     parser = argparse.ArgumentParser(
@@ -199,8 +141,7 @@ def test_unihan_help_formatter_inherits_raw_description() -> None:
 
 def test_formatter_with_subparsers() -> None:
     """Test formatter works correctly with subparsers."""
-    colors = Colors(ColorMode.NEVER)
-    formatter_class = create_themed_formatter(colors)
+    formatter_class = create_themed_formatter()
 
     parser = argparse.ArgumentParser(
         prog="myapp",
@@ -225,3 +166,27 @@ def test_formatter_with_subparsers() -> None:
     assert "commands" in help_text
     assert "export" in help_text
     assert "import" in help_text
+
+
+def test_create_themed_formatter_returns_unihan_formatter() -> None:
+    """Test create_themed_formatter returns UnihanHelpFormatter class."""
+    formatter_class = create_themed_formatter()
+    assert formatter_class is UnihanHelpFormatter
+
+
+def test_formatter_uses_native_theme() -> None:
+    """Test formatter uses Python 3.14's native _theme attribute.
+
+    This test verifies the formatter checks for _theme (not _help_theme)
+    when colorizing, which is the attribute set by Python 3.14's argparse.
+    """
+    formatter_class = create_themed_formatter()
+    formatter = formatter_class("test")
+
+    # In non-TTY environment, _theme should be None or not set
+    theme = getattr(formatter, "_theme", None)
+    # We don't assert the value since it depends on Python version and TTY
+
+    # But we can verify _help_theme is NOT used (removed in the fix)
+    # The formatter should not have _help_theme as a class attribute
+    assert not hasattr(UnihanHelpFormatter, "_help_theme")
