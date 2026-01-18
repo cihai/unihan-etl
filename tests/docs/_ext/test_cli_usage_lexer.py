@@ -72,15 +72,15 @@ TOKEN_TYPE_FIXTURES: list[TokenTypeFixture] = [
     ),
     TokenTypeFixture(
         test_id="positional_arg",
-        input_text="session-name",
+        input_text="repo-name",
         expected_token_type="Token.Name.Label",
-        expected_value="session-name",
+        expected_value="repo-name",
     ),
     TokenTypeFixture(
         test_id="command_name",
-        input_text="unihan-etl",
+        input_text="vcspull",
         expected_token_type="Token.Name.Label",
-        expected_value="unihan-etl",
+        expected_value="vcspull",
     ),
     TokenTypeFixture(
         test_id="open_bracket",
@@ -141,20 +141,20 @@ class ShortOptionValueFixture(t.NamedTuple):
 SHORT_OPTION_VALUE_FIXTURES: list[ShortOptionValueFixture] = [
     ShortOptionValueFixture(
         test_id="lowercase_value",
-        input_text="-S socket-path",
-        option="-S",
-        value="socket-path",
+        input_text="-c config-path",
+        option="-c",
+        value="config-path",
     ),
     ShortOptionValueFixture(
         test_id="uppercase_value",
-        input_text="-c COMMAND",
-        option="-c",
-        value="COMMAND",
+        input_text="-d DIRECTORY",
+        option="-d",
+        value="DIRECTORY",
     ),
     ShortOptionValueFixture(
         test_id="simple_value",
-        input_text="-L name",
-        option="-L",
+        input_text="-r name",
+        option="-r",
         value="name",
     ),
 ]
@@ -255,33 +255,33 @@ USAGE_STRING_FIXTURES: list[UsageStringFixture] = [
     ),
     UsageStringFixture(
         test_id="mutually_exclusive",
-        input_text="[--best | --pdb | --code]",
+        input_text="[--json | --ndjson | --table]",
         expected_contains=[
-            ("Token.Name.Tag", "--best"),
+            ("Token.Name.Tag", "--json"),
             ("Token.Operator", "|"),
-            ("Token.Name.Tag", "--pdb"),
+            ("Token.Name.Tag", "--ndjson"),
             ("Token.Operator", "|"),
-            ("Token.Name.Tag", "--code"),
+            ("Token.Name.Tag", "--table"),
         ],
     ),
     UsageStringFixture(
         test_id="subcommand",
-        input_text="usage: unihan-etl export",
+        input_text="usage: vcspull sync",
         expected_contains=[
             ("Token.Generic.Heading", "usage:"),
-            ("Token.Name.Label", "unihan-etl"),
-            ("Token.Name.Label", "export"),
+            ("Token.Name.Label", "vcspull"),
+            ("Token.Name.Label", "sync"),
         ],
     ),
     UsageStringFixture(
         test_id="positional_args",
-        input_text="[input-file] [output-file]",
+        input_text="[repo-name] [path]",
         expected_contains=[
             ("Token.Punctuation", "["),
-            ("Token.Name.Label", "input-file"),
+            ("Token.Name.Label", "repo-name"),
             ("Token.Punctuation", "]"),
             ("Token.Punctuation", "["),
-            ("Token.Name.Label", "output-file"),
+            ("Token.Name.Label", "path"),
             ("Token.Punctuation", "]"),
         ],
     ),
@@ -306,35 +306,38 @@ def test_usage_string(
         )
 
 
-# --- Real unihan-etl usage output test ---
+# --- Real vcspull usage output test ---
 
 
-def test_unihan_etl_usage() -> None:
-    """Test real unihan-etl usage output tokenization."""
+def test_vcspull_sync_usage() -> None:
+    """Test real vcspull sync usage output tokenization."""
     usage_text = """\
-usage: unihan-etl [-h] [-v] [-F format] [--no-expand] [--no-prune]
-                  [-d DESTINATION] [--cache-dir CACHE_DIR]
-                  [-f FIELD [FIELD ...]] [-i INPUT_FILE [INPUT_FILE ...]]"""
+usage: vcspull sync [-h] [-c CONFIG] [-d DIRECTORY]
+                    [--json | --ndjson | --table] [--color {auto,always,never}]
+                    [--no-progress] [--verbose]
+                    [repo-name] [path]"""
 
     tokens = get_tokens(usage_text)
 
     # Check key elements are present
+    # Note: DIRECTORY after -d is Name.Variable (option value), not Name.Constant
     expected = [
         ("Token.Generic.Heading", "usage:"),
-        ("Token.Name.Label", "unihan-etl"),
+        ("Token.Name.Label", "vcspull"),
+        ("Token.Name.Label", "sync"),
         ("Token.Name.Attribute", "-h"),
-        ("Token.Name.Attribute", "-v"),
-        ("Token.Name.Attribute", "-F"),
-        ("Token.Name.Variable", "format"),
-        ("Token.Name.Tag", "--no-expand"),
-        ("Token.Name.Tag", "--no-prune"),
+        ("Token.Name.Attribute", "-c"),
+        ("Token.Name.Variable", "CONFIG"),  # Option value, not standalone metavar
         ("Token.Name.Attribute", "-d"),
-        ("Token.Name.Variable", "DESTINATION"),
-        ("Token.Name.Tag", "--cache-dir"),
-        ("Token.Name.Attribute", "-f"),
-        ("Token.Name.Variable", "FIELD"),
-        ("Token.Name.Attribute", "-i"),
-        ("Token.Name.Variable", "INPUT_FILE"),
+        ("Token.Name.Variable", "DIRECTORY"),  # Option value, not standalone metavar
+        ("Token.Name.Tag", "--json"),
+        ("Token.Name.Tag", "--ndjson"),
+        ("Token.Name.Tag", "--table"),
+        ("Token.Name.Tag", "--color"),
+        ("Token.Name.Tag", "--no-progress"),
+        ("Token.Name.Tag", "--verbose"),
+        ("Token.Name.Label", "repo-name"),
+        ("Token.Name.Label", "path"),
     ]
 
     for expected_type, expected_value in expected:
