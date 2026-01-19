@@ -20,7 +20,81 @@ Migration and deprecation notes for unihan-etl are here, see {ref}`history` as w
 
 ## Next release
 
-_Notes on the upcoming release will be added here_
+### pytest plugin: Fixture dataclass containers
+
+The pytest plugin fixtures have been redesigned with better type safety and DX.
+Fixtures that previously returned `zipfile.ZipFile` now return dataclass containers.
+
+#### `unihan_quick_zip` and `unihan_mock_zip` return `UnihanZip`
+
+Before:
+
+```python
+def test_example(unihan_mock_zip: zipfile.ZipFile) -> None:
+    # ZipFile was closed before return - couldn't read file contents!
+    with unihan_mock_zip.open("Unihan_Readings.txt") as f:
+        content = f.read()  # Would fail - handle closed
+```
+
+After:
+
+```python
+from unihan_etl.types import UnihanZip
+
+def test_example(unihan_mock_zip: UnihanZip) -> None:
+    # Access path directly
+    assert unihan_mock_zip.exists()
+
+    # Use context manager for open handle
+    with unihan_mock_zip.open() as zf:
+        files = zf.namelist()
+
+    # Or use convenience property
+    files = unihan_mock_zip.namelist
+```
+
+#### New primary fixtures: `unihan_quick` and `unihan_full`
+
+New `UnihanDataset` container fixtures provide unified access to all dataset paths:
+
+```python
+from unihan_etl.types import UnihanDataset
+
+def test_with_dataset(unihan_quick: UnihanDataset) -> None:
+    assert unihan_quick.name == "quick"
+    assert unihan_quick.zip.exists()
+    print(unihan_quick.work_dir)
+    print(unihan_quick.destination)
+```
+
+#### New lazy data fixture: `unihan_quick_data_lazy`
+
+```python
+from unihan_etl.types import UnihanData
+
+def test_lazy_data(unihan_quick_data_lazy: UnihanData) -> None:
+    # Data only loads when accessed
+    expanded = unihan_quick_data_lazy.expanded
+    by_char = unihan_quick_data_lazy.by_char
+```
+
+#### CLI option: `--unihan-cache-dir`
+
+Override the cache directory via command line:
+
+```bash
+pytest --unihan-cache-dir=/tmp/my-cache
+```
+
+#### Marker: `@pytest.mark.unihan_full`
+
+Mark tests requiring the full dataset:
+
+```python
+@pytest.mark.unihan_full
+def test_full_dataset(unihan_full: UnihanDataset, unihan_ensure_full: None) -> None:
+    assert unihan_full.is_ready
+```
 
 <!-- Maintainers, insert migration notes for the next release here -->
 

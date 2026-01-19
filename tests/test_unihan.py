@@ -27,26 +27,25 @@ from unihan_etl.test import assert_dict_contains_subset
 from unihan_etl.util import get_fields
 
 if t.TYPE_CHECKING:
-    import zipfile
     from collections.abc import Callable
     from urllib.request import _DataType
 
-    from unihan_etl.types import ColumnData, StrPath, UntypedNormalizedData
+    from unihan_etl.types import ColumnData, StrPath, UnihanZip, UntypedNormalizedData
 
 
 log = logging.getLogger(__name__)
 
 
-def test_zip_has_files(unihan_mock_zip: zipfile.ZipFile) -> None:
+def test_zip_has_files(unihan_mock_zip: UnihanZip) -> None:
     """Test zip_has_files() returns when zip file has files contents inside."""
-    assert zip_has_files(["Unihan_Readings.txt"], unihan_mock_zip)
-
-    assert not zip_has_files(["Unihan_Cats.txt"], unihan_mock_zip)
+    with unihan_mock_zip.open() as zf:
+        assert zip_has_files(["Unihan_Readings.txt"], zf)
+        assert not zip_has_files(["Unihan_Cats.txt"], zf)
 
 
 def test_has_valid_zip(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip: UnihanZip,
 ) -> None:
     """Test has_valid_zip() returns whether zip file is valid."""
     if UNIHAN_ZIP_PATH.is_file():
@@ -54,9 +53,8 @@ def test_has_valid_zip(
     else:
         assert not core.has_valid_zip(UNIHAN_ZIP_PATH)
 
-    assert unihan_mock_zip.filename is not None
-
-    assert core.has_valid_zip(unihan_mock_zip.filename)
+    assert unihan_mock_zip.exists()
+    assert core.has_valid_zip(unihan_mock_zip.path)
 
     bad_zip = tmp_path / "corrupt.zip"
     bad_zip.write_text("moo", encoding="utf-8")
@@ -101,7 +99,6 @@ def test_get_files() -> None:
 
 def test_download(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_zip_pathname: pathlib.Path,
 ) -> None:
@@ -132,7 +129,6 @@ def test_download(
 
 def test_download_mock(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
@@ -172,7 +168,6 @@ def test_download_mock(
 
 def test_export_format(
     tmp_path: pathlib.Path,
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     unihan_mock_test_dir: pathlib.Path,
     unihan_test_options: Options,
@@ -211,7 +206,6 @@ def test_export_format(
 
 
 def test_extract_zip(
-    unihan_mock_zip: zipfile.ZipFile,
     unihan_mock_zip_path: pathlib.Path,
     tmp_path: pathlib.Path,
 ) -> None:
