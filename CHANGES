@@ -32,6 +32,10 @@ Then run `unihan-etl@next`.
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+_Next release's updates go here_
+
+## unihan-etl 0.39.1 (2026-01-24)
+
 ### CI
 
 - Migrate to PyPI Trusted Publisher (#339)
