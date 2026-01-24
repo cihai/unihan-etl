@@ -1,1 +1,2 @@
 "api.md" "api/index.md"
+"cli.md" "cli/index.md"

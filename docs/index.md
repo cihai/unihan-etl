@@ -9,7 +9,7 @@
 :hidden:
 
 quickstart
-cli
+cli/index
 api/index
 pytest-plugin
 
