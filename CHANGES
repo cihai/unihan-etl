@@ -34,6 +34,37 @@ Then run `unihan-etl@next`.
 
 _Add your latest changes from PRs here_
 
+### New CLI subcommand architecture (#342)
+
+The CLI has been redesigned with a subcommand structure for better organization and discoverability:
+
+- `unihan-etl export` - Export UNIHAN data (CSV, JSON, YAML, Python)
+- `unihan-etl download` - Download and cache UNIHAN database
+- `unihan-etl fields` - List available UNIHAN fields
+- `unihan-etl files` - List available UNIHAN source files
+- `unihan-etl search` - Search UNIHAN data by character or field
+
+#### CLI features
+
+- Colorized help output with syntax highlighting for examples
+- Privacy-aware path display (hides home directory in output)
+- Multiple output formats: table, JSON, NDJSON
+- Consistent `--color` option across all subcommands
+
+### Documentation
+
+#### Sphinx extensions
+
+New Sphinx extensions ported from tmuxp for enhanced CLI documentation:
+
+- `pretty_argparse`: Enhanced sphinx-argparse output with better formatting
+- `cli_usage_lexer`: Pygments lexer for CLI usage/help text highlighting
+
+### Development
+
+- Comprehensive test coverage for CLI subcommands and infrastructure
+- Tests for Sphinx documentation extensions
+
 ## unihan-etl 0.39.0 (2026-01-11)
 
 ### Revision 39 updates (#343)
