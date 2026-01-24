@@ -180,13 +180,6 @@ def test_formatter_uses_native_theme() -> None:
     This test verifies the formatter checks for _theme (not _help_theme)
     when colorizing, which is the attribute set by Python 3.14's argparse.
     """
-    formatter_class = create_themed_formatter()
-    formatter = formatter_class("test")
-
-    # In non-TTY environment, _theme should be None or not set
-    theme = getattr(formatter, "_theme", None)
-    # We don't assert the value since it depends on Python version and TTY
-
-    # But we can verify _help_theme is NOT used (removed in the fix)
+    # Verify _help_theme is NOT used (removed in the fix)
     # The formatter should not have _help_theme as a class attribute
     assert not hasattr(UnihanHelpFormatter, "_help_theme")
