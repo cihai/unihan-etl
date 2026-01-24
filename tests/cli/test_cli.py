@@ -203,10 +203,6 @@ def test_parser_global_options() -> None:
     """Test parser has global options."""
     parser = create_parser()
 
-    # Color option
-    args = parser.parse_args(["--color", "never", "fields"])
-    assert args.color == "never"
-
     # Log level option
     args = parser.parse_args(["--log-level", "DEBUG", "fields"])
     assert args.log_level == "DEBUG"

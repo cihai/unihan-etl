@@ -89,12 +89,6 @@ def create_parser() -> argparse.ArgumentParser:
         version=f"%(prog)s {__version__}",
     )
     parser.add_argument(
-        "--color",
-        choices=["auto", "always", "never"],
-        default="auto",
-        help="Color output mode. Default: auto",
-    )
-    parser.add_argument(
         "-l",
         "--log-level",
         dest="log_level",
