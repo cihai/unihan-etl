@@ -28,17 +28,13 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 Then run `unihan-etl@next`.
 
-## unihan-etl 0.40.x (unreleased)
+## unihan-etl 0.41.x (unreleased)
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
 _Next release's updates go here_
 
-## unihan-etl 0.39.1 (2026-01-24)
-
-### CI
-
-- Migrate to PyPI Trusted Publisher (#339)
+## unihan-etl 0.40.0 (2026-01-24)
 
 ### Breaking changes
 
@@ -94,6 +90,14 @@ New Sphinx extensions ported from vcspull for enhanced CLI documentation:
 
 - Comprehensive test coverage for CLI subcommands and infrastructure
 - Tests for Sphinx documentation extensions
+
+
+
+## unihan-etl 0.39.1 (2026-01-24)
+
+### CI
+
+- Migrate to PyPI Trusted Publisher (#339)
 
 ## unihan-etl 0.39.0 (2026-01-11)
 

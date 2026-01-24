@@ -24,7 +24,7 @@ _Notes on the upcoming release will be added here_
 
 <!-- Maintainers, insert migration notes for the next release here -->
 
-## unihan-etl 0.40.0 (Unreleased)
+## unihan-etl 0.40.0 (2026-01-24)
 
 ### CLI now requires explicit subcommand (#344)
 
