@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import codecs
 import csv
 import dataclasses
 import fileinput
@@ -451,7 +450,7 @@ def export_csv(
 
 def export_json(data: UntypedNormalizedData, destination: StrPath) -> None:
     """Export UNIHAN in JSON format."""
-    with codecs.open(str(destination), "w", encoding="utf-8") as f:
+    with pathlib.Path(destination).open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         log.info("Saved output to: %s", destination)
 
@@ -460,7 +459,7 @@ def export_yaml(data: UntypedNormalizedData, destination: StrPath) -> None:
     """Export UNIHAN in YAML format."""
     import yaml
 
-    with codecs.open(str(destination), "w", encoding="utf-8") as f:
+    with pathlib.Path(destination).open("w", encoding="utf-8") as f:
         yaml.safe_dump(data, stream=f, allow_unicode=True, default_flow_style=False)
         log.info("Saved output to: %s", destination)
 
