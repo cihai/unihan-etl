@@ -60,7 +60,6 @@ The `unihan-etl` command is the entry point for all UNIHAN ETL operations. Use s
 
 ## Global Options
 
-- `--color {auto,always,never}`: Color output mode (default: auto)
 - `-l, --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}`: Logging level (default: INFO)
 - `-V, --version`: Show version and exit
 
