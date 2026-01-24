@@ -38,7 +38,6 @@ OPTIONS_EXPECTING_VALUE = frozenset(
         "-o",
         "--output",
         "--cache-dir",
-        "--color",
     }
 )
 

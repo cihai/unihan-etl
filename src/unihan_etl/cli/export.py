@@ -182,9 +182,7 @@ def command_export(
         option_kwargs = {
             k: v
             for k, v in vars(args).items()
-            if v is not None
-            and v != []
-            and k not in ("subparser_name", "log_level", "color")
+            if v is not None and v != [] and k not in ("subparser_name", "log_level")
         }
 
         packager = Packager(Options(**option_kwargs))
