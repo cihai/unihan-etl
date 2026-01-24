@@ -24,6 +24,92 @@ _Notes on the upcoming release will be added here_
 
 <!-- Maintainers, insert migration notes for the next release here -->
 
+## unihan-etl 0.40.0 (Unreleased)
+
+### CLI now requires explicit subcommand (#344)
+
+The CLI has been redesigned with a subcommand architecture. Running `unihan-etl` without arguments now displays help instead of immediately running the ETL export process.
+
+#### Quick migration
+
+Before 0.39.1, running the bare command would download and export UNIHAN data:
+
+```console
+$ unihan-etl
+```
+
+From 0.40.0+, use the `export` subcommand explicitly:
+
+```console
+$ unihan-etl export
+```
+
+#### Command mapping
+
+| Before 0.39.1 | From 0.39.1+ | Description |
+|---------------|--------------|-------------|
+| `unihan-etl` | `unihan-etl export` | Export UNIHAN data |
+| `unihan-etl -F json` | `unihan-etl export -F json` | Export as JSON |
+| `unihan-etl -f kDefinition` | `unihan-etl export -f kDefinition` | Export specific fields |
+
+#### New subcommands
+
+The new architecture adds dedicated subcommands for common tasks:
+
+List available UNIHAN fields:
+
+```console
+$ unihan-etl fields
+```
+
+List available source files:
+
+```console
+$ unihan-etl files
+```
+
+Download without exporting:
+
+```console
+$ unihan-etl download
+```
+
+Search for a character:
+
+```console
+$ unihan-etl search 好
+```
+
+#### Scripts and automation
+
+If you have scripts that invoke `unihan-etl` directly, update them to use `unihan-etl export`:
+
+Before:
+
+```bash
+#!/bin/bash
+unihan-etl -F json -f kDefinition,kMandarin > unihan.json
+```
+
+After:
+
+```bash
+#!/bin/bash
+unihan-etl export -F json -f kDefinition,kMandarin > unihan.json
+```
+
+#### Python API unchanged
+
+The Python API remains unchanged. If you use unihan-etl as a library, no changes are needed:
+
+```python
+>>> from unihan_etl.core import Packager
+>>> from unihan_etl.options import Options
+>>> packager = Packager(Options(fields=['kDefinition']))
+>>> packager.download()
+>>> data = packager.export()
+```
+
 ## unihan-etl 0.22.0 (2023-06-17)
 
 ### Move `unihan_etl.process` to `unihan_etl.core` (#284)
