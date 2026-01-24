@@ -46,13 +46,13 @@ Download and export Unicode Han character database.""",
             ],
         ),
         (
-            "Download",  # Colorized as category inside examples block
+            "download",  # Colorized as category inside examples block
             [
                 "unihan-etl download",
             ],
         ),
         (
-            "Explore",  # Colorized as category inside examples block
+            "explore",  # Colorized as category inside examples block
             [
                 "unihan-etl fields",
                 "unihan-etl files",
