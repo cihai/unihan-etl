@@ -570,7 +570,7 @@ def _generate_usage(parser: argparse.ArgumentParser) -> str:
     formatter.add_usage(
         parser.usage, parser._actions, parser._mutually_exclusive_groups
     )
-    usage = strip_ansi(formatter.format_help().strip())
+    usage: str = strip_ansi(formatter.format_help().strip())
 
     # Remove "usage: " prefix if present
     if usage.lower().startswith("usage:"):
