@@ -43,14 +43,14 @@ Requires UNIHAN data to be downloaded (will download if not cached).""",
             ],
         ),
         (
-            "Output formats",
+            "Output format examples",
             [
                 "unihan-etl search 好 --json",
                 "unihan-etl search 好 --ndjson",
             ],
         ),
         (
-            "Field filtering",
+            "Field filtering examples",
             [
                 "unihan-etl search 好 -f kDefinition kMandarin",
             ],
