@@ -11,8 +11,13 @@ Three lexer classes are provided:
 
 from __future__ import annotations
 
-from pygments.lexer import RegexLexer, bygroups, include
+import typing as t
+
+from pygments.lexer import RegexLexer, bygroups as _bygroups, include
 from pygments.token import Generic, Name, Operator, Punctuation, Text, Whitespace
+
+# Wrapper to silence mypy [no-untyped-call] - bygroups is untyped in types-pygments
+bygroups: t.Callable[..., t.Any] = _bygroups
 
 
 class ArgparseUsageLexer(RegexLexer):
@@ -36,16 +41,16 @@ class ArgparseUsageLexer(RegexLexer):
     """
 
     name = "Argparse Usage"
-    aliases = ["argparse-usage"]  # noqa: RUF012
-    filenames: list[str] = []  # noqa: RUF012
-    mimetypes = ["text/x-argparse-usage"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse-usage"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse-usage"]
 
-    tokens = {  # noqa: RUF012
+    tokens: t.ClassVar[dict[str, list[t.Any]]] = {
         "root": [
             # "usage:" at start of line - then look for program name
             (
                 r"^(usage:)(\s+)",
-                bygroups(Generic.Heading, Whitespace),  # type: ignore[no-untyped-call]
+                bygroups(Generic.Heading, Whitespace),
                 "after_usage",
             ),
             # Continuation lines (leading whitespace for wrapped usage)
@@ -68,14 +73,14 @@ class ArgparseUsageLexer(RegexLexer):
             # Long options with = value (e.g., --log-level=VALUE)
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Tag, Operator, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with space-separated value (e.g., -S socket-path)
             (
                 r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Attribute, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
             (r"-[a-zA-Z0-9]", Name.Attribute),
@@ -106,14 +111,14 @@ class ArgparseUsageLexer(RegexLexer):
             # Long options with = value (e.g., --log-level=VALUE)
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Tag, Operator, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with space-separated value (e.g., -S socket-path)
             (
                 r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Attribute, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
             (r"-[a-zA-Z0-9]", Name.Attribute),
@@ -187,16 +192,16 @@ class ArgparseHelpLexer(RegexLexer):
     """
 
     name = "Argparse Help"
-    aliases = ["argparse-help"]  # noqa: RUF012
-    filenames: list[str] = []  # noqa: RUF012
-    mimetypes = ["text/x-argparse-help"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse-help"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse-help"]
 
-    tokens = {  # noqa: RUF012
+    tokens: t.ClassVar[dict[str, list[t.Any]]] = {
         "root": [
             # "usage:" line - switch to after_usage to find program name
             (
                 r"^(usage:)(\s+)",
-                bygroups(Generic.Heading, Whitespace),  # type: ignore[no-untyped-call]
+                bygroups(Generic.Heading, Whitespace),
                 "after_usage",
             ),
             # Section headers (e.g., "positional arguments:", "options:")
@@ -235,14 +240,14 @@ class ArgparseHelpLexer(RegexLexer):
             # Long options with = value
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Tag, Operator, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with value
             (
                 r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Attribute, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
             (r"-[a-zA-Z0-9]", Name.Attribute),
@@ -267,31 +272,31 @@ class ArgparseHelpLexer(RegexLexer):
             # Short option with comma (e.g., "-h, --help")
             (
                 r"(-[a-zA-Z0-9])(,)(\s*)(--[a-zA-Z0-9][-a-zA-Z0-9]*)",
-                bygroups(Name.Attribute, Punctuation, Whitespace, Name.Tag),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Punctuation, Whitespace, Name.Tag),
             ),
             # Long options with = value
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
-                bygroups(Name.Tag, Operator, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options with space-separated metavar
             (
                 r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(\s+)([A-Z][A-Z0-9_]+)",
-                bygroups(Name.Tag, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Tag, Whitespace, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with metavar
             (
                 r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]+)",
-                bygroups(Name.Attribute, Whitespace, Name.Variable),  # type: ignore[no-untyped-call]
+                bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
             (r"-[a-zA-Z0-9]", Name.Attribute),
             # Choices in braces
             (r"\{", Punctuation, "option_choices"),
             # Help text (everything after double space or large gap)
-            (r"([ \t]{2,})(.+)$", bygroups(Whitespace, Text)),  # type: ignore[no-untyped-call]
+            (r"([ \t]{2,})(.+)$", bygroups(Whitespace, Text)),
             # End of line - MUST come before \s+ to properly pop on newlines
             (r"\n", Text, "#pop"),
             # Other whitespace (spaces/tabs only, not newlines)
@@ -360,9 +365,9 @@ class ArgparseLexer(ArgparseHelpLexer):
     """
 
     name = "Argparse"
-    aliases = ["argparse"]  # noqa: RUF012
-    filenames: list[str] = []  # noqa: RUF012
-    mimetypes = ["text/x-argparse"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse"]
 
     # Tokens inherited from ArgparseHelpLexer - do NOT redefine or copy
 
