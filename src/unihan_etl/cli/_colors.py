@@ -1,7 +1,7 @@
 """Color output utilities for unihan-etl CLI.
 
-This module provides semantic color utilities following patterns from tmuxp/vcspull
-and CPython's _colorize module. It includes low-level ANSI styling functions
+This module provides semantic color utilities following patterns from CPython's
+_colorize module. It includes low-level ANSI styling functions
 and high-level semantic color utilities.
 
 Examples

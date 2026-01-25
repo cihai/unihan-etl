@@ -1,7 +1,7 @@
 """Custom help formatter for unihan-etl CLI with colorized examples.
 
 This module provides a custom argparse formatter that colorizes example
-sections in help output, similar to tmuxp/vcspull's formatter.
+sections in help output.
 
 Examples
 --------
