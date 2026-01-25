@@ -10,7 +10,7 @@ import typing as t
 from os.path import relpath
 
 from pygments import token
-from pygments.lexer import RegexLexer, bygroups
+from pygments.lexer import RegexLexer, bygroups as _bygroups
 from pygments.token import Keyword, Literal, Name, Operator, Punctuation
 from sphinx.highlighting import lexers
 
@@ -18,6 +18,9 @@ import unihan_etl
 
 if t.TYPE_CHECKING:
     from sphinx.application import Sphinx
+
+# Wrapper to silence mypy [no-untyped-call] - bygroups is untyped in types-pygments
+bygroups: t.Callable[..., t.Any] = _bygroups
 
 # Get the project root dir, which is the parent dir of this
 cwd = pathlib.Path(__file__).parent
