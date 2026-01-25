@@ -8,6 +8,7 @@ windows:
     main-pane-height: 67%
   panes:
   - focus: true
+  - pane
   - just watch-mypy
   - just start
 - window_name: docs
