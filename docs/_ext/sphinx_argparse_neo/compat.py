@@ -191,11 +191,11 @@ def get_parser_from_module(
 
     Examples
     --------
-    Load unihan_etl's parser factory:
+    Load tmuxp's parser factory:
 
-    >>> parser = get_parser_from_module("unihan_etl.cli", "create_parser")
+    >>> parser = get_parser_from_module("tmuxp.cli", "create_parser")
     >>> parser.prog
-    'unihan-etl'
+    'tmuxp'
     >>> hasattr(parser, 'parse_args')
     True
     """
@@ -250,11 +250,11 @@ def get_parser_from_entry_point(
 
     Examples
     --------
-    Load unihan_etl's parser using entry point syntax:
+    Load tmuxp's parser using entry point syntax:
 
-    >>> parser = get_parser_from_entry_point("unihan_etl.cli:create_parser")
+    >>> parser = get_parser_from_entry_point("tmuxp.cli:create_parser")
     >>> parser.prog
-    'unihan-etl'
+    'tmuxp'
 
     Invalid format raises ValueError:
 
