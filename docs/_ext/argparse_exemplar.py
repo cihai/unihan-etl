@@ -516,6 +516,33 @@ def _create_example_section(
     -------
     nodes.section
         A section node with title and code blocks.
+
+    Examples
+    --------
+    Create a section from a definition node containing example commands:
+
+    >>> from docutils import nodes
+    >>> def_node = nodes.definition()
+    >>> def_node += nodes.paragraph(text="myapp sync")
+    >>> section = _create_example_section("examples:", def_node)
+    >>> section["ids"]
+    ['examples']
+    >>> section[0].astext()
+    'Examples'
+
+    With a page prefix for uniqueness across documentation pages:
+
+    >>> section = _create_example_section("examples:", def_node, page_prefix="sync")
+    >>> section["ids"]
+    ['sync-examples']
+
+    Category-prefixed examples create descriptive section IDs:
+
+    >>> section = _create_example_section("Machine-readable output examples:", def_node)
+    >>> section["ids"]
+    ['machine-readable-output-examples']
+    >>> section[0].astext()
+    'Machine-Readable Output Examples'
     """
     config = config or ExemplarConfig()
     section_id = make_section_id(
@@ -823,7 +850,7 @@ def process_node(
             else:
                 new_children.append(child)
         if children_changed:
-            node.children = new_children
+            node[:] = new_children  # type: ignore[index]
 
     return node
 
@@ -965,28 +992,6 @@ def _is_examples_section(
         return False
     ids: list[str] = node.get("ids", [])
     return any(config.examples_term_suffix in id_str.lower() for id_str in ids)
-
-
-def _fix_parent_references(node: nodes.Node, parent: nodes.Node | None = None) -> None:
-    """Recursively fix parent references in a node tree.
-
-    When nodes are extracted from containers or created in lists,
-    their parent references may be None or stale. This function
-    walks the tree and ensures all children point to their actual parent.
-
-    Parameters
-    ----------
-    node : nodes.Node
-        The node to fix, along with all its descendants.
-    parent : nodes.Node | None
-        The parent to assign to this node. If None, only fixes descendants.
-    """
-    if parent is not None:
-        node.parent = parent
-
-    if hasattr(node, "children"):
-        for child in node.children:
-            _fix_parent_references(child, node)
 
 
 def _reorder_nodes(
@@ -1155,7 +1160,7 @@ def _extract_sections_from_container(
             remaining_children.append(child)
 
     # Update container with remaining children only
-    container.children = remaining_children
+    container[:] = remaining_children  # type: ignore[index]
 
     return container, extracted_sections
 
@@ -1210,15 +1215,7 @@ class CleanArgParseDirective(ArgparseDirective):  # type: ignore[misc]
                 flattened.append(node)
 
         # Reorder: usage sections/blocks before examples sections
-        result = _reorder_nodes(flattened, config=config)
-
-        # Fix parent references for all returned nodes
-        # Nodes returned from directives should have parent=None at the top level
-        # but all descendants must have valid parent references
-        for node in result:
-            _fix_parent_references(node, parent=None)
-
-        return result
+        return _reorder_nodes(flattened, config=config)
 
 
 def setup(app: Sphinx) -> dict[str, t.Any]:

@@ -11,10 +11,13 @@ Three lexer classes are provided:
 
 from __future__ import annotations
 
-from typing import ClassVar
+import typing as t
 
-from pygments.lexer import RegexLexer, bygroups, include  # type: ignore[attr-defined]
+from pygments.lexer import RegexLexer, bygroups as _bygroups, include
 from pygments.token import Generic, Name, Operator, Punctuation, Text, Whitespace
+
+# Wrapper to silence mypy [no-untyped-call] - bygroups is untyped in types-pygments
+bygroups: t.Callable[..., t.Any] = _bygroups
 
 
 class ArgparseUsageLexer(RegexLexer):
@@ -38,11 +41,11 @@ class ArgparseUsageLexer(RegexLexer):
     """
 
     name = "Argparse Usage"
-    aliases = ["argparse-usage"]  # noqa: RUF012
-    filenames: ClassVar[list[str]] = []
-    mimetypes = ["text/x-argparse-usage"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse-usage"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse-usage"]
 
-    tokens = {  # noqa: RUF012
+    tokens: t.ClassVar[dict[str, list[t.Any]]] = {
         "root": [
             # "usage:" at start of line - then look for program name
             (
@@ -69,14 +72,14 @@ class ArgparseUsageLexer(RegexLexer):
             (r"\.\.\.", Punctuation),
             # Long options with = value (e.g., --log-level=VALUE)
             (
-                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with space-separated value (e.g., -S socket-path)
             (
-                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
@@ -96,7 +99,7 @@ class ArgparseUsageLexer(RegexLexer):
             # UPPERCASE meta-variables (COMMAND, FILE, PATH)
             (r"\b[A-Z][A-Z0-9_]*\b", Name.Variable),
             # Subcommand/positional names (Name.Function for distinct styling)
-            (r"\b[a-z][-a-z0-9]*\b", Name.Function),
+            (r"\b[a-z][-a-z0-9_]*\b", Name.Function),
             # Catch-all for any other text
             (r"[^\s\[\]|(){},]+", Text),
         ],
@@ -107,14 +110,14 @@ class ArgparseUsageLexer(RegexLexer):
             (r"\.\.\.", Punctuation),
             # Long options with = value (e.g., --log-level=VALUE)
             (
-                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with space-separated value (e.g., -S socket-path)
             (
-                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
@@ -134,7 +137,7 @@ class ArgparseUsageLexer(RegexLexer):
             # UPPERCASE meta-variables (COMMAND, FILE, PATH)
             (r"\b[A-Z][A-Z0-9_]*\b", Name.Variable),
             # Positional/command names (lowercase with dashes)
-            (r"\b[a-z][-a-z0-9]*\b", Name.Label),
+            (r"\b[a-z][-a-z0-9_]*\b", Name.Label),
             # Catch-all for any other text
             (r"[^\s\[\]|(){},]+", Text),
         ],
@@ -189,11 +192,11 @@ class ArgparseHelpLexer(RegexLexer):
     """
 
     name = "Argparse Help"
-    aliases = ["argparse-help"]  # noqa: RUF012
-    filenames: ClassVar[list[str]] = []
-    mimetypes = ["text/x-argparse-help"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse-help"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse-help"]
 
-    tokens = {  # noqa: RUF012
+    tokens: t.ClassVar[dict[str, list[t.Any]]] = {
         "root": [
             # "usage:" line - switch to after_usage to find program name
             (
@@ -236,14 +239,14 @@ class ArgparseHelpLexer(RegexLexer):
             (r"\.\.\.", Punctuation),
             # Long options with = value
             (
-                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(--[a-zA-Z0-9][-a-zA-Z0-9]*)(=)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Tag, Operator, Name.Variable),
             ),
             # Long options standalone
             (r"--[a-zA-Z0-9][-a-zA-Z0-9]*", Name.Tag),
             # Short options with value
             (
-                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9]*)",
+                r"(-[a-zA-Z0-9])(\s+)([A-Z][A-Z0-9_]*|[a-z][-a-z0-9_]*)",
                 bygroups(Name.Attribute, Whitespace, Name.Variable),
             ),
             # Short options standalone
@@ -261,7 +264,7 @@ class ArgparseHelpLexer(RegexLexer):
             # UPPERCASE metavars
             (r"\b[A-Z][A-Z0-9_]*\b", Name.Variable),
             # Subcommand/positional names (Name.Function for distinct styling)
-            (r"\b[a-z][-a-z0-9]*\b", Name.Function),
+            (r"\b[a-z][-a-z0-9_]*\b", Name.Function),
             # Other text
             (r"[^\s\[\]|(){},\n]+", Text),
         ],
@@ -362,9 +365,9 @@ class ArgparseLexer(ArgparseHelpLexer):
     """
 
     name = "Argparse"
-    aliases = ["argparse"]  # noqa: RUF012
-    filenames: ClassVar[list[str]] = []
-    mimetypes = ["text/x-argparse"]  # noqa: RUF012
+    aliases: t.ClassVar[list[str]] = ["argparse"]
+    filenames: t.ClassVar[list[str]] = []
+    mimetypes: t.ClassVar[list[str]] = ["text/x-argparse"]
 
     # Tokens inherited from ArgparseHelpLexer - do NOT redefine or copy
 
@@ -396,8 +399,7 @@ def tokenize_argparse(text: str) -> list[tuple[str, str]]:
     """
     lexer = ArgparseLexer()
     return [
-        (str(tok_type), tok_value)
-        for tok_type, tok_value in lexer.get_tokens(text)  # type: ignore[attr-defined]
+        (str(tok_type), tok_value) for tok_type, tok_value in lexer.get_tokens(text)
     ]
 
 
@@ -428,6 +430,5 @@ def tokenize_usage(text: str) -> list[tuple[str, str]]:
     """
     lexer = ArgparseUsageLexer()
     return [
-        (str(tok_type), tok_value)
-        for tok_type, tok_value in lexer.get_tokens(text)  # type: ignore[attr-defined]
+        (str(tok_type), tok_value) for tok_type, tok_value in lexer.get_tokens(text)
     ]

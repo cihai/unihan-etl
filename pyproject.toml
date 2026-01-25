@@ -146,9 +146,7 @@ files = [
   "src/",
   "tests/",
 ]
-mypy_path = "type_stubs"
 exclude = [
-  "type_stubs/.*",
   "docs/_ext/.*",
   "tests/docs/.*",
 ]
@@ -159,13 +157,16 @@ module = [
   "sphinx_argparse_neo",
   "sphinx_argparse_neo.*",
   "cli_usage_lexer",
-  "argparse_lexer",
   "argparse_roles",
   "docutils",
   "docutils.*",
   "pygments",
   "pygments.*",
 ]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "argparse_lexer"
 ignore_missing_imports = true
 
 [tool.coverage.run]

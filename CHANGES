@@ -36,6 +36,21 @@ _Notes on the upcoming release will go here._
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+### Documentation
+
+#### Linkable CLI argument definitions
+
+CLI documentation now features linkable argument definitions:
+
+- Each argument (`--format`, `-h`, etc.) has a unique anchor ID
+- Headerlink anchors (¶) appear on hover for easy link copying
+- Direct navigation to specific arguments via URL fragments
+
+#### Improved help text rendering
+
+- Glob patterns like `django-*` in help text no longer trigger RST parsing warnings
+- Metavars with underscores (e.g., `socket_name`) are now properly highlighted
+
 ## unihan-etl 0.40.0 (2026-01-24)
 
 ### Breaking changes
