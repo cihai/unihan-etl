@@ -156,6 +156,7 @@ module = [
   "zhon.*",
   "sphinx_argparse_neo",
   "sphinx_argparse_neo.*",
+  "sphinx_fonts",
   "cli_usage_lexer",
   "argparse_roles",
   "docutils",
