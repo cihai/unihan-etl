@@ -1,2 +1,5 @@
 # "api.md" "api/index.md"  # dirhtml: same output path
 # "cli.md" "cli/index.md"  # dirhtml: same output path
+"unihan.md" "topics/unihan.md"
+"FAQ.md" "topics/faq.md"
+"pytest-plugin.md" "api/pytest-plugin.md"

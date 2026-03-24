@@ -1,8 +1,43 @@
 (cli)=
 
-# Commands
+(commands)=
 
-unihan-etl provides a subcommand-based CLI for working with UNIHAN data.
+# CLI Reference
+
+::::{grid} 1 1 2 2
+:gutter: 2 2 3 3
+
+:::{grid-item-card} unihan-etl download
+:link: download
+:link-type: doc
+Download and cache the UNIHAN database.
+:::
+
+:::{grid-item-card} unihan-etl export
+:link: export
+:link-type: doc
+Export UNIHAN data to CSV, JSON, or YAML.
+:::
+
+:::{grid-item-card} unihan-etl search
+:link: search
+:link-type: doc
+Look up character data by codepoint or field.
+:::
+
+:::{grid-item-card} unihan-etl fields
+:link: fields
+:link-type: doc
+List available UNIHAN fields.
+:::
+
+:::{grid-item-card} unihan-etl files
+:link: files
+:link-type: doc
+List available UNIHAN source files.
+:::
+
+::::
 
 ```{toctree}
 :caption: Data Operations
@@ -20,24 +55,6 @@ search
 fields
 files
 ```
-
-## Usage
-
-Running `unihan-etl` without arguments shows help with available commands:
-
-```console
-$ unihan-etl
-```
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `export` | Export UNIHAN data to CSV, JSON, or YAML |
-| `download` | Download and cache UNIHAN database |
-| `fields` | List available UNIHAN fields |
-| `files` | List available UNIHAN source files |
-| `search` | Look up character data |
 
 (cli-main)=
 
