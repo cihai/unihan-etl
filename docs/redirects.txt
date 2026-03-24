@@ -1,2 +1,2 @@
-"api.md" "api/index.md"
-"cli.md" "cli/index.md"
+# "api.md" "api/index.md"  # dirhtml: same output path
+# "cli.md" "cli/index.md"  # dirhtml: same output path
