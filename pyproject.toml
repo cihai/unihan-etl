@@ -67,18 +67,10 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 [dependency-groups]
 dev = [
   # Docs
-  "sphinx<9",
-  "furo",
+  "gp-sphinx==0.0.1a1",
+  "sphinx-argparse-neo==0.0.1a1",
   "gp-libs",
   "sphinx-autobuild",
-  "sphinx-autodoc-typehints",
-  "sphinx-inline-tabs",
-  "sphinx-design",
-  "sphinxext-opengraph",
-  "sphinx-copybutton",
-  "sphinxext-rediraffe",
-  "myst-parser",
-  "linkify-it-py",
   # Testing
   "gp-libs",
   "pytest",
@@ -101,18 +93,10 @@ dev = [
 ]
 
 docs = [
-  "sphinx<9",
-  "furo",
+  "gp-sphinx==0.0.1a1",
+  "sphinx-argparse-neo==0.0.1a1",
   "gp-libs",
   "sphinx-autobuild",
-  "sphinx-autodoc-typehints",
-  "sphinx-inline-tabs",
-  "sphinx-design",
-  "sphinxext-opengraph",
-  "sphinx-copybutton",
-  "sphinxext-rediraffe",
-  "myst-parser",
-  "linkify-it-py",
 ]
 testing = [
   "gp-libs",
@@ -148,28 +132,14 @@ files = [
   "src/",
   "tests/",
 ]
-exclude = [
-  "docs/_ext/.*",
-  "tests/docs/.*",
-]
-
 [[tool.mypy.overrides]]
 module = [
   "zhon.*",
-  "sphinx_argparse_neo",
-  "sphinx_argparse_neo.*",
-  "sphinx_fonts",
-  "cli_usage_lexer",
-  "argparse_roles",
   "docutils",
   "docutils.*",
   "pygments",
   "pygments.*",
 ]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "argparse_lexer"
 ignore_missing_imports = true
 
 [tool.coverage.run]
