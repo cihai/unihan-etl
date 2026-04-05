@@ -2,90 +2,37 @@
 
 # `pytest` plugin
 
-Download and reuse UNIHAN.zip on the fly in [pytest].
+:::{doc-pytest-plugin} unihan_etl.pytest_plugin
+:project: unihan-etl
+:package: unihan-etl
+:summary: unihan-etl ships a pytest plugin that downloads UNIHAN.zip once and reuses it across tests.
+:tests-url: https://github.com/cihai/unihan-etl/tree/master/tests
 
-```{module} unihan_etl.pytest_plugin
-
-```
-
-[pytest]: https://docs.pytest.org/
-
-## Usage
-
-Install `unihan-etl` via the python package manager of your choosing, e.g.
-
-Using uv to add it to your project:
-
-```console
-$ uv add unihan-etl
-```
-
-Run it without installing via uvx:
-
-```console
-$ uvx unihan-etl
-```
-
-Install it system-wide with pip:
-
-```console
-$ pip install unihan-etl
-```
-
-The pytest plugin will automatically be detected via pytest, and the fixtures will be added.
-
-## Fixtures
-
-`pytest-unihan` works through providing {ref}`pytest fixtures <pytest:fixtures-api>` - so read up on
-those!
-
-The plugin's fixtures guarantee downloading, and then reusing UNIHAN.zip every
-test without needing to redownload.
-
-(recommended-fixtures)=
+Use these fixtures when your test suite needs a repeatable UNIHAN dataset plus
+an isolated home directory for cache and config setup.
 
 ## Recommended fixtures
 
-These fixtures are automatically used when the plugin is enabled and `pytest` is run.
+The plugin stays intentionally explicit. These fixtures are the common setup:
 
-- Creating temporary, test directories for:
-  - `/home/` ({func}`home_path`)
-  - `/home/${user}` ({func}`user_path`)
-- Setting your home directory
-  - Patch `$HOME` to point to {func}`user_path` ({func}`set_home`)
+- {fixture}`set_home` patches `$HOME` to point at {fixture}`user_path`.
+- {fixture}`home_path` and {fixture}`user_path` create disposable filesystem
+  roots for each test run.
+- The dataset fixtures keep `UNIHAN.zip` cached so tests can reuse it without
+  re-downloading the archive every time.
 
-## Bootstrapping pytest in your `conftest.py`
+## Bootstrapping in `conftest.py`
 
-The most common scenario is you will want to configure the above fixtures with `autouse`.
-
-_Why doesn't the plugin automatically add them?_ It's part of being a decent pytest plugin and
-python package: explicitness.
-
-(set_home)=
-
-### Setting a temporary home directory
+Make the environment setup explicit in your own suite:
 
 ```python
 import pytest
 
+
 @pytest.fixture(autouse=True)
 def setup(
     set_home: None,
-):
+) -> None:
     pass
 ```
-
-## See examples
-
-View unihan-etl's own [tests/](https://github.com/cihai/unihan-etl/tree/master/tests)
-
-## API reference
-
-```{eval-rst}
-.. automodule:: unihan_etl.pytest_plugin
-    :members:
-    :inherited-members:
-    :private-members:
-    :show-inheritance:
-    :member-order: bysource
-```
+:::
