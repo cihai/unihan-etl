@@ -37,7 +37,10 @@ conf = merge_sphinx_config(
     source_branch="master",
     light_logo="img/cihai.svg",
     dark_logo="img/cihai.svg",
-    extra_extensions=["sphinx_argparse_neo.exemplar"],
+    extra_extensions=[
+        "sphinx_argparse_neo.exemplar",
+        "sphinx_autodoc_pytest_fixtures",
+    ],
     intersphinx_mapping={
         "python": ("https://docs.python.org/3", None),
         "typing_extensions": (
