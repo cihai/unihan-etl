@@ -26,19 +26,23 @@ StrPath: TypeAlias = t.Union[str, "PathLike[str]"]
 LogLevel = t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Column data
-ColumnData = Sequence[str]
+ColumnData: TypeAlias = Sequence[str]
+"""Sequence of UNIHAN field name strings."""
+
 ColumnDataTuple = tuple[str, ...]
 
 # In situ
 UntypedUnihanData = Mapping[str, t.Any]
 
-UntypedNormalizedData = Sequence[UntypedUnihanData]
+UntypedNormalizedData: TypeAlias = Sequence[UntypedUnihanData]
+"""Normalized UNIHAN data as a sequence of field-value mappings."""
 
 # Export w/ listify()
 ListifiedExport = list[list[str]]
 
 # Export w/ listify() -> expand_delimiters()
-ExpandedExport = Sequence[Mapping[str, t.Any]]
+ExpandedExport: TypeAlias = Sequence[Mapping[str, t.Any]]
+"""Expanded UNIHAN export with multi-value delimiters resolved."""
 
 # Valid output formats
 UnihanFormats = t.Literal["json", "csv", "yaml", "python"]
