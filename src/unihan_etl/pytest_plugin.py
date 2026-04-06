@@ -9,6 +9,7 @@ import os
 import pathlib
 import typing as t
 import zipfile
+from collections.abc import Mapping
 
 import pytest
 from appdirs import AppDirs as BaseAppDirs
@@ -386,7 +387,7 @@ def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
 
 
 if t.TYPE_CHECKING:
-    from collections.abc import Mapping
+    from typing import TypeAlias
 
     from unihan_etl.types import (
         ColumnData,
@@ -394,9 +395,16 @@ if t.TYPE_CHECKING:
         UntypedNormalizedData,
     )
 
+UnihanTestOptions: TypeAlias = UnihanOptions | Mapping[str, t.Any]
+"""Options accepted by :fixture:`unihan_test_options`.
+
+Either a fully-configured :class:`~unihan_etl.options.Options` dataclass or a
+plain mapping of keyword arguments.
+"""
+
 
 @pytest.fixture
-def unihan_test_options() -> UnihanOptions | Mapping[str, t.Any]:
+def unihan_test_options() -> UnihanTestOptions:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 

@@ -36,3 +36,9 @@ def setup(
     pass
 ```
 :::
+
+## Types
+
+```{eval-rst}
+.. autodata:: unihan_etl.pytest_plugin.UnihanTestOptions
+```

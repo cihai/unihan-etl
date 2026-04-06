@@ -6,6 +6,13 @@ import pathlib
 import sys
 import typing as t
 
+if t.TYPE_CHECKING:
+    from docutils import nodes
+    from sphinx import addnodes
+    from sphinx.application import Sphinx
+    from sphinx.domains.python import PythonDomain
+    from sphinx.environment import BuildEnvironment
+
 from gp_sphinx.config import make_linkcode_resolve, merge_sphinx_config
 from pygments import token
 from pygments.lexer import RegexLexer, bygroups as _bygroups
@@ -174,3 +181,33 @@ class TsvLexer(CsvLexer):
 
 
 lexers["tsv"] = TsvLexer()
+
+
+def _on_missing_class_reference(
+    app: Sphinx,
+    env: BuildEnvironment,
+    node: addnodes.pending_xref,
+    contnode: nodes.TextElement,
+) -> nodes.reference | None:
+    if node.get("refdomain") != "py" or node.get("reftype") != "class":
+        return None
+    from sphinx.util.nodes import make_refnode
+
+    py_domain: PythonDomain = env.get_domain("py")  # type: ignore[assignment]
+    target = node.get("reftarget", "")
+    matches = py_domain.find_obj(env, "", "", target, None, 1)
+    if not matches:
+        return None
+    _name, obj_entry = matches[0]
+    return make_refnode(
+        app.builder,
+        node.get("refdoc", ""),
+        obj_entry.docname,
+        obj_entry.node_id,
+        contnode,
+    )
+
+
+def setup(app: Sphinx) -> None:
+    """Connect missing-reference handler to resolve py:data as :class: links."""
+    app.connect("missing-reference", _on_missing_class_reference)
