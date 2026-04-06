@@ -387,6 +387,7 @@ def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
 
 if t.TYPE_CHECKING:
     from collections.abc import Mapping
+    from typing import TypeAlias
 
     from unihan_etl.types import (
         ColumnData,
@@ -394,9 +395,11 @@ if t.TYPE_CHECKING:
         UntypedNormalizedData,
     )
 
+    UnihanTestOptions: TypeAlias = UnihanOptions | Mapping[str, t.Any]
+
 
 @pytest.fixture
-def unihan_test_options() -> UnihanOptions | Mapping[str, t.Any]:
+def unihan_test_options() -> UnihanTestOptions:
     """Return UnihanOptions for test data."""
     return UnihanOptions(input_files=["Unihan_Readings.txt"])
 
