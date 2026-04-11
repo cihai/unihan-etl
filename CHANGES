@@ -34,6 +34,11 @@ Then run `unihan-etl@next`.
 _Notes on the upcoming release will go here._
 <!-- END PLACEHOLDER - ADD NEW CHANGELOG ENTRIES BELOW THIS LINE -->
 
+### Documentation
+
+- Visual improvements to API docs from [gp-sphinx](https://gp-sphinx.git-pull.com)-based Sphinx packages (#354)
+
+
 <!-- Maintainers, insert changes / features for the next release here -->
 
 ## unihan-etl 0.41.0 (2026-03-21)
