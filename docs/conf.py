@@ -46,7 +46,7 @@ conf = merge_sphinx_config(
     dark_logo="img/cihai.svg",
     extra_extensions=[
         "sphinx_autodoc_api_style",
-        "sphinx_argparse_neo.exemplar",
+        "sphinx_autodoc_argparse.exemplar",
         "sphinx_autodoc_pytest_fixtures",
     ],
     intersphinx_mapping={
