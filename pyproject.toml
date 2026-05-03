@@ -67,10 +67,10 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 [dependency-groups]
 dev = [
   # Docs
-  "gp-sphinx==0.0.1a15",
-  "sphinx-autodoc-argparse==0.0.1a15",
-  "sphinx-autodoc-api-style==0.0.1a15",
-  "sphinx-autodoc-pytest-fixtures==0.0.1a15",
+  "gp-sphinx==0.0.1a13",
+  "sphinx-autodoc-argparse==0.0.1a13",
+  "sphinx-autodoc-api-style==0.0.1a13",
+  "sphinx-autodoc-pytest-fixtures==0.0.1a13",
   "gp-libs",
   "sphinx-autobuild",
   # Testing
@@ -95,10 +95,10 @@ dev = [
 ]
 
 docs = [
-  "gp-sphinx==0.0.1a15",
-  "sphinx-autodoc-argparse==0.0.1a15",
-  "sphinx-autodoc-api-style==0.0.1a15",
-  "sphinx-autodoc-pytest-fixtures==0.0.1a15",
+  "gp-sphinx==0.0.1a13",
+  "sphinx-autodoc-argparse==0.0.1a13",
+  "sphinx-autodoc-api-style==0.0.1a13",
+  "sphinx-autodoc-pytest-fixtures==0.0.1a13",
   "gp-libs",
   "sphinx-autobuild",
 ]
