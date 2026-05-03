@@ -34,6 +34,15 @@ Then run `unihan-etl@next`.
 _Notes on the upcoming release will go here._
 <!-- END PLACEHOLDER - ADD NEW CHANGELOG ENTRIES BELOW THIS LINE -->
 
+### Bug fixes
+
+- Fix dark-theme flash when light theme is selected — the docs
+  `conf.py` was overriding gp-sphinx's `setup()` callback, so the
+  inline FOWT-prevention `<script>` never landed in `<head>`. Chain
+  the gp-sphinx setup explicitly so the script (and the
+  `spa-nav.js` / copybutton / MyST-lexer hooks) register correctly
+  (#357)
+
 ### Documentation
 
 - Visual improvements to API docs from [gp-sphinx](https://gp-sphinx.git-pull.com)-based Sphinx packages (#354)

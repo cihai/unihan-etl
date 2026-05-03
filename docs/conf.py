@@ -63,6 +63,8 @@ conf = merge_sphinx_config(
     html_extra_path=["manifest.json"],
     rediraffe_redirects="redirects.txt",
 )
+
+_gp_setup = conf.pop("setup")
 globals().update(conf)
 
 
@@ -210,5 +212,14 @@ def _on_missing_class_reference(
 
 
 def setup(app: Sphinx) -> None:
-    """Connect missing-reference handler to resolve py:data as :class: links."""
+    """Chain gp-sphinx setup() and connect the missing-reference handler.
+
+    ``_gp_setup`` is the callback ``gp_sphinx.config.merge_sphinx_config``
+    returns; it registers the FOWT-prevention head injection,
+    ``spa-nav.js``, the copy-button bridge, the ``remove_tabs_js``
+    cleanup, and the MyST Pygments lexers. Without this chain those
+    hooks never register and the docs site flashes the wrong theme
+    before settling on the user's preference.
+    """
+    _gp_setup(app)
     app.connect("missing-reference", _on_missing_class_reference)
