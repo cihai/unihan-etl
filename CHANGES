@@ -34,1026 +34,911 @@ Then run `unihan-etl@next`.
 _Notes on the upcoming release will go here._
 <!-- END PLACEHOLDER - ADD NEW CHANGELOG ENTRIES BELOW THIS LINE -->
 
-### Bug fixes
+unihan-etl 0.42.x continues the documentation-platform refresh started after 0.41.0. The release moves the API and pytest-plugin pages onto shared gp-sphinx components, restores first-paint theme handling, and keeps the generated CLI/API reference linked to concrete docs targets such as {doc}`api/pytest-plugin`, {doc}`api/index`, and {doc}`cli/index`.
 
-- Fix dark-theme flash when light theme is selected — the docs
-  `conf.py` was overriding gp-sphinx's `setup()` callback, so the
-  inline FOWT-prevention `<script>` never landed in `<head>`. Chain
-  the gp-sphinx setup explicitly so the script (and the
-  `spa-nav.js` / copybutton / MyST-lexer hooks) register correctly
-  (#357)
+### What's new
 
-### Documentation
+#### Shared gp-sphinx documentation platform (#351, #354, #355, #356)
 
-- Visual improvements to API docs from [gp-sphinx](https://gp-sphinx.git-pull.com)-based Sphinx packages (#354)
-- Bump gp-sphinx docs stack to v0.0.1a8 (#355)
-- Bump gp-sphinx docs stack to v0.0.1a16 — docs site now renders
-  via `gp-furo-theme`, a Tailwind v4 respin of Furo, with
-  `sphinx-vite-builder` handling theme-asset builds (#356)
+The docs site now relies on the published gp-sphinx package stack instead of carrying local copies of the Furo theme customizations, argparse renderers, font loader, SPA navigation script, and related Sphinx extensions. That keeps unihan-etl aligned with the shared gp-libs documentation platform while preserving project-specific pieces such as the CSV/TSV lexers in `docs/conf.py`.
 
+The API reference adopts the gp-sphinx autodoc styling layer: signatures render as structured API cards, Python-object cross-reference roles work in MyST pages, and generated CLI pages use the packaged argparse domain rather than repo-local extensions. The latest dependency refresh also moves theme asset building to `sphinx-vite-builder`, so source builds fail with clearer setup guidance and wheels carry the static assets they need.
+
+#### Generated pytest plugin reference (#352, #353)
+
+The {doc}`api/pytest-plugin` page now uses the shared `doc-pytest-plugin` directive to present fixtures in the same shape as other gp-libs projects. The page keeps unihan-etl's project-specific guidance for explicit fixture setup, while the generated table gives users a faster path to the quick/full UNIHAN dataset fixtures.
+
+Fixture return types now link to real API targets instead of rendering as plain text. The {data}`unihan_etl.pytest_plugin.UnihanTestOptions` alias is available at runtime and documented on the plugin page, and the type aliases used by fixture summaries are included in the Sphinx inventory.
+
+### Fixes
+
+#### Theme preference no longer flashes on first paint (#357)
+
+Light-theme loads no longer briefly flash the default dark styling before the user's preference is applied. `docs/conf.py` now chains the gp-sphinx `setup()` callback before registering unihan-etl's own missing-reference handler, restoring the inline theme-prevention script plus the shared `spa-nav.js`, copybutton bridge, and MyST lexer hooks.
+
+### Development
+
+gp-sphinx and sibling docs packages were bumped through the 0.0.1a17 workspace releases, alongside routine uv, just, and development dependency refreshes.
 
 <!-- Maintainers, insert changes / features for the next release here -->
 
+_Add your latest changes from PRs here_
+
 ## unihan-etl 0.41.0 (2026-03-21)
+
+unihan-etl 0.41.0 improves the generated CLI documentation and makes the docs site feel more polished in daily use. Argument definitions gained stable anchors and headerlinks, help text renders more safely, and the frontend picked up self-hosted fonts, reduced layout shift, and smoother internal navigation.
 
 ### Documentation
 
-#### Linkable CLI argument definitions
+#### Linkable CLI argument definitions (#347)
 
-CLI documentation now features linkable argument definitions:
+The {doc}`cli/index` and per-command pages now give each generated argument definition its own anchor. Users can link directly to option definitions such as {argparse:option}`unihan-etl export --format`, and headerlinks appear on hover so those URLs are easy to copy from the rendered page.
 
-- Each argument (`--format`, `-h`, etc.) has a unique anchor ID
-- Headerlink anchors (¶) appear on hover for easy link copying
-- Direct navigation to specific arguments via URL fragments
+#### More robust help text rendering (#347)
 
-#### Improved help text rendering
+Generated help output now handles glob-like patterns and underscore-heavy metavars without creating spurious reStructuredText warnings. The argparse renderer also uses semantic definition-list markup for argument metadata, making the CLI pages easier to scan and easier for Sphinx to index.
 
-- Glob patterns like `django-*` in help text no longer trigger RST parsing warnings
-- Metavars with underscores (e.g., `socket_name`) are now properly highlighted
+#### Faster, steadier documentation pages (#349)
+
+The docs frontend now self-hosts IBM Plex fonts, preloads critical weights, and uses fallback font metrics to avoid text reflow while fonts load. Image and badge dimensions are stabilized to reduce layout shift, and internal links use a lightweight SPA-style navigation script with progressive view transitions.
 
 ## unihan-etl 0.40.0 (2026-01-24)
 
+unihan-etl 0.40.0 is the CLI redesign release. It splits the single command into explicit subcommands for exporting, downloading, field discovery, source-file discovery, and character lookup, while leaving the Python API centered on {class}`unihan_etl.core.Packager` and {class}`unihan_etl.options.Options`.
+
 ### Breaking changes
 
-#### CLI now requires explicit subcommand (#344)
+#### Bare `unihan-etl` now shows help (#344)
 
-Running `unihan-etl` without arguments now displays help instead of running the ETL process.
-
-**Before (0.39.x and earlier):**
+Running `unihan-etl` with no arguments now shows the command overview instead of starting the export workflow. Scripts that relied on the old implicit behavior should call `unihan-etl export` explicitly.
 
 ```console
 $ unihan-etl
 ```
 
-This would download and export UNIHAN data with default settings.
-
-**After (0.40.x):**
+Now use:
 
 ```console
 $ unihan-etl export
 ```
 
-Use the `export` subcommand explicitly. The bare command now shows available subcommands.
+See {doc}`migration` for the upgrade guidance and command mapping.
 
-### New CLI subcommand architecture (#342)
+### What's new
 
-The CLI has been redesigned with a subcommand structure for better organization and discoverability:
+#### Subcommands for each user workflow (#344)
 
-- `unihan-etl export` - Export UNIHAN data (CSV, JSON, YAML, Python)
-- `unihan-etl download` - Download and cache UNIHAN database
-- `unihan-etl fields` - List available UNIHAN fields
-- `unihan-etl files` - List available UNIHAN source files
-- `unihan-etl search` - Search UNIHAN data by character or field
+The CLI now exposes separate pages and command handlers for {doc}`cli/export`, {doc}`cli/download`, {doc}`cli/fields`, {doc}`cli/files`, and {doc}`cli/search`. This makes common workflows discoverable from help output instead of requiring users to remember which flags change the old all-in-one command's behavior.
 
-#### CLI features
+Field and file discovery commands support table, JSON, and NDJSON output for both human inspection and tool-friendly consumption. Character search accepts a character, UCN, or hexadecimal codepoint and can limit output to selected fields.
 
-- Colorized help output with syntax highlighting for examples
-- Privacy-aware path display (hides home directory in output)
-- Multiple output formats: table, JSON, NDJSON
+#### Modern help and path output (#344)
+
+Help output uses colorized examples where the running Python supports argparse theming, and generated examples use the visually distinct character `好` for search documentation. CLI output that mentions local paths collapses the user's home directory to `~`, avoiding accidental disclosure of full home paths in copied output.
 
 ### Documentation
 
-#### Sphinx extensions
+#### Dedicated CLI reference pages (#344)
 
-New Sphinx extensions ported from vcspull for enhanced CLI documentation:
+The CLI reference moved from one page to a command-oriented structure under {doc}`cli/index`. Each command page includes generated argparse output plus short examples for the workflow it represents.
 
-- `sphinx_argparse_neo`: Modern sphinx-argparse replacement with better compatibility
-- `argparse_exemplar`: Transform argparse epilog examples into documentation sections
-- `argparse_lexer`: Pygments lexer for argparse help output highlighting
-- `argparse_roles`: RST roles for argparse cross-references
-- `cli_usage_lexer`: Pygments lexer for CLI usage/help text highlighting
+#### Custom argparse documentation extensions (#344)
+
+The release introduced a local Sphinx argparse renderer, example transformer, CLI usage lexer, argparse lexer, and argparse cross-reference roles. These extensions powered the new CLI pages until they were later moved into the shared gp-sphinx package stack.
 
 ### Development
 
-- Comprehensive test coverage for CLI subcommands and infrastructure
-- Tests for Sphinx documentation extensions
-
-
+The CLI work added focused tests for command dispatch, output formats, path masking, formatter behavior, and generated Sphinx documentation.
 
 ## unihan-etl 0.39.1 (2026-01-24)
 
-### CI
+unihan-etl 0.39.1 is a release-infrastructure update. It moves publishing to PyPI Trusted Publisher so releases can authenticate through GitHub Actions OIDC rather than long-lived upload tokens.
 
-- Migrate to PyPI Trusted Publisher (#339)
+### Development
+
+#### PyPI Trusted Publisher (#339)
+
+Release publishing now uses PyPI Trusted Publisher from CI. This reduces credential management risk for maintainers without changing the package's runtime behavior.
 
 ## unihan-etl 0.39.0 (2026-01-11)
 
-### Revision 39 updates (#343)
+unihan-etl 0.39.0 updates the bundled UNIHAN field model for Unicode 16.0 and 17.0 changes. It adds the new Tày numeric field, accepts the new symmetric `kStrange` property type, and removes fields that Unicode no longer publishes.
 
-These changes align with UNIHAN's [39th revision](https://www.unicode.org/reports/tr38/tr38-39.html#Modifications) and are part of ongoing improvements to Unihan data handling.
+### What's new
 
-#### New field
+#### Unicode 16.0 and 17.0 field updates (#343)
 
-- `kTayNumeric`: Numeric value for Tày Nôm characters (Unicode 17.0)
+`kTayNumeric` is now included in the UNIHAN manifest and space-delimited list handling for Unicode 17.0 data. `kStrange` also accepts the `Y` property type introduced for symmetric ideographs in Unicode 16.0.
 
-  See also: https://www.unicode.org/reports/tr38/#kTayNumeric
-
-#### New property type
-
-- `kStrange`: Add 'Y' (S**y**mmetric) property type for symmetric ideographs (Unicode 16.0)
-
-  The letter 'Y' was chosen because 'S' was already assigned to Stroke-heavy.
-
-  See also: https://www.unicode.org/reports/tr38/#kStrange
-
-#### Removed fields
-
-- `kGB7`: Removed in Unicode 17.0
-- `kJa`: Removed in Unicode 17.0
-
-  See also: https://www.unicode.org/reports/tr38/#ChronologicalListing
-
-### Development
-
-#### Makefile -> Justfile (#340)
-
-- Migrate from `Makefile` to `justfile` for running development tasks
-- Update documentation to reference `just` commands
+The deprecated `kGB7` and `kJa` fields were removed from the manifest and quick fixture data to match Unicode 17.0. See the [Unicode TR38 modification notes](https://www.unicode.org/reports/tr38/#ChronologicalListing) for the upstream field history.
 
 ### Documentation
 
-- Migrate docs deployment to AWS OIDC authentication and AWS CLI
+Docs deployment moved to AWS OIDC authentication, matching the token-free publishing approach used for PyPI.
+
+### Development
+
+#### Justfile task runner (#340)
+
+The repository moved from `make` targets to `just` recipes for routine development and docs tasks. Project docs and CI now call the same `just` entry points used locally.
 
 ## unihan-etl 0.38.0 (2025-11-01)
 
+unihan-etl 0.38.0 updates the supported Python floor and adds coverage for the newest CPython line available during the release. The package now targets Python 3.10 and later.
+
 ### Breaking changes
 
-- Drop support for Python 3.9; the new minimum is Python 3.10 (#386)
+#### Python 3.9 support dropped (#338)
 
-  See also:
-  - [Python 3.9 EOL timeline](https://devguide.python.org/versions/#:~:text=Release%20manager-,3.9,-PEP%20596)
-  - [PEP 596](https://peps.python.org/pep-0596/)
+Python 3.10 is now the minimum supported version. Python 3.9 reached end-of-life in October 2025, so the project also updated typing, Ruff, mypy, and CI settings for Python 3.10+.
 
 ### Development
 
-- Add Python 3.14 to test matrix (#337)
+#### Python 3.14 support (#337)
 
-#### chore: Implement PEP 563 deferred annotation resolution (#333)
+Python 3.14 was added to trove classifiers and the CI test/docs matrix.
 
-- Add `from __future__ import annotations` to defer annotation resolution and reduce unnecessary runtime computations during type checking.
-- Enable Ruff checks for PEP-compliant annotations:
-  - [non-pep585-annotation (UP006)](https://docs.astral.sh/ruff/rules/non-pep585-annotation/)
-  - [non-pep604-annotation (UP007)](https://docs.astral.sh/ruff/rules/non-pep604-annotation/)
+#### Deferred annotations (#333)
 
-For more details on PEP 563, see: https://peps.python.org/pep-0563/
+All Python modules now start with `from __future__ import annotations`, and Ruff's modern-annotation rules are enabled. This keeps annotations cheaper at runtime and prepares the codebase for newer typing syntax.
 
 ## unihan-etl 0.37.0 (2024-12-21)
 
-_Maintenance release: No bug fixes or new features._
+unihan-etl 0.37.0 is a maintenance release focused on Python-version support and automated lint cleanup.
 
 ### Breaking changes
 
-- Drop Python 3.8 (#332)
+#### Python 3.8 support dropped (#332)
 
-  The minimum version of Python in this and future releases is Python 3.9.
-
-  Python 3.8 reached end-of-life status on October 7th, 2024 (see PEP 569).
+Python 3.9 became the minimum supported version after Python 3.8 reached end-of-life on October 7, 2024.
 
 ### Development
 
-- Aggressive automated lint fixes via `ruff` (#332)
+#### Python 3.9 lint modernization (#332)
 
-  via ruff v0.8.4, all automated lint fixes, including unsafe and previews were applied for Python 3.9:
-
-  ```sh
-  ruff check --select ALL . --fix --unsafe-fixes --preview --show-fixes; ruff format .
-  ```
+Ruff automated fixes were applied against the Python 3.9 target, including preview and unsafe fixes where they matched the project's style goals.
 
 ## unihan-etl 0.36.0 (2024-11-26)
 
-_Maintenance release: No bug fixes or new features._
+unihan-etl 0.36.0 changes the project management and build backend stack. The release moves local development to uv and package builds to hatchling.
 
 ### Breaking changes
 
-#### Project and package management: poetry to uv (#329)
+#### Project management moved from Poetry to uv (#329)
 
-[uv] is the new package and project manager for the project, replacing Poetry.
+[uv](https://github.com/astral-sh/uv) replaced Poetry for dependency management, locking, and local environment workflows.
 
-[uv]: https://github.com/astral-sh/uv
+#### Build backend moved from Poetry to hatchling (#329)
 
-#### Build system: poetry to hatchling (#329)
-
-[Build system] moved from [poetry] to [hatchling].
-
-[Build system]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#choosing-a-build-backend
-[poetry]: https://github.com/python-poetry/poetry
-[hatchling]: https://hatch.pypa.io/latest/
+The package build backend moved to [hatchling](https://hatch.pypa.io/latest/). Packaging metadata and lock files were updated for the new build path.
 
 ## unihan-etl 0.35.0 (2024-11-25)
 
-### Revision 37 updates (#330)
+unihan-etl 0.35.0 aligns the parser, expansion logic, datapackage metadata, and quick fixture data with Unicode Technical Report #38 revision 37. The release adds new reading fields, updates radical-stroke handling for apostrophe forms, and removes a field that was dropped upstream.
 
-These changes align with Unicode Technical Report #38's [37th revision](https://www.unicode.org/reports/tr38/tr38-37.html#Modifications) and are part of ongoing improvements to Unihan data handling.
+### Breaking changes
 
-#### Add `kFanqie` and `kZhuang`
+#### `kFrequency` removed (#330)
 
-Adds support for the `kFanqie` and `kZhuang` fields.
+`kFrequency` was removed from `Unihan_DictionaryLikeData`, constants, and datapackage metadata to match Unicode's field removal.
 
-See also:
-- https://www.unicode.org/reports/tr38/#kFanqie
-- https://www.unicode.org/reports/tr38/#kZhuang
+### What's new
 
-#### Support `kRSUnicode` for apostrophes
+#### `kFanqie` and `kZhuang` support (#330)
 
-`Unihan_IRGSources`: Updated `kRSUnicode` for apostrophes.
+The UNIHAN manifest, datapackage metadata, quick fixture data, and expansion rules now include `kFanqie` and `kZhuang`. Structured exports can expand both fields instead of leaving them as opaque strings.
 
-See also:
-- https://www.unicode.org/reports/tr38/#ChronologicalListing
-- https://github.com/cihai/unihan-etl/issues/318
-- https://github.com/cihai/unihan-etl/issues/315#issuecomment-2029105502
+#### `kRSUnicode` apostrophe forms (#330)
 
-#### Removals
-
-- `kFrequency`: Removed from `Unihan_DictionaryLikeData`, `constants`, and `datapackage.json`.
-
-See also:
-- https://www.unicode.org/L2/L2024/24006.htm#178-C17
-- https://www.unicode.org/reports/tr38/#ChronologicalListing
-
-#### Tests
-
-- Added tests for simplified expansions to ensure correctness of `kFanqie` and `kZhuang`.
+`kRSUnicode` handling was updated for apostrophe-bearing radical-stroke values from `Unihan_IRGSources`. The change fixes parsing for forms discussed in Unicode TR38 revision 37 and the related upstream issue trail.
 
 ### Documentation
 
-- Automatically linkify links that were previously only text.
+Plain-text links in docs are now automatically linkified.
 
 ### Development
 
-- poetry: 1.8.1 -> 1.8.2
-
-  See also: https://github.com/python-poetry/poetry/blob/1.8.2/CHANGELOG.md
-- Code quality: Use f-strings in more places (#320)
-
-  via [ruff 0.4.2](https://github.com/astral-sh/ruff/blob/v0.4.2/CHANGELOG.md).
+Tests were added for simplified field expansions covering `kFanqie` and `kZhuang`, and the development stack picked up Poetry 1.8.2 plus Ruff 0.4.2 style updates.
 
 ## unihan-etl 0.34.0 (2024-03-24)
 
+unihan-etl 0.34.0 is a maintenance release for linting and developer tooling.
+
 ### Development
 
-- Aggressive automated lint fixes via `ruff` (#317)
+#### Aggressive Ruff cleanup (#317)
 
-  via ruff v0.3.4, all automated lint fixes, including unsafe and previews were applied:
+Ruff 0.3.4 was applied across the codebase with automated fixes, preview rules, and unsafe fixes where accepted by the project. CI also switched to the newer `ruff check .` invocation.
 
-  ```sh
-  ruff check --select ALL . --fix --unsafe-fixes --preview --show-fixes; ruff format .
-  ```
+#### Dependency updates (#316)
 
-  Branches were treated with:
-
-  ```sh
-  git rebase \
-      --strategy-option=theirs \
-      --exec 'poetry run ruff check --select ALL . --fix --unsafe-fixes --preview --show-fixes; poetry run ruff format .; git add src tests; git commit --amend --no-edit' \
-      origin/master
-  ```
-- poetry: 1.7.1 -> 1.8.1
-
-  See also: https://github.com/python-poetry/poetry/blob/1.8.1/CHANGELOG.md
-- ruff 0.2.2 -> 0.3.0 (#316)
-
-  Related formattings. Update CI to use `ruff check .` instead of `ruff .`.
-
-  See also: https://github.com/astral-sh/ruff/blob/v0.3.0/CHANGELOG.md
+Ruff moved from 0.2.2 to 0.3.0 and Poetry moved from 1.7.1 to 1.8.1.
 
 ## unihan-etl 0.33.1 (2024-02-09)
 
-_Maintenance release: No bug fixes or new features._
+unihan-etl 0.33.1 is a documentation-only maintenance release.
 
 ### Documentation
 
-- README: Rewrite introduction, note updated UNIHAN compatibility information.
-- Link to UNIHAN release in v0.31.0's changelog notes.
+The README introduction was rewritten and the UNIHAN compatibility notes were refreshed. The 0.31.0 changelog entry also gained a link to the relevant UNIHAN release context.
 
 ## unihan-etl 0.33.0 (2024-02-09)
 
-_Maintenance release: No bug fixes or new features._
+unihan-etl 0.33.0 is a maintenance release for documentation rendering and lint policy.
 
 ### Documentation
 
-- `CsvLexer`: Fix quoted items (#314)
+#### Quoted CSV example highlighting (#314)
+
+The docs CSV lexer now handles quoted items correctly, improving rendered CSV examples.
 
 ### Development
 
-- Strengthen linting (#313)
+#### Stricter Ruff rule set (#313)
 
-  - Add flake8-commas (COM)
-
-    - https://docs.astral.sh/ruff/rules/#flake8-commas-com
-    - https://pypi.org/project/flake8-commas/
-
-  - Add flake8-builtins (A)
-
-    - https://docs.astral.sh/ruff/rules/#flake8-builtins-a
-    - https://pypi.org/project/flake8-builtins/
-
-  - Add flake8-errmsg (EM)
-
-    - https://docs.astral.sh/ruff/rules/#flake8-errmsg-em
-    - https://pypi.org/project/flake8-errmsg/
+Ruff gained additional flake8-compatible rule families, including comma, builtins, and error-message checks. The resulting fixes remove more style drift before review.
 
 ## unihan-etl 0.32.0 (2024-02-05)
 
-### Documentation
+unihan-etl 0.32.0 improves rendered data examples and adds a small typing/test pass around UNIHAN expansion data.
 
-- Highlighting for CSV and TSV examples (#253)
+### What's new
 
-### Improvements
+#### CSV and TSV example highlighting (#253)
 
-- Typing fixes and additional doctest for `kTGH2013` (#312)
+Documentation examples for CSV and TSV output now use custom Pygments lexers, making table-shaped output easier to read in the docs.
+
+#### `kTGHZ2013` typing and examples (#312)
+
+The `kTGHZ2013` test data and typing were tightened, including an example with multiple items and a doctest that documents the expected shape.
 
 ### Development
 
-- Added `types-pygments` package (#253)
-- Added some manual type stubs for `pygments`' `Lexer` (#253)
-- pytest-watcher: Silent `*.py.*py` reruns (#312)
+The release added `types-pygments`, local Pygments stubs used at the time, and pytest-watcher configuration to avoid noisy reruns on generated `*.py.*py` files.
 
 ## unihan-etl 0.31.0 (2024-02-04)
 
-### Breaking: UNIHAN upgrades (#305)
+unihan-etl 0.31.0 is the major UNIHAN compatibility refresh from Unicode 11.0-era data to Unicode 15.1. It adds fields introduced across Unicode 13.0 through 15.1, removes fields no longer published upstream, and relaxes tests that previously assumed older fixture sizes.
 
-Bump UNIHAN compatibility from 11.0.0 to [15.1.0](https://www.unicode.org/reports/tr38/tr38-35.html#History) (released 2023-09-01, revision 35).
+### Breaking changes
 
-#### Removed fields
+#### UNIHAN compatibility moved to 15.1 (#309)
 
-- 15.1.0: [kHKSCS](https://www.unicode.org/L2/L2023/23005.htm#174-C10),
-  [kIRGDaiKanwaZiten](https://www.unicode.org/L2/L2022/22241.htm#173-C9),
-  [kKPS0](https://www.unicode.org/L2/L2023/23005.htm#174-C11),
-  [kKPS1](https://www.unicode.org/L2/L2023/23005.htm#174-C11),
-  [kKSC0](https://www.unicode.org/L2/L2023/23005.htm#174-C9),
-  [kKSC1](https://www.unicode.org/L2/L2023/23005.htm#174-C9),
-  [kRSKangXi](https://www.unicode.org/L2/L2022/22241.htm#173-C12)
-- 13.0.0:
-  [kRSJapanese](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209),
-  [kRSKanWa](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209),
-  [kRSKorean](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/19-209)
-- 12.0.0:
-  [kDefaultSortKey](https://www.unicode.org/cgi-bin/GetDocumentLink?L2/18-118)
-  (private property)
+The manifest and expansion support now match the Unicode 15.1 UNIHAN field set. Removed fields include `kHKSCS`, `kIRGDaiKanwaZiten`, `kKPS0`, `kKPS1`, `kKSC0`, `kKSC1`, `kRSKangXi`, `kRSJapanese`, `kRSKanWa`, `kRSKorean`, and the private `kDefaultSortKey`.
 
-#### New fields
+### What's new
 
-- 15.1.0: [kJapanese](https://www.unicode.org/reports/tr38/#kJapanese),
-  [kMojiJoho](https://www.unicode.org/reports/tr38/#kMojiJoho),
-  [kSMSZD2003Index](https://www.unicode.org/reports/tr38/#kSMSZD2003Index),
-  [kSMSZD2003Readings](https://www.unicode.org/reports/tr38/#kSMSZD2003Readings),
-  [kVietnameseNumeric](https://www.unicode.org/reports/tr38/#kVietnameseNumeric),
-  [kZhuangNumeric](https://www.unicode.org/reports/tr38/#kZhuangNumeric)
-- 15.0.0:
-  [kAlternateTotalStrokes](https://www.unicode.org/reports/tr38/#kAlternateTotalStrokes)
-- 14.0.0: [kStrange ](https://www.unicode.org/reports/tr38/#kStrange)
-- 13.0.0: [kIRG_SSource](https://www.unicode.org/reports/tr38/#kIRG_SSource),
-  [kIRG_UKSource](https://www.unicode.org/reports/tr38/#kIRG_UKSource),
-  [kSpoofingVariant](https://www.unicode.org/reports/tr38/#kSpoofingVariant),
-  [kTGHZ2013](https://www.unicode.org/reports/tr38/#kTGHZ2013),
-  [kUnihanCore2020](https://www.unicode.org/reports/tr38/#kUnihanCore2020)
+#### New fields from Unicode 13.0 through 15.1 (#309)
+
+Newly supported fields include `kIRG_SSource`, `kIRG_UKSource`, `kSpoofingVariant`, `kTGHZ2013`, `kUnihanCore2020`, `kStrange`, `kAlternateTotalStrokes`, `kJapanese`, `kMojiJoho`, `kSMSZD2003Index`, `kSMSZD2003Readings`, `kVietnameseNumeric`, and `kZhuangNumeric`.
 
 ### Development
 
-- Quiet pytest tracebacks (#310)
-- Relax pytest plugin assertions in regards to zip / export file size (#310)
+Pytest tracebacks were quieted, and pytest plugin fixture assertions were relaxed so field removals no longer fail tests only because fixture zip or export sizes changed.
 
 ## unihan-etl 0.30.1 (2023-12-10)
 
-### Bug fix
-
-- Expansions: Fix loading of double apostrophe values via `kRSUnicode` via `kRSGeneric` (#304)
-
-## unihan-etl 0.30.0post0 (2023-11-26)
-
-### CI
-
-- Move CodeQL from advanced configuration file to GitHub's default
-
-### Documentation
-
-- Typo fixes
-
-## unihan-etl 0.30.0 (2023-11-26)
-
-_Maintenance only, no bug fixes, or new features_
-
-### Development
-
-- ci: Add pydocstyle rule to ruff (#303)
-
-### Documentation
-
-- Add docstrings to functions, methods, classes, and packages (#303)
-
-## unihan-etl 0.29.0 (2023-11-19)
-
-_Maintenance only, no bug fixes, or new features_
-
-### Packaging
-
-- Move pytest configuration to `pyproject.toml` (#299)
-- Add Python 3.12 to trove classifiers
-- Per [Poetry's docs on managing dependencies] and `poetry check`, we had it wrong: Instead of using extras, we should create these:
-
-  ```toml
-  [tool.poetry.group.group-name.dependencies]
-  dev-dependency = "1.0.0"
-  ```
-
-  Which we now do.
-
-  [Poetry's docs on managing dependencies]: https://python-poetry.org/docs/master/managing-dependencies/
-
-### Development
-
-- Poetry: 1.6.1 -> 1.7.0
-
-  See also: https://github.com/python-poetry/poetry/blob/1.7.0/CHANGELOG.md
-
-- Move formatting from `black` to [`ruff format`] (#302)
-
-  This retains the same formatting style of `black` while eliminating a
-  dev dependency by using our existing rust-based `ruff` linter.
-
-  [`ruff format`]: https://docs.astral.sh/ruff/formatter/
-
-- CI: Update action packages to fix warnings
-
-  - [dorny/paths-filter]: 2.7.0 -> 2.11.1
-
-  [dorny/paths-filter]: https://github.com/dorny/paths-filter
-
-## unihan-etl 0.28.1 (2023-09-02)
-
-### Bug fix
-
-- `SPACE_DELIMITED_LIST_FIELDS`: Fix for field name `kAccountingNumeric` found
-  during automated sweep for typos.
-
-### Development
-
-- Typo fixes
-
-  ```console
-  typos --format brief --write-changes
-  ```
-
-  One of these typos was for `kAccountingNumeric` in
-  `SPACE_DELIMITED_LIST_FIELDS`.
-
-- ruff: Remove ERA / `eradicate` plugin
-
-  This rule had too many false positives to trust. Other ruff rules have been beneficial.
-
-## unihan-etl 0.28.0 (2023-07-22)
-
-### Breaking: pytest fixtures now prefixed with `unihan_` (#296)
-
-- All pytest plugin fixtures are now prefixed `unihan_`, e.g.:
-
-  - `quick_unihan_path` -> `unihan_quick_path`
-  - `quick_unihan_options` -> `unihan_quick_options`
-  - `quick_unihan_packager` -> `unihan_quick_packager`
-  - `ensure_quick_unihan` -> `unihan_ensure_quick`
-  - `mock_zip` -> `unihan_mock_zip`
-  - `columns` -> `unihan_quick_columns`
-
-- `TestPackager` fixture has been removed
-
-  This fixture was made redundant by `unihan_quick_*` and `unihan_full_*`
-  fixtures
-
-### Bug fixes (#296)
-
-- pytest plugin (`unihan_zshrc`): Fix `skipif` condition to run if shell uses `zsh(1)`
-
-## unihan-etl 0.27.0 (2023-07-18)
-
-### Breaking: pytest fixtures renamed, data moved (#294)
-
-- "quick" fixtures:
-
-  - Data has been moved from `tests/fixtures` to
-    `src/unihan_etl/data_files/quick`
-  - Fixtures prefixed by `sample_` in the name have been renamed to `quick_`
-
-- "quick" and "full" fixtures: Fixed ability to access data files from outside
-  `unihan_etl` package
-
-### Development
-
-- ruff: Code quality tweaks (#295)
-
-## unihan-etl 0.26.0 (2023-07-09)
-
-### Features
-
-- pytest plugin: Add cached fixtures for `UNIHAN` (#291)
-
-  After initial download of UNIHAN.zip, an 11 second testrun on unihan-etl's
-  test can go down to 1.5 seconds - eliminating redownloading and extraction.
-
-## unihan-etl 0.25.2 (2023-07-08)
-
-### Bug Fixes
-
-- pytest plugin: Revert fix of `zshrc` fixture's `skipif` condition (#293)
-
-  It was fine as-is.
-
-## unihan-etl 0.25.1 (2023-07-08)
-
-_Rolled back_
-
-### Bug Fixes
-
-- pytest plugin: Fix `zshrc` fixture's `skipif` condition (#292)
-
-## unihan-etl 0.25.0 (2023-07-01)
-
-_Maintenance only, no bug fixes, or new features_
-
-### Internal changes
-
-- ruff: Add additional linters, apply code fixes automatically and by hand
-  (#290)
-- Typings: Extract `LogLevel` and `UnihanFormats`
-
-## unihan-etl 0.24.0 (2023-06-24)
-
-_Maintenance only, no bug fixes, or new features_
-
-### Internal changes
-
-- zhon: 1.1.5 -> 2.0.0 (#289, fixes #282)
-
-  [Release notes](https://github.com/tsroten/zhon/blob/v2.0.0/CHANGES.rst#v200-2023-06-24)
-
-  Fixes pytest warning related to regular expressions.
-
-## unihan-etl 0.23.0 (2023-06-24)
-
-_Maintenance only, no bug fixes, or new features_
-
-### Internal changes
-
-- {mod}`unihan_etl._internal.app_dirs` improvements (#287)
-
-  - Breaking: `app_dirs` moved
-
-    - Before 0.23.x: `unihan_etl.app_dirs`
-    - After 0.23.x: `unihan_etl._internal.app_dirs`
-
-  - New feature: Override directories on a one-off basis
-  - New feature: Template replacement of variables replacing environmental variables
-    via {func}`os.path.expandvars` + {func}`os.path.expanduser`
-  - {mod}`doctests`: See the above in action thanks to doctests
-  - Dedicated tests via pytest
-
-### Documentation
-
-- API docs (#288):
-  - Limit depth of table of contents to one
-  - Fix section heading
-  - Fix comment in `AppDirs`
-
-## unihan-etl 0.22.1 (2023-06-18)
-
-### Bug fixes
-
-- Fix for `destination` of files not replacing file extension correctly (#285)
-
-## unihan-etl 0.22.0 (2023-06-17)
-
-### Breaking changes
-
-#### `unihan_etl.process` -> `unihan_etl.core` (#284)
-
-This module has been renamed.
-
-#### Configuration (#280)
-
-Before 0.22.x, unihan_etl's configuration was done through a {class}`dict` object.
-
-0.22.0 and after settings are configurable via a {obj}`dataclasses.dataclass` object:
-{class}`unihan_etl.options.Options`
-
-### Documentation
-
-- Add {mod}`doctest` support (#274)
-
-  - Initial doctest example added to README.md, test.py, and util.py.
-
-- Stub out initial pytest plugin (#274)
-- Split _API_ docs into multiple files (#283)
-- Fix `make start` in `docs/Makefile` by fixing argument positions (#283)
-
-## unihan-etl 0.21.1 (2023-06-18)
-
-### Bug fixes
-
-- Fix for `destination` of files not replacing file extension correctly (#286)
-
-## unihan-etl 0.21.0 (2023-06-12)
-
-_Maintenance only, no bug fixes or features_
-
-### Internal improvements
-
-- Move file locations to {mod}`pathlib` internally (#277)
-- Improved typing download `urlretrive_fn` and `reporthook` via {class}`typing.Protocol` (#277)
-
-## unihan-etl 0.20.0 (2023-06-11)
-
-_Maintenance only, no bug fixes or features_
-
-### Breaking changes
-
-- **Python 3.7 Dropped**
-
-  Python 3.7 support has been dropped (#272)
-
-  Its end-of-life is June 27th, 2023 and Python 3.8 will add support for
-  {mod}`typing`'s {class}`typing.TypedDict` and {class}`typing.Protocol` out of the box without needing
-  {mod}`typing_extensions`'s.
-
-### Internal improvements
-
-- Typings:
-
-  - Import {mod}`typing` as a namespace, e.g. `import typing as t` (#276)
-  - Use `typing` for {class}`typing.TypedDict` and {class}`typing.Literal` (#276)
-  - Use typing_extensions' {py:data}`TypeAlias` for repeated types, such in test_expansions (#276)
-
-## unihan-etl 0.19.1 (2023-05-28)
-
-_Maintenance only, no bug fixes or features_
-
-### Development
-
-- Add back `black` for formatting
-
-  This is still necessary to accompany `ruff`, until it replaces black.
-
-## unihan-etl 0.19.0 (2023-05-27)
-
-_Maintenance only, no bug fixes or features_
-
-### Internal improvements
-
-- Move formatting, import sorting, and linting to [ruff].
-
-  This rust-based checker has dramatically improved performance. Linting and
-  formatting can be done almost instantly.
-
-  This change replaces black, isort, flake8 and flake8 plugins.
-
-- poetry: 1.4.0 -> 1.5.0
-
-  See also: https://github.com/python-poetry/poetry/releases/tag/1.5.0
-
-- pytest: Fix invalid escape sequence warning from `zhon`
-
-[ruff]: https://ruff.rs
-
-### Development
-
-- `merge_dict`: Improve typing of generic params (#271)
-
-## unihan-etl 0.18.1 (2022-10-01)
-
-### Packaging
-
-- Add PyYAML dependency
-
-### Infrastructure
-
-- CI speedups (#267)
-
-  - Split out release to separate job so the PyPI Upload docker image isn't pulled on normal runs
-  - Clean up CodeQL
-
-- Bump poetry 1.1.x to 1.2.x
-
-### Packaging
-
-- Move `.coveragerc` -> `pyproject.toml` (#268)
-
-## unihan-etl 0.18.0 (2022-09-11)
-
-### Development
-
-- Move to `src/`-layout structure (#266)
-- Add [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear) (#263)
-- Add [flake8-comprehensions](https://github.com/adamchainz/flake8-comprehensions) (#264)
-
-### Documentation
-
-- Render changelog in [`linkify_issues`] (~~#261~~, #265)
-- Fix Table of contents rendering with sphinx autodoc with [`sphinx_toctree_autodoc_fix`] (#265)
-- Test doctests in our docs via [`pytest_doctest_docutils`] (built on [`doctest_docutils`]) (#265)
-
-[`linkify_issues`]: https://gp-libs.git-pull.com/linkify_issues/
-[`sphinx_toctree_autodoc_fix`]: https://gp-libs.git-pull.com/sphinx_toctree_autodoc_fix/
-[`pytest_doctest_docutils`]: https://gp-libs.git-pull.com/doctest/pytest.html
-[`doctest_docutils`]: https://gp-libs.git-pull.com/doctest
-
-## unihan-etl 0.17.2 (2022-08-21)
-
-### Documentation
-
-- Add vendorized, updated fork of `sphinxcontrib-issuetracker`, via #261.
-- Remove sphinx-issues package
-
-## unihan-etl 0.17.1 (2022-08-21)
-
-Follow ups to #257.
+unihan-etl 0.30.1 fixes a radical-stroke parsing edge case.
 
 ### Fixes
 
-- `merged_dict()`: Fix merging edgecase where destination key was missing
-- `download()`: Fix edgecase when "downloading" file from local path
+#### Double apostrophes in `kRSUnicode` values (#304)
 
-## unihan-etl 0.17.0 (2022-08-21)
+The expansion logic now loads double-apostrophe values correctly when `kRSUnicode` data is parsed through `kRSGeneric` handling.
 
-### Features
+## unihan-etl 0.30.0post0 (2023-11-26)
 
-- mypy `--strict` annotations, via #257
-
-## unihan-etl 0.16.0 (2022-08-20)
-
-### Features
-
-- New option: `--no-cache`
-
-  Disregard cached .zip / extracted files, via #259.
-
-### Development
-
-- Add python 3.8 and 3.9 to CI
-
-  This is to make way for strict type annotations, as the typings and generic
-  behavior vary dramatically between 3.7 - 3.11.
-
-## unihan-etl 0.15.0 (2022-08-29)
-
-### Breaking changes
-
-- Python 2 compatibility module and imports removed. Python 2.x was officially
-  dropped in 0.12.0 (2021-06-15) via #258
-
-## unihan-etl 0.14.0 (2022-08-16)
-
-### Improvements
-
-- `load_data`: Accept list of `pathlib.Path` in addition to list of `str`
-
-### Compatibility
-
-- Add Python 3.10 (#248)
-- Dropped Python 3.6 (#248)
-
-### Development
-
-Infrastructure updates for static type checking and doctest examples.
-
-- Update poetry to 1.1
-  - CI: Use poetry 1.1.12 and `install-poetry.py` installer (#237 + #248)
-  - Relock poetry.lock at 1.1 (w/ 1.1.7's fix)
-- Run pyupgrade for python 3.7
-- Tests: Move from `tmpdir` -> `tmp_path`
-- Initial [doctests] support added, via #255
-
-  [doctests]: https://docs.python.org/3/library/doctest.html
-
-- Initial [mypy] validation, via #255
-
-  [mypy]: https://github.com/python/mypy
-
-- CI (tests, docs): Improve caching of python dependencies via
-  `action/setup-python`'s v3/4's new poetry caching, via #255
-
-- CI (docs): Skip if no `PUBLISH` condition triggered, via #255
+unihan-etl 0.30.0post0 is a CI and documentation follow-up to 0.30.0.
 
 ### Documentation
 
-- Move to `furo` theme
-- Add :ref:`quickstart` page
-- Link to cihai's developer documentation:
-  https://cihai.git-pull.com/contributing/
+Docstrings for {class}`unihan_etl.core.Packager` and related download helpers were cleaned up.
+
+### Development
+
+CodeQL moved from an advanced local configuration file to GitHub's default Python setup.
+
+## unihan-etl 0.30.0 (2023-11-26)
+
+unihan-etl 0.30.0 is a documentation-quality release. It enables NumPy-style docstring checks and fills in public module, class, function, and test-helper docstrings across the codebase.
+
+### Documentation
+
+#### NumPy-style docstrings (#303)
+
+Ruff's pydocstyle rules now enforce the project's NumPy docstring convention, and existing modules were updated to satisfy that standard.
+
+### Development
+
+The development lint suite gained pydocstyle coverage through Ruff.
+
+## unihan-etl 0.29.0 (2023-11-19)
+
+unihan-etl 0.29.0 is a packaging and formatting maintenance release.
+
+### Development
+
+#### Pytest configuration moved to `pyproject.toml` (#299)
+
+Pytest settings now live with the rest of the project configuration in `pyproject.toml`.
+
+#### Formatting moved from Black to Ruff (#302)
+
+`ruff format` replaced Black as the formatter, keeping Black-compatible formatting while removing a separate formatter dependency.
+
+#### Poetry dependency groups corrected (#302)
+
+Development dependencies moved from extras to Poetry dependency groups, matching Poetry's documented model. Python 3.12 was also added to trove classifiers, and GitHub Actions dependencies were refreshed to quiet CI warnings.
+
+## unihan-etl 0.28.1 (2023-09-02)
+
+unihan-etl 0.28.1 fixes a field-name typo found during a repository-wide typo sweep.
+
+### Fixes
+
+#### `kAccountingNumeric` list handling (#296)
+
+`SPACE_DELIMITED_LIST_FIELDS` now spells `kAccountingNumeric` correctly, so the field is recognized by the expansion configuration.
+
+### Development
+
+The typo sweep used `typos`, and the Ruff ERA/eradicate rule was removed because its false positives were too noisy for this codebase.
+
+## unihan-etl 0.28.0 (2023-07-22)
+
+unihan-etl 0.28.0 finishes the pytest fixture naming cleanup started in the previous release. Fixtures now consistently use the `unihan_` prefix, making the plugin safer to enable in downstream test suites with their own generic fixture names.
+
+### Breaking changes
+
+#### Pytest fixtures now use the `unihan_` prefix (#296)
+
+The quick dataset fixtures were renamed from names such as `quick_unihan_path`, `quick_unihan_options`, and `quick_unihan_packager` to names such as `unihan_quick_path`, `unihan_quick_options`, and `unihan_quick_packager`. Helper fixtures followed the same convention: for example, `ensure_quick_unihan` became `unihan_ensure_quick`.
+
+The old `TestPackager` fixture was removed because the quick and full dataset fixtures cover the same test setup more explicitly.
+
+### Fixes
+
+The pytest plugin's `zshrc` skip condition was corrected so zsh-specific tests run under the intended shell conditions.
+
+## unihan-etl 0.27.0 (2023-07-18)
+
+unihan-etl 0.27.0 moves quick fixture data into the package and starts the fixture-name cleanup.
+
+### Breaking changes
+
+#### Quick fixture data moved into package data (#294)
+
+The quick dataset moved from `tests/fixtures` to `src/unihan_etl/data_files/quick`, making the files available when the package is installed rather than only inside the source checkout.
+
+#### Sample fixture names became quick fixture names (#294)
+
+Fixtures with `sample_` in the name were renamed to use `quick_`, matching the quick/full dataset language used by the plugin.
+
+### Development
+
+Ruff quality rules were tightened and the resulting fixes were applied.
+
+## unihan-etl 0.26.0 (2023-07-09)
+
+unihan-etl 0.26.0 introduces the pytest plugin's cached UNIHAN datasets.
+
+### What's new
+
+#### Cached quick and full UNIHAN fixtures (#291)
+
+The pytest plugin can now download `UNIHAN.zip` once and reuse the cached archive and extracted files across test runs. This avoids repeated download/extraction work for suites that need real UNIHAN data.
+
+## unihan-etl 0.25.2 (2023-07-08)
+
+unihan-etl 0.25.2 rolls back the previous zsh fixture condition change.
+
+### Fixes
+
+The `zshrc` fixture condition from 0.25.1 was reverted because the original behavior was correct.
+
+## unihan-etl 0.25.1 (2023-07-08)
+
+unihan-etl 0.25.1 was rolled back by 0.25.2.
+
+### Fixes
+
+This release attempted to fix the pytest plugin's `zshrc` skip condition.
+
+## unihan-etl 0.25.0 (2023-07-01)
+
+unihan-etl 0.25.0 is a maintenance release for linting and type aliases.
+
+### Development
+
+Ruff gained additional lint rules, and automatic plus manual fixes were applied. The release also extracted reusable typing names for log levels and export formats.
+
+## unihan-etl 0.24.0 (2023-06-24)
+
+unihan-etl 0.24.0 is a dependency maintenance release.
+
+### Dependencies
+
+#### `zhon` 2.0 (#289)
+
+`zhon` was updated from 1.1.5 to 2.0.0, resolving pytest warnings related to regular expressions. See the [zhon 2.0.0 release notes](https://github.com/tsroten/zhon/blob/v2.0.0/CHANGES.rst#v200-2023-06-24).
+
+## unihan-etl 0.23.0 (2023-06-24)
+
+unihan-etl 0.23.0 improves the internal app-directory helper used for cache and config paths.
+
+### Breaking changes
+
+#### `app_dirs` moved under `_internal` (#287)
+
+The app-directory helper moved from `unihan_etl.app_dirs` to `unihan_etl._internal.app_dirs`. This module is documented under {doc}`internals/api/app_dirs` because it is not part of the primary public API surface.
+
+### What's new
+
+#### Configurable app directories (#287)
+
+App directory values can now be overridden on a one-off basis, and template values can expand environment variables and user-home references through the standard `os.path` expansion behavior.
+
+### Documentation
+
+The internal app-directory docs gained doctest examples, and the API table-of-contents depth and section heading were cleaned up.
+
+## unihan-etl 0.22.1 (2023-06-18)
+
+unihan-etl 0.22.1 fixes export destination path handling for the 0.22.x line.
+
+### Fixes
+
+The configured destination path now replaces the output file extension correctly when export format changes.
+
+## unihan-etl 0.22.0 (2023-06-17)
+
+unihan-etl 0.22.0 reorganizes the public API around clearer module names and a typed options object. It also adds the first project doctests and initial pytest plugin documentation.
+
+### Breaking changes
+
+#### Processing module renamed to core (#284)
+
+`unihan_etl.process` was renamed to `unihan_etl.core`, which is where {class}`unihan_etl.core.Packager` now lives.
+
+#### Configuration moved to `Options` (#280)
+
+Configuration moved from dictionary-style settings to the {class}`unihan_etl.options.Options` dataclass. This gives both library users and the CLI a typed configuration object.
+
+### Documentation
+
+Doctest examples were added for README and utility behavior, initial pytest plugin docs landed, the API docs split into multiple pages, and the docs Makefile watch target was fixed.
+
+## unihan-etl 0.21.1 (2023-06-18)
+
+unihan-etl 0.21.1 backports the destination path fix for the 0.21.x line.
+
+### Fixes
+
+The configured destination path now replaces the output file extension correctly when export format changes.
+
+## unihan-etl 0.21.0 (2023-06-12)
+
+unihan-etl 0.21.0 is an internal modernization release for path and callback typing.
+
+### Development
+
+Internal file locations now use `pathlib.Path`, and download callback types are expressed through typed protocols.
+
+## unihan-etl 0.20.0 (2023-06-11)
+
+unihan-etl 0.20.0 drops Python 3.7 and simplifies typing support around the standard library.
+
+### Breaking changes
+
+#### Python 3.7 support dropped (#272)
+
+Python 3.7 was dropped ahead of its June 27, 2023 end-of-life date. The project can now use standard-library `TypedDict` and `Protocol` support from Python 3.8+ rather than relying on compatibility shims.
+
+### Development
+
+Imports now use the `typing as t` namespace style, and repeated type shapes were extracted into aliases where that made expansion tests and options code clearer.
+
+## unihan-etl 0.19.1 (2023-05-28)
+
+unihan-etl 0.19.1 restores Black while the project continues its Ruff migration.
+
+### Development
+
+Black was added back because Ruff had not yet fully replaced it for this project's formatting needs.
+
+## unihan-etl 0.19.0 (2023-05-27)
+
+unihan-etl 0.19.0 starts the move to Ruff-based linting and formatting.
+
+### Development
+
+Ruff replaced the earlier Black, isort, flake8, and flake8-plugin stack for faster linting and style feedback. Poetry moved from 1.4.0 to 1.5.0, a pytest warning from `zhon` was addressed, and `merge_dict` typing was tightened.
+
+## unihan-etl 0.18.1 (2022-10-01)
+
+unihan-etl 0.18.1 fixes packaging and CI maintenance issues after the source-layout migration.
+
+### Dependencies
+
+PyYAML was added as a dependency.
+
+### Development
+
+CI was split so release-only PyPI upload dependencies do not run on every test job, CodeQL was cleaned up, Poetry moved to 1.2.x, and coverage settings moved from `.coveragerc` into `pyproject.toml`.
+
+## unihan-etl 0.18.0 (2022-09-11)
+
+unihan-etl 0.18.0 moves the package to a `src/` layout and adopts gp-libs documentation helpers.
+
+### Documentation
+
+The changelog and issue references render through gp-libs linkification helpers, autodoc table-of-contents rendering was fixed, and docs doctests began running through the gp-libs docutils doctest tooling.
+
+### Development
+
+The source tree moved to `src/`, and linting gained flake8-bugbear plus flake8-comprehensions.
+
+## unihan-etl 0.17.2 (2022-08-21)
+
+unihan-etl 0.17.2 is a documentation-linking maintenance release.
+
+### Documentation
+
+The docs gained an updated vendored issue-linking helper, replacing the older `sphinx-issues` package.
+
+## unihan-etl 0.17.1 (2022-08-21)
+
+unihan-etl 0.17.1 follows up on the strict typing work from 0.17.0.
+
+### Fixes
+
+`merge_dict()` now handles the edge case where the destination key is missing, and `download()` handles local file paths correctly when the "download" source is already on disk.
+
+## unihan-etl 0.17.0 (2022-08-21)
+
+unihan-etl 0.17.0 enables strict mypy validation.
+
+### Development
+
+The codebase was annotated enough to run mypy with `--strict`, improving confidence in the ETL and expansion paths.
+
+## unihan-etl 0.16.0 (2022-08-20)
+
+unihan-etl 0.16.0 adds cache-busting support and expands CI coverage for the typing work that followed.
+
+### What's new
+
+#### `--no-cache` (#259)
+
+The CLI can now ignore cached zip and extracted files with `--no-cache`, forcing a fresh fetch/extract cycle.
+
+### Development
+
+Python 3.8 and 3.9 were added to CI to prepare for stricter typing across supported Python versions.
+
+## unihan-etl 0.15.0 (2022-08-29)
+
+unihan-etl 0.15.0 removes the remaining Python 2 compatibility layer.
+
+### Breaking changes
+
+Python 2 compatibility modules and imports were removed. Python 2 had already been officially dropped in 0.12.0.
+
+## unihan-etl 0.14.0 (2022-08-16)
+
+unihan-etl 0.14.0 modernizes supported Python versions and starts the current doctest/type-checking direction.
+
+### Breaking changes
+
+Python 3.6 support was dropped.
+
+### What's new
+
+`load_data` now accepts lists of `pathlib.Path` objects in addition to lists of strings.
+
+### Documentation
+
+The docs moved to the Furo theme, added a {ref}`quickstart` page, and linked to cihai developer documentation.
+
+### Development
+
+Python 3.10 support was added, Poetry 1.1 became the development baseline, tests moved from `tmpdir` to `tmp_path`, pyupgrade ran for Python 3.7+, and initial mypy plus doctest validation landed.
 
 ## unihan-etl 0.13.0 (2021-06-16)
 
-- #236: Convert to markdown
+unihan-etl 0.13.0 converts the documentation source format.
+
+### Documentation
+
+Documentation moved to Markdown.
 
 ## unihan-etl 0.12.0 (2021-06-15)
 
-- Update `black` to 21.6b0
-- Update trove classifiers to 3.9
-- #235: Drop python 2.7, 3.5. Remove python 2 modesets and
-  `__future__`
+unihan-etl 0.12.0 drops legacy Python support and refreshes packaging metadata.
+
+### Breaking changes
+
+Python 2.7 and Python 3.5 support were removed, along with Python 2 modesets and `__future__` compatibility imports.
+
+### Development
+
+Black moved to 21.6b0 and trove classifiers were updated for Python 3.9.
 
 ## unihan-etl 0.11.0 (2020-08-09)
 
-- #230 Move packaging / publishing to poetry
-- #229 Self host docs
-- #229 Add metadata / icons / etc. for doc site
-- #229 Move travis -> github actions
-- #229 Overhaul Makefiles
+unihan-etl 0.11.0 is a packaging and documentation infrastructure release.
+
+### Development
+
+Packaging and publishing moved to Poetry, docs became self-hosted with additional metadata and icons, CI moved from Travis to GitHub Actions, and Makefiles were overhauled.
 
 ## unihan-etl 0.10.4 (2020-08-05)
 
-- Update CHANGES headings to produce working links
-- Relax `appdirs` version constraint
-- #228 Move from Pipfile to poetry
+unihan-etl 0.10.4 fixes changelog links and packaging constraints.
+
+### Fixes
+
+Changelog headings now produce working links, and the `appdirs` version constraint was relaxed.
+
+### Development
+
+The project moved from Pipfile-based packaging to Poetry.
 
 ## unihan-etl 0.10.3 (2019-08-18)
 
-- Fix flicker in download progress bar
+unihan-etl 0.10.3 fixes a visible CLI polish issue.
+
+### Fixes
+
+The download progress bar no longer flickers during updates.
 
 ## unihan-etl 0.10.2 (2019-08-17)
 
-- Add `project_urls` to setup.py
-- Use plain reStructuredText for CHANGES
-- Use `collections` that's compatible with python 2 and 3
-- PEP8 tweaks
+unihan-etl 0.10.2 is a packaging and compatibility maintenance release.
+
+### Development
+
+The package gained `project_urls`, `CHANGES` moved back to plain reStructuredText for packaging compatibility, collection imports were made Python 2/3 compatible, and PEP 8 cleanups landed.
 
 ## unihan-etl 0.10.1 (2017-09-08)
 
-- Add code links in API
-- Add `__version__` to `unihan_etl`
+unihan-etl 0.10.1 improves package metadata and API docs.
+
+### Documentation
+
+API docs gained code links.
+
+### Development
+
+`__version__` was added to `unihan_etl`.
 
 ## unihan-etl 0.10.0 (2017-08-29)
 
-- #91 New fields from UNIHAN
-  [Revision 25](https://www.unicode.org/reports/tr38/tr38-25.html).
+unihan-etl 0.10.0 adds Unicode 11-era UNIHAN fields and refreshes the project infrastructure used to build, test, and document the package.
 
-  - kJinmeiyoKanji
-  - kJoyoKanji
-  - kKoreanEducationHanja
-  - kKoreanName
-  - kTGH
+### What's new
 
-  UNIHAN Revision 25 was released 2018-05-18 and issued for Unicode **11.0**:
+#### UNIHAN Revision 25 fields (#91)
 
-- Add tests and example corpus for kCCCII
-- Add configuration / make tests for isort, flake8
-- Switch tmuxp config to use pipenv
-- Add _Pipfile_
-- Add `make sync_pipfile` task to sync _requirements/_.txt* files
-  with *Pipfile\*
-- Update and sync Pipfile
-- Developer package updates (linting / docs / testing)
+Support was added for fields from [UNIHAN Revision 25](https://www.unicode.org/reports/tr38/tr38-25.html), including `kJinmeiyoKanji`, `kJoyoKanji`, `kKoreanEducationHanja`, `kKoreanName`, and `kTGH`.
 
-  - isort 4.2.15 to 4.3.4
-  - flake8 3.3.0 to 3.5.0
-  - vulture 0.14 to 0.27
-  - sphinx 1.6.2 to 1.7.6
-  - alagitpull 0.0.12 to 0.0.21
-  - releases 1.3.1 to 1.6.1
-  - sphinx-argparse 0.2.1 to 1.6.2
-  - pytest 3.1.2 to 3.6.4
+### Documentation
 
-- Move documentation over to numpy-style
-- Add sphinxcontrib-napoleon 0.6.1
-- Update LICENSE New BSD to MIT
-- All future commits and contributions are licensed to the
-  _cihai software foundation_. This includes commits by Tony Narlock (creator).
+Documentation moved to NumPy-style docstrings.
+
+### Development
+
+The release added tests and example corpus data for `kCCCII`, configured isort and flake8, added Pipfile-based development workflows, updated developer dependencies, added `sphinxcontrib-napoleon`, and changed the license from BSD to MIT for future cihai software foundation contributions.
 
 ## unihan-etl 0.9.5 (2017-06-26)
 
-- Enhance support for locations on _kHDZRadBreak_ fields.
+unihan-etl 0.9.5 improves structured expansion support for dictionary locations.
+
+### Fixes
+
+Location parsing for `kHDZRadBreak` fields was improved.
 
 ## unihan-etl 0.9.4 (2017-06-05)
 
-- Fix kIRG_GSource without location
-- Fix kFenn output
-- Fix kHanyuPinlu support output for n diacritics
+unihan-etl 0.9.4 fixes several field-expansion edge cases.
+
+### Fixes
+
+`kIRG_GSource` values without a location now expand correctly, `kFenn` output was fixed, and `kHanyuPinlu` support handles `n` diacritics correctly.
 
 ## unihan-etl 0.9.3 (2017-05-31)
 
-- Add expansion for kIRGKangXi
+unihan-etl 0.9.3 expands support for IRG source fields.
+
+### What's new
+
+Expansion support was added for `kIRGKangXi`.
 
 ## unihan-etl 0.9.2 (2017-05-31)
 
-- Normalize Radical-Stroke expansion for kRSUnicode
-- Migrate more fields to regular expressions
-- Normalize character field for kDaeJaweon, kHanyuPinyin,
-  and kCheungBauer, kFennIndex, kCheungBauerIndex, kIICore,
-  kIRGHanyuDaZidian
+unihan-etl 0.9.2 normalizes more structured expansion outputs.
+
+### Fixes
+
+Radical-stroke expansion for `kRSUnicode` was normalized, more field expansions moved to regular expressions, and character fields were normalized for dictionary and index fields including `kDaeJaweon`, `kHanyuPinyin`, `kCheungBauer`, `kFennIndex`, `kCheungBauerIndex`, `kIICore`, and `kIRGHanyuDaZidian`.
 
 ## unihan-etl 0.9.1 (2017-05-27)
 
-- Support for expanding kGSR
-- Convert some field expansions to use regexes
+unihan-etl 0.9.1 adds another structured expansion and refactors parsing internals.
+
+### What's new
+
+Expansion support was added for `kGSR`, and several field expansions moved to regex-based parsing.
 
 ## unihan-etl 0.9.0 (2017-05-26)
 
-- Fix bug where destination file was made into directory on
-  first run
-- Rename from unihan-tabular to unihan-etl
-- Support for expanding multi-value fields
-- Support for pruning empty fields
-- Improve help dialog
-- Added a page about UNIHAN and the project to documentation
-- Split constant values into their own module
-- Split functionality for expanding unstructured values into
-  its own module
+unihan-etl 0.9.0 is the rename and ETL feature release. The project moved from `unihan-tabular` to `unihan-etl` and gained the core export-shaping options that still define the tool.
+
+### What's new
+
+#### Multi-value expansion and empty-field pruning
+
+Exports can now expand multi-value UNIHAN fields into structured values and prune empty fields from output.
+
+### Fixes
+
+The first-run destination bug that created a directory instead of an output file was fixed.
+
+### Documentation
+
+The docs gained a page explaining UNIHAN and the project.
+
+### Development
+
+Constants and expansion behavior were split into dedicated modules.
 
 ## unihan-etl 0.8.1 (2017-05-20)
 
-- Update to add _kJa_ and adjust source file of
-  _kCompatibilityVariant_ per Unicode 8.0.0.
+unihan-etl 0.8.1 updates field metadata for Unicode 8.0.0.
+
+### What's new
+
+`kJa` was added and `kCompatibilityVariant` source-file metadata was adjusted for Unicode 8.0.0.
 
 ## unihan-etl 0.8.0 (2017-05-17)
 
-- Support for configuring logging via options and CLI
-- Convert all print statements to use logger
+unihan-etl 0.8.0 replaces direct printing with library logging.
+
+### What's new
+
+Logging can now be configured through options and the CLI.
+
+### Development
+
+Internal diagnostics moved from `print()` calls to loggers.
 
 ## unihan-etl 0.7.4 (2017-05-14)
 
-- Allow for local / file system sources for Unihan.zip
-- Only extract zip if unextracted
+unihan-etl 0.7.4 improves local development and offline workflows.
+
+### What's new
+
+UNIHAN zip sources can now be local filesystem paths, and already-extracted archives are not extracted again unnecessarily.
 
 ## unihan-etl 0.7.3 (2017-05-13)
 
-- Update package classifiers
+unihan-etl 0.7.3 is a package metadata refresh.
+
+### Development
+
+Package classifiers were updated.
 
 ## unihan-etl 0.7.2 (2017-05-13)
 
-- Add back datapackage
+unihan-etl 0.7.2 restores datapackage output metadata.
+
+### Fixes
+
+The datapackage file was added back.
 
 ## unihan-etl 0.7.1 (2017-05-12)
 
-- Fix python 2 CSV output
-- Default to CSV output
+unihan-etl 0.7.1 fixes CSV behavior and defaults.
+
+### Fixes
+
+CSV output works correctly on Python 2 again, and CSV became the default export format.
 
 ## unihan-etl 0.7.0 (2017-05-12)
 
-- Move unicodecsv module to dependency package
-- Support for XDG directory specification
-- Support for custom destination output, including replacing
-  template variable `{ext}`
+unihan-etl 0.7.0 improves output location handling and platform directory support.
+
+### What's new
+
+The project now depends on `unicodecsv`, supports XDG directory conventions, and allows custom destination templates using `{ext}` replacement.
 
 ## unihan-etl 0.6.3 (2017-05-11)
 
-- Move _**about**.py_ to module level
+unihan-etl 0.6.3 fixes package metadata placement.
+
+### Fixes
+
+The `__about__.py` metadata file moved to the module level.
 
 ## unihan-etl 0.6.2 (2017-05-11)
 
-- Fix python package import
+unihan-etl 0.6.2 fixes a package import issue.
+
+### Fixes
+
+Python package imports work again.
 
 ## unihan-etl 0.6.1 (2017-05-10)
 
-- Fix readme bug on pypi
+unihan-etl 0.6.1 fixes the PyPI README rendering.
+
+### Fixes
+
+The README renders correctly on PyPI.
 
 ## unihan-etl 0.6.0 (2017-05-10)
 
-- Support for exporting in YAML and JSON
-- More internal factoring and simplification
-- Return data as list
+unihan-etl 0.6.0 adds structured export formats.
+
+### What's new
+
+Exports can now be written as YAML and JSON in addition to CSV, and the library can return data as a list for Python callers.
+
+### Development
+
+Internals were factored and simplified around the new export paths.
 
 ## unihan-etl 0.5.1 (2017-05-08)
 
-- Drop python 3.3 an 3.4 support
+unihan-etl 0.5.1 drops old Python 3 minors.
+
+### Breaking changes
+
+Python 3.3 and Python 3.4 support were dropped.
 
 ## unihan-etl 0.5.0 (2017-05-08)
 
-- Rename from cihaidata_unihan unihan_tabular
-- Drop datapackages in favor of a universal JSON, YAML and CSV
-  export.
-- Only use UnicodeWriter in Python 2, fixes issue with python
-  would encode `b` in front of values
+unihan-etl 0.5.0 is the rename to the unihan-tabular package and the move away from datapackage-first exports.
+
+### Breaking changes
+
+The package was renamed from `cihaidata_unihan` to `unihan_tabular`.
+
+### What's new
+
+Exports now use a universal JSON, YAML, and CSV model rather than datapackages as the primary output. Python 2 CSV output only uses `UnicodeWriter` where necessary, avoiding byte-prefix artifacts in values.
 
 ## unihan-etl 0.4.2 (2017-05-07)
 
-- Rename _scripts/_ to _cihaidata_unihan/_
+unihan-etl 0.4.2 continues the early package rename work.
+
+### Development
+
+The `scripts/` directory was renamed to `cihaidata_unihan/`.
 
 ## unihan-etl 0.4.1 (2017-05-07)
 
-- Enable invoking tool via `$ cihaidata_unihan`
+unihan-etl 0.4.1 restores the command-line entry point for the early package name.
+
+### Fixes
+
+The tool can be invoked as `cihaidata_unihan`.
 
 ## unihan-etl 0.4.0 (2017-05-07)
 
-- Major internal refactor and simplification
-- Convert to pytest `assert` statements
-- Convert full test suite to pytest functions and fixtures
-- Get CLI documentation up again
-- Improve test coverage
-- Lint code, remove unused imports
-- Switch license BSD -> MIT
+unihan-etl 0.4.0 is an early test and packaging cleanup release.
+
+### Development
+
+The codebase received a major internal refactor, converted tests to pytest functions and fixtures, restored CLI documentation, improved test coverage, removed unused imports, and switched the license from BSD to MIT.
 
 ## unihan-etl 0.3.0 (2017-04-17)
 
-- Rebooted
-- Modernize _Makefile_ in docs
-- Add Makefile to main project
-- Modernize package metadata to use _**about**.py_
-- Update requirements to use _requirements/_ folder for
-  base, testing and doc dependencies.
-- Update sphinx theme to alabaster with new logo.
-- Update travis to use coverall
-- Update links on README to use https
-- Update travis to test up to python 3.6
-- Add support for pypy (why not)
-- Lock base dependencies
-- Add dev dependencies for isort, vulture and flake8
+unihan-etl 0.3.0 is the project reboot release.
+
+### What's new
+
+The reboot modernized the root and docs Makefiles, refreshed package metadata, split requirements into base/test/docs groups, updated docs styling, moved project links to HTTPS, added Travis coverage, tested up to Python 3.6, added PyPy coverage, locked base dependencies, and added development dependencies for isort, vulture, and flake8.
 
 <!---
 vim: set filetype=markdown:
