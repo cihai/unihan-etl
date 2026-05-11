@@ -56,6 +56,7 @@ conf = merge_sphinx_config(
             None,
         ),
         "mypy": ("https://mypy.readthedocs.io/en/stable/", None),
+        "pytest": ("https://docs.pytest.org/en/stable/", None),
         "sqlalchemy": ("https://docs.sqlalchemy.org/en/20/", None),
     },
     linkcode_resolve=make_linkcode_resolve(unihan_etl, about["__github__"]),
