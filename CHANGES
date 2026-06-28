@@ -56,6 +56,10 @@ Fixture return types now link to real API targets instead of rendering as plain 
 
 Light-theme loads no longer briefly flash the default dark styling before the user's preference is applied. `docs/conf.py` now chains the gp-sphinx `setup()` callback before registering unihan-etl's own missing-reference handler, restoring the inline theme-prevention script plus the shared `spa-nav.js`, copybutton bridge, and MyST lexer hooks.
 
+#### pytest 9.1 compatibility for the pytest plugin
+
+unihan-etl's pytest plugin (see {doc}`api/pytest-plugin`) loads automatically whenever pytest runs, so any project with unihan-etl installed can now use pytest 9.1+ — the plugin no longer aborts the test session at startup. pytest 9.1 began rejecting marks applied to fixture functions; the bundled quick/full UNIHAN dataset fixtures now import cleanly. Downstream projects such as cihai are the primary beneficiaries.
+
 ### Development
 
 gp-sphinx and sibling docs packages were bumped through the 0.0.1a17 workspace releases, alongside routine uv, just, and development dependency refreshes.
