@@ -28,7 +28,7 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 Then run `unihan-etl@next`.
 
-## unihan-etl 0.43.x (unreleased)
+## unihan-etl 0.44.x (unreleased)
 
 <!-- KEEP THIS PLACEHOLDER - DO NOT REMOVE OR MODIFY THIS LINE -->
 _Notes on the upcoming release will go here._
@@ -37,6 +37,10 @@ _Notes on the upcoming release will go here._
 <!-- Maintainers, insert changes / features for the next release here -->
 
 _Add your latest changes from PRs here_
+
+## unihan-etl 0.43.0 (2026-06-28)
+
+unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.
 
 ### Fixes
 
