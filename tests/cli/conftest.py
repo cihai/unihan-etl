@@ -17,9 +17,3 @@ def colors_always() -> Colors:
 def colors_never() -> Colors:
     """Return Colors instance with NEVER mode."""
     return Colors(ColorMode.NEVER)
-
-
-@pytest.fixture
-def colors_auto() -> Colors:
-    """Return Colors instance with AUTO mode."""
-    return Colors(ColorMode.AUTO)
