@@ -374,7 +374,6 @@ def unihan_user_path(
     return p
 
 
-@pytest.mark.skipif(not USING_ZSH, reason="Using ZSH")
 @pytest.fixture(scope="session")
 def unihan_zshrc(unihan_user_path: pathlib.Path) -> pathlib.Path:
     """Suppress ZSH default message.
