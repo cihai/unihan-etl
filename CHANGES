@@ -28,13 +28,19 @@ $ pipx install --suffix=@next unihan-etl --pip-args '\--pre' --force
 
 Then run `unihan-etl@next`.
 
-## unihan-etl 0.42.x (unreleased)
+## unihan-etl 0.43.x (unreleased)
 
 <!-- KEEP THIS PLACEHOLDER - DO NOT REMOVE OR MODIFY THIS LINE -->
 _Notes on the upcoming release will go here._
 <!-- END PLACEHOLDER - ADD NEW CHANGELOG ENTRIES BELOW THIS LINE -->
 
-unihan-etl 0.42.x continues the documentation-platform refresh started after 0.41.0. The release moves the API and pytest-plugin pages onto shared gp-sphinx components, restores first-paint theme handling, and keeps the generated CLI/API reference linked to concrete docs targets such as {doc}`api/pytest-plugin`, {doc}`api/index`, and {doc}`cli/index`.
+<!-- Maintainers, insert changes / features for the next release here -->
+
+_Add your latest changes from PRs here_
+
+## unihan-etl 0.42.0 (2026-06-28)
+
+unihan-etl 0.42.0 continues the documentation-platform refresh started after 0.41.0. The release moves the API and pytest-plugin pages onto shared gp-sphinx components, restores first-paint theme handling, and keeps the generated CLI/API reference linked to concrete docs targets such as {doc}`api/pytest-plugin`, {doc}`api/index`, and {doc}`cli/index`. It also restores compatibility with pytest 9.1+ for the bundled pytest plugin, so downstream projects such as cihai can adopt the latest pytest without the plugin aborting test collection.
 
 ### What's new
 
@@ -63,10 +69,6 @@ unihan-etl's pytest plugin (see {doc}`api/pytest-plugin`) loads automatically wh
 ### Development
 
 gp-sphinx and sibling docs packages were bumped through the 0.0.1a17 workspace releases, alongside routine uv, just, and development dependency refreshes.
-
-<!-- Maintainers, insert changes / features for the next release here -->
-
-_Add your latest changes from PRs here_
 
 ## unihan-etl 0.41.0 (2026-03-21)
 
