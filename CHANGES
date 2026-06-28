@@ -38,9 +38,25 @@ _Notes on the upcoming release will go here._
 
 _Add your latest changes from PRs here_
 
+### Fixes
+
+#### Corrupt or custom-named cached zips are re-fetched instead of crashing (#360)
+
+{meth}`unihan_etl.core.Packager.download` now treats a cached UNIHAN archive as reusable only when it is a *valid* zip, rather than when a file merely exists. A corrupt or truncated cache is re-downloaded automatically instead of being handed to extraction (which previously failed with `zipfile.BadZipFile`), and a non-default `zip_path` filename is respected instead of a hardcoded `Unihan.zip`.
+
+### Documentation
+
+#### `--no-cache` documents only the zip cache (#360)
+
+The `unihan-etl export` `--no-cache` help no longer claims it caches "CSV outputs"; caching governs only the downloaded UNIHAN zip and its extraction, which the help now states accurately.
+
 ### Development
 
 The parametrized field-expansion tests now follow the project's typed `NamedTuple` case convention (a `test_id`-led fixture with `ids=` derived from it) already used across the rest of the suite, so expansion test failures report named scenarios instead of positional ids. An unused CLI color-mode test fixture was also removed.
+
+The bundled quick-dataset pytest fixtures now rebuild their cached zip when a source data file changes (detected via CRC32), so edits to the quick UNIHAN fixtures take effect without manually clearing `.unihan_cache`. The zip fixtures also yield an open, reusable archive handle (closed on teardown) instead of an already-closed one.
+
+The bundled pytest fixtures are now safe under `pytest-xdist`: writes to the shared `.unihan_cache` are serialized across workers with an inter-process lock (a no-op in single-process runs), `pytest-xdist` and `filelock` are available as optional test dependencies, and a `just test-dist` target runs the suite in parallel.
 
 ## unihan-etl 0.42.0 (2026-06-28)
 

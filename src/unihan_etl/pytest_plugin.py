@@ -7,9 +7,11 @@ import getpass
 import logging
 import os
 import pathlib
+import shutil
 import typing as t
 import zipfile
-from collections.abc import Mapping
+import zlib
+from collections.abc import Generator, Mapping
 
 import pytest
 from appdirs import AppDirs as BaseAppDirs
@@ -31,6 +33,44 @@ DATA_FIXTURE_PATH = UNIHAN_ETL_PATH / "data_files"
 QUICK_FIXTURE_PATH = DATA_FIXTURE_PATH / "quick"
 
 app_dirs = AppDirs(_app_dirs=BaseAppDirs("pytest-cihai", "cihai team"))
+
+
+def _cache_lock(
+    config: pytest.Config,
+    basetemp: pathlib.Path,
+) -> contextlib.AbstractContextManager[t.Any]:
+    """Return a context manager serializing shared ``.unihan_cache`` writes.
+
+    Off xdist (no ``workerinput`` on the config) this is a no-op
+    :func:`contextlib.nullcontext`. Under an xdist worker it is an inter-process
+    :class:`filelock.FileLock` on the shared base temp dir, so concurrent workers
+    build the cache one at a time. ``filelock`` is imported lazily here so the
+    plugin still loads for downstream consumers that do not depend on it.
+    """
+    if not hasattr(config, "workerinput"):
+        return contextlib.nullcontext()
+    try:
+        from filelock import FileLock
+    except ModuleNotFoundError as exc:  # pragma: no cover - optional test extra
+        msg = "filelock is required to run these fixtures under pytest-xdist"
+        raise ModuleNotFoundError(msg) from exc
+
+    return FileLock(str(basetemp / "unihan_cache.lock"))
+
+
+@pytest.fixture(scope="session")
+def unihan_cache_lock(
+    request: pytest.FixtureRequest,
+    tmp_path_factory: pytest.TempPathFactory,
+) -> contextlib.AbstractContextManager[t.Any]:
+    """Serialize shared ``.unihan_cache`` writes across xdist workers.
+
+    A no-op in single-process runs; under xdist it locks on the shared base temp
+    so only one worker (re)builds the cache while the others wait and reuse it.
+    One lock deliberately covers both the quick and full datasets: a session
+    bootstraps both, so per-dataset locks would not reduce contention.
+    """
+    return _cache_lock(request.config, tmp_path_factory.getbasetemp().parent)
 
 
 @pytest.fixture(scope="session")
@@ -87,6 +127,7 @@ def unihan_ensure_full(
     unihan_full_path: pathlib.Path,
     unihan_full_options: UnihanOptions,
     unihan_full_packager: Packager,
+    unihan_cache_lock: contextlib.AbstractContextManager[t.Any],
 ) -> None:
     """Download and extract "full" UNIHAN, return UnihanOptions.
 
@@ -170,10 +211,10 @@ def unihan_ensure_full(
         >>> result.assert_outcomes(passed=1)
     """
     pkgr = Packager(unihan_full_options)
-    pkgr.download()
-
-    if not pkgr.options.destination.exists():
-        pkgr.export()
+    with unihan_cache_lock:
+        pkgr.download()
+        if not pkgr.options.destination.exists():
+            pkgr.export()
 
 
 @pytest.fixture(scope="session")
@@ -189,39 +230,129 @@ def unihan_quick_zip_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
 
 
 @pytest.fixture(scope="session")
+def unihan_quick_work_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
+    """Return the "quick" dataset extraction (work) directory."""
+    return unihan_quick_path / "work"
+
+
+@pytest.fixture(scope="session")
+def unihan_quick_out_path(unihan_quick_path: pathlib.Path) -> pathlib.Path:
+    """Return the "quick" dataset export (out) directory."""
+    return unihan_quick_path / "out"
+
+
+def _quick_zip_is_stale(
+    zip_path: pathlib.Path,
+    source_files: list[pathlib.Path],
+) -> bool:
+    """Return True if the cached quick zip is missing, invalid, or out of date.
+
+    Staleness is bidirectional and content-aware: the cache is stale when the
+    archive is missing or not a valid zip, when its member set differs from the
+    source set (a file added or removed), or when any source file's content
+    differs from the archived member by CRC32. zipfile stores a CRC per member,
+    so no sidecar hash file is needed.
+    """
+    if not zip_path.is_file() or not zipfile.is_zipfile(zip_path):
+        return True
+    with zipfile.ZipFile(zip_path) as zf:
+        if set(zf.namelist()) != {source.name for source in source_files}:
+            return True
+        for source in source_files:
+            archived_crc = zf.getinfo(source.name).CRC
+            if archived_crc != zlib.crc32(source.read_bytes()) & 0xFFFFFFFF:
+                return True
+    return False
+
+
+def _sync_quick_zip(
+    zip_path: pathlib.Path,
+    source_files: list[pathlib.Path],
+) -> bool:
+    """Build or refresh the quick-dataset zip; return True if it was (re)built.
+
+    Rewrites the whole archive whenever it is stale -- append mode cannot replace
+    or drop a member. The archive is written to a sibling temp file and atomically
+    moved into place, so a reader never observes a half-written zip. Returns False
+    when the cache is already current, so callers can skip invalidating derived
+    artifacts.
+    """
+    if not _quick_zip_is_stale(zip_path, source_files):
+        return False
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = zip_path.parent / (zip_path.name + ".tmp")
+    with zipfile.ZipFile(tmp_path, "w") as zf:
+        for source in source_files:
+            zf.write(source, source.name)
+    tmp_path.replace(zip_path)
+    return True
+
+
+def _sync_quick_dataset(
+    zip_path: pathlib.Path,
+    source_files: list[pathlib.Path],
+    work_dir: pathlib.Path,
+    out_dir: pathlib.Path,
+) -> bool:
+    """Sync the quick zip and, on a rebuild, drop the derived work/out layers.
+
+    Returns True when the zip was rebuilt (and the derived directories cleared so
+    extraction and export regenerate), False when the cache was already current.
+    """
+    rebuilt = _sync_quick_zip(zip_path, source_files)
+    if rebuilt:
+        shutil.rmtree(work_dir, ignore_errors=True)
+        shutil.rmtree(out_dir, ignore_errors=True)
+    return rebuilt
+
+
+@pytest.fixture(scope="session")
 def unihan_quick_zip(
-    unihan_quick_path: pathlib.Path,
     unihan_quick_zip_path: pathlib.Path,
     unihan_quick_fixture_files: list[pathlib.Path],
-) -> zipfile.ZipFile:
-    """Return zip file for "quick" test data set."""
-    files = []
-    for f in unihan_quick_fixture_files:
-        files += [f]
+    unihan_quick_work_path: pathlib.Path,
+    unihan_quick_out_path: pathlib.Path,
+    unihan_cache_lock: contextlib.AbstractContextManager[t.Any],
+) -> Generator[zipfile.ZipFile, None, None]:
+    """Yield the "quick" test data set zip, rebuilding it when sources change.
 
-    with contextlib.suppress(FileExistsError):
-        unihan_quick_zip_path.parent.mkdir(parents=True)
+    The cached archive is refreshed (by CRC32) whenever a bundled quick source
+    file changes, so edits propagate without manually clearing ``.unihan_cache``.
+    On a rebuild the derived ``work/`` and ``out/`` artifacts are cleared so
+    :class:`~unihan_etl.core.Packager` re-extracts and re-exports. The yielded
+    handle is open for reading and closed on teardown.
 
-    zf = zipfile.ZipFile(unihan_quick_zip_path, "a")
-    for _f in unihan_quick_fixture_files:
-        if _f.name not in zf.namelist():
-            zf.write(_f, _f.name)
-    zf.close()
+    Teardown
+    --------
+    Closes the yielded archive handle.
+    """
+    # work/ and out/ are the same fixtures unihan_quick_options uses, so the
+    # cleared dirs always match the extraction/export targets. Cleared on a
+    # rebuild so extract/export regenerate from the refreshed archive.
+    with unihan_cache_lock:
+        _sync_quick_dataset(
+            unihan_quick_zip_path,
+            unihan_quick_fixture_files,
+            unihan_quick_work_path,
+            unihan_quick_out_path,
+        )
 
-    return zf
+    with zipfile.ZipFile(unihan_quick_zip_path) as zf:
+        yield zf
 
 
 @pytest.fixture(scope="session")
 def unihan_quick_options(
-    unihan_quick_path: pathlib.Path,
     unihan_quick_zip: zipfile.ZipFile,
     unihan_quick_zip_path: pathlib.Path,
+    unihan_quick_work_path: pathlib.Path,
+    unihan_quick_out_path: pathlib.Path,
 ) -> UnihanOptions:
     """Return UnihanOptions for "quick" test data set."""
     return UnihanOptions(
-        work_dir=unihan_quick_path / "work",
+        work_dir=unihan_quick_work_path,
         zip_path=unihan_quick_zip_path,
-        destination=unihan_quick_path / "out" / "unihan.csv",
+        destination=unihan_quick_out_path / "unihan.csv",
     )
 
 
@@ -239,6 +370,7 @@ def unihan_ensure_quick(
     unihan_quick_path: pathlib.Path,
     unihan_quick_options: UnihanOptions,
     unihan_quick_packager: Packager,
+    unihan_cache_lock: contextlib.AbstractContextManager[t.Any],
 ) -> None:
     """Return a small, but effective portion of UNIHAN, return a UnihanOptions.
 
@@ -326,10 +458,10 @@ def unihan_ensure_quick(
         >>> result.assert_outcomes(passed=1)
     """
     pkgr = Packager(unihan_quick_options)
-    pkgr.download()
-
-    if not pkgr.options.destination.exists():
-        pkgr.export()
+    with unihan_cache_lock:
+        pkgr.download()
+        if not pkgr.options.destination.exists():
+            pkgr.export()
 
 
 @pytest.fixture(scope="session")
@@ -449,12 +581,18 @@ def unihan_mock_zip_path(
 def unihan_mock_zip(
     unihan_mock_zip_path: pathlib.Path,
     unihan_quick_data: str,
-) -> zipfile.ZipFile:
-    """Return Unihan zipfile."""
-    zf = zipfile.ZipFile(str(unihan_mock_zip_path), "a")
-    zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
-    zf.close()
-    return zf
+) -> Generator[zipfile.ZipFile, None, None]:
+    """Yield a mock Unihan zipfile, open for reading and closed on teardown.
+
+    Teardown
+    --------
+    Closes the yielded archive handle.
+    """
+    with zipfile.ZipFile(str(unihan_mock_zip_path), "a") as zf:
+        if "Unihan_Readings.txt" not in zf.namelist():
+            zf.writestr("Unihan_Readings.txt", unihan_quick_data.encode("utf-8"))
+    with zipfile.ZipFile(str(unihan_mock_zip_path)) as zf:
+        yield zf
 
 
 @pytest.fixture(scope="session")
