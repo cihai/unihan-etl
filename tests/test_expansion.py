@@ -31,24 +31,73 @@ def test_expand_kCantonese(unihan_quick_expanded_data: ExpandedData) -> None:
         assert AssertionError("Missing U+342B kCantonese")
 
 
+class ExpandFieldFixture(t.NamedTuple):
+    """Fixture for test_expand."""
+
+    test_id: str
+    ucn: str
+    field: str
+    expected: list[str]
+
+
+EXPAND_FIELD_FIXTURES: list[ExpandFieldFixture] = [
+    ExpandFieldFixture(
+        test_id="U+37AE-kJapaneseKun",
+        ucn="U+37AE",
+        field="kJapaneseKun",
+        expected=["DERU", "DASU"],
+    ),
+    ExpandFieldFixture(
+        test_id="U+37AE-kJapaneseOn",
+        ucn="U+37AE",
+        field="kJapaneseOn",
+        expected=["SHUTSU", "SUI"],
+    ),
+    ExpandFieldFixture(
+        test_id="U+37AE-kDefinition",
+        ucn="U+37AE",
+        field="kDefinition",
+        expected=[
+            "variant of 出 U+51FA, to go out, send out",
+            "to stand",
+            "to produce",
+        ],
+    ),
+    ExpandFieldFixture(
+        test_id="U+4FFE-kHangul",
+        ucn="U+4FFE",
+        field="kHangul",
+        expected=["비"],
+    ),
+    ExpandFieldFixture(
+        test_id="U+3427-kJapanese",
+        ucn="U+3427",
+        field="kJapanese",
+        expected=["ダイ", "テイ", "ただ", "ついで", "やしき"],
+    ),
+    ExpandFieldFixture(
+        test_id="U+91B1-kKorean",
+        ucn="U+91B1",
+        field="kKorean",
+        expected=["PAL"],
+    ),
+    ExpandFieldFixture(
+        test_id="U+91B1-kTang",
+        ucn="U+91B1",
+        field="kTang",
+        expected=[r"pɑt"],  # NOQA: RUF001
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "field", "expected"),
-    [
-        ("U+37AE", "kJapaneseKun", ["DERU", "DASU"]),
-        ("U+37AE", "kJapaneseOn", ["SHUTSU", "SUI"]),
-        (
-            "U+37AE",
-            "kDefinition",
-            ["variant of 出 U+51FA, to go out, send out", "to stand", "to produce"],
-        ),
-        ("U+4FFE", "kHangul", ["비"]),
-        ("U+3427", "kJapanese", ["ダイ", "テイ", "ただ", "ついで", "やしき"]),
-        ("U+91B1", "kKorean", ["PAL"]),
-        ("U+91B1", "kTang", [r"pɑt"]),  # NOQA: RUF001
-    ],
+    ExpandFieldFixture._fields,
+    EXPAND_FIELD_FIXTURES,
+    ids=[f.test_id for f in EXPAND_FIELD_FIXTURES],
 )
 def test_expand(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     field: str,
     expected: list[str],
@@ -61,15 +110,36 @@ def test_expand(
     assert set(item[field]) == set(expected)
 
 
+class ExpandKMandarinFixture(t.NamedTuple):
+    """Fixture for test_expand_kMandarin."""
+
+    test_id: str
+    ucn: str
+    expected: dict[str, str]
+
+
+EXPAND_KMANDARIN_FIXTURES: list[ExpandKMandarinFixture] = [
+    ExpandKMandarinFixture(
+        test_id="U+346E",
+        ucn="U+346E",
+        expected={"zh-Hans": "hún", "zh-Hant": "hún"},  # U+346E	kMandarin	hún
+    ),
+    ExpandKMandarinFixture(
+        test_id="U+4FFE",
+        ucn="U+4FFE",
+        expected={"zh-Hans": "bǐ", "zh-Hant": "bì"},  # U+4FFE	kMandarin	bǐ bì
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        ("U+346E", {"zh-Hans": "hún", "zh-Hant": "hún"}),  # U+346E	kMandarin	hún
-        ("U+4FFE", {"zh-Hans": "bǐ", "zh-Hant": "bì"}),  # U+4FFE	kMandarin	bǐ bì
-    ],
+    ExpandKMandarinFixture._fields,
+    EXPAND_KMANDARIN_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KMANDARIN_FIXTURES],
 )
 def test_expand_kMandarin(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: dict[str, str],
 ) -> None:
@@ -86,15 +156,36 @@ def test_expand_kMandarin(
     assert item["kMandarin"] == expected
 
 
+class ExpandKTotalStrokesFixture(t.NamedTuple):
+    """Fixture for test_expand_kTotalStrokes."""
+
+    test_id: str
+    ucn: str
+    expected: dict[str, int]
+
+
+EXPAND_KTOTAL_STROKES_FIXTURES: list[ExpandKTotalStrokesFixture] = [
+    ExpandKTotalStrokesFixture(
+        test_id="U+8303",
+        ucn="U+8303",
+        expected={"zh-Hans": 8, "zh-Hant": 9},  # U+8303	kTotalStrokes	8 9
+    ),
+    ExpandKTotalStrokesFixture(
+        test_id="U+34D6",
+        ucn="U+34D6",
+        expected={"zh-Hans": 13, "zh-Hant": 13},  # U+34D6	kTotalStrokes	13
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        ("U+8303", {"zh-Hans": 8, "zh-Hant": 9}),  # U+8303	kTotalStrokes	8 9
-        ("U+34D6", {"zh-Hans": 13, "zh-Hant": 13}),  # U+34D6	kTotalStrokes	13
-    ],
+    ExpandKTotalStrokesFixture._fields,
+    EXPAND_KTOTAL_STROKES_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KTOTAL_STROKES_FIXTURES],
 )
 def test_expand_kTotalStrokes(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: dict[str, int],
 ) -> None:
@@ -111,85 +202,123 @@ def test_expand_kTotalStrokes(
     assert item["kTotalStrokes"] == expected
 
 
+class ExpandKIRGHanyuDaZidianFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRGHanyuDaZidian."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KIRGHANYU_DA_ZIDIAN_FIXTURES: list[ExpandKIRGHanyuDaZidianFixture] = [
+    # U+34AD      kIRGHanyuDaZidian       10273.120
+    ExpandKIRGHanyuDaZidianFixture(
+        test_id="U+34AD",
+        ucn="U+34AD",
+        expected=[{"volume": 1, "page": 273, "character": 12, "virtual": 0}],
+    ),
+    # U+34AF      kIRGHanyuDaZidian       10275.091
+    ExpandKIRGHanyuDaZidianFixture(
+        test_id="U+34AF",
+        ucn="U+34AF",
+        expected=[{"volume": 1, "page": 275, "character": 9, "virtual": 1}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+34AD      kIRGHanyuDaZidian       10273.120
-        ("U+34AD", [{"volume": 1, "page": 273, "character": 12, "virtual": 0}]),
-        # U+34AF      kIRGHanyuDaZidian       10275.091
-        ("U+34AF", [{"volume": 1, "page": 275, "character": 9, "virtual": 1}]),
-    ],
+    ExpandKIRGHanyuDaZidianFixture._fields,
+    EXPAND_KIRGHANYU_DA_ZIDIAN_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGHANYU_DA_ZIDIAN_FIXTURES],
 )
 def test_expand_kIRGHanyuDaZidian(
     ucn: str,
     expected: ExpandedData,
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
 ) -> None:
     """Test expansion of kIRGHanyuDaZidian."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
     assert item["kIRGHanyuDaZidian"] == expected
 
 
+class ExpandKHanyuPinyinFixture(t.NamedTuple):
+    """Fixture for test_expand_kHanyuPinyin."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KHANYU_PINYIN_FIXTURES: list[ExpandKHanyuPinyinFixture] = [
+    ExpandKHanyuPinyinFixture(
+        test_id="U+5EFE",
+        ucn="U+5EFE",
+        expected=[
+            {  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
+                "locations": [
+                    {"volume": 1, "page": 513, "character": 11, "virtual": 0},
+                    {"volume": 1, "page": 514, "character": 1, "virtual": 0},
+                    {"volume": 1, "page": 514, "character": 2, "virtual": 0},
+                ],
+                "readings": ["gǒng"],
+            },
+        ],
+    ),
+    ExpandKHanyuPinyinFixture(
+        test_id="U+5364",
+        ucn="U+5364",
+        expected=[
+            {  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
+                "locations": [
+                    {"volume": 1, "page": 93, "character": 13, "virtual": 0},
+                ],
+                "readings": ["xī", "lǔ"],
+            },
+            {
+                "locations": [
+                    {"volume": 7, "page": 4609, "character": 2, "virtual": 0},
+                ],
+                "readings": ["lǔ", "xī"],
+            },
+        ],
+    ),
+    ExpandKHanyuPinyinFixture(
+        test_id="U+34D8",
+        ucn="U+34D8",
+        expected=[
+            {  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
+                "locations": [
+                    {"volume": 1, "page": 278, "character": 8, "virtual": 0},
+                    {"volume": 1, "page": 278, "character": 9, "virtual": 0},
+                ],
+                "readings": ["sù"],
+            },
+        ],
+    ),
+    ExpandKHanyuPinyinFixture(
+        test_id="U+34CE",
+        ucn="U+34CE",
+        expected=[
+            {  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
+                "locations": [
+                    {"volume": 1, "page": 297, "character": 26, "virtual": 0},
+                ],
+                "readings": ["qīn", "qìn", "qǐn"],
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        (
-            "U+5EFE",
-            [
-                {  # U+5EFE	kHanyuPinyin	10513.110,10514.010,10514.020:gǒng
-                    "locations": [
-                        {"volume": 1, "page": 513, "character": 11, "virtual": 0},
-                        {"volume": 1, "page": 514, "character": 1, "virtual": 0},
-                        {"volume": 1, "page": 514, "character": 2, "virtual": 0},
-                    ],
-                    "readings": ["gǒng"],
-                },
-            ],
-        ),
-        (
-            "U+5364",
-            [
-                {  # U+5364	kHanyuPinyin	10093.130:xī,lǔ 74609.020:lǔ,xī
-                    "locations": [
-                        {"volume": 1, "page": 93, "character": 13, "virtual": 0},
-                    ],
-                    "readings": ["xī", "lǔ"],
-                },
-                {
-                    "locations": [
-                        {"volume": 7, "page": 4609, "character": 2, "virtual": 0},
-                    ],
-                    "readings": ["lǔ", "xī"],
-                },
-            ],
-        ),
-        (
-            "U+34D8",
-            [
-                {  # U+34D8	kHanyuPinyin	10278.080,10278.090:sù
-                    "locations": [
-                        {"volume": 1, "page": 278, "character": 8, "virtual": 0},
-                        {"volume": 1, "page": 278, "character": 9, "virtual": 0},
-                    ],
-                    "readings": ["sù"],
-                },
-            ],
-        ),
-        (
-            "U+34CE",
-            [
-                {  # U+34CE	kHanyuPinyin	10297.260:qīn,qìn,qǐn
-                    "locations": [
-                        {"volume": 1, "page": 297, "character": 26, "virtual": 0},
-                    ],
-                    "readings": ["qīn", "qìn", "qǐn"],
-                },
-            ],
-        ),
-    ],
+    ExpandKHanyuPinyinFixture._fields,
+    EXPAND_KHANYU_PINYIN_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KHANYU_PINYIN_FIXTURES],
 )
 def test_expand_kHanyuPinyin(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -220,47 +349,63 @@ def test_expand_kHanyuPinyin(
     assert item["kHanyuPinyin"] == expected
 
 
+class ExpandHanYuFixture(t.NamedTuple):
+    """Fixture for test_expand_HanYu."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_HAN_YU_FIXTURES: list[ExpandHanYuFixture] = [
+    ExpandHanYuFixture(
+        test_id="U+9BF5",
+        ucn="U+9BF5",
+        expected=[
+            {  # U+9BF5 kHanYu  74699.122
+                "volume": 7,
+                "page": 4699,
+                "character": 12,
+                "virtual": 2,
+            },
+        ],
+    ),
+    ExpandHanYuFixture(
+        test_id="U+34B9",
+        ucn="U+34B9",
+        expected=[
+            {  # U+34B9	kHanYu	10254.060 10254.100
+                "volume": 1,
+                "page": 254,
+                "character": 6,
+                "virtual": 0,
+            },
+            {"volume": 1, "page": 254, "character": 10, "virtual": 0},
+        ],
+    ),
+    ExpandHanYuFixture(
+        test_id="U+34AD",
+        ucn="U+34AD",
+        expected=[
+            {  # U+34AD	kHanYu	10273.120
+                "volume": 1,
+                "page": 273,
+                "character": 12,
+                "virtual": 0,
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        (
-            "U+9BF5",
-            [
-                {  # U+9BF5 kHanYu  74699.122
-                    "volume": 7,
-                    "page": 4699,
-                    "character": 12,
-                    "virtual": 2,
-                },
-            ],
-        ),
-        (
-            "U+34B9",
-            [
-                {  # U+34B9	kHanYu	10254.060 10254.100
-                    "volume": 1,
-                    "page": 254,
-                    "character": 6,
-                    "virtual": 0,
-                },
-                {"volume": 1, "page": 254, "character": 10, "virtual": 0},
-            ],
-        ),
-        (
-            "U+34AD",
-            [
-                {  # U+34AD	kHanYu	10273.120
-                    "volume": 1,
-                    "page": 273,
-                    "character": 12,
-                    "virtual": 0,
-                },
-            ],
-        ),
-    ],
+    ExpandHanYuFixture._fields,
+    EXPAND_HAN_YU_FIXTURES,
+    ids=[f.test_id for f in EXPAND_HAN_YU_FIXTURES],
 )
 def test_expand_HanYu(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -287,66 +432,82 @@ def test_expand_HanYu(
     assert item["kHanYu"] == expected
 
 
+class ExpandKRSAdobeJapan16Fixture(t.NamedTuple):
+    """Fixture for test_expand_kRSAdobe_Japan1_6."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KRSADOBE_JAPAN16_FIXTURES: list[ExpandKRSAdobeJapan16Fixture] = [
+    # U+4E9D      kRSAdobe_Japan1_6       C+17245+7.2.6 C+17245+28.2.6
+    ExpandKRSAdobeJapan16Fixture(
+        test_id="U+4E9D",
+        ucn="U+4E9D",
+        expected=[
+            {
+                "type": "C",
+                "cid": 17245,
+                "radical": 7,
+                "strokes": 2,
+                "strokes-residue": 6,
+            },
+            {
+                "type": "C",
+                "cid": 17245,
+                "radical": 28,
+                "strokes": 2,
+                "strokes-residue": 6,
+            },
+        ],
+    ),
+    # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
+    ExpandKRSAdobeJapan16Fixture(
+        test_id="U+4E9E",
+        ucn="U+4E9E",
+        expected=[
+            {
+                "type": "C",
+                "cid": 4108,
+                "radical": 7,
+                "strokes": 2,
+                "strokes-residue": 6,
+            },
+        ],
+    ),
+    # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
+    ExpandKRSAdobeJapan16Fixture(
+        test_id="U+4E30",
+        ucn="U+4E30",
+        expected=[
+            {
+                "type": "C",
+                "cid": 14301,
+                "radical": 2,
+                "strokes": 1,
+                "strokes-residue": 3,
+            },
+            {
+                "type": "V",
+                "cid": 15386,
+                "radical": 2,
+                "strokes": 1,
+                "strokes-residue": 3,
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+4E9D      kRSAdobe_Japan1_6       C+17245+7.2.6 C+17245+28.2.6
-        (
-            "U+4E9D",
-            [
-                {
-                    "type": "C",
-                    "cid": 17245,
-                    "radical": 7,
-                    "strokes": 2,
-                    "strokes-residue": 6,
-                },
-                {
-                    "type": "C",
-                    "cid": 17245,
-                    "radical": 28,
-                    "strokes": 2,
-                    "strokes-residue": 6,
-                },
-            ],
-        ),
-        # U+4E9E      kRSAdobe_Japan1_6       C+4108+7.2.6
-        (
-            "U+4E9E",
-            [
-                {
-                    "type": "C",
-                    "cid": 4108,
-                    "radical": 7,
-                    "strokes": 2,
-                    "strokes-residue": 6,
-                },
-            ],
-        ),
-        # U+4E30      kRSAdobe_Japan1_6       C+14301+2.1.3 V+15386+2.1.3
-        (
-            "U+4E30",
-            [
-                {
-                    "type": "C",
-                    "cid": 14301,
-                    "radical": 2,
-                    "strokes": 1,
-                    "strokes-residue": 3,
-                },
-                {
-                    "type": "V",
-                    "cid": 15386,
-                    "radical": 2,
-                    "strokes": 1,
-                    "strokes-residue": 3,
-                },
-            ],
-        ),
-    ],
+    ExpandKRSAdobeJapan16Fixture._fields,
+    EXPAND_KRSADOBE_JAPAN16_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KRSADOBE_JAPAN16_FIXTURES],
 )
 def test_expand_kRSAdobe_Japan1_6(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -375,67 +536,84 @@ def test_expand_kRSAdobe_Japan1_6(
     assert item["kRSAdobe_Japan1_6"] == expected
 
 
+class ExpandKRSUnihanFixture(t.NamedTuple):
+    """Fixture for test_expand_kRSUnihan."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KRSUNIHAN_FIXTURES: list[ExpandKRSUnihanFixture] = [
+    # U+3491      kRSUnicode      9.13
+    ExpandKRSUnihanFixture(
+        test_id="U+3491",
+        ucn="U+3491",
+        expected=[
+            {
+                "radical": 9,
+                "strokes": 13,
+                "simplified": False,
+            },
+        ],
+    ),
+    # U+4336       kRSUnicode      120'.3
+    ExpandKRSUnihanFixture(
+        test_id="U+4336",
+        ucn="U+4336",
+        expected=[
+            {
+                "radical": 120,
+                "strokes": 3,
+                "simplified": expansion.kRSSimplifiedType.Chinese,
+            },
+        ],
+    ),
+    # U+2CC7B	kRSUnicode	182''.5 117.4
+    ExpandKRSUnihanFixture(
+        test_id="U+2CC7B",
+        ucn="U+2CC7B",
+        expected=[
+            {
+                "radical": 182,
+                "strokes": 5,
+                "simplified": expansion.kRSSimplifiedType.NonChinese,
+            },
+            {
+                "radical": 117,
+                "strokes": 4,
+                "simplified": False,
+            },
+        ],
+    ),
+    # U+31E22	kRSUnicode	118.11 212'''.6
+    ExpandKRSUnihanFixture(
+        test_id="U+31E22",
+        ucn="U+31E22",
+        expected=[
+            {
+                "radical": 118,
+                "strokes": 11,
+                "simplified": False,
+            },
+            {
+                "radical": 212,
+                "strokes": 6,
+                "simplified": expansion.kRSSimplifiedType.SecondNonChinese,
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+3491      kRSUnicode      9.13
-        (
-            "U+3491",
-            [
-                {
-                    "radical": 9,
-                    "strokes": 13,
-                    "simplified": False,
-                },
-            ],
-        ),
-        # U+4336       kRSUnicode      120'.3
-        (
-            "U+4336",
-            [
-                {
-                    "radical": 120,
-                    "strokes": 3,
-                    "simplified": expansion.kRSSimplifiedType.Chinese,
-                },
-            ],
-        ),
-        # U+2CC7B	kRSUnicode	182''.5 117.4
-        (
-            "U+2CC7B",
-            [
-                {
-                    "radical": 182,
-                    "strokes": 5,
-                    "simplified": expansion.kRSSimplifiedType.NonChinese,
-                },
-                {
-                    "radical": 117,
-                    "strokes": 4,
-                    "simplified": False,
-                },
-            ],
-        ),
-        # U+31E22	kRSUnicode	118.11 212'''.6
-        (
-            "U+31E22",
-            [
-                {
-                    "radical": 118,
-                    "strokes": 11,
-                    "simplified": False,
-                },
-                {
-                    "radical": 212,
-                    "strokes": 6,
-                    "simplified": expansion.kRSSimplifiedType.SecondNonChinese,
-                },
-            ],
-        ),
-    ],
+    ExpandKRSUnihanFixture._fields,
+    EXPAND_KRSUNIHAN_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KRSUNIHAN_FIXTURES],
 )
 def test_expand_kRSUnihan(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -454,35 +632,55 @@ def test_expand_kRSUnihan(
     assert item["kRSUnicode"] == expected
 
 
+class ExpandKCheungBauerFixture(t.NamedTuple):
+    """Fixture for test_expand_kCheungBauer."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KCHEUNG_BAUER_FIXTURES: list[ExpandKCheungBauerFixture] = [
+    # U+34BC      kCheungBauer    055/08;TLBO;mang4
+    ExpandKCheungBauerFixture(
+        test_id="U+34BC",
+        ucn="U+34BC",
+        expected=[
+            {"radical": 55, "strokes": 8, "cangjie": "TLBO", "readings": ["mang4"]}
+        ],
+    ),
+    # U+356C  kCheungBauer    030/04;;gung1
+    ExpandKCheungBauerFixture(
+        test_id="U+356C",
+        ucn="U+356C",
+        expected=[
+            {"radical": 30, "strokes": 4, "cangjie": None, "readings": ["gung1"]}
+        ],
+    ),
+    # U+3598  kCheungBauer    030/07;RMMV;san2,seon2
+    ExpandKCheungBauerFixture(
+        test_id="U+3598",
+        ucn="U+3598",
+        expected=[
+            {
+                "radical": 30,
+                "strokes": 7,
+                "cangjie": "RMMV",
+                "readings": ["san2", "seon2"],
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+34BC      kCheungBauer    055/08;TLBO;mang4
-        (
-            "U+34BC",
-            [{"radical": 55, "strokes": 8, "cangjie": "TLBO", "readings": ["mang4"]}],
-        ),
-        # U+356C  kCheungBauer    030/04;;gung1
-        (
-            "U+356C",
-            [{"radical": 30, "strokes": 4, "cangjie": None, "readings": ["gung1"]}],
-        ),
-        # U+3598  kCheungBauer    030/07;RMMV;san2,seon2
-        (
-            "U+3598",
-            [
-                {
-                    "radical": 30,
-                    "strokes": 7,
-                    "cangjie": "RMMV",
-                    "readings": ["san2", "seon2"],
-                },
-            ],
-        ),
-    ],
+    ExpandKCheungBauerFixture._fields,
+    EXPAND_KCHEUNG_BAUER_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KCHEUNG_BAUER_FIXTURES],
 )
 def test_expand_kCheungBauer(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -502,15 +700,32 @@ def test_expand_kCheungBauer(
     assert item["kCheungBauer"] == expected
 
 
+class ExpandKCihaiTFixture(t.NamedTuple):
+    """Fixture for test_expand_kCihaiT."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KCIHAI_T_FIXTURES: list[ExpandKCihaiTFixture] = [
+    # U+34D6      kCihaiT 170.105
+    ExpandKCihaiTFixture(
+        test_id="U+34D6",
+        ucn="U+34D6",
+        expected=[{"page": 170, "row": 1, "character": 5}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+34D6      kCihaiT 170.105
-        ("U+34D6", [{"page": 170, "row": 1, "character": 5}]),
-    ],
+    ExpandKCihaiTFixture._fields,
+    EXPAND_KCIHAI_T_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KCIHAI_T_FIXTURES],
 )
 def test_expand_kCihaiT(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -527,17 +742,38 @@ def test_expand_kCihaiT(
     assert item["kCihaiT"] == expected
 
 
+class ExpandKDaeJaweonFixture(t.NamedTuple):
+    """Fixture for test_expand_kDaeJaweon."""
+
+    test_id: str
+    ucn: str
+    expected: dict[str, int]
+
+
+EXPAND_KDAE_JAWEON_FIXTURES: list[ExpandKDaeJaweonFixture] = [
+    # U+9F7C  kDaeJaweon      2075.100
+    ExpandKDaeJaweonFixture(
+        test_id="U+9F7C",
+        ucn="U+9F7C",
+        expected={"page": 2075, "character": 10, "virtual": 0},
+    ),
+    # U+4E37  kDaeJaweon      0162.211
+    ExpandKDaeJaweonFixture(
+        test_id="U+4E37",
+        ucn="U+4E37",
+        expected={"page": 162, "character": 21, "virtual": 1},
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+9F7C  kDaeJaweon      2075.100
-        ("U+9F7C", {"page": 2075, "character": 10, "virtual": 0}),
-        # U+4E37  kDaeJaweon      0162.211
-        ("U+4E37", {"page": 162, "character": 21, "virtual": 1}),
-    ],
+    ExpandKDaeJaweonFixture._fields,
+    EXPAND_KDAE_JAWEON_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KDAE_JAWEON_FIXTURES],
 )
 def test_expand_kDaeJaweon(
     unihan_quick_expanded_data: list[dict[str, t.Any]],
+    test_id: str,
     ucn: str,
     expected: dict[str, int],
 ) -> None:
@@ -554,19 +790,44 @@ def test_expand_kDaeJaweon(
     assert item["kDaeJaweon"] == expected
 
 
+class ExpandKIICoreFixture(t.NamedTuple):
+    """Fixture for test_expand_kIICore."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KIICORE_FIXTURES: list[ExpandKIICoreFixture] = [
+    # U+48D3  kIICore CG
+    ExpandKIICoreFixture(
+        test_id="U+48D3",
+        ucn="U+48D3",
+        expected=[{"priority": "C", "sources": ["G"]}],
+    ),
+    # U+4E09  kIICore AGTJHKMP
+    ExpandKIICoreFixture(
+        test_id="U+4E09",
+        ucn="U+4E09",
+        expected=[{"priority": "A", "sources": ["G", "T", "J", "H", "K", "M", "P"]}],
+    ),
+    # U+4E0E  kIICore AGJ
+    ExpandKIICoreFixture(
+        test_id="U+4E0E",
+        ucn="U+4E0E",
+        expected=[{"priority": "A", "sources": ["G", "J"]}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+48D3  kIICore CG
-        ("U+48D3", [{"priority": "C", "sources": ["G"]}]),
-        # U+4E09  kIICore AGTJHKMP
-        ("U+4E09", [{"priority": "A", "sources": ["G", "T", "J", "H", "K", "M", "P"]}]),
-        # U+4E0E  kIICore AGJ
-        ("U+4E0E", [{"priority": "A", "sources": ["G", "J"]}]),
-    ],
+    ExpandKIICoreFixture._fields,
+    EXPAND_KIICORE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIICORE_FIXTURES],
 )
 def test_expand_kIICore(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -583,17 +844,38 @@ def test_expand_kIICore(
     assert item["kIICore"] == expected
 
 
+class ExpandKIRGDaeJaweonFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRGDaeJaweon."""
+
+    test_id: str
+    ucn: str
+    expected: list[dict[str, int]]
+
+
+EXPAND_KIRGDAE_JAWEON_FIXTURES: list[ExpandKIRGDaeJaweonFixture] = [
+    # U+4E07  kIRGDaeJaweon   0137.070
+    ExpandKIRGDaeJaweonFixture(
+        test_id="U+4E07",
+        ucn="U+4E07",
+        expected=[{"page": 137, "character": 7, "virtual": 0}],
+    ),
+    # U+4E37  kIRGDaeJaweon   0162.211
+    ExpandKIRGDaeJaweonFixture(
+        test_id="U+4E37",
+        ucn="U+4E37",
+        expected=[{"page": 162, "character": 21, "virtual": 1}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+4E07  kIRGDaeJaweon   0137.070
-        ("U+4E07", [{"page": 137, "character": 7, "virtual": 0}]),
-        # U+4E37  kIRGDaeJaweon   0162.211
-        ("U+4E37", [{"page": 162, "character": 21, "virtual": 1}]),
-    ],
+    ExpandKIRGDaeJaweonFixture._fields,
+    EXPAND_KIRGDAE_JAWEON_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGDAE_JAWEON_FIXTURES],
 )
 def test_expand_kIRGDaeJaweon(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: list[dict[str, int]],
 ) -> None:
@@ -602,21 +884,50 @@ def test_expand_kIRGDaeJaweon(
     assert item["kIRGDaeJaweon"] == expected
 
 
+class ExpandKFennFixture(t.NamedTuple):
+    """Fixture for test_expand_kFenn."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KFENN_FIXTURES: list[ExpandKFennFixture] = [
+    # U+342C      kFenn   871P
+    ExpandKFennFixture(
+        test_id="U+342C",
+        ucn="U+342C",
+        expected=[{"phonetic": "871", "frequency": "P"}],
+    ),
+    # U+3431      kFenn   281K
+    ExpandKFennFixture(
+        test_id="U+3431",
+        ucn="U+3431",
+        expected=[{"phonetic": "281", "frequency": "K"}],
+    ),
+    # U+9918      kFenn   31A
+    ExpandKFennFixture(
+        test_id="U+9918",
+        ucn="U+9918",
+        expected=[{"phonetic": "31", "frequency": "A"}],
+    ),
+    # U+807D      kFenn   381aA
+    ExpandKFennFixture(
+        test_id="U+807D",
+        ucn="U+807D",
+        expected=[{"phonetic": "381a", "frequency": "A"}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+342C      kFenn   871P
-        ("U+342C", [{"phonetic": "871", "frequency": "P"}]),
-        # U+3431      kFenn   281K
-        ("U+3431", [{"phonetic": "281", "frequency": "K"}]),
-        # U+9918      kFenn   31A
-        ("U+9918", [{"phonetic": "31", "frequency": "A"}]),
-        # U+807D      kFenn   381aA
-        ("U+807D", [{"phonetic": "381a", "frequency": "A"}]),
-    ],
+    ExpandKFennFixture._fields,
+    EXPAND_KFENN_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KFENN_FIXTURES],
 )
 def test_expand_kFenn(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -625,35 +936,54 @@ def test_expand_kFenn(
     assert item["kFenn"] == expected
 
 
+class ExpandKHanyuPinluFixture(t.NamedTuple):
+    """Fixture for test_expand_kHanyuPinlu."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KHANYU_PINLU_FIXTURES: list[ExpandKHanyuPinluFixture] = [
+    # U+4E0B      kHanyuPinlu     xià(6430) xia(249)
+    ExpandKHanyuPinluFixture(
+        test_id="U+4E0B",
+        ucn="U+4E0B",
+        expected=[
+            {"phonetic": "xià", "frequency": 6430},
+            {"phonetic": "xia", "frequency": 249},
+        ],
+    ),
+    # U+4E09      kHanyuPinlu     sān(3030)
+    ExpandKHanyuPinluFixture(
+        test_id="U+4E09",
+        ucn="U+4E09",
+        expected=[{"phonetic": "sān", "frequency": 3030}],
+    ),
+    # U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
+    ExpandKHanyuPinluFixture(
+        test_id="U+55EF",
+        ucn="U+55EF",
+        expected=[
+            {"phonetic": "ń", "frequency": 48},
+            {"phonetic": "ň", "frequency": 48},
+            {"phonetic": "ǹ", "frequency": 48},
+            {"phonetic": "ńg", "frequency": 48},
+            {"phonetic": "ňg", "frequency": 48},
+            {"phonetic": "ǹg", "frequency": 48},
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+4E0B      kHanyuPinlu     xià(6430) xia(249)
-        (
-            "U+4E0B",
-            [
-                {"phonetic": "xià", "frequency": 6430},
-                {"phonetic": "xia", "frequency": 249},
-            ],
-        ),
-        # U+4E09      kHanyuPinlu     sān(3030)
-        ("U+4E09", [{"phonetic": "sān", "frequency": 3030}]),
-        # U+55EF	kHanyuPinlu	ń(48) ň(48) ǹ(48) ńg(48) ňg(48) ǹg(48)
-        (
-            "U+55EF",
-            [
-                {"phonetic": "ń", "frequency": 48},
-                {"phonetic": "ň", "frequency": 48},
-                {"phonetic": "ǹ", "frequency": 48},
-                {"phonetic": "ńg", "frequency": 48},
-                {"phonetic": "ňg", "frequency": 48},
-                {"phonetic": "ǹg", "frequency": 48},
-            ],
-        ),
-    ],
+    ExpandKHanyuPinluFixture._fields,
+    EXPAND_KHANYU_PINLU_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KHANYU_PINLU_FIXTURES],
 )
 def test_expand_kHanyuPinlu(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -670,33 +1000,48 @@ def test_expand_kHanyuPinlu(
     assert item["kHanyuPinlu"] == expected
 
 
+class ExpandKHDZRadBreakFixture(t.NamedTuple):
+    """Fixture for test_expand_kHDZRadBreak."""
+
+    test_id: str
+    ucn: str
+    expected: dict[str, t.Any]
+
+
+EXPAND_KHDZRAD_BREAK_FIXTURES: list[ExpandKHDZRadBreakFixture] = [
+    # U+4E00  kHDZRadBreak    ⼀[U+2F00]:10001.010
+    ExpandKHDZRadBreakFixture(
+        test_id="U+4E00",
+        ucn="U+4E00",
+        expected={
+            "radical": "⼀",
+            "ucn": "U+2F00",
+            "location": {"volume": 1, "page": 1, "character": 1, "virtual": False},
+        },
+    ),
+    # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
+    ExpandKHDZRadBreakFixture(
+        test_id="U+4E59",
+        ucn="U+4E59",
+        expected={
+            "radical": "⼄",
+            "ucn": "U+2F04",
+            "location": {"volume": 1, "page": 47, "character": 4, "virtual": False},
+        },
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+4E00  kHDZRadBreak    ⼀[U+2F00]:10001.010
-        (
-            "U+4E00",
-            {
-                "radical": "⼀",
-                "ucn": "U+2F00",
-                "location": {"volume": 1, "page": 1, "character": 1, "virtual": False},
-            },
-        ),
-        # U+4E59  kHDZRadBreak    ⼄[U+2F04]:10047.040
-        (
-            "U+4E59",
-            {
-                "radical": "⼄",
-                "ucn": "U+2F04",
-                "location": {"volume": 1, "page": 47, "character": 4, "virtual": False},
-            },
-        ),
-    ],
+    ExpandKHDZRadBreakFixture._fields,
+    EXPAND_KHDZRAD_BREAK_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KHDZRAD_BREAK_FIXTURES],
 )
 def test_expand_kHDZRadBreak(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
-    expected: ExpandedData,
+    expected: dict[str, t.Any],
 ) -> None:
     """Test expansion of kHDZRadBreak.
 
@@ -710,17 +1055,38 @@ def test_expand_kHDZRadBreak(
     assert item["kHDZRadBreak"] == expected
 
 
+class ExpandKSBGYFixture(t.NamedTuple):
+    """Fixture for test_expand_kSBGY."""
+
+    test_id: str
+    ucn: str
+    expected: ExpandedData
+
+
+EXPAND_KSBGY_FIXTURES: list[ExpandKSBGYFixture] = [
+    # U+349D      kSBGY   479.12 495.09
+    ExpandKSBGYFixture(
+        test_id="U+349D",
+        ucn="U+349D",
+        expected=[{"page": 479, "character": 12}, {"page": 495, "character": 9}],
+    ),
+    # U+349F      kSBGY   296.38
+    ExpandKSBGYFixture(
+        test_id="U+349F",
+        ucn="U+349F",
+        expected=[{"page": 296, "character": 38}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        # U+349D      kSBGY   479.12 495.09
-        ("U+349D", [{"page": 479, "character": 12}, {"page": 495, "character": 9}]),
-        # U+349F      kSBGY   296.38
-        ("U+349F", [{"page": 296, "character": 38}]),
-    ],
+    ExpandKSBGYFixture._fields,
+    EXPAND_KSBGY_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KSBGY_FIXTURES],
 )
 def test_expand_kSBGY(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: ExpandedData,
 ) -> None:
@@ -738,75 +1104,92 @@ def test_expand_kSBGY(
     assert item["kSBGY"] == expected
 
 
+class ExpandKXHC1983Fixture(t.NamedTuple):
+    """Fixture for test_expand_kXHC1983."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: list[dict[str, list[dict[str, int | bool]] | str]]
+
+
+EXPAND_KXHC1983_FIXTURES: list[ExpandKXHC1983Fixture] = [
+    # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
+    ExpandKXHC1983Fixture(
+        test_id="U+91B1",
+        ucn="U+91B1",
+        fieldval="0295.011:fā 0884.081:pō",
+        expected=[
+            {
+                "locations": [
+                    {"page": 295, "character": 1, "entry": 1, "substituted": False},
+                ],
+                "reading": "fā",
+            },
+            {
+                "locations": [
+                    {"page": 884, "character": 8, "entry": 1, "substituted": False},
+                ],
+                "reading": "pō",
+            },
+        ],
+    ),
+    # U+379E  kXHC1983        1092.070*,1092.071:sóng
+    ExpandKXHC1983Fixture(
+        test_id="U+379E",
+        ucn="U+379E",
+        fieldval="1092.070*,1092.071:sóng",
+        expected=[
+            {
+                "locations": [
+                    {"page": 1092, "character": 7, "entry": 0, "substituted": True},
+                    {
+                        "page": 1092,
+                        "character": 7,
+                        "entry": 1,
+                        "substituted": False,
+                    },
+                ],
+                "reading": "sóng",
+            },
+        ],
+    ),
+    # U+5750  kXHC1983        1551.040,1552.011:zuò
+    ExpandKXHC1983Fixture(
+        test_id="U+5750",
+        ucn="U+5750",
+        fieldval="1551.040,1552.011:zuò",
+        expected=[
+            {
+                "locations": [
+                    {
+                        "page": 1551,
+                        "character": 4,
+                        "entry": 0,
+                        "substituted": False,
+                    },
+                    {
+                        "page": 1552,
+                        "character": 1,
+                        "entry": 1,
+                        "substituted": False,
+                    },
+                ],
+                "reading": "zuò",
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+91B1  kXHC1983        0295.011:fā 0884.081:pō
-        (
-            "U+91B1",
-            "0295.011:fā 0884.081:pō",
-            [
-                {
-                    "locations": [
-                        {"page": 295, "character": 1, "entry": 1, "substituted": False},
-                    ],
-                    "reading": "fā",
-                },
-                {
-                    "locations": [
-                        {"page": 884, "character": 8, "entry": 1, "substituted": False},
-                    ],
-                    "reading": "pō",
-                },
-            ],
-        ),
-        # U+379E  kXHC1983        1092.070*,1092.071:sóng
-        (
-            "U+379E",
-            "1092.070*,1092.071:sóng",
-            [
-                {
-                    "locations": [
-                        {"page": 1092, "character": 7, "entry": 0, "substituted": True},
-                        {
-                            "page": 1092,
-                            "character": 7,
-                            "entry": 1,
-                            "substituted": False,
-                        },
-                    ],
-                    "reading": "sóng",
-                },
-            ],
-        ),
-        # U+5750  kXHC1983        1551.040,1552.011:zuò
-        (
-            "U+5750",
-            "1551.040,1552.011:zuò",
-            [
-                {
-                    "locations": [
-                        {
-                            "page": 1551,
-                            "character": 4,
-                            "entry": 0,
-                            "substituted": False,
-                        },
-                        {
-                            "page": 1552,
-                            "character": 1,
-                            "entry": 1,
-                            "substituted": False,
-                        },
-                    ],
-                    "reading": "zuò",
-                },
-            ],
-        ),
-    ],
+    ExpandKXHC1983Fixture._fields,
+    EXPAND_KXHC1983_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KXHC1983_FIXTURES],
 )
 def test_expand_kXHC1983(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: list[dict[str, list[dict[str, int | bool]] | str]],
@@ -842,79 +1225,96 @@ def test_expand_kXHC1983(
     assert expansion.expand_field("kXHC1983", fieldval) == expected
 
 
+class ExpandKTGHZ2013Fixture(t.NamedTuple):
+    """Fixture for test_expand_kTGHZ2013."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: list[dict[str, list[dict[str, int | bool]] | str]]
+
+
+EXPAND_KTGHZ2013_FIXTURES: list[ExpandKTGHZ2013Fixture] = [
+    # U+3447	kTGHZ2013	482.140:zhòu
+    ExpandKTGHZ2013Fixture(
+        test_id="U+3447",
+        ucn="U+3447",
+        fieldval="482.140:zhòu",
+        expected=[
+            {
+                "locations": [
+                    {
+                        "page": 482,
+                        "position": 14,
+                        "entry_type": 0,
+                    },
+                ],
+                "reading": "zhòu",
+            },
+        ],
+    ),
+    # U+4E0A	kTGHZ2013	326.050:shǎng 326.090:shàng
+    ExpandKTGHZ2013Fixture(
+        test_id="U+4E0A",
+        ucn="U+4E0A",
+        fieldval="326.050:shǎng 326.090:shàng",
+        expected=[
+            {
+                "locations": [
+                    {
+                        "page": 326,
+                        "position": 5,
+                        "entry_type": 0,
+                    },
+                ],
+                "reading": "shǎng",
+            },
+            {
+                "locations": [
+                    {
+                        "page": 326,
+                        "position": 9,
+                        "entry_type": 0,
+                    },
+                ],
+                "reading": "shàng",
+            },
+        ],
+    ),
+    # U+4E30	kTGHZ2013	097.110,097.120:fēng
+    ExpandKTGHZ2013Fixture(
+        test_id="U+4E30",
+        ucn="U+4E30",
+        fieldval="097.110,097.120:fēng",
+        expected=[
+            {
+                "locations": [
+                    {
+                        "page": 97,
+                        "position": 11,
+                        "entry_type": 0,
+                    },
+                    {
+                        "page": 97,
+                        "position": 12,
+                        "entry_type": 0,
+                    },
+                ],
+                "reading": "fēng",
+            },
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+3447	kTGHZ2013	482.140:zhòu
-        (
-            "U+3447",
-            "482.140:zhòu",
-            [
-                {
-                    "locations": [
-                        {
-                            "page": 482,
-                            "position": 14,
-                            "entry_type": 0,
-                        },
-                    ],
-                    "reading": "zhòu",
-                },
-            ],
-        ),
-        # U+4E0A	kTGHZ2013	326.050:shǎng 326.090:shàng
-        (
-            "U+4E0A",
-            "326.050:shǎng 326.090:shàng",
-            [
-                {
-                    "locations": [
-                        {
-                            "page": 326,
-                            "position": 5,
-                            "entry_type": 0,
-                        },
-                    ],
-                    "reading": "shǎng",
-                },
-                {
-                    "locations": [
-                        {
-                            "page": 326,
-                            "position": 9,
-                            "entry_type": 0,
-                        },
-                    ],
-                    "reading": "shàng",
-                },
-            ],
-        ),
-        # U+4E30	kTGHZ2013	097.110,097.120:fēng
-        (
-            "U+4E30",
-            "097.110,097.120:fēng",
-            [
-                {
-                    "locations": [
-                        {
-                            "page": 97,
-                            "position": 11,
-                            "entry_type": 0,
-                        },
-                        {
-                            "page": 97,
-                            "position": 12,
-                            "entry_type": 0,
-                        },
-                    ],
-                    "reading": "fēng",
-                },
-            ],
-        ),
-    ],
+    ExpandKTGHZ2013Fixture._fields,
+    EXPAND_KTGHZ2013_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KTGHZ2013_FIXTURES],
 )
 def test_expand_kTGHZ2013(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: list[dict[str, list[dict[str, int | bool]] | str]],
@@ -939,22 +1339,51 @@ def test_expand_kTGHZ2013(
     assert item["kTGHZ2013"] == expected
 
 
+class ExpandKIRGGSourceFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRG_GSource."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: dict[str, str | None]
+
+
+EXPAND_KIRGGSOURCE_FIXTURES: list[ExpandKIRGGSourceFixture] = [
+    # U+348C      kIRG_GSource    GKX-0118.03
+    ExpandKIRGGSourceFixture(
+        test_id="U+348C",
+        ucn="U+348C",
+        fieldval="GKX-0118.03",
+        expected={"source": "GKX", "location": "0118.03"},
+    ),
+    # U+2A660  kIRG_GSource    G4K
+    ExpandKIRGGSourceFixture(
+        test_id="U+2A660",
+        ucn="U+2A660",
+        fieldval="G4K",
+        expected={"source": "G4K", "location": None},
+    ),
+    # U+348D      kIRG_GSource    G5-3272
+    ExpandKIRGGSourceFixture(
+        test_id="U+348D",
+        ucn="U+348D",
+        fieldval="G5-3272",
+        expected={"source": "G5", "location": "3272"},
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+348C      kIRG_GSource    GKX-0118.03
-        ("U+348C", "GKX-0118.03", {"source": "GKX", "location": "0118.03"}),
-        # U+2A660  kIRG_GSource    G4K
-        ("U+2A660", "G4K", {"source": "G4K", "location": None}),
-        # U+348D      kIRG_GSource    G5-3272
-        ("U+348D", "G5-3272", {"source": "G5", "location": "3272"}),
-    ],
+    ExpandKIRGGSourceFixture._fields,
+    EXPAND_KIRGGSOURCE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGGSOURCE_FIXTURES],
 )
 def test_expand_kIRG_GSource(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
-    expected: ExpandedData,
+    expected: dict[str, str | None],
 ) -> None:
     """Tests for expansion kIRG_GSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -963,22 +1392,51 @@ def test_expand_kIRG_GSource(
     assert expansion.expand_field("kIRG_GSource", fieldval) == expected
 
 
+class ExpandKIRGHSourceFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRG_HSource."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: dict[str, str]
+
+
+EXPAND_KIRGHSOURCE_FIXTURES: list[ExpandKIRGHSourceFixture] = [
+    # U+347E      kIRG_HSource    H-8F59
+    ExpandKIRGHSourceFixture(
+        test_id="U+347E",
+        ucn="U+347E",
+        fieldval="H-8F59",
+        expected={"source": "H", "location": "8F59"},
+    ),
+    # U+4E00      kIRG_HSource    HB1-A440
+    ExpandKIRGHSourceFixture(
+        test_id="U+4E00",
+        ucn="U+4E00",
+        fieldval="HB1-A440",
+        expected={"source": "HB1", "location": "A440"},
+    ),
+    # U+4E07      kIRG_HSource    HB2-C945
+    ExpandKIRGHSourceFixture(
+        test_id="U+4E07",
+        ucn="U+4E07",
+        fieldval="HB2-C945",
+        expected={"source": "HB2", "location": "C945"},
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+347E      kIRG_HSource    H-8F59
-        ("U+347E", "H-8F59", {"source": "H", "location": "8F59"}),
-        # U+4E00      kIRG_HSource    HB1-A440
-        ("U+4E00", "HB1-A440", {"source": "HB1", "location": "A440"}),
-        # U+4E07      kIRG_HSource    HB2-C945
-        ("U+4E07", "HB2-C945", {"source": "HB2", "location": "C945"}),
-    ],
+    ExpandKIRGHSourceFixture._fields,
+    EXPAND_KIRGHSOURCE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGHSOURCE_FIXTURES],
 )
 def test_expand_kIRG_HSource(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
-    expected: ExpandedData,
+    expected: dict[str, str],
 ) -> None:
     """Tests for expansion kIRG_HSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -987,20 +1445,44 @@ def test_expand_kIRG_HSource(
     assert expansion.expand_field("kIRG_HSource", fieldval) == expected
 
 
+class ExpandKIRGJSourceFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRG_JSource."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: dict[str, str]
+
+
+EXPAND_KIRGJSOURCE_FIXTURES: list[ExpandKIRGJSourceFixture] = [
+    # U+3400	kIRG_JSource	JA-2121
+    ExpandKIRGJSourceFixture(
+        test_id="U+3400",
+        ucn="U+3400",
+        fieldval="JA-2121",
+        expected={"source": "JA", "location": "2121"},
+    ),
+    # U+3402	kIRG_JSource	JA3-2E23
+    ExpandKIRGJSourceFixture(
+        test_id="U+3402",
+        ucn="U+3402",
+        fieldval="JA3-2E23",
+        expected={"source": "JA3", "location": "2E23"},
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+3400	kIRG_JSource	JA-2121
-        ("U+3400", "JA-2121", {"source": "JA", "location": "2121"}),
-        # U+3402	kIRG_JSource	JA3-2E23
-        ("U+3402", "JA3-2E23", {"source": "JA3", "location": "2E23"}),
-    ],
+    ExpandKIRGJSourceFixture._fields,
+    EXPAND_KIRGJSOURCE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGJSOURCE_FIXTURES],
 )
 def test_expand_kIRG_JSource(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
-    expected: ExpandedData,
+    expected: dict[str, str],
 ) -> None:
     """Tests for expansion kIRG_JSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -1009,61 +1491,128 @@ def test_expand_kIRG_JSource(
     assert expansion.expand_field("kIRG_JSource", fieldval) == expected
 
 
+class ExpandKIRGKPSourceFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRG_KPSource."""
+
+    test_id: str
+    field: str
+    ucn: str
+    fieldval: str
+    expected: dict[str, str]
+
+
+EXPAND_KIRGKPSOURCE_FIXTURES: list[ExpandKIRGKPSourceFixture] = [
+    # U+3ED0  kIRG_KPSource   KP0-EAB2
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_KPSource-U+3ED0",
+        field="kIRG_KPSource",
+        ucn="U+3ED0",
+        fieldval="KP0-EAB2",
+        expected={"source": "KP0", "location": "EAB2"},
+    ),
+    # U+340C  kIRG_KPSource   KP1-3451
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_KPSource-U+340C",
+        field="kIRG_KPSource",
+        ucn="U+340C",
+        fieldval="KP1-3451",
+        expected={"source": "KP1", "location": "3451"},
+    ),
+    # U+4E06  kIRG_KSource    K2-2121
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_KSource-U+4E06",
+        field="kIRG_KSource",
+        ucn="U+4E06",
+        fieldval="K2-2121",
+        expected={"source": "K2", "location": "2121"},
+    ),
+    # U+3401  kIRG_KSource    K3-2121
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_KSource-U+3401",
+        field="kIRG_KSource",
+        ucn="U+3401",
+        fieldval="K3-2121",
+        expected={"source": "K3", "location": "2121"},
+    ),
+    # U+21290	kIRG_MSource	MAC-00077
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_MSource-U+21290",
+        field="kIRG_MSource",
+        ucn="U+21290",
+        fieldval="MAC-00077",
+        expected={"source": "MAC", "location": "00077"},
+    ),
+    # U+3400  kIRG_TSource    T6-222C
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_TSource-U+3400",
+        field="kIRG_TSource",
+        ucn="U+3400",
+        fieldval="T6-222C",
+        expected={"source": "T6", "location": "222C"},
+    ),
+    # U+3401  kIRG_TSource    T4-2224
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_TSource-U+3401",
+        field="kIRG_TSource",
+        ucn="U+3401",
+        fieldval="T4-2224",
+        expected={"source": "T4", "location": "2224"},
+    ),
+    # U+2CEBC	kIRG_SSource	SAT-04823
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_SSource-U+2CEBC",
+        field="kIRG_SSource",
+        ucn="U+2CEBC",
+        fieldval="SAT-04823",
+        expected={"source": "SAT", "location": "04823"},
+    ),
+    # U+22016 kIRG_USource    UTC-00069
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_USource-U+22016",
+        field="kIRG_USource",
+        ucn="U+22016",
+        fieldval="UTC-00069",
+        expected={"source": "UTC", "location": "00069"},
+    ),
+    # U+2DE4A	kIRG_UKSource	UK-02896
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_UKSource-U+2DE4A",
+        field="kIRG_UKSource",
+        ucn="U+2DE4A",
+        fieldval="UK-02896",
+        expected={"source": "UK", "location": "02896"},
+    ),
+    # U+346B  kIRG_VSource    V0-3034
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_VSource-U+346B",
+        field="kIRG_VSource",
+        ucn="U+346B",
+        fieldval="V0-3034",
+        expected={"source": "V0", "location": "3034"},
+    ),
+    # U+340C  kIRG_VSource    V2-8874
+    ExpandKIRGKPSourceFixture(
+        test_id="kIRG_VSource-U+340C",
+        field="kIRG_VSource",
+        ucn="U+340C",
+        fieldval="V2-8874",
+        expected={"source": "V2", "location": "8874"},
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("field", "ucn", "fieldval", "expected"),
-    [
-        # U+3ED0  kIRG_KPSource   KP0-EAB2
-        ("kIRG_KPSource", "U+3ED0", "KP0-EAB2", {"source": "KP0", "location": "EAB2"}),
-        # U+340C  kIRG_KPSource   KP1-3451
-        ("kIRG_KPSource", "U+340C", "KP1-3451", {"source": "KP1", "location": "3451"}),
-        # U+4E06  kIRG_KSource    K2-2121
-        ("kIRG_KSource", "U+4E06", "K2-2121", {"source": "K2", "location": "2121"}),
-        # U+3401  kIRG_KSource    K3-2121
-        ("kIRG_KSource", "U+3401", "K3-2121", {"source": "K3", "location": "2121"}),
-        # U+21290	kIRG_MSource	MAC-00077
-        (
-            "kIRG_MSource",
-            "U+21290",
-            "MAC-00077",
-            {"source": "MAC", "location": "00077"},
-        ),
-        # U+3400  kIRG_TSource    T6-222C
-        ("kIRG_TSource", "U+3400", "T6-222C", {"source": "T6", "location": "222C"}),
-        # U+3401  kIRG_TSource    T4-2224
-        ("kIRG_TSource", "U+3401", "T4-2224", {"source": "T4", "location": "2224"}),
-        # U+2CEBC	kIRG_SSource	SAT-04823
-        (
-            "kIRG_SSource",
-            "U+2CEBC",
-            "SAT-04823",
-            {"source": "SAT", "location": "04823"},
-        ),
-        # U+22016 kIRG_USource    UTC-00069
-        (
-            "kIRG_USource",
-            "U+22016",
-            "UTC-00069",
-            {"source": "UTC", "location": "00069"},
-        ),
-        # U+2DE4A	kIRG_UKSource	UK-02896
-        (
-            "kIRG_UKSource",
-            "U+2DE4A",
-            "UK-02896",
-            {"source": "UK", "location": "02896"},
-        ),
-        # U+346B  kIRG_VSource    V0-3034
-        ("kIRG_VSource", "U+346B", "V0-3034", {"source": "V0", "location": "3034"}),
-        # U+340C  kIRG_VSource    V2-8874
-        ("kIRG_VSource", "U+340C", "V2-8874", {"source": "V2", "location": "8874"}),
-    ],
+    ExpandKIRGKPSourceFixture._fields,
+    EXPAND_KIRGKPSOURCE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGKPSOURCE_FIXTURES],
 )
 def test_expand_kIRG_KPSource(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     field: str,
     ucn: str,
     fieldval: str,
-    expected: ExpandedData,
+    expected: dict[str, str],
 ) -> None:
     """Tests for expansion of kIRG_KPSource."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -1072,26 +1621,51 @@ def test_expand_kIRG_KPSource(
     assert expansion.expand_field(field, fieldval) == expected
 
 
+class ExpandKGSRFixture(t.NamedTuple):
+    """Fixture for test_expand_kGSR."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: ExpandedData
+
+
+EXPAND_KGSR_FIXTURES: list[ExpandKGSRFixture] = [
+    # U+340C  kGSR    0004f
+    ExpandKGSRFixture(
+        test_id="U+340C",
+        ucn="U+340C",
+        fieldval="0004f",
+        expected=[{"set": 4, "letter": "f", "apostrophe": False}],
+    ),
+    # U+371D	kGSR	0651k'
+    ExpandKGSRFixture(
+        test_id="U+371D",
+        ucn="U+371D",
+        fieldval="0651k'",
+        expected=[{"set": 651, "letter": "k", "apostrophe": True}],
+    ),
+    # U+9AE2  kGSR    0004e' 0850s
+    ExpandKGSRFixture(
+        test_id="U+9AE2",
+        ucn="U+9AE2",
+        fieldval="0004e' 0850s",
+        expected=[
+            {"set": 4, "letter": "e", "apostrophe": True},
+            {"set": 850, "letter": "s", "apostrophe": False},
+        ],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+340C  kGSR    0004f
-        ("U+340C", "0004f", [{"set": 4, "letter": "f", "apostrophe": False}]),
-        # U+371D	kGSR	0651k'
-        ("U+371D", "0651k'", [{"set": 651, "letter": "k", "apostrophe": True}]),
-        # U+9AE2  kGSR    0004e' 0850s
-        (
-            "U+9AE2",
-            "0004e' 0850s",
-            [
-                {"set": 4, "letter": "e", "apostrophe": True},
-                {"set": 850, "letter": "s", "apostrophe": False},
-            ],
-        ),
-    ],
+    ExpandKGSRFixture._fields,
+    EXPAND_KGSR_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KGSR_FIXTURES],
 )
 def test_expand_kGSR(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
@@ -1103,21 +1677,41 @@ def test_expand_kGSR(
     assert expansion.expand_field("kGSR", fieldval) == expected
 
 
+class ExpandKCheungBauerIndexFixture(t.NamedTuple):
+    """Fixture for test_expand_kCheungBauerIndex."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: ExpandedData
+
+
+EXPAND_KCHEUNG_BAUER_INDEX_FIXTURES: list[ExpandKCheungBauerIndexFixture] = [
+    # U+34BC  kCheungBauerIndex       402.06
+    ExpandKCheungBauerIndexFixture(
+        test_id="U+34BC",
+        ucn="U+34BC",
+        fieldval="402.06",
+        expected=[{"page": 402, "character": 6}],
+    ),
+    # U+3578  kCheungBauerIndex       351.02 351.03
+    ExpandKCheungBauerIndexFixture(
+        test_id="U+3578",
+        ucn="U+3578",
+        fieldval="351.02 351.03",
+        expected=[{"page": 351, "character": 2}, {"page": 351, "character": 3}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+34BC  kCheungBauerIndex       402.06
-        ("U+34BC", "402.06", [{"page": 402, "character": 6}]),
-        # U+3578  kCheungBauerIndex       351.02 351.03
-        (
-            "U+3578",
-            "351.02 351.03",
-            [{"page": 351, "character": 2}, {"page": 351, "character": 3}],
-        ),
-    ],
+    ExpandKCheungBauerIndexFixture._fields,
+    EXPAND_KCHEUNG_BAUER_INDEX_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KCHEUNG_BAUER_INDEX_FIXTURES],
 )
 def test_expand_kCheungBauerIndex(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
@@ -1129,17 +1723,41 @@ def test_expand_kCheungBauerIndex(
     assert expansion.expand_field("kCheungBauerIndex", fieldval) == expected
 
 
+class ExpandKFennIndexFixture(t.NamedTuple):
+    """Fixture for test_expand_kFennIndex."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: ExpandedData
+
+
+EXPAND_KFENN_INDEX_FIXTURES: list[ExpandKFennIndexFixture] = [
+    # U+348B      kFennIndex      480.05
+    ExpandKFennIndexFixture(
+        test_id="U+348B",
+        ucn="U+348B",
+        fieldval="480.05",
+        expected=[{"page": 480, "character": 5}],
+    ),
+    # U+349A      kFennIndex      602.04
+    ExpandKFennIndexFixture(
+        test_id="U+349A",
+        ucn="U+349A",
+        fieldval="602.04",
+        expected=[{"page": 602, "character": 4}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+348B      kFennIndex      480.05
-        ("U+348B", "480.05", [{"page": 480, "character": 5}]),
-        # U+349A      kFennIndex      602.04
-        ("U+349A", "602.04", [{"page": 602, "character": 4}]),
-    ],
+    ExpandKFennIndexFixture._fields,
+    EXPAND_KFENN_INDEX_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KFENN_INDEX_FIXTURES],
 )
 def test_expand_kFennIndex(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
@@ -1151,17 +1769,41 @@ def test_expand_kFennIndex(
     assert expansion.expand_field("kFennIndex", fieldval) == expected
 
 
+class ExpandKIRGKangXiFixture(t.NamedTuple):
+    """Fixture for test_expand_kIRGKangXi."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: ExpandedData
+
+
+EXPAND_KIRGKANG_XI_FIXTURES: list[ExpandKIRGKangXiFixture] = [
+    # U+34AD      kIRGKangXi      0125.190
+    ExpandKIRGKangXiFixture(
+        test_id="U+34AD",
+        ucn="U+34AD",
+        fieldval="0125.190",
+        expected=[{"page": 125, "character": 19, "virtual": 0}],
+    ),
+    # U+34AE      kIRGKangXi      0125.201
+    ExpandKIRGKangXiFixture(
+        test_id="U+34AE",
+        ucn="U+34AE",
+        fieldval="0125.201",
+        expected=[{"page": 125, "character": 20, "virtual": 1}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+34AD      kIRGKangXi      0125.190
-        ("U+34AD", "0125.190", [{"page": 125, "character": 19, "virtual": 0}]),
-        # U+34AE      kIRGKangXi      0125.201
-        ("U+34AE", "0125.201", [{"page": 125, "character": 20, "virtual": 1}]),
-    ],
+    ExpandKIRGKangXiFixture._fields,
+    EXPAND_KIRGKANG_XI_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KIRGKANG_XI_FIXTURES],
 )
 def test_expand_kIRGKangXi(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
     expected: ExpandedData,
@@ -1173,20 +1815,44 @@ def test_expand_kIRGKangXi(
     assert expansion.expand_field("kIRGKangXi", fieldval) == expected
 
 
+class ExpandKCCCIIFixture(t.NamedTuple):
+    """Fixture for test_expand_kCCCII."""
+
+    test_id: str
+    ucn: str
+    fieldval: str
+    expected: list[str]
+
+
+EXPAND_KCCCII_FIXTURES: list[ExpandKCCCIIFixture] = [
+    # U+4E00	kCCCII	213021
+    ExpandKCCCIIFixture(
+        test_id="U+4E00",
+        ucn="U+4E00",
+        fieldval="213021",
+        expected=["213021"],
+    ),
+    # U+4E0D	kCCCII	21302A
+    ExpandKCCCIIFixture(
+        test_id="U+4E0D",
+        ucn="U+4E0D",
+        fieldval="21302A",
+        expected=["21302A"],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "fieldval", "expected"),
-    [
-        # U+4E00	kCCCII	213021
-        ("U+4E00", "213021", ["213021"]),
-        # U+4E0D	kCCCII	21302A
-        ("U+4E0D", "21302A", ["21302A"]),
-    ],
+    ExpandKCCCIIFixture._fields,
+    EXPAND_KCCCII_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KCCCII_FIXTURES],
 )
 def test_expand_kCCCII(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     fieldval: str,
-    expected: ExpandedData,
+    expected: list[str],
 ) -> None:
     """Tests for expansion of kCCCII."""
     item = next(i for i in unihan_quick_expanded_data if i["ucn"] == ucn)
@@ -1195,24 +1861,42 @@ def test_expand_kCCCII(
     assert expansion.expand_field("kCCCII", fieldval) == expected
 
 
+class ExpandKFanqieFixture(t.NamedTuple):
+    """Fixture for test_expand_kFanqie."""
+
+    test_id: str
+    ucn: str
+    expected: list[dict[str, str]]
+
+
+EXPAND_KFANQIE_FIXTURES: list[ExpandKFanqieFixture] = [
+    ExpandKFanqieFixture(
+        test_id="U+3A4B",
+        ucn="U+3A4B",
+        expected=[
+            {"initial": "蘇", "final": "彫"},
+            {"initial": "先", "final": "鳥"},
+            {"initial": "蘇", "final": "弔"},
+            {"initial": "所", "final": "六"},
+            {"initial": "息", "final": "逐"},
+        ],
+    ),
+    ExpandKFanqieFixture(
+        test_id="U+3A53",
+        ucn="U+3A53",
+        expected=[{"initial": "許", "final": "委"}],
+    ),
+]
+
+
 @pytest.mark.parametrize(
-    ("ucn", "expected"),
-    [
-        (
-            "U+3A4B",
-            [
-                {"initial": "蘇", "final": "彫"},
-                {"initial": "先", "final": "鳥"},
-                {"initial": "蘇", "final": "弔"},
-                {"initial": "所", "final": "六"},
-                {"initial": "息", "final": "逐"},
-            ],
-        ),
-        ("U+3A53", [{"initial": "許", "final": "委"}]),
-    ],
+    ExpandKFanqieFixture._fields,
+    EXPAND_KFANQIE_FIXTURES,
+    ids=[f.test_id for f in EXPAND_KFANQIE_FIXTURES],
 )
 def test_expand_kFanqie(
     unihan_quick_expanded_data: ExpandedData,
+    test_id: str,
     ucn: str,
     expected: list[dict[str, str]],
 ) -> None:
