@@ -20,7 +20,6 @@ test *args:
 # Run tests then start continuous testing with pytest-watcher
 [group: 'test']
 start:
-    just test
     uv run ptw .
 
 # Watch files and run tests on change (requires entr)
