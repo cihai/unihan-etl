@@ -7,6 +7,7 @@ import argparse
 import csv
 import dataclasses
 import fileinput
+import functools
 import json
 import logging
 import pathlib
@@ -211,8 +212,33 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
+@functools.lru_cache(maxsize=256)
+def _zip_integrity_ok(zip_path: str, mtime_ns: int, size: int) -> bool:
+    """Return True if the zip is structurally valid and every member's CRC passes.
+
+    Memoized on the file's ``(path, mtime_ns, size)`` fingerprint so the
+    expensive :meth:`zipfile.ZipFile.testzip` (which decompresses every member)
+    runs once per file state -- repeat checks of an unchanged archive are free.
+    The ``mtime_ns``/``size`` args are the cache key, not used directly.
+    """
+    if not zipfile.is_zipfile(zip_path):
+        log.info("Not a valid zip: %s", zip_path)
+        return False
+    with zipfile.ZipFile(zip_path) as zf:
+        bad_member = zf.testzip()
+    if bad_member is not None:
+        log.info("Zip member failed CRC check: %s", bad_member)
+        return False
+    log.info("Exists, is valid zip: %s", zip_path)
+    return True
+
+
 def has_valid_zip(zip_path: StrPath) -> bool:
-    """Return True if valid zip exists.
+    """Return True if a valid zip exists at ``zip_path``.
+
+    The structural and member-CRC checks are memoized on the file's
+    ``(path, mtime, size)`` fingerprint, so repeated calls on an unchanged
+    archive only pay a ``stat`` rather than re-decompressing the whole zip.
 
     Parameters
     ----------
@@ -231,11 +257,8 @@ def has_valid_zip(zip_path: StrPath) -> bool:
         log.info("Exists, but is not a file: %s", zip_path)
         return False
 
-    if zipfile.is_zipfile(zip_path):
-        log.info("Exists, is valid zip: %s", zip_path)
-        return True
-    log.info("Not a valid zip: %s", zip_path)
-    return False
+    st = zip_path.stat()
+    return _zip_integrity_ok(str(zip_path), st.st_mtime_ns, st.st_size)
 
 
 def zip_has_files(files: list[str], zip_file: zipfile.ZipFile) -> bool:
@@ -287,13 +310,7 @@ def download(
     if not data_dir.exists():
         data_dir.mkdir(parents=True, exist_ok=True)
 
-    def no_unihan_files_exist() -> bool:
-        return not data_dir.match("Unihan*.txt")
-
-    def not_downloaded() -> bool:
-        return not (data_dir / "Unihan.zip").exists()
-
-    if (no_unihan_files_exist() and not_downloaded()) or not cache:
+    if not has_valid_zip(dest) or not cache:
         log.info("Downloading Unihan.zip...")
         log.info("%s to %s", url, dest)
         if pathlib.Path(url).is_file():

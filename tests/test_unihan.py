@@ -446,3 +446,154 @@ def test_cli_version(capsys: pytest.CaptureFixture[str], flag: str) -> None:
     captured = capsys.readouterr()
 
     assert __version__ in captured.out
+
+
+class DownloadCacheCase(t.NamedTuple):
+    """Case for :func:`test_download_caching`."""
+
+    test_id: str
+    zip_name: str  # dest filename under <tmp>/downloads/
+    seed_state: str  # "valid" | "corrupt" | "bad_crc" | "absent"
+    cache: bool
+    expect_download: bool
+
+
+DOWNLOAD_CACHE_CASES: list[DownloadCacheCase] = [
+    DownloadCacheCase(
+        test_id="cached_valid_skips",
+        zip_name="Unihan.zip",
+        seed_state="valid",
+        cache=True,
+        expect_download=False,
+    ),
+    DownloadCacheCase(
+        test_id="absent_downloads",
+        zip_name="Unihan.zip",
+        seed_state="absent",
+        cache=True,
+        expect_download=True,
+    ),
+    DownloadCacheCase(
+        test_id="corrupt_redownloads",
+        zip_name="Unihan.zip",
+        seed_state="corrupt",
+        cache=True,
+        expect_download=True,
+    ),
+    DownloadCacheCase(
+        test_id="cache_off_redownloads",
+        zip_name="Unihan.zip",
+        seed_state="valid",
+        cache=False,
+        expect_download=True,
+    ),
+    DownloadCacheCase(
+        test_id="absent_cache_off_downloads",
+        zip_name="Unihan.zip",
+        seed_state="absent",
+        cache=False,
+        expect_download=True,
+    ),
+    DownloadCacheCase(
+        test_id="custom_name_cached_skips",
+        zip_name="Moo.zip",
+        seed_state="valid",
+        cache=True,
+        expect_download=False,
+    ),
+    DownloadCacheCase(
+        test_id="custom_name_bad_crc_redownloads",
+        zip_name="Moo.zip",
+        seed_state="bad_crc",
+        cache=True,
+        expect_download=True,
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    DownloadCacheCase._fields,
+    DOWNLOAD_CACHE_CASES,
+    ids=[c.test_id for c in DOWNLOAD_CACHE_CASES],
+)
+def test_download_caching(
+    test_id: str,
+    zip_name: str,
+    seed_state: str,
+    cache: bool,
+    expect_download: bool,
+    tmp_path: pathlib.Path,
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+) -> None:
+    """core.download() caches on zip validity, not mere existence or a fixed name.
+
+    A valid cached zip is reused; a missing, corrupt, or cache-disabled dest is
+    (re-)fetched. The dest's real name is honored, not a hardcoded ``Unihan.zip``.
+    """
+    dest = tmp_path / "downloads" / zip_name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if seed_state == "valid":
+        shutil.copy(str(unihan_mock_zip_path), str(dest))
+    elif seed_state == "corrupt":
+        dest.write_text("not a zip", encoding="utf-8")
+    elif seed_state == "bad_crc":
+        shutil.copy(str(unihan_mock_zip_path), str(dest))
+        zip_bytes = bytearray(dest.read_bytes())
+        zip_bytes[zip_bytes.index(b"jau1")] ^= 0x01
+        dest.write_bytes(zip_bytes)
+
+    download_calls = 0
+
+    def urlretrieve(
+        url: str,
+        filename: StrPath | None = None,
+        reporthook: Callable[[int, int, int], object] | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
+        nonlocal download_calls
+        download_calls += 1
+        shutil.copy(str(unihan_mock_zip_path), str(dest))
+        return ("", HTTPMessage())
+
+    result = core.download(
+        url="https://example.invalid/Unihan.zip",
+        dest=dest,
+        urlretrieve_fn=urlretrieve,
+        cache=cache,
+    )
+
+    assert result == dest
+    assert download_calls == (1 if expect_download else 0)
+    assert core.has_valid_zip(dest)
+
+
+def test_download_returns_usable_path(
+    tmp_path: pathlib.Path,
+    unihan_mock_zip: zipfile.ZipFile,
+    unihan_mock_zip_path: pathlib.Path,
+) -> None:
+    """The path core.download() returns is real and directly extractable."""
+    dest = tmp_path / "downloads" / "Unihan.zip"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+
+    def urlretrieve(
+        url: str,
+        filename: StrPath | None = None,
+        reporthook: Callable[[int, int, int], object] | None = None,
+        data: _DataType | None = None,
+    ) -> tuple[str, HTTPMessage]:
+        shutil.copy(str(unihan_mock_zip_path), str(dest))
+        return ("", HTTPMessage())
+
+    result = core.download(
+        url="https://example.invalid/Unihan.zip",
+        dest=dest,
+        urlretrieve_fn=urlretrieve,
+    )
+
+    assert isinstance(result, pathlib.Path)
+    assert result == dest
+    assert core.has_valid_zip(result)
+    extracted = core.extract_zip(result, tmp_path / "work")
+    assert "Unihan_Readings.txt" in extracted.namelist()
