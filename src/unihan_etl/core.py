@@ -181,7 +181,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--no-cache",
         dest="cache",
         action="store_false",
-        help=("Don't cache the UNIHAN zip file or CSV outputs."),
+        help="Don't reuse the cached UNIHAN zip (force re-download and re-extract).",
     )
     parser.add_argument(
         "-f",
