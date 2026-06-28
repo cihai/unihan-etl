@@ -38,6 +38,10 @@ _Notes on the upcoming release will go here._
 
 _Add your latest changes from PRs here_
 
+### Development
+
+The parametrized field-expansion tests now follow the project's typed `NamedTuple` case convention (a `test_id`-led fixture with `ids=` derived from it) already used across the rest of the suite, so expansion test failures report named scenarios instead of positional ids. An unused CLI color-mode test fixture was also removed.
+
 ## unihan-etl 0.42.0 (2026-06-28)
 
 unihan-etl 0.42.0 continues the documentation-platform refresh started after 0.41.0. The release moves the API and pytest-plugin pages onto shared gp-sphinx components, restores first-paint theme handling, and keeps the generated CLI/API reference linked to concrete docs targets such as {doc}`api/pytest-plugin`, {doc}`api/index`, and {doc}`cli/index`. It also restores compatibility with pytest 9.1+ for the bundled pytest plugin, so downstream projects such as cihai can adopt the latest pytest without the plugin aborting test collection.
