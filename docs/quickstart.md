@@ -2,6 +2,10 @@
 
 # Quickstart
 
+unihan-etl downloads the Unicode {ref}`UNIHAN <unihan>` database and
+exports it to CSV, JSON, or YAML. A plain `unihan-etl export` works out
+of the box — the download is cached for reuse.
+
 ## Installation
 
 Ensure you have at least Python **>= 3.10**.
@@ -12,7 +16,7 @@ Using [uv]:
 $ uv add unihan-etl
 ```
 
-Run the CLI once without a persistent install via `uvx`:
+Run the CLI once without a persistent install via [uvx]:
 
 ```console
 $ uvx unihan-etl
@@ -34,8 +38,8 @@ $ pip install --user --upgrade unihan-etl
 
 ### Developmental releases
 
-New versions of unihan-etl are published to PyPI as alpha, beta, or release candidates.
-In their versions you will see notification like `a1`, `b1`, and `rc1`, respectively.
+unihan-etl publishes alpha, beta, and release-candidate versions to [PyPI](https://pypi.org/project/unihan-etl/).
+Their version numbers carry `a1`, `b1`, and `rc1` suffixes, respectively.
 For example, `0.27.0a1` is the first alpha release of `0.27.0` before general availability.
 
 - [uv]:
@@ -102,12 +106,12 @@ via trunk (can break easily):
 
 ## Commands
 
+Run `unihan-etl` without arguments to list its subcommands; the {ref}`CLI reference <cli>` documents each one.
+
 ```console
 $ unihan-etl
 ```
 
 ## Pythonics
 
-:::{seealso}
-
-{ref}`unihan-etl API documentation <api>`.
+For the rarer cases, you can drive the same pipeline from Python — see the {ref}`API reference <api>` for {class}`~unihan_etl.core.Packager` and {class}`~unihan_etl.options.Options`.
