@@ -4,7 +4,7 @@
 
 ## Installation
 
-Assure you have at least python **>= 3.7**.
+Ensure you have at least Python **>= 3.10**.
 
 Using [uv]:
 
@@ -56,7 +56,7 @@ For example, `0.27.0a1` is the first alpha release of `0.27.0` before general av
   $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
   ```
 
-  Then run `unihan-etl@next load [session]`.
+  Then run `unihan-etl@next export`.
 
 - [uv tool install][uv-tools]:
 
@@ -70,7 +70,7 @@ For example, `0.27.0a1` is the first alpha release of `0.27.0` before general av
   $ uvx --from 'unihan-etl' --prerelease allow unihan-etl
   ```
 
-  Then rerun with your desired arguments, e.g. `uvx --prerelease allow unihan-etl load [session]`.
+  Then rerun with your desired arguments, e.g. `uvx --prerelease allow unihan-etl export`.
 
 via trunk (can break easily):
 
