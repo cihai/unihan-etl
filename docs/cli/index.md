@@ -75,15 +75,6 @@ The `unihan-etl` command is the entry point for all {ref}`UNIHAN <unihan>` ETL o
         See :ref:`cli-export`
 ```
 
-## Global Options
-
-- `-l, --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}`: Logging level (default: INFO)
-- `-V, --version`: Show version and exit
-
 ## Output Formats
 
-The `fields`, `files`, and `search` commands support different output formats:
-
-- **Table** (default): Human-readable formatted output
-- `--json`: Pretty-printed JSON (entire result as array/object)
-- `--ndjson`: Newline-delimited JSON (one record per line, ideal for LLM consumption)
+The `fields`, `files`, and `search` commands print a human-readable table by default, and can emit JSON for programmatic use — see each command's page for the exact flags.
