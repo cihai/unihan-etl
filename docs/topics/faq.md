@@ -2,10 +2,10 @@
 
 # Frequently Asked Questions
 
-... Why are some fields, e.g. _kTotalStrokes_, in lists when there's seemingly not any multi-value data?
+## Why are some fields, e.g. [kTotalStrokes](https://www.unicode.org/reports/tr38/#kTotalStrokes), in lists when there's seemingly no multi-value data?
 
-: The word back from the developers of UNIHAN is they keep some fields
-multi-valued for future use.
+The word back from the developers of {ref}`UNIHAN <unihan>` is they keep
+some fields multi-valued for future use.
 
 > Apparently at the moment there is only one record with two values for
 > the kTotalStrokes field in the Unihan database. However, the maintainers
@@ -13,6 +13,6 @@ multi-valued for future use.
 > future, and as documented in UAX #38.
 >
 > May 30, 2017 (Unicode 9.0)
->
-> unihan-etl is designed to handle fields correctly and consistently
-> according to the documentation in the database.
+
+unihan-etl handles these fields consistently, following the documentation
+in the database.
