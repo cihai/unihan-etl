@@ -2,7 +2,7 @@
 
 # unihan-etl download
 
-Download and cache the UNIHAN database without exporting.
+Download and cache the {ref}`UNIHAN <unihan>` database without exporting.
 
 ## Command
 

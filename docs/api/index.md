@@ -22,7 +22,7 @@ If you need an API stabilized please [file an issue](https://github.com/cihai/un
 :::{grid-item-card} Core
 :link: core
 :link-type: doc
-ETL pipeline and Packager: download, normalize, export.
+ETL pipeline and {class}`~unihan_etl.core.Packager`: download, normalize, export.
 :::
 
 :::{grid-item-card} Options
@@ -34,13 +34,13 @@ Configuration dataclass for paths, formats, and field selection.
 :::{grid-item-card} Expansion
 :link: expansion
 :link-type: doc
-Expand multi-value UNIHAN fields into structured data.
+Expand multi-value {ref}`UNIHAN <unihan>` fields into structured data.
 :::
 
 :::{grid-item-card} Types
 :link: types
 :link-type: doc
-Shared TypedDicts and type aliases.
+Shared {class}`~typing.TypedDict` structures and type aliases.
 :::
 
 :::{grid-item-card} Constants
@@ -71,7 +71,7 @@ Legacy test harness.
 :::{grid-item-card} pytest plugin
 :link: pytest-plugin
 :link-type: doc
-Fixtures for quick and full UNIHAN datasets in pytest.
+Fixtures for quick and full UNIHAN datasets in [pytest](https://docs.pytest.org/).
 :::
 
 ::::

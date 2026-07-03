@@ -2,7 +2,7 @@
 
 # `pytest` plugin
 
-unihan-etl ships a pytest plugin that downloads `UNIHAN.zip` once and reuses
+unihan-etl ships a [pytest](https://docs.pytest.org/) plugin that downloads `Unihan.zip` once and reuses
 it across tests, plus an isolated home directory for cache and config setup.
 The plugin auto-discovers via the `pytest11` entry point — installing
 `unihan-etl` is enough to make every fixture below available in your tests.
@@ -26,10 +26,10 @@ def test_with_raw_snippet(unihan_quick_data: str) -> None:
 
 ## Which Fixture Do I Need?
 
-- Use {fixture}`unihan_quick_packager` when you want a small, fast UNIHAN dataset for unit tests.
-- Use {fixture}`unihan_full_packager` when you need the complete UNIHAN corpus.
+- Use {fixture}`unihan_quick_packager` when you want a small, fast {ref}`UNIHAN <unihan>` dataset for unit tests.
+- Use {fixture}`unihan_full_packager` when you need the complete UNIHAN corpus — it downloads the full database and is slower than the quick dataset.
 - Use {fixture}`unihan_bootstrap_all` (autouse-wrapped) when you want both datasets pre-downloaded at session start.
-- Use {fixture}`unihan_quick_data` when you only need a raw text snippet rather than a fully bootstrapped Packager.
+- Use {fixture}`unihan_quick_data` when you only need a raw text snippet rather than a fully bootstrapped {class}`~unihan_etl.core.Packager`.
 - Override {fixture}`unihan_cache_path` (or {fixture}`unihan_project_cache_path`) to redirect where cached UNIHAN data lives.
 - Override {fixture}`unihan_home_user_name` when you need a custom test user identity.
 

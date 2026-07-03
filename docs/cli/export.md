@@ -2,7 +2,7 @@
 
 # unihan-etl export
 
-Export UNIHAN data to CSV, JSON, or YAML format.
+Export {ref}`UNIHAN <unihan>` data to CSV, JSON, or YAML format.
 
 ## Command
 
@@ -15,6 +15,12 @@ Export UNIHAN data to CSV, JSON, or YAML format.
 ```
 
 ## Examples
+
+Export with the defaults — CSV, with the download cached:
+
+```console
+$ unihan-etl export
+```
 
 Export all UNIHAN data to JSON:
 

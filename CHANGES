@@ -38,6 +38,16 @@ _Notes on the upcoming release will go here._
 
 _Add your latest changes from PRs here_
 
+### Documentation
+
+- {ref}`quickstart` no longer shows a nonexistent `load` subcommand
+  and states the correct Python 3.10 minimum.
+- The {ref}`About UNIHAN <unihan>` image renders again, and the
+  {ref}`faq` shows as a heading instead of raw definition-list markup.
+- CLI, API, and topic pages now link the UNIHAN dataset, the
+  {class}`~unihan_etl.core.Packager` API, and external tools on first
+  mention.
+
 ## unihan-etl 0.43.0 (2026-06-28)
 
 unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.

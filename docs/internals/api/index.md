@@ -1,13 +1,9 @@
-(internal_api)=
+(internals-api)=
 
 # Internal API
 
-```{module} unihan_etl
-
-```
-
 :::{warning}
-Be careful with these! Internal APIs are **not** covered by version policies. They can break or be removed between minor versions!
+Be careful with these! Internal APIs are **not** covered by version policies. They can break or be removed in any release!
 
 If you need an internal API stabilized please [file an issue](https://github.com/cihai/unihan-etl/issues).
 :::

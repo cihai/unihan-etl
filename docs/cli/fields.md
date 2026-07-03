@@ -2,7 +2,7 @@
 
 # unihan-etl fields
 
-List available UNIHAN fields with their descriptions and source files.
+List available {ref}`UNIHAN <unihan>` fields with their descriptions and source files.
 
 ## Command
 

@@ -26,16 +26,16 @@ character.
 
 This entails pulling together minds from around the world to assign codepoints.
 
-The _Unicode Consortium_ is a non-profit organization founded to develop,
+The [Unicode Consortium](https://en.wikipedia.org/wiki/Unicode_Consortium) is a non-profit organization founded to develop,
 extend and promote use of the Unicode Standard.
 
 ## What is UNIHAN?
 
-UNIHAN, short for [Han unification][han unification], is the effort of the consortium
-assign codepoints to CJK characters. Any single {}`han character` can
+UNIHAN, short for [Han unification][han unification], is the effort of the consortium to
+assign codepoints to CJK characters. Any single [han character] can have
 multiple historical or regional variants to account for, hence "unification".
 
-```{image} _static/img/sword_variants.png
+```{image} ../_static/img/sword_variants.png
 :width: 300px
 :align: center
 
@@ -43,15 +43,15 @@ multiple historical or regional variants to account for, hence "unification".
 
 To do this, various sources of information are pulled together and cross-referenced
 to detail characteristics of the glyphs, and vet them through a thorough
-proofreading process. It's an international effort, hallmarked by between
+proofreading process. It's an international effort, hallmarked by collaboration between
 researchers and groups like the [Ideographic Rapporteur Group][ideographic rapporteur group]. Glyphs
 once only noted in dictionaries and antiquity are set in stone with
 their own codepoints, carefully cross-referenced with information from,
 often multiple, distinct sources.
 
-The advantage that UNIHAN provides to east asian researchers, including
+The advantage that UNIHAN provides to East Asian researchers, including
 sinologists and japanologists, linguists, analysts, language learners, and
-hobbyists cannot be understated. Unbeknownst to users, its used under the hood
+hobbyists cannot be overstated. Unbeknownst to users, it's used under the hood
 in many applications and websites.
 
 The resulting standard has industrial ramifications downstream to
@@ -83,7 +83,7 @@ on each field of information is derived from. For instance:
   9. 朗文初級中文詞典, Hong Kong: Longman, 2001.
 
 - [kHanYu](http://www.unicode.org/reports/tr38/#kHanYu): The position of this
-  character in the Hanyu Da Zidian (HDZ) Chinese character dictionary.
+  character in the [Hanyu Da Zidian][hànyǔ dà zìdiǎn] (HDZ) Chinese character dictionary.
 
   Bibliography:
 
@@ -111,28 +111,28 @@ Han Unification is a global effort. And it's available free to the world.
 
 ## The problem
 
-It's difficult to readily take advantage of UNIHAN database in its
+It's difficult to readily take advantage of the UNIHAN database in its
 raw form.
 
 UNIHAN comprises over 20 MB of character information, separated
-across multiple files. Within these files is _90_ fields, spanning 8
-general categories of data. Within some of fields, there are specific
-considerations to take account of to use the data correctly, for instance:
+across multiple files. Within these files are _90_ fields, spanning 8
+general categories of data. Some fields need specific handling to use
+the data correctly, for instance:
 
 UNIHAN's values place references to its own codepoints, such as
-_kDefinition_:
+[kDefinition](http://www.unicode.org/reports/tr38/#kDefinition):
 
 ```
 U+3400       kDefinition     (same as U+4E18 丘) hillock or mound
 ```
 
-And also by spaces, such as in _kCantonese_:
+Values are also separated by spaces, as in _kCantonese_:
 
 ```
 U+342B       kCantonese      gun3 hung1 zung1
 ```
 
-And by spaces which specify different sources, like _kMandarin_, "When
+Other fields use spaces to distinguish sources, like [kMandarin](http://www.unicode.org/reports/tr38/#kMandarin), "When
 there are two values, then the first is preferred for zh-Hans (CN) and the
 second is preferred for zh-Hant (TW). When there is only one value, it is
 appropriate for both.":
@@ -141,7 +141,7 @@ appropriate for both.":
 U+7E43        kMandarin       běng bēng
 ```
 
-Another, values are delimited in various ways, for instance, by rules,
+Values are also delimited by per-field rules,
 like _kDefinition_, "Major definitions are separated by semicolons, and minor
 definitions by commas.":
 
@@ -163,13 +163,12 @@ U+5364  kHanyuPinyin    10093.130:xī,lǔ 74609.020:lǔ,xī
 U+5EFE  kHanyuPinyin    10513.110,10514.010,10514.020:gǒng
 ```
 
-Data could be exported to a CSV, but users wouldn't be able to
-handle delimited values and structured information held within.
+You could export the data to CSV, but you couldn't work with the
+delimited values and structured information held within.
 
-Since CSV does not support structured information, another format that
-supports needs to be found.
+Since CSV cannot hold structured information, you need a format that can.
 
-Even then, users may not want an export that expands the structured
-output of fields. So if a tool exists, exports should be configurable. Users
-could then export a field with `gun3 hung1 zung1` pristinely without
-turning it into list form.
+Even then, you may not want an export that expands fields into
+structured output. A tool has to make expansion configurable, so you
+can export a field like `gun3 hung1 zung1` as-is instead of turning it
+into a list.
