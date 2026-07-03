@@ -32,10 +32,10 @@ extend and promote use of the Unicode Standard.
 ## What is UNIHAN?
 
 UNIHAN, short for [Han unification][han unification], is the effort of the consortium
-assign codepoints to CJK characters. Any single {}`han character` can
+assign codepoints to CJK characters. Any single [han character] can
 multiple historical or regional variants to account for, hence "unification".
 
-```{image} _static/img/sword_variants.png
+```{image} ../_static/img/sword_variants.png
 :width: 300px
 :align: center
 
