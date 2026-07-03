@@ -60,7 +60,7 @@ files
 
 ## Main command
 
-The `unihan-etl` command is the entry point for all UNIHAN ETL operations. Use subcommands to export data, download the database, or query fields and files.
+The `unihan-etl` command is the entry point for all {ref}`UNIHAN <unihan>` ETL operations. Use subcommands to export data, download the database, or query fields and files.
 
 ### Command
 

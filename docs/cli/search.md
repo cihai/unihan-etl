@@ -2,7 +2,7 @@
 
 # unihan-etl search
 
-Look up character data in the UNIHAN database.
+Look up character data in the {ref}`UNIHAN <unihan>` database.
 
 ## Command
 

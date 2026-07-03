@@ -2,7 +2,7 @@
 
 # unihan-etl files
 
-List available UNIHAN source files.
+List available {ref}`UNIHAN <unihan>` source files.
 
 ## Command
 
