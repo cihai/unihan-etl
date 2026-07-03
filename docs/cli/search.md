@@ -34,7 +34,7 @@ Look up by hex codepoint:
 $ unihan-etl search 4E00
 ```
 
-Get JSON output for LLM consumption:
+Get the result as JSON:
 
 ```console
 $ unihan-etl search 一 --json
