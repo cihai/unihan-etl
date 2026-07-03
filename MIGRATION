@@ -38,7 +38,7 @@ Before 0.39.1, running the bare command would download and export UNIHAN data:
 $ unihan-etl
 ```
 
-From 0.40.0+, use the `export` subcommand explicitly:
+From 0.40.0+, use the `export` {ref}`subcommand <cli-export>` explicitly:
 
 ```console
 $ unihan-etl export
@@ -112,7 +112,7 @@ The Python API remains unchanged. If you use unihan-etl as a library, no changes
 
 ## unihan-etl 0.22.0 (2023-06-17)
 
-### Move `unihan_etl.process` to `unihan_etl.core` (#284)
+### Move `unihan_etl.process` to {mod}`unihan_etl.core` (#284)
 
 Before 0.22.0:
 
@@ -126,9 +126,9 @@ From 0.22.0+:
 >>> from unihan_etl.core import Packager
 ```
 
-### Options is now a dataclass object (#280)
+### {class}`~unihan_etl.options.Options` is now a dataclass object (#280)
 
-A typed, autocomplete-friendly :obj:`dataclasses.dataclass` object is now used for the unihan_etl options object.
+A typed, autocomplete-friendly {obj}`dataclasses.dataclass` object is now used for the unihan-etl options object.
 
 Before 0.22.0:
 
