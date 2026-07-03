@@ -2,9 +2,9 @@
 
 # unihan-etl
 
-Download, search, and export Unicode's UNIHAN CJK character dataset. Normalizes raw Unicode data files into clean JSON, CSV, or YAML.
+Download, search, and export Unicode's {ref}`UNIHAN <unihan>` CJK character dataset. Normalizes raw Unicode data files into clean JSON, CSV, or YAML.
 
-unihan-etl handles the data pipeline. For SQLAlchemy models, see [unihan-db](https://unihan-db.git-pull.com/). For end-user character lookups, see [cihai](https://cihai.git-pull.com/).
+unihan-etl handles the data pipeline. For [SQLAlchemy](https://www.sqlalchemy.org/) models, see [unihan-db](https://unihan-db.git-pull.com/). For end-user character lookups, see [cihai](https://cihai.git-pull.com/).
 
 ::::{grid} 1 2 3 3
 :gutter: 2 2 3 3
@@ -58,19 +58,19 @@ $ pip install unihan-etl
 
 ## At a glance
 
-Fetches raw UNIHAN data from unicode.org.
+{ref}`Fetch <cli-download>` raw UNIHAN data from [unicode.org](https://www.unicode.org/).
 
 ```console
 $ unihan-etl download
 ```
 
-Look up a character across all fields.
+{ref}`Look up <cli-search>` a character across all fields.
 
 ```console
 $ unihan-etl search 好
 ```
 
-Export the full dataset to JSON (also supports CSV, YAML).
+{ref}`Export <cli-export>` the full dataset to JSON (also supports CSV, YAML).
 
 ```console
 $ unihan-etl export -F json
