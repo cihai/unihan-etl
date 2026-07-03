@@ -163,12 +163,12 @@ U+5364  kHanyuPinyin    10093.130:xī,lǔ 74609.020:lǔ,xī
 U+5EFE  kHanyuPinyin    10513.110,10514.010,10514.020:gǒng
 ```
 
-Data could be exported to a CSV, but users wouldn't be able to
-handle delimited values and structured information held within.
+You could export the data to CSV, but you couldn't work with the
+delimited values and structured information held within.
 
 Since CSV cannot hold structured information, you need a format that can.
 
-Even then, users may not want an export that expands the structured
-output of fields. So if a tool exists, exports should be configurable. Users
-could then export a field with `gun3 hung1 zung1` pristinely without
-turning it into list form.
+Even then, you may not want an export that expands fields into
+structured output. A tool has to make expansion configurable, so you
+can export a field like `gun3 hung1 zung1` as-is instead of turning it
+into a list.
