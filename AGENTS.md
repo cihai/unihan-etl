@@ -130,6 +130,27 @@ just design-docs    # rebuild CSS/JS assets
 - Pytest: favor existing fixtures and `tmp_path`/`monkeypatch` instead of heavy mocks.
 - Avoid debug loops: if stuck after a few failed attempts, pause, strip to a minimal repro, capture exact errors, and write a concise summary before retrying.
 
+**Classes with fields** — `NamedTuple`, dataclasses — document every field in
+an `Attributes` section:
+
+```python
+class _ColorizedLine(t.NamedTuple):
+    """Result of colorizing an example line.
+
+    Attributes
+    ----------
+    text : str
+        Colorized line content.
+    expect_value : bool
+        Whether the next token is a value for the preceding option.
+    """
+```
+
+Autodoc renders every field whether or not you describe it, so an
+undocumented `NamedTuple` field ships to the API docs as "Alias for field
+number 0" and a dataclass field ships bare. Document all of them — a class
+with three fields and two documented still ships a stub for the third.
+
 ## Logging Standards
 
 These rules guide future logging changes; existing code may not yet conform.
