@@ -165,7 +165,23 @@ def expand_kUnihanCore2020(
 
 
 class kLocationDict(t.TypedDict):
-    """kLocation mapping."""
+    """kLocation mapping.
+
+    Position in the Hanyu Da Zidian, parsed from an ``ABCDE.XYZ`` reference.
+
+    Attributes
+    ----------
+    volume : int
+        Volume number, ``1`` through ``8``.
+    page : int
+        Page number within the volume.
+    character : int
+        Position of the character on the page.
+    virtual : int
+        ``0`` for a character printed in the dictionary, greater than ``0`` for
+        one assigned a virtual position, counting up for each character given
+        the same virtual position.
+    """
 
     volume: int
     page: int
@@ -235,7 +251,21 @@ def expand_kIRGHanyuDaZidian(value: list[str]) -> list[kLocationDict]:
 
 
 class kTGHZ2013LocationDict(t.TypedDict):
-    """kTGHZ2013 location mapping."""
+    """kTGHZ2013 location mapping.
+
+    Position in the Tōngyòng Guīfàn Hànzì Zìdiǎn, parsed from a
+    ``page.positionentry`` reference.
+
+    Attributes
+    ----------
+    page : int
+        Page number, zero-padded to three digits in the source.
+    position : int
+        Position of the entry on the page.
+    entry_type : int
+        ``0`` for a main entry, greater than ``0`` for a parenthesized or
+        bracketed variant of the main entry.
+    """
 
     page: int
     position: int
@@ -245,7 +275,15 @@ class kTGHZ2013LocationDict(t.TypedDict):
 
 
 class kTGHZ2013Dict(t.TypedDict):
-    """kTGHZ2013 mapping."""
+    """kTGHZ2013 mapping.
+
+    Attributes
+    ----------
+    reading : str
+        Pīnyīn reading, taken from after the colon.
+    locations : Sequence[kTGHZ2013LocationDict]
+        Dictionary positions the reading is given at.
+    """
 
     reading: str
     locations: Sequence[kTGHZ2013LocationDict]
@@ -309,7 +347,18 @@ def expand_kTGHZ2013(
 
 
 class kSMSZD2003IndexDict(t.TypedDict):
-    """kSMSZD2003Index location mapping."""
+    """kSMSZD2003Index location mapping.
+
+    Position in the Soengmou San Zidin (商務新字典), parsed from a
+    ``page.position`` reference.
+
+    Attributes
+    ----------
+    page : int
+        Page number.
+    position : int
+        Position of the entry on the page.
+    """
 
     page: int
     position: int
@@ -405,14 +454,33 @@ def expand_kSMSZD2003Readings(
 
 
 class kHanyuPinyinPreDict(t.TypedDict):
-    """kHanyuPinyin predicate mapping."""
+    """kHanyuPinyin predicate mapping.
+
+    Staging shape held while a kHanyuPinyin value is being split apart.
+
+    Attributes
+    ----------
+    locations : Sequence[str | kLocationDict]
+        Hanyu Da Zidian references from before the colon, each a raw string
+        until it is replaced by its parsed :class:`kLocationDict`.
+    readings : list[str]
+        Pīnyīn readings from after the colon.
+    """
 
     locations: Sequence[str | kLocationDict]
     readings: list[str]
 
 
 class kHanyuPinyinDict(t.TypedDict):
-    """kHanyuPinyin mapping."""
+    """kHanyuPinyin mapping.
+
+    Attributes
+    ----------
+    locations : kLocationDict
+        Hanyu Da Zidian position(s) the readings are given at.
+    readings : list[str]
+        Pīnyīn readings from after the colon.
+    """
 
     locations: kLocationDict
     readings: list[str]
@@ -459,7 +527,24 @@ def expand_kHanyuPinyin(
 
 
 class kXHC1983LocationDict(t.TypedDict):
-    """kXHC1983 location mapping."""
+    """kXHC1983 location mapping.
+
+    Position in the 1983 Xiàndài Hànyǔ Cídiǎn, parsed from a
+    ``page.positionentry`` reference with an optional trailing ``*``.
+
+    Attributes
+    ----------
+    page : int
+        Page number, zero-padded to four digits in the source.
+    character : int
+        Position of the entry on the page.
+    entry : int | None
+        ``0`` for a main entry, greater than ``0`` for a parenthesized variant
+        of the main entry.
+    substituted : bool
+        Whether the reference carried a trailing ``*``, marking an encoded
+        variant standing in for a character the dictionary prints unencoded.
+    """
 
     page: int
     character: int
@@ -468,14 +553,33 @@ class kXHC1983LocationDict(t.TypedDict):
 
 
 class kXHC1983Dict(t.TypedDict):
-    """kXHC1983 mapping."""
+    """kXHC1983 mapping.
+
+    Attributes
+    ----------
+    locations : kXHC1983LocationDict
+        Dictionary position(s) the reading is given at.
+    reading : str
+        Pīnyīn reading, taken from after the colon.
+    """
 
     locations: kXHC1983LocationDict
     reading: str
 
 
 class kXHC1983PreDict(t.TypedDict):
-    """kXHC1983 predicate mapping."""
+    """kXHC1983 predicate mapping.
+
+    Staging shape held while a kXHC1983 value is being split apart.
+
+    Attributes
+    ----------
+    locations : list[str] | kXHC1983LocationDict
+        Location references from before the colon, each a raw string until it
+        is replaced by its parsed :class:`kXHC1983LocationDict`.
+    reading : str
+        Pīnyīn reading from after the colon.
+    """
 
     locations: list[str] | kXHC1983LocationDict
     reading: str
@@ -604,7 +708,20 @@ def expand_kRSAdobe_Japan1_6(value: list[str]) -> list[kRSAdobe_Japan1_6Dict]:
 
 
 class kCihaiTDict(t.TypedDict):
-    """kCihaiT mapping."""
+    """kCihaiT mapping.
+
+    Position in the Cihai (辭海), parsed from a decimal reference whose digits
+    encode page, row, and position.
+
+    Attributes
+    ----------
+    page : int
+        Page number, the digits left of the decimal point.
+    row : int
+        Row on the page, the first digit after the decimal point.
+    character : int
+        Position within the row, the remaining two digits.
+    """
 
     page: int
     row: int
@@ -661,7 +778,21 @@ def expand_kIICore(
 
 
 class kDaeJaweonDict(t.TypedDict):
-    """kDaehwan mapping."""
+    """kDaehwan mapping.
+
+    Position in the Dae Jaweon, parsed from a ``page.position`` reference whose
+    final digit flags virtual entries.
+
+    Attributes
+    ----------
+    page : int
+        Page number.
+    character : int
+        Position of the character on the page.
+    virtual : int
+        ``0`` for a character printed in the dictionary, ``1`` for one absent
+        from it and assigned a virtual position.
+    """
 
     page: int
     character: int
@@ -774,7 +905,23 @@ def expand_kHanyuPinlu(value: list[str]) -> list[kHanyuPinluDict]:
 
 
 class LocationDict(t.TypedDict):
-    """Location mapping."""
+    """Location mapping.
+
+    Hanyu Da Zidian position in the same ``ABCDE.XYZ`` form the kHanYu field
+    uses.
+
+    Attributes
+    ----------
+    volume : int
+        Volume number, ``1`` through ``8``.
+    page : int
+        Page number within the volume.
+    character : int
+        Position of the character on the page.
+    virtual : int
+        ``0`` for a character printed in the dictionary, ``1`` for one assigned
+        a virtual position.
+    """
 
     volume: int
     page: int
@@ -783,7 +930,17 @@ class LocationDict(t.TypedDict):
 
 
 class kHDZRadBreakDict(t.TypedDict):
-    """kHDZRadBreak mapping."""
+    """kHDZRadBreak mapping.
+
+    Attributes
+    ----------
+    radical : str
+        Radical the Hanyu Da Zidian break begins with.
+    ucn : str
+        Code point of that radical, in ``U+2Fxx`` Kangxi Radicals form.
+    location : LocationDict
+        Hanyu Da Zidian position where the break begins.
+    """
 
     radical: str
     ucn: str
@@ -832,7 +989,17 @@ def expand_kHDZRadBreak(value: str) -> kHDZRadBreakDict:
 
 
 class kSBGYDict(t.TypedDict):
-    """kSBGY mapping."""
+    """kSBGY mapping.
+
+    Position in the Song Ben Guang Yun, parsed from an ``ABC.XY`` reference.
+
+    Attributes
+    ----------
+    page : int
+        Page number.
+    character : int
+        Position of the character on the page.
+    """
 
     page: int
     character: int
@@ -982,7 +1149,20 @@ expand_kIRG_VSource = _expand_kIRG_GenericSource
 
 
 class kGSRDict(t.TypedDict):
-    """kGSR mapping."""
+    """kGSR mapping.
+
+    Position in Bernhard Karlgren's Grammata Serica Recensa.
+
+    Attributes
+    ----------
+    set : int
+        Set number, from the four leading digits.
+    letter : str
+        Entry letter within the set, ``a`` through ``v`` or ``x`` through
+        ``z``.
+    apostrophe : bool
+        Whether the entry letter is followed by an apostrophe.
+    """
 
     set: int
     letter: str
@@ -1020,7 +1200,18 @@ def expand_kGSR(value: list[str]) -> list[kGSRDict]:
 
 
 class kCheungBauerIndexDict(t.TypedDict):
-    """kCheungBauer mapping."""
+    """kCheungBauer mapping.
+
+    Page-and-position reference, shared by the kCheungBauerIndex and kFennIndex
+    fields.
+
+    Attributes
+    ----------
+    page : int
+        Page number, the digits before the period.
+    character : int
+        Position of the character on the page.
+    """
 
     page: int
     character: int
