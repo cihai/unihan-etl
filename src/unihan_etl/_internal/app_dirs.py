@@ -37,6 +37,30 @@ MISSING_DIR = pathlib.Path(str(hash(dataclasses.MISSING)))
 class AppDirs:
     """Wrap :class:`appdirs.AppDirs`'s paths in typed :class:`pathlib.Path`'s.
 
+    Every directory defaults to ``MISSING_DIR``, the sentinel marking a path as
+    unsupplied: those are filled in from the wrapped :class:`appdirs.AppDirs`,
+    while supplied paths keep their value after environment variable, XDG, and
+    tilde expansion.
+
+    Attributes
+    ----------
+    user_data_dir : pathlib.Path
+        Per-user data directory; unihan-etl writes its exports here by default.
+    site_data_dir : pathlib.Path
+        Data directory shared by every user on the machine.
+    user_config_dir : pathlib.Path
+        Per-user configuration directory.
+    site_config_dir : pathlib.Path
+        Configuration directory shared by every user on the machine.
+    user_cache_dir : pathlib.Path
+        Per-user cache directory; the downloaded UNIHAN zip and the files
+        extracted from it live under it by default.
+    user_state_dir : pathlib.Path
+        Per-user directory for state that outlives a run without being
+        configuration.
+    user_log_dir : pathlib.Path
+        Per-user log directory.
+
     Retrieve directories as dataclass in :class:`pathlib.Path` format:
 
     >>> from appdirs import AppDirs as BaseAppDirs
