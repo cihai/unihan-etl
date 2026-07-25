@@ -61,6 +61,8 @@ class AppDirs:
     user_log_dir : pathlib.Path
         Per-user log directory.
 
+    Examples
+    --------
     Retrieve directories as dataclass in :class:`pathlib.Path` format:
 
     >>> from appdirs import AppDirs as BaseAppDirs
