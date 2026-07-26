@@ -92,7 +92,7 @@ dev = [
   "coverage",
   "pytest-cov",
   # Lint
-  "ruff",
+  "ruff>=0.16.0",
   "mypy",
   # Typings
   "types-appdirs",
@@ -210,7 +210,10 @@ exclude_lines = [
 target-version = "py310"
 
 [tool.ruff.lint]
-select = [
+# `select` is deliberately unset: ruff 0.16 enables a curated default rule
+# set, and an explicit `select` would replace it rather than extend it.
+# `extend-select` layers this project's additional linters on top.
+extend-select = [
   "E", # pycodestyle
   "F", # pyflakes
   "I", # isort
@@ -227,7 +230,7 @@ select = [
   "PERF", # Perflint
   "RUF", # Ruff-specific rules
   "D", # pydocstyle
-  "FA100",  # future annotations
+  "FA100", # future annotations
 ]
 ignore = [
   "COM812", # missing trailing comma, ruff format conflict
@@ -258,6 +261,15 @@ convention = "numpy"
 
 [tool.ruff.lint.per-file-ignores]
 "*/__init__.py" = ["F401"]
+# The Sphinx config reads version metadata by `exec`-ing the package's
+# `__about__.py`, which keeps docs off an import of the package itself.
+"docs/conf.py" = ["S102"]
+# `Packager.from_cli` is the CLI boundary: option validation raises
+# `FieldNotFound`, `FileNotSupported`, and bare `KeyError` for an unknown
+# input file, and the handler turns any of them into `sys.exit(message)`
+# so a bad flag prints one line instead of a traceback. Enumerating the
+# types would leak a traceback the moment validation grows a new one.
+"src/unihan_etl/core.py" = ["BLE001"]
 
 [tool.pytest.ini_options]
 addopts = "--tb=short --no-header --doctest-docutils-modules --reruns 2 -p no:doctest"

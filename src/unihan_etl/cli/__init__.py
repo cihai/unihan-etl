@@ -32,6 +32,8 @@ if t.TYPE_CHECKING:
 
     _ExitCode: TypeAlias = str | int | None
 
+log = logging.getLogger(__name__)
+
 
 CLI_DESCRIPTION = build_description(
     """unihan-etl - Export UNIHAN data to CSV, JSON, or YAML.
@@ -154,7 +156,7 @@ def cli(args: list[str] | None = None) -> _ExitCode:
 
     command_fn = commands.get(parsed.subparser_name)
     if command_fn is None:
-        logging.error("Unknown command: %s", parsed.subparser_name)
+        log.error("Unknown command: %s", parsed.subparser_name)
         return 1
 
     return command_fn(parsed, parser)

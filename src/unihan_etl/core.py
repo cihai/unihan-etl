@@ -86,14 +86,14 @@ class FieldNotFound(Exception):
     """Raise if field not found in file list."""
 
     def __init__(self, field: str) -> None:
-        return super().__init__(f"Field not found in file list: '{field}'")
+        super().__init__(f"Field not found in file list: '{field}'")
 
 
 class FileNotSupported(Exception):
     """Raise if field requested is not included in current file list."""
 
     def __init__(self, field: str) -> None:
-        return super().__init__(f"File not supported: '{field}'")
+        super().__init__(f"File not supported: '{field}'")
 
 
 #: Return list of files from list of fields.
@@ -576,7 +576,7 @@ class Packager:
         ):
             extract_zip(self.options.zip_path, self.options.work_dir)
 
-    def export(self) -> None | UntypedNormalizedData:
+    def export(self) -> UntypedNormalizedData | None:
         """Extract zip and process information into CSV's."""
         fields = list(self.options.fields)
         for k in INDEX_FIELDS:
