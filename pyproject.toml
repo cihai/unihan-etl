@@ -261,6 +261,9 @@ convention = "numpy"
 
 [tool.ruff.lint.per-file-ignores]
 "*/__init__.py" = ["F401"]
+# The Sphinx config reads version metadata by `exec`-ing the package's
+# `__about__.py`, which keeps docs off an import of the package itself.
+"docs/conf.py" = ["S102"]
 
 [tool.pytest.ini_options]
 addopts = "--tb=short --no-header --doctest-docutils-modules --reruns 2 -p no:doctest"
