@@ -576,7 +576,7 @@ class Packager:
         ):
             extract_zip(self.options.zip_path, self.options.work_dir)
 
-    def export(self) -> None | UntypedNormalizedData:
+    def export(self) -> UntypedNormalizedData | None:
         """Extract zip and process information into CSV's."""
         fields = list(self.options.fields)
         for k in INDEX_FIELDS:
