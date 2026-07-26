@@ -42,10 +42,6 @@ class PrivatePath(PrivatePathBase):
     'config: ~/.config/unihan-etl'
     """
 
-    def __new__(cls, *args: t.Any, **kwargs: t.Any) -> PrivatePath:
-        """Create a new PrivatePath instance."""
-        return super().__new__(cls, *args, **kwargs)
-
     @classmethod
     def _collapse_home(cls, value: str) -> str:
         """Collapse the user's home directory to ``~`` in ``value``.
