@@ -60,7 +60,7 @@ def test_private_path_str(
     """Test PrivatePath string representation collapses home directory."""
     home = pathlib.Path.home()
 
-    if path_suffix.startswith("/tmp") or path_suffix.startswith("/usr"):
+    if path_suffix.startswith(("/tmp", "/usr")):
         # Absolute path not under home
         input_path = pathlib.Path(path_suffix)
     elif path_suffix == "":
