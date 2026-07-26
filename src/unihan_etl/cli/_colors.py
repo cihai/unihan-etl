@@ -586,7 +586,7 @@ class UnknownStyleColor(Exception):
     """
 
     def __init__(self, color: CLIColour, *args: object, **kwargs: object) -> None:
-        return super().__init__(f"Unknown color {color!r}", *args, **kwargs)
+        super().__init__(f"Unknown color {color!r}", *args, **kwargs)
 
 
 def style(
