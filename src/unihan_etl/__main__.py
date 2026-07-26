@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Run unihan-etl as a CLI tool."""
 
 from __future__ import annotations
