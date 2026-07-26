@@ -264,6 +264,12 @@ convention = "numpy"
 # The Sphinx config reads version metadata by `exec`-ing the package's
 # `__about__.py`, which keeps docs off an import of the package itself.
 "docs/conf.py" = ["S102"]
+# `Packager.from_cli` is the CLI boundary: option validation raises
+# `FieldNotFound`, `FileNotSupported`, and bare `KeyError` for an unknown
+# input file, and the handler turns any of them into `sys.exit(message)`
+# so a bad flag prints one line instead of a traceback. Enumerating the
+# types would leak a traceback the moment validation grows a new one.
+"src/unihan_etl/core.py" = ["BLE001"]
 
 [tool.pytest.ini_options]
 addopts = "--tb=short --no-header --doctest-docutils-modules --reruns 2 -p no:doctest"
