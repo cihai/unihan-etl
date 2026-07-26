@@ -57,6 +57,13 @@ Workflow actions moved to their current major releases: `actions/checkout` v7,
 and `dorny/paths-filter` v4. Workflow behavior is unchanged, though setup-uv no
 longer prunes the uv cache, so the first run after this repopulates it.
 
+#### Class fields describe themselves in the API reference (#362)
+
+The dataclass, `NamedTuple`, and `TypedDict` fields across the options,
+expansion, and export surface now say what each one holds. They previously
+reached the rendered API reference as "Alias for field number 0" or as a
+bare name carrying only its type.
+
 ## unihan-etl 0.43.0 (2026-06-28)
 
 unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.
