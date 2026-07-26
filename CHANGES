@@ -48,6 +48,15 @@ _Add your latest changes from PRs here_
   {class}`~unihan_etl.core.Packager` API, and external tools on first
   mention.
 
+### Development
+
+#### CI actions updated to current majors
+
+Workflow actions moved to their current major releases: `actions/checkout` v7,
+`actions/cache` v6, `astral-sh/setup-uv` v9.0.0, `codecov/codecov-action` v7,
+and `dorny/paths-filter` v4. Workflow behavior is unchanged, though setup-uv no
+longer prunes the uv cache, so the first run after this repopulates it.
+
 ## unihan-etl 0.43.0 (2026-06-28)
 
 unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.
