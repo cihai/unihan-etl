@@ -64,6 +64,13 @@ expansion, and export surface now say what each one holds. They previously
 reached the rendered API reference as "Alias for field number 0" or as a
 bare name carrying only its type.
 
+#### Lint floor moved to ruff 0.16 (#364)
+
+Minimum `ruff>=0.16.0` (was unpinned). 0.16.0 stabilizes
+`none-not-at-end-of-union` (`RUF036`) out of preview, and starts formatting
+Python code blocks inside Markdown, so `ruff format` now covers the docs tree
+alongside `src/` and `tests/`.
+
 ## unihan-etl 0.43.0 (2026-06-28)
 
 unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.
