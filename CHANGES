@@ -71,6 +71,18 @@ Minimum `ruff>=0.16.0` (was unpinned). 0.16.0 stabilizes
 Python code blocks inside Markdown, so `ruff format` now covers the docs tree
 alongside `src/` and `tests/`.
 
+The lint config also adopts ruff's curated default rule set. `select` became
+`extend-select`, so this project's linters layer on top of the defaults rather
+than replace them, taking enabled rules from 349 to 563. Fallout was small:
+exception constructors no longer `return super().__init__(...)`, the
+unknown-subcommand message logs through the `unihan_etl.cli` logger instead of
+the root logger, and the internal `PrivatePath` shed a passthrough `__new__`
+whose annotation blocked `Self` propagation to subclasses. Two idioms are
+ignored per file with their reason recorded in `pyproject.toml` — `exec` in the
+Sphinx config, which sources version metadata without importing the package,
+and the catch-all in {meth}`~unihan_etl.core.Packager.from_cli`, which is what
+turns a bad flag into one line of output instead of a traceback.
+
 ## unihan-etl 0.43.0 (2026-06-28)
 
 unihan-etl 0.43.0 hardens cache handling and the bundled pytest fixtures. The downloader now reuses a cached UNIHAN archive only when it is a valid zip — re-fetching a corrupt or truncated cache instead of crashing extraction — and honors a custom `zip_path` filename. The quick-dataset pytest fixtures rebuild themselves when their source data changes and are now safe to run under `pytest-xdist`, and the `unihan-etl export` `--no-cache` help now describes what it actually controls.
