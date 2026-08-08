@@ -92,7 +92,7 @@ dev = [
   "coverage",
   "pytest-cov",
   # Lint
-  "ruff>=0.16.0",
+  "ruff>=0.16.1",
   "mypy",
   # Typings
   "types-appdirs",
