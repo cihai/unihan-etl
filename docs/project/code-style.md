@@ -2,33 +2,10 @@
 
 # Code Style
 
-## Formatting and linting
+This page split into two homes:
 
-unihan-etl uses [ruff](https://docs.astral.sh/ruff/) for both formatting and linting.
-
-```console
-$ uv run ruff format .
-```
-
-```console
-$ uv run ruff check . --fix --show-fixes
-```
-
-## Type checking
-
-[mypy](https://mypy.readthedocs.io/) runs in strict mode.
-
-```console
-$ uv run mypy src tests
-```
-
-## Docstrings
-
-Follow [NumPy-style](https://numpydoc.readthedocs.io/en/latest/format.html) docstrings
-in reStructuredText format.
-
-## Imports
-
-- Begin every module with `from __future__ import annotations`.
-- Prefer namespace imports for stdlib: `import typing as t`, `import pathlib`.
-- Third-party packages may use `from X import Y`.
+- [ruff](https://docs.astral.sh/ruff/) formatting and linting, [mypy](https://mypy.readthedocs.io/)
+  strict-mode type checking, and import conventions — the gates and coding
+  standards, in [CONTRIBUTING.md](https://github.com/cihai/unihan-etl/blob/master/.github/CONTRIBUTING.md).
+- NumPy-style docstring conventions and doctest rules — the prose policy, in
+  [WRITING.md](https://github.com/cihai/unihan-etl/blob/master/.github/WRITING.md#docstrings).

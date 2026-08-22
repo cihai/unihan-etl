@@ -1,16 +1,21 @@
 # unihan-etl &middot; [![Python Package](https://img.shields.io/pypi/v/unihan-etl.svg)](https://pypi.org/project/unihan-etl/) [![License](https://img.shields.io/github/license/cihai/unihan-etl.svg)](https://github.com/cihai/unihan-etl/blob/master/LICENSE) [![Code Coverage](https://codecov.io/gh/cihai/unihan-etl/branch/master/graph/badge.svg)](https://codecov.io/gh/cihai/unihan-etl)
 
-An [ETL](http://www.unicode.org/charts/unihan.html) tool for the Unicode Han Unification ([UNIHAN](http://www.unicode.org/charts/unihan.html)) database releases. unihan-etl is designed to fetch (download), unpack (unzip), and convert the database from the Unicode website into either a flattened, tabular format or a structured, hierarchical format.
+An [ETL][etl] tool for the Unicode Han Unification ([UNIHAN](http://www.unicode.org/charts/unihan.html)) database
+releases: unihan-etl downloads, unpacks, and converts Unicode's raw CJK character data files into a flattened,
+tabular export or a structured, hierarchical one.
 
-unihan-etl serves dual purposes: as a Python library offering an [API](https://unihan-etl.git-pull.com/en/latest/) for accessing data as Python objects, and as a command-line interface ([CLI](https://unihan-etl.git-pull.com/en/latest/cli.html)) for exporting data into CSV, JSON, or YAML formats.
+unihan-etl serves dual purposes: a typed Python library offering an [API](https://unihan-etl.git-pull.com/en/latest/)
+for working with the data as Python objects, and a [CLI](https://unihan-etl.git-pull.com/en/latest/cli.html) for
+exporting to CSV, JSON, or YAML.
 
-This tool is a component of the [cihai](https://cihai.git-pull.com) suite of CJK related projects. For a similar tool, see [libUnihan](http://libunihan.sourceforge.net/).
+unihan-etl is a component of the [cihai](https://cihai.git-pull.com) suite of CJK related projects. For a similar
+tool, see [libUnihan](http://libunihan.sourceforge.net/).
 
 As of v0.31.0, unihan-etl is compatible with UNIHAN Version 15.1.0 ([released on 2023-09-01, revision 35](https://www.unicode.org/reports/tr38/tr38-35.html#History)).
 
 ## The UNIHAN database
 
-The [UNIHAN](http://www.unicode.org/charts/unihan.html) database organizes data across multiple files, exemplified below:
+The UNIHAN database spreads its data across multiple files. A sample:
 
 ```tsv
 U+3400	kCantonese		jau1
@@ -22,19 +27,19 @@ U+3401	kHanyuPinyin		10019.020:tiàn
 U+3401	kMandarin		tiàn
 ```
 
-Values vary in shape and structure depending on their field type.
-[kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin) maps Unicode codepoints to
-[Hànyǔ Dà Zìdiǎn](https://en.wikipedia.org/wiki/Hanyu_Da_Zidian), where `10019.020:tiàn` represents
-an entry. Complicating it further, more variations:
+Field values vary in shape by field type.
+[kHanyuPinyin](http://www.unicode.org/reports/tr38/#kHanyuPinyin) maps a codepoint to an entry in
+[Hànyǔ Dà Zìdiǎn](https://en.wikipedia.org/wiki/Hanyu_Da_Zidian); `10019.020:tiàn` is one such entry.
+Some fields hold several:
 
 ```tsv
 U+5EFE	kHanyuPinyin		10513.110,10514.010,10514.020:gǒng
 U+5364	kHanyuPinyin		10093.130:xī,lǔ 74609.020:lǔ,xī
 ```
 
-_kHanyuPinyin_ supports multiple entries delimited by spaces. ":" (colon) separate locations in the
-work from pinyin readings. "," (comma) separate multiple entries/readings. This is just one of 90
-fields contained in the database.
+`kHanyuPinyin` delimits multiple entries with spaces, separates a location from its pinyin reading
+with `:`, and separates multiple locations or readings with `,`. This is one of 90 fields in the
+database.
 
 [etl]: https://en.wikipedia.org/wiki/Extract,_transform,_load
 
@@ -133,17 +138,14 @@ Filter via the CLI with [yq](https://github.com/mikefarah/yq).
 
 ## "Structured" output
 
-Codepoints can pack a lot more detail, unihan-etl carefully extracts these values in a uniform
-manner. Empty values are pruned.
-
-To make this possible, unihan-etl exports to JSON, YAML, and python list/dicts.
+A codepoint can carry more structure than a flat row holds. unihan-etl extracts it uniformly and
+prunes empty values, exporting to JSON, YAML, and Python list/dicts.
 
 <div class="admonition">
 
 Why not CSV?
 
-Unfortunately, CSV is only suitable for storing table-like information. File formats such as JSON
-and YAML accept key-values and hierarchical entries.
+CSV only holds table-like data. JSON and YAML also hold key-values and hierarchical entries.
 
 </div>
 
@@ -229,24 +231,21 @@ $ unihan-etl -F yaml
 
 ## Features
 
-- automatically downloads UNIHAN from the internet
-- strives for accuracy with the specifications described in
+- downloads and caches UNIHAN releases from unicode.org
+- follows the field semantics in
   [UNIHAN's database design](http://www.unicode.org/reports/tr38/)
-- export to JSON, CSV and YAML (requires [pyyaml](http://pyyaml.org/)) via `-F`
-- configurable to export specific fields via `-f`
-- accounts for encoding conflicts due to the Unicode-heavy content
-- designed as a technical proof for future CJK (Chinese, Japanese, Korean) datasets
+- exports to CSV, JSON, and YAML (YAML requires [pyyaml](http://pyyaml.org/)) via `-F`
+- exports a subset of fields via `-f`
+- expands multi-value delimited fields into structured lists/dicts for YAML, JSON, and Python exports
+- handles the Unicode-heavy encoding of UNIHAN's source files
+- [data package](http://frictionlessdata.io/data-packages/) descriptor included
 - core component and dependency of [cihai](https://cihai.git-pull.com), a CJK library
-- [data package](http://frictionlessdata.io/data-packages/) support
-- expansion of multi-value delimited fields in YAML, JSON and python dictionaries
-- supports >= 3.7 and pypy
+- Python 3.10+ and PyPy
 
 If you encounter a problem or have a question, please
 [create an issue](https://github.com/cihai/unihan-etl/issues/new).
 
 ## Installation
-
-To download and build your own UNIHAN export:
 
 Using [uv](https://docs.astral.sh/uv/) to add the CLI to your project:
 
@@ -298,7 +297,8 @@ $ pip install --user --upgrade --pre unihan-etl
 $ pipx install --suffix=@next 'unihan-etl' --pip-args '\--pre' --force
 ```
 
-Then run `unihan-etl@next load yoursession`.
+This installs the pre-release under the `unihan-etl@next` executable name, alongside a regular
+install. Run it the same way, for example `unihan-etl@next export`.
 
 Run pre-release builds without installing with [`uvx`](https://docs.astral.sh/uv/guides/tools/):
 
@@ -316,10 +316,12 @@ Swap `0.27.0a1` for whichever pre-release you plan to use.
 
 ## Usage
 
-`unihan-etl` offers customizable builds via its command line arguments.
-
-See [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for information
-on how you can specify columns, files, download URL's, and output destination.
+Without `--destination`, an export writes to the platform's XDG data directory (see
+[Code layout](#code-layout)) and the download is cached, so a repeat run skips the network. A failed
+export exits non-zero and writes both a traceback and a one-line `Error:
+<message>` to stderr. See
+[unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for every flag,
+including how to specify columns, files, and download URLs.
 
 To output CSV, the default format:
 
@@ -407,8 +409,7 @@ tests/*
 
 ## API
 
-The package is python underneath the hood, you can utilize its full [API].
-Example:
+unihan-etl is a typed Python library underneath the CLI; see the full [API].
 
 ```python
 >>> from unihan_etl.core import Packager
@@ -429,7 +430,10 @@ $ git clone https://github.com/cihai/unihan-etl.git
 $ cd unihan-etl
 ```
 
-[Bootstrap your environment and learn more about contributing](https://cihai.git-pull.com/contributing/). We use the same conventions / tools across all cihai projects: `pytest`, `sphinx`, `mypy`, `ruff`, `tmuxp`, and file watcher helpers (e.g. `entr(1)`).
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for this repository's setup and gates.
+[Bootstrap your environment and learn more about contributing](https://cihai.git-pull.com/contributing/)
+to any cihai project: the suite shares `pytest`, `sphinx`, `mypy`, `ruff`, `tmuxp`, and file watcher
+helpers (e.g. `entr(1)`) across repositories.
 
 ## More information
 
