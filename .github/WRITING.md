@@ -204,16 +204,19 @@ one common invocation.
 Two layers handle failure, and they behave differently on purpose:
 
 - **A subcommand's `command_*` function** (`cli/search.py`,
-  `cli/export.py`, `cli/download.py`) catches the exceptions it can name,
-  prints `Error: <message>` to stderr, and returns a non-zero `int` exit
-  code — never raises past its own boundary. Call `log.exception(...)`
-  first when the cause is worth keeping in the log; the user-facing line
-  stays one sentence.
-- **`Packager.from_cli`**, the library's own CLI boundary, catches any
-  `Exception` and calls `sys.exit(str(e))`: one line to stderr, no
-  traceback. This is the one place a broad `except Exception` is allowed
-  (`ruff`'s `BLE001` is disabled for `src/unihan_etl/core.py` for exactly
-  this reason) — anywhere else, catch the exception types you can name.
+  `cli/export.py`, `cli/download.py`) catches `Exception` broadly, calls
+  `log.exception(...)` first so the traceback lands in the log, prints
+  `Error: <message>` to stderr, and returns a non-zero `int` exit code —
+  never raises past its own boundary.
+- **`Packager.from_cli`**, the library's own CLI boundary, also catches
+  `Exception` broadly but skips `log.exception(...)` and calls
+  `sys.exit(str(e))` directly: one line to stderr, no traceback logged.
+
+Both layers catch broadly on purpose. `ruff`'s `BLE001` (blind-except)
+exempts a broad catch that logs through `log.exception`, so the three
+`command_*` functions need no per-file ignore; `Packager.from_cli` skips
+that log call, so `BLE001` would flag it — `ruff`'s per-file-ignores
+disables `BLE001` for `src/unihan_etl/core.py` for exactly that reason.
 
 Raise `FieldNotFound` or `FileNotSupported` (`core.py`) for a bad field or
 input file, not a bare `KeyError` or `ValueError`, so the CLI boundary can

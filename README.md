@@ -318,7 +318,8 @@ Swap `0.27.0a1` for whichever pre-release you plan to use.
 
 Without `--destination`, an export writes to the platform's XDG data directory (see
 [Code layout](#code-layout)) and the download is cached, so a repeat run skips the network. A failed
-export exits non-zero with a one-line message on stderr rather than a traceback. See
+export exits non-zero and writes both a traceback and a one-line `Error:
+<message>` to stderr. See
 [unihan-etl CLI arguments](https://unihan-etl.git-pull.com/en/latest/cli.html) for every flag,
 including how to specify columns, files, and download URLs.
 

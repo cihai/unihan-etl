@@ -36,8 +36,10 @@ Type-check:
 $ uv run mypy .
 ```
 
-`mypy` runs in strict mode, scoped to `src/` and `tests/` via `[tool.mypy]`
-in `pyproject.toml`.
+`mypy` runs in strict mode. `[tool.mypy]` in `pyproject.toml` sets `files =
+["src/", "tests/"]`, but the `.` argument to `mypy .` above overrides that
+setting, so the gate actually type-checks everything under the repo root,
+including `docs/conf.py`.
 
 Test:
 
@@ -57,7 +59,8 @@ never been red is an assumption.
 
 CI (`.github/workflows/tests.yml`) runs `ruff check`, `ruff format --check`,
 `mypy .`, and `py.test --cov=./ --cov-report=xml` on every push and pull
-request across Python 3.10 through 3.14; it is the order of record.
+request across Python 3.10, 3.11, 3.12, and 3.14 (3.13 is not in the
+matrix); it is the order of record.
 
 ## Tests
 

@@ -57,9 +57,11 @@ stated twice, the file listed above is the one that governs.
   `expansion.py`. Be deliberate about which shape a change targets.
 - When adding a UNIHAN field, update both the manifest and the allowed-field
   list in `constants.py` — they are read together.
-- The CLI's broad `except Exception: sys.exit(str(e))` in
-  `Packager.from_cli` is the one sanctioned catch-all; everywhere else,
-  catch the exception type you can name (see WRITING.md).
+- `Packager.from_cli` and the three `command_*` CLI functions
+  (`cli/search.py`, `cli/export.py`, `cli/download.py`) all catch
+  `Exception` broadly at the CLI boundary; only `from_cli` needs a
+  `BLE001` ignore, because the other three log the traceback first (see
+  WRITING.md).
 
 ## References
 
