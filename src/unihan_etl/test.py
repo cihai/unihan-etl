@@ -30,7 +30,7 @@ def assert_dict_contains_subset(
     >>> not assert_dict_contains_subset({ 'test': 3 }, { 'more_data': '_', 'test': 4 })
     Traceback (most recent call last):
         ...
-    AssertionError: None
+    AssertionError: None...
     """
     for key, value in subset.items():
         assert key in dictionary, msg
