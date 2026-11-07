@@ -67,7 +67,7 @@ Changes = "https://github.com/cihai/unihan-etl/blob/master/CHANGES"
 [project.optional-dependencies]
 xdist = [
   "pytest-xdist",
-  "filelock",
+  "filelock; python_version >= '3.11'",
 ]
 
 [dependency-groups]
@@ -86,7 +86,7 @@ dev = [
   "pytest-mock",
   "pytest-watcher",
   "pytest-xdist",
-  "filelock",
+  "filelock; python_version >= '3.11'",
   # Coverage
   "codecov",
   "coverage",
@@ -117,7 +117,7 @@ testing = [
   "pytest-mock",
   "pytest-watcher",
   "pytest-xdist",
-  "filelock",
+  "filelock; python_version >= '3.11'",
 ]
 coverage =[
   "codecov",
@@ -179,6 +179,11 @@ module = [
   "pygments",
   "pygments.*",
 ]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# filelock is not installed on Python 3.10 (see the xdist extra).
+module = "filelock"
 ignore_missing_imports = true
 
 [tool.coverage.run]

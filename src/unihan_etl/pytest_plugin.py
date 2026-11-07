@@ -55,7 +55,10 @@ def _cache_lock(
         msg = "filelock is required to run these fixtures under pytest-xdist"
         raise ModuleNotFoundError(msg) from exc
 
-    return FileLock(str(basetemp / "unihan_cache.lock"))
+    lock: contextlib.AbstractContextManager[t.Any] = FileLock(
+        str(basetemp / "unihan_cache.lock")
+    )
+    return lock
 
 
 @pytest.fixture(scope="session")
