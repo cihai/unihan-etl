@@ -5,14 +5,23 @@ from __future__ import annotations
 import contextlib
 import multiprocessing
 import pathlib
+import sys
 import types
 import typing as t
 import zipfile
 
 import pytest
-from filelock import FileLock
 
 from unihan_etl.pytest_plugin import _cache_lock, _sync_quick_dataset
+
+
+def _file_lock_type() -> t.Any:
+    """Return ``filelock.FileLock``, skipping where filelock is not installed.
+
+    The dependency is scoped to Python 3.11+ in ``pyproject.toml``.
+    """
+    module = pytest.importorskip("filelock", reason="filelock needs Python 3.11+")
+    return module.FileLock
 
 
 class CacheLockCase(t.NamedTuple):
@@ -50,6 +59,7 @@ def test_cache_lock_selection(
     never touches filelock); only an actual worker, signalled by ``workerinput``
     on the config, gets an inter-process lock.
     """
+    file_lock: t.Any = _file_lock_type() if expect_filelock else None
     config_ns = types.SimpleNamespace()
     if under_xdist:
         config_ns.workerinput = {}
@@ -58,11 +68,23 @@ def test_cache_lock_selection(
     lock = _cache_lock(config, tmp_path)
 
     if expect_filelock:
-        assert isinstance(lock, FileLock)
+        assert isinstance(lock, file_lock)
     else:
         assert isinstance(lock, contextlib.nullcontext)
     with lock:  # usable as a context manager either way
         pass
+
+
+def test_cache_lock_requires_filelock_under_xdist(
+    tmp_path: pathlib.Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Under an xdist worker without filelock, _cache_lock names the missing package."""
+    monkeypatch.setitem(sys.modules, "filelock", None)
+    config = t.cast("pytest.Config", types.SimpleNamespace(workerinput={}))
+
+    with pytest.raises(ModuleNotFoundError, match="filelock is required"):
+        _cache_lock(config, tmp_path)
 
 
 def _build_quick_cache(payload: tuple[t.Any, ...]) -> bool:
@@ -72,7 +94,7 @@ def _build_quick_cache(payload: tuple[t.Any, ...]) -> bool:
     (``with unihan_cache_lock: _sync_quick_dataset(...)``).
     """
     zip_path, sources, work_dir, out_dir, lock_path = payload
-    with FileLock(str(lock_path)):
+    with _file_lock_type()(str(lock_path)):
         return _sync_quick_dataset(zip_path, sources, work_dir, out_dir)
 
 
@@ -84,6 +106,7 @@ def test_concurrent_cache_build_serializes(tmp_path: pathlib.Path) -> None:
     built exactly once and stays valid. Cheaper and more deterministic than a
     nested ``pytest-xdist`` run, and it never touches the real ``.unihan_cache``.
     """
+    _file_lock_type()  # skip before spawning workers where filelock is absent
     src = tmp_path / "src"
     src.mkdir()
     readings = src / "Unihan_Readings.txt"

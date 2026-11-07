@@ -38,6 +38,12 @@ _Notes on the upcoming release will go here._
 
 _Add your latest changes from PRs here_
 
+### Dependencies
+
+#### `xdist` extra installs `filelock` on Python 3.11+ only (#366)
+
+The `xdist` extra no longer installs `filelock` on Python 3.10. `filelock` releases that fix its published advisories require Python 3.11, so a 3.10 install could only resolve the vulnerable 4.1.0. On Python 3.10, running the bundled fixtures under `pytest-xdist` raises `ModuleNotFoundError: filelock is required to run these fixtures under pytest-xdist`; install a `filelock` yourself or run on Python 3.11+. Runs without `pytest-xdist` are unaffected. `requires-python` stays `>=3.10`.
+
 ### Documentation
 
 - {ref}`quickstart` no longer shows a nonexistent `load` subcommand
