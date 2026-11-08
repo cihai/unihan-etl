@@ -8,7 +8,7 @@ of the box — the download is cached for reuse.
 
 ## Installation
 
-Ensure you have at least Python **>= 3.10**.
+Ensure you have at least Python **>= 3.11**.
 
 Using [uv]:
 
