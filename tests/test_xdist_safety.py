@@ -16,12 +16,10 @@ from unihan_etl.pytest_plugin import _cache_lock, _sync_quick_dataset
 
 
 def _file_lock_type() -> t.Any:
-    """Return ``filelock.FileLock``, skipping where filelock is not installed.
+    """Return ``filelock.FileLock``."""
+    import filelock
 
-    The dependency is scoped to Python 3.11+ in ``pyproject.toml``.
-    """
-    module = pytest.importorskip("filelock", reason="filelock needs Python 3.11+")
-    return module.FileLock
+    return filelock.FileLock
 
 
 class CacheLockCase(t.NamedTuple):
@@ -106,7 +104,6 @@ def test_concurrent_cache_build_serializes(tmp_path: pathlib.Path) -> None:
     built exactly once and stays valid. Cheaper and more deterministic than a
     nested ``pytest-xdist`` run, and it never touches the real ``.unihan_cache``.
     """
-    _file_lock_type()  # skip before spawning workers where filelock is absent
     src = tmp_path / "src"
     src.mkdir()
     readings = src / "Unihan_Readings.txt"

@@ -130,7 +130,7 @@ class AppDirs:
                     None,
                     MISSING_DIR,
                 }
-            except (AttributeError, AssertionError):  # noqa: PERF203
+            except (AttributeError, AssertionError):
                 object.__setattr__(
                     self,
                     attr,

@@ -38,16 +38,16 @@ _Notes on the upcoming release will go here._
 
 _Add your latest changes from PRs here_
 
-### Dependencies
+### Breaking changes
 
-#### `xdist` extra installs `filelock` on Python 3.11+ only (#366)
+#### Python 3.11 is now the minimum
 
-The `xdist` extra no longer installs `filelock` on Python 3.10. `filelock` releases that fix its published advisories require Python 3.11, so a 3.10 install could only resolve the vulnerable 4.1.0. On Python 3.10, running the bundled fixtures under `pytest-xdist` raises `ModuleNotFoundError: filelock is required to run these fixtures under pytest-xdist`; install a `filelock` yourself or run on Python 3.11+. Runs without `pytest-xdist` are unaffected. `requires-python` stays `>=3.10`.
+unihan-etl now requires Python 3.11 or newer. Python 3.10 reached end of life in October 2026, and `filelock` releases that fix its published advisories already require Python 3.11. The `xdist` extra therefore installs `filelock` on every supported interpreter, with no Python 3.10 exception.
 
 ### Documentation
 
 - {ref}`quickstart` no longer shows a nonexistent `load` subcommand
-  and states the correct Python 3.10 minimum.
+  and states the correct Python 3.11 minimum.
 - The {ref}`About UNIHAN <unihan>` image renders again, and the
   {ref}`faq` shows as a heading instead of raw definition-list markup.
 - CLI, API, and topic pages now link the UNIHAN dataset, the

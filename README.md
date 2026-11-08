@@ -240,7 +240,7 @@ $ unihan-etl -F yaml
 - handles the Unicode-heavy encoding of UNIHAN's source files
 - [data package](http://frictionlessdata.io/data-packages/) descriptor included
 - core component and dependency of [cihai](https://cihai.git-pull.com), a CJK library
-- Python 3.10+ and PyPy
+- Python 3.11+ and PyPy
 
 If you encounter a problem or have a question, please
 [create an issue](https://github.com/cihai/unihan-etl/issues/new).
