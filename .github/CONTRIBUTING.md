@@ -59,7 +59,7 @@ never been red is an assumption.
 
 CI (`.github/workflows/tests.yml`) runs `ruff check`, `ruff format --check`,
 `mypy .`, and `py.test --cov=./ --cov-report=xml` on every push and pull
-request across Python 3.10, 3.11, 3.12, and 3.14 (3.13 is not in the
+request across Python 3.10, 3.11, 3.12, 3.14, and 3.15 (3.13 is not in the
 matrix); it is the order of record.
 
 ## Tests
